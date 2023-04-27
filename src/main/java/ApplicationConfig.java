@@ -18,9 +18,9 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:persistence.properties")
-@ComponentScan("org.hbrs.se2.project.hellocar.repository")
+@ComponentScan("org.hbrs.se2.project.aldavia.repository")
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "org.hbrs.se2.project.hellocar.repository")
+@EnableJpaRepositories(basePackages = "org.hbrs.se2.project.aldavia.repository")
 public class ApplicationConfig {
 
     @Autowired
@@ -35,7 +35,7 @@ public class ApplicationConfig {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
 
-        em.setPackagesToScan("org.hbrs.se2.project.hellocar.repository");
+        em.setPackagesToScan("org.hbrs.se2.project.aldavia.repository");
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
