@@ -22,11 +22,8 @@ public class LoginControl {
         // Standard: User wird mit Spring JPA ausgelesen (Was sind die Vorteile?)
         UserDTO tmpUser = this.getUserWithJPA( username , password );
 
-        // Alternative: Auslesen des Users mit JDBC (Was sind die Vorteile bzw. Nachteile?)
-        // UserDTO tmpUser = this.getUserWithJDBC( username , password );
-
         if ( tmpUser == null ) {
-            // ggf. hier ein Loggin einfügen
+
             return false;
         }
         this.userDTO = tmpUser;
@@ -55,14 +52,14 @@ public class LoginControl {
                 // throw new DatabaseUserException("No User could be found! Please check your credentials!");
             }
             else if ( reason.equals((Globals.Errors.SQLERROR))) {
-                throw new DatabaseUserException("There were problems with the SQL code. Please contact the developer!");
+                throw new DatabaseUserException(databaseUserExceptionType, "There were problems with the SQL code. Please contact the developer!");
             }
             else if ( reason.equals((Globals.Errors.DATABASE ) )) {
-                throw new DatabaseUserException("A failure occured while trying to connect to database with JDBC. " +
+                throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while trying to connect to database with JDBC. " +
                         "Please contact the admin");
             }
             else {
-                throw new DatabaseUserException("A failure occured while");
+                throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while");
             }
 
         }
@@ -75,7 +72,7 @@ public class LoginControl {
             userTmp = repository.findUserByUseridAndPassword(username, password);
         } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
             // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
-           throw new DatabaseUserException("A failure occured while trying to connect to database with JPA");
+           throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while trying to connect to database with JPA");
         }
         return userTmp;
     }

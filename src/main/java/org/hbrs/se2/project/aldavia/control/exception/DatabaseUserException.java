@@ -1,17 +1,31 @@
 package org.hbrs.se2.project.aldavia.control.exception;
 
 public class DatabaseUserException extends Exception {
-    private String reason = null;
-
-    public String getReason() {
-        return reason;
+    public enum DatabaseUserExceptionType {
+        WrongPassword,
+        UserNotFound,
+        SQLERROR,
+        WrongUsername,
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    private final DatabaseUserExceptionType databaseUserExceptionType;
+
+    /**
+     * Konstruktor
+     * @param databaseUserExceptionType
+     * @param message
+     */
+    public DatabaseUserException(DatabaseUserExceptionType databaseUserExceptionType, String message) {
+        super(message);
+        this.databaseUserExceptionType = databaseUserExceptionType;
     }
 
-    public DatabaseUserException( String reason ) {
-        this.reason = reason;
+    /**
+     * Gibt den Typ der Exception zurück
+     * @return DatabaseUserExceptionType
+     */
+    public DatabaseUserExceptionType getDatabaseUserExceptionType() {
+        return databaseUserExceptionType;
     }
+
 }
