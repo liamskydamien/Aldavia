@@ -10,8 +10,8 @@ public class DatabaseUserException extends Exception {
 
     /**
      * Konstruktor
-     * @param databaseUserExceptionType
-     * @param message
+     * @param databaseUserExceptionType Typ der Exception
+     * @param message Nachricht
      */
     public DatabaseUserException(DatabaseUserExceptionType databaseUserExceptionType, String message) {
         super(message);
