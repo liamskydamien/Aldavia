@@ -27,7 +27,7 @@ public class DatabaseUserException extends Exception {
     }
 
     public String getReason() {
-        return this.getDatabaseUserExceptionType().toString();
+        return this.getMessage();
     }
 
 }

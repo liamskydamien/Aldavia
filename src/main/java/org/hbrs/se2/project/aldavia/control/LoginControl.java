@@ -79,15 +79,16 @@ public class LoginControl {
      */
 
     /**
-     * Backdoor für Testzwecke (JPA) TODO: Wieder Entfernen!
+     * Backdoor für Testzwecke (JPA)
      * @param username
      * @param password
      * @return
      * @throws DatabaseUserException
-     */
+
     public UserDTO TestGetUserWithJPA( String username , String password ) throws DatabaseUserException {
         return this.getUserWithJPA( username , password );
     }
+    */
 
     /**
      * Methode zur Anfrage eines Benutzers mit JPA
