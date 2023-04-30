@@ -15,6 +15,10 @@ public class Globals {
         public static final String ADMIN = "admin";
         public static final String USER = "user";
 
+        public static final String STUDENT = "student";
+
+        public static final String UNTERNEHMEN = "unternehmen";
+
     }
 
     public static class Errors {
