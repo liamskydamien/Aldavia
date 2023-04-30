@@ -18,13 +18,23 @@ public class LoginControl {
 
     private UserDTO userDTO = null;
 
+    /**
+     * Methode zur Authentifizierung eines Benutzers
+     * @param username Benutzername
+     * @param password Passwort
+     * @return true, wenn die Authentifizierung erfolgreich war, sonst false
+     * @throws DatabaseUserException
+     */
     public boolean authentificate(String username, String password ) throws DatabaseUserException {
-        // Standard: User wird mit Spring JPA ausgelesen (Was sind die Vorteile?)
+
         UserDTO tmpUser = this.getUserWithJPA( username , password );
 
         if ( tmpUser == null ) {
-
-            return false;
+            throw new DatabaseUserException(
+                    DatabaseUserException.
+                            DatabaseUserExceptionType.
+                            UserNotFound,
+                    "No User could be found! Please check your credentials!");
         }
         this.userDTO = tmpUser;
         return true;
@@ -35,6 +45,7 @@ public class LoginControl {
 
     }
 
+    /*
     private UserDTO getUserWithJDBC( String username , String password ) throws DatabaseUserException {
         UserDTO userTmp = null;
         UserDAO dao = new UserDAO();
@@ -65,14 +76,26 @@ public class LoginControl {
         }
         return userDTO;
     }
+     */
 
+    /**
+     * Methode zur Anfrage eines Benutzers mit JPA
+     * @param username Benutzername
+     * @param password Passwort
+     * @return UserDTO
+     * @throws DatabaseUserException
+     */
     private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
         UserDTO userTmp;
         try {
             userTmp = repository.findUserByUseridAndPassword(username, password);
         } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
             // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
-           throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while trying to connect to database with JPA");
+           throw new DatabaseUserException(
+                   DatabaseUserException.
+                        DatabaseUserExceptionType.
+                        DatabaseConnectionFailed,
+                   "A failure occured while trying to connect to database. Please try again later.");
         }
         return userTmp;
     }

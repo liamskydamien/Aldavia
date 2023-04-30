@@ -2,10 +2,8 @@ package org.hbrs.se2.project.aldavia.control.exception;
 
 public class DatabaseUserException extends Exception {
     public enum DatabaseUserExceptionType {
-        WrongPassword,
         UserNotFound,
-        SQLERROR,
-        WrongUsername,
+        DatabaseConnectionFailed,
     }
 
     private final DatabaseUserExceptionType databaseUserExceptionType;
