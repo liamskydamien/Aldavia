@@ -40,6 +40,10 @@ public class LoginControl {
         return true;
     }
 
+    /**
+     * Methode zur Anfrage des aktuellen Nutzers
+     * @return UserDTO des aktuellen Nutzers
+     */
     public UserDTO getCurrentUser(){
         return this.userDTO;
 
