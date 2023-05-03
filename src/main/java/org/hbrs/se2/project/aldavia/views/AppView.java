@@ -39,6 +39,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private H1 viewTitle;
     private H1 helloUser;
 
+
     private AuthorizationControl authorizationControl;
 
     public AppView() {
