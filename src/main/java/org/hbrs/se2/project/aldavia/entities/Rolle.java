@@ -5,19 +5,19 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="rolle" , schema = "aldavia" )
+@Table( name ="rolle" , schema = "carlook" )
 public class Rolle {
-    private String bezeichnung;
-    private List<Benutzer> benutzer;
+    private String bezeichhnung;
+    private List<User> users;
 
     @Id
-    @Column(name = "bezeichnung")
-    public String getBezeichnung() {
-        return bezeichnung;
+    @Column(name = "bezeichhnung")
+    public String getBezeichhnung() {
+        return bezeichhnung;
     }
 
-    public void setBezeichnung(String bezeichnung) {
-        this.bezeichnung = bezeichnung;
+    public void setBezeichhnung(String bezeichhnung) {
+        this.bezeichhnung = bezeichhnung;
     }
 
     @Override
@@ -25,20 +25,20 @@ public class Rolle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rolle rolle = (Rolle) o;
-        return Objects.equals(bezeichnung, rolle.bezeichnung);
+        return Objects.equals(bezeichhnung, rolle.bezeichhnung);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bezeichnung);
+        return Objects.hash(bezeichhnung);
     }
 
-    @ManyToMany(mappedBy = "rollen", fetch = FetchType.EAGER )
-    public List<Benutzer> getBenutzer() {
-        return benutzer;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER )
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setBenutzer(List<Benutzer> benutzer) {
-        this.benutzer = benutzer;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
