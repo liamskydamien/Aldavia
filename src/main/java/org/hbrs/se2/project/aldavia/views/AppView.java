@@ -39,6 +39,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private H1 viewTitle;
     private H1 helloUser;
 
+
     private AuthorizationControl authorizationControl;
 
     public AppView() {
@@ -136,8 +137,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Hinzufügen des Logos
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
-        logoLayout.add(new H1("HelloCar"));
+        logoLayout.add(new Image("images/aldavia.png", "HelloCar logo"));
+        logoLayout.add(new H1("Aldavia"));
 
         // Hinzufügen des Menus inklusive der Tabs
         layout.add(logoLayout, menu);

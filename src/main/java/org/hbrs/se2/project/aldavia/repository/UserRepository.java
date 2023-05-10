@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.repository;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,7 +29,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // FROM User p
     // WHERE p.userid = [StringValueOf( userid )] AND p.password = [StringValueOf( password )]
     UserDTO findUserByUseridAndPassword ( String userid , String password);
-
-
 
 }
