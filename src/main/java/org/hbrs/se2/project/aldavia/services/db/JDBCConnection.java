@@ -16,13 +16,13 @@ public class JDBCConnection {
 
     private static JDBCConnection connection = null;
 
-    private String url = "jdbc:postgresql://dumbo.inf.h-brs.de/nmuese2s";
+    private String url = "jdbc:postgresql://dumbo.inf.h-brs.de/demouser";
 
     private Connection conn;
 
-    private String login = "nmuese2s";
+    private String login = "demouser";
 
-    private String password = "nmuese2s";
+    private String password = "demouser";
 
     public static JDBCConnection getInstance() throws DatabaseLayerException {
 
@@ -53,8 +53,8 @@ public class JDBCConnection {
 
         try {
             Properties props = new Properties();
-            props.setProperty("user", "nmuese2s" );
-            props.setProperty("password", "nmuese2s" );
+            props.setProperty("user", "demouser" );
+            props.setProperty("password", "demouser" );
 
 
             this.conn = DriverManager.getConnection(this.url, props);
