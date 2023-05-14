@@ -4,7 +4,6 @@ import java.util.List;
 
 public interface UserDTO {
     public int getId();
-    public String getFirstName();
-    public String getLastName();
+    public String getUserid();
     public List<RolleDTO> getRoles();
 }
