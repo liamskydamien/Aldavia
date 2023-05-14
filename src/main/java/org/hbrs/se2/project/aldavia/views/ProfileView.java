@@ -33,7 +33,7 @@ public class ProfileView extends Div implements HasUrlParameter<String> {
     }
 
     public void addTextToView(String text) {
-        add(new Text(profileControl.getInformation(text)));
+        add(new Text(text));
     }
 
 
