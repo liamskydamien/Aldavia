@@ -9,5 +9,7 @@ public interface StudentProfileDTO extends ProfileDTO {
     String getStudiengang();
     LocalDate getStudienbeginn();
     LocalDate getGeburtsdatum();
+    String getEmail();
+
     // more fields follow soon TODO! Add more fields
 }

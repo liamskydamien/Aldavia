@@ -31,6 +31,10 @@ public class ProfileControl {
     }
 
     public StudentProfileDTO transformStudentProfileDTO(Student student) {
+
+        // Get Email
+        String email = student.getUser().getEmail();
+
         //Create new StudentProfileDTOImpl and set values
         StudentProfileDTOImpl studentProfileDTO = new StudentProfileDTOImpl();
         studentProfileDTO.setVorname(student.getVorname());
@@ -39,6 +43,7 @@ public class ProfileControl {
         studentProfileDTO.setStudiengang(student.getStudiengang());
         studentProfileDTO.setStudienbeginn(student.getStudienbeginn());
         studentProfileDTO.setGeburtsdatum(student.getGeburtsdatum());
+        studentProfileDTO.setEmail(email);
 
         //Return StudentProfileDTOImpl
         return studentProfileDTO;

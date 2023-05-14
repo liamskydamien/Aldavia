@@ -18,5 +18,5 @@ public class StudentProfileDTOImpl implements StudentProfileDTO {
     private String studiengang;
     private LocalDate studienbeginn;
     private LocalDate geburtsdatum;
-
+    private String email;
 }
