@@ -1,8 +1,10 @@
 package org.hbrs.se2.project.aldavia.test;
 
 import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,9 @@ public class RoundTripTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private UnternehmenRepository unternehmenRepository;
+
 
     @Test
     /**
@@ -31,7 +36,7 @@ public class RoundTripTest {
      *
      */
 
-    void createReadAndDeleteAUser() {
+    void createReadAndDeleteAStudent() {
 
         // Schritt 1: C = Create (hier: Erzeugung und Abspeicherung mit der Method save()
         // Anlegen eines Users. Eine ID wird automatisch erzeugt durch JPA
@@ -89,6 +94,48 @@ public class RoundTripTest {
         assertFalse( wrapperAfterDelete.isPresent() );
         assertFalse( wrapperStudentAfterDelete.isPresent() );
     }
+
+    @Test
+    void createReadAndDeleteAUnternehmen() {
+
+        // Schritt 1: C = Create (hier: Erzeugung und Abspeicherung mit der Method save()
+        // Anlegen eines Users. Eine ID wird automatisch erzeugt durch JPA
+        User user = new User();
+        user.setEmail("unternehmen@test.de");
+
+        // Anlegen eines Unternehmens
+        Unternehmen unternehmen = new Unternehmen();
+        unternehmen.setUser(user);
+        unternehmen.setName("TestFirma");
+
+        // und ab auf die DB damit (save!)
+        userRepository.save(user);
+        unternehmenRepository.save(unternehmen);
+
+        // Teste Read
+        Optional<User> wrapper = userRepository.findById(user.getId());
+        User userAfterCreate = null;
+        if (wrapper.isPresent()) {
+            userAfterCreate = wrapper.get();
+        }
+
+        Optional<Unternehmen> wrapper2 = unternehmenRepository.findByUser(userAfterCreate);
+        Unternehmen unternehmenAfterCreate = null;
+        if (wrapper2.isPresent()) {
+            unternehmenAfterCreate = wrapper2.get();
+        }
+
+        // Teste Assertion
+        assertEquals(unternehmenAfterCreate.getName(), "TestFirma");
+        assertNotSame(user, userAfterCreate);
+        assertNotSame(unternehmen, unternehmenAfterCreate);
+
+        // Teste Delete
+        int unternehmenTmpId = unternehmenAfterCreate.getUnternehmenId();
+        unternehmenRepository.deleteById(unternehmenTmpId);
+        userRepository.deleteById(user.getId());
+    }
+
 
     @AfterEach
     public void deleteUser(){
