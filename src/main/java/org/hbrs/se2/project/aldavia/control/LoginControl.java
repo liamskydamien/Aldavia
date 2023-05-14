@@ -6,7 +6,6 @@ import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class LoginControl {
 
@@ -132,14 +131,14 @@ public class LoginControl {
                     DatabaseUserException.
                             DatabaseUserExceptionType.
                             UserNotFound,
-                    "No User could be found! Please check your credentials!");
+                    "Credentials are empty! Please check your credentials!");
         }
         else if ( username.equals("") || password.equals("") ) {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
                             UserNotFound,
-                    "No User could be found! Please check your credentials!");
+                    "Credentials are empty! Please check your credentials!");
         }
     }
 
