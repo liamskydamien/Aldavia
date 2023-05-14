@@ -114,7 +114,6 @@ public class LoginControl {
                 userTmp = repository.findUserByUseridAndPassword(username, password);
             }
         } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
-            // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
            throw new DatabaseUserException(
                    DatabaseUserException.
                         DatabaseUserExceptionType.
@@ -124,6 +123,12 @@ public class LoginControl {
         return userTmp;
     }
 
+    /**
+     * Methode zur Filterung von häufigen Fehlern
+     * @param username Benutzername / E-Mail-Adresse
+     * @param password Passwort
+     * @throws DatabaseUserException wenn ein Fehler auftritt
+     */
     public void filterForCommonErrors(String username, String password) throws DatabaseUserException {
         if( username == null || password == null ) {
             throw new DatabaseUserException(
@@ -141,6 +146,11 @@ public class LoginControl {
         }
     }
 
+    /**
+     * Methode zur Überprüfung, ob der Benutzername eine E-Mail-Adresse ist
+     * @param username Benutzername oder E-Mail-Adresse
+     * @return true, wenn es sich um eine E-Mail-Adresse handelt, sonst false
+     */
     public boolean checkForEMailAdress(String username){
         return username.contains("@");
     }
