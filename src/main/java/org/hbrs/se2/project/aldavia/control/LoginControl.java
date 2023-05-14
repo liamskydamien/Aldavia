@@ -1,11 +1,8 @@
 package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.aldavia.dao.UserDAO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.services.db.exceptions.DatabaseLayerException;
-import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

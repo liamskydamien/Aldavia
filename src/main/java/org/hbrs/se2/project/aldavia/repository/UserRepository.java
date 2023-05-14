@@ -26,5 +26,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     UserDTO findUserByEmailAndPassword(String email, String password);
 
+    void deleteByUserid(String userid);
+
 
 }
