@@ -103,8 +103,16 @@ public class LoginControl {
      */
     private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
         UserDTO userTmp;
+
+        filterForCommonErrors(username, password);
+
         try {
-            userTmp = repository.findUserByUseridAndPassword(username, password);
+            if(checkForEMailAdress(username)){
+                userTmp = repository.findUserByEmailAndPassword(username, password);
+            }
+            else {
+                userTmp = repository.findUserByUseridAndPassword(username, password);
+            }
         } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
             // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
            throw new DatabaseUserException(
@@ -114,6 +122,27 @@ public class LoginControl {
                    "A failure occured while trying to connect to database. Please try again later.");
         }
         return userTmp;
+    }
+
+    public void filterForCommonErrors(String username, String password) throws DatabaseUserException {
+        if( username == null || password == null ) {
+            throw new DatabaseUserException(
+                    DatabaseUserException.
+                            DatabaseUserExceptionType.
+                            UserNotFound,
+                    "No User could be found! Please check your credentials!");
+        }
+        else if ( username.equals("") || password.equals("") ) {
+            throw new DatabaseUserException(
+                    DatabaseUserException.
+                            DatabaseUserExceptionType.
+                            UserNotFound,
+                    "No User could be found! Please check your credentials!");
+        }
+    }
+
+    public boolean checkForEMailAdress(String username){
+        return username.contains("@");
     }
 
 }
