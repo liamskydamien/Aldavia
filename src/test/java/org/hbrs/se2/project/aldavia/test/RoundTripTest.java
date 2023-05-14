@@ -38,12 +38,13 @@ public class RoundTripTest {
         User user = new User();
         user.setEmail("test@myserver.de");
 
+        // Anlegen eines Studenten
         Student student = new Student();
         student.setUser(user);
         student.setVorname( "Torben" );
         student.setNachname("Michel");
-        // und ab auf die DB damit (save!)
 
+        // und ab auf die DB damit (save!)
         userRepository.save( user );
         studentRepository.save(student);
 
@@ -58,6 +59,7 @@ public class RoundTripTest {
         }
         System.out.println("User: " + userAfterCreate);
 
+        // Auslesen des Studenten
         Optional<Student> wrapper2 = studentRepository.findByUser(userAfterCreate);
         Student studentAfterCreate = null;
         if ( wrapper2.isPresent() ) {
@@ -76,11 +78,14 @@ public class RoundTripTest {
         int studentTmpId = studentAfterCreate.getStudentId();
         studentRepository.deleteById(studentTmpId);
         userRepository.deleteById(idTmp);
+
         // Schritt 4.1: Wir sind vorsichtig und gucken, ob der User wirklich gelöscht wurde ;-)
         Optional<User> wrapperAfterDelete = userRepository.findById(idTmp);
         Optional<Student> wrapperStudentAfterDelete = studentRepository.findById(studentTmpId);
+
         System.out.println("Wrapper: " + wrapperAfterDelete);
         System.out.println("Student-Wrapper: " + wrapperStudentAfterDelete);
+
         assertFalse( wrapperAfterDelete.isPresent() );
         assertFalse( wrapperStudentAfterDelete.isPresent() );
     }
