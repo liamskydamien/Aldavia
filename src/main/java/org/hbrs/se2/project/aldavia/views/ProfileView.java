@@ -25,7 +25,7 @@ public class ProfileView extends Div implements HasUrlParameter<String> {
                 .getQueryParameters();
 
         Map<String, List<String>> parametersMap = queryParameters.getParameters();
-        addTextToView(parametersMap.get("id").get(0));
+        addTextToView(parametersMap.get("username").get(0));
     }
     public ProfileView(ProfileControl profileControl) {
         addClassName("profile-view");
@@ -33,7 +33,7 @@ public class ProfileView extends Div implements HasUrlParameter<String> {
     }
 
     public void addTextToView(String text) {
-        add(new Text(text));
+        add(new Text(profileControl.getStudentProfile(text).toString()));
     }
 
 

@@ -23,7 +23,7 @@ public class AddStudents {
     @Test
     public void testAddStudents() {
         User user = new User();
-        user.setUserid("test");
+        user.setUserid("TestUser");
         user.setPassword("test");
         user.setEmail("test@test.de");
 
