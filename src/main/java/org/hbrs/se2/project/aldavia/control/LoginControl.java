@@ -1,14 +1,10 @@
 package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.aldavia.dao.UserDAO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.services.db.exceptions.DatabaseLayerException;
-import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class LoginControl {
@@ -103,10 +99,17 @@ public class LoginControl {
      */
     private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
         UserDTO userTmp;
+
+        filterForCommonErrors(username, password);
+
         try {
-            userTmp = repository.findUserByUseridAndPassword(username, password);
+            if(checkForEMailAdress(username)){
+                userTmp = repository.findUserByEmailAndPassword(username, password);
+            }
+            else {
+                userTmp = repository.findUserByUseridAndPassword(username, password);
+            }
         } catch ( org.springframework.dao.DataAccessResourceFailureException e ) {
-            // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen (ToDo!)
            throw new DatabaseUserException(
                    DatabaseUserException.
                         DatabaseUserExceptionType.
@@ -114,6 +117,38 @@ public class LoginControl {
                    "A failure occured while trying to connect to database. Please try again later.");
         }
         return userTmp;
+    }
+
+    /**
+     * Methode zur Filterung von häufigen Fehlern
+     * @param username Benutzername / E-Mail-Adresse
+     * @param password Passwort
+     * @throws DatabaseUserException wenn ein Fehler auftritt
+     */
+    public void filterForCommonErrors(String username, String password) throws DatabaseUserException {
+        if( username == null || password == null ) {
+            throw new DatabaseUserException(
+                    DatabaseUserException.
+                            DatabaseUserExceptionType.
+                            UserNotFound,
+                    "Credentials are empty! Please check your credentials!");
+        }
+        else if ( username.equals("") || password.equals("") ) {
+            throw new DatabaseUserException(
+                    DatabaseUserException.
+                            DatabaseUserExceptionType.
+                            UserNotFound,
+                    "Credentials are empty! Please check your credentials!");
+        }
+    }
+
+    /**
+     * Methode zur Überprüfung, ob der Benutzername eine E-Mail-Adresse ist
+     * @param username Benutzername oder E-Mail-Adresse
+     * @return true, wenn es sich um eine E-Mail-Adresse handelt, sonst false
+     */
+    public boolean checkForEMailAdress(String username){
+        return username.contains("@");
     }
 
 }

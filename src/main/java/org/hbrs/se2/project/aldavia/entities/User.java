@@ -57,7 +57,7 @@ public class User {
         return id;
     }
     @Basic
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, length = 45, unique = true)
     public String getUserid() {
         return userid;
     }
