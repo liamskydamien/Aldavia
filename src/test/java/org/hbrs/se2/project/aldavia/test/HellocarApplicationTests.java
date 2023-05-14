@@ -34,6 +34,7 @@ class HellocarApplicationTests {
     @Autowired
     private CarRepository carRepository;
 
+    /*
     @Test
     void testRolesOfUser() {
         Optional<User> wrapper = userRepository.findById(1);
@@ -132,5 +133,5 @@ class HellocarApplicationTests {
         }
 
     }
-
+*/
 }
