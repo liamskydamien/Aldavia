@@ -136,7 +136,7 @@ public class User {
     @JoinTable(name = "user_to_rolle", catalog = "demouser",
             schema = "carlook",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichhnung", nullable = false))
+            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung", nullable = false))
     public List<Rolle> getRoles() {
         return roles;
     }

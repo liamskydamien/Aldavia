@@ -43,7 +43,7 @@ class HellocarApplicationTests {
             List<Rolle> list = user.getRoles();
             assertEquals(2 , list.size() , "Anzahl der Rollen");
             Rolle rolle1 = list.get(0);
-            assertEquals("admin" , rolle1.getBezeichhnung() );
+            assertEquals("admin" , rolle1.getBezeichnung() );
         }
     }
 
@@ -88,8 +88,8 @@ class HellocarApplicationTests {
         String[] ist = {};
 
         for (Rolle r : list) {
-            System.out.println("Rolle: " + r.getBezeichhnung() );
-            ist = Utils.append( ist , r.getBezeichhnung() );
+            System.out.println("Rolle: " + r.getBezeichnung() );
+            ist = Utils.append( ist , r.getBezeichnung() );
         }
         assertArrayEquals( soll , ist );
     }
