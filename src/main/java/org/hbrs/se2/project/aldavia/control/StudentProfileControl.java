@@ -62,7 +62,6 @@ public class StudentProfileControl {
                 studentRepository.save(studentFromDB);
                 return true;
             } else {
-                // TODO Add exception handling
                 throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
             }
         }
