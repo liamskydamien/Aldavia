@@ -30,12 +30,11 @@ public class StudentProfileControl {
                 System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
                 return transformStudentProfileDTO(student);
             } else {
-                // TODO Add exception handling
-                throw new IllegalArgumentException("Student not found");
+                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
             }
         }
         catch (Exception e) {
-            throw new ProfileException("Error while loading student profile");
+            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
     }
 
@@ -64,11 +63,11 @@ public class StudentProfileControl {
                 return true;
             } else {
                 // TODO Add exception handling
-                throw new IllegalArgumentException("Student not found");
+                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
             }
         }
         catch (Exception e) {
-            throw new ProfileException("Error while saving student profile");
+            throw new ProfileException("Error while saving student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
     }
 
