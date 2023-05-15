@@ -14,7 +14,7 @@ public class DatabaseTest {
        "EntityManagerFactory" und einen "EntityManager" konfigurieren / verwenden.
     */
     @Before
-    public void setUp(){
+    public void setUp() {
         // Name der "Persistence Unit", die in der "persistence.xml"-Datei definiert ist:
         entityManagerFactory = Persistence.createEntityManagerFactory("<BitteNamenEinfügen>");
         entityManager = entityManagerFactory.createEntityManager();
@@ -24,7 +24,7 @@ public class DatabaseTest {
        und die "EntityManagerFactory" schließen.
      */
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (entityManager != null) {
             entityManager.close();
         }

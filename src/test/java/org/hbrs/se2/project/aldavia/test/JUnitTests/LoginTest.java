@@ -28,7 +28,7 @@ public class LoginTest {
 
     // Pürfung der misslungenen Anmeldung mit "ungültigen" Anmeldedaten mit Erwartung "false":
     @Test
-    public void testFailedLoginWithInvalidCredentials()(){}
+    public void testFailedLoginWithInvalidCredentials(){}
 
     // Wenn der Benutzer ohne Anmeldung versucht in einen geschützten Bereich zu kommen auf die Login-Seite weiterleiten Prüfung:
     @Test
