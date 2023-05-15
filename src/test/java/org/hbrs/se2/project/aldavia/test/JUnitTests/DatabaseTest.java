@@ -9,10 +9,9 @@ public class DatabaseTest {
     private EntityManagerFactory entityManagerFactory;
     protected EntityManager entityManager;
 
-    /* Stellt eine Verbindung zur Datenbank mit JPA (Java Persistence API) her.
-
-       Bei JPA ist keine explizite Verbindung zur Datenbank nötig, da die JPA-Implementierung alles erledigt.
-       Stattdessen muss man eine "EntityManagerFactory" und einen "EntityManager" konfigurieren / verwenden.
+    /* Stellt eine Verbindung zur Datenbank mit JPA (Java Persistence API) her. Bei JPA ist keine explizite
+       Verbindung zur Datenbank nötig, da die JPA-Implementierung alles erledigt. Stattdessen muss man eine
+       "EntityManagerFactory" und einen "EntityManager" konfigurieren / verwenden.
     */
     @Before
     public void setUp(){
