@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Student{
     @Id
     @GeneratedValue
@@ -49,6 +51,15 @@ public class Student{
     @OneToOne(optional = false)
     private User user;
 
+    public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.matrikelNummer = matrikelNummer;
+        this.studiengang = studiengang;
+        this.studienbeginn = studienbeginn;
+        this.geburtsdatum = geburtsdatum;
+        this.lebenslauf = lebenslauf;
+    }
 
     @Override
     public boolean equals(Object o) {
