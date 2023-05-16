@@ -48,8 +48,6 @@ public class Student{
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
-    private List<Kenntnis> kenntnisse;
-
     public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
         this.vorname = vorname;
         this.nachname = nachname;
@@ -66,6 +64,8 @@ public class Student{
     private int studentId;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    private List<Kenntnis> kenntnisse;
+
     @JoinTable(name = "student_to_kenntnis", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "studentId", referencedColumnName = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung"))
