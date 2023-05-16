@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,9 +16,6 @@ import java.util.Objects;
 @Builder
 
 public class Student{
-    @Id
-    @GeneratedValue
-    private int studentId;
 
     @Basic
     @Column(name = "vorname")
@@ -50,6 +48,7 @@ public class Student{
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
+    private List<Kenntnis> kenntnisse;
 
     public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
         this.vorname = vorname;
@@ -59,6 +58,19 @@ public class Student{
         this.studienbeginn = studienbeginn;
         this.geburtsdatum = geburtsdatum;
         this.lebenslauf = lebenslauf;
+    }
+
+    @Id
+    @GeneratedValue
+    @Column(name = "student_id")
+    private int studentId;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "student_to_kenntnis", catalog = "nmuese2s", schema = "carlook",
+            joinColumns = @JoinColumn(name = "studentId", referencedColumnName = "studentId"),
+            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung"))
+    public List<Kenntnis> getKenntnisse() {
+        return kenntnisse;
     }
 
     @Override
