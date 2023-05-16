@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="taetigkeitsfeld" , schema = "carlook" )
+@Table( name ="qualifikation" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
-public class Taetigkeitsfeld {
+public class Qualifikation {
     private String bezeichnung;
-    private List<Stellenanzeige> stellenanzeigen;
+    private String bereich;
     private List<Student> studenten;
     @Id
     @Column(name = "bezeichnung")
@@ -22,12 +22,17 @@ public class Taetigkeitsfeld {
         return bezeichnung;
     }
 
+    @Basic
+    @Column(name = "bereich")
+    public String getBereich() { return bereich; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Taetigkeitsfeld taetigkeitsfeld = (Taetigkeitsfeld) o;
-        return Objects.equals(bezeichnung, taetigkeitsfeld.bezeichnung);
+        Qualifikation qualifikation = (Qualifikation) o;
+        return Objects.equals(bezeichnung, qualifikation.bezeichnung) &&
+                Objects.equals(bereich, qualifikation.bereich);
     }
 
     @Override
@@ -36,20 +41,10 @@ public class Taetigkeitsfeld {
     }
 
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
-    public void setStellenanzeigen(List<Stellenanzeige> stellenanzeigen) {
-        this.stellenanzeigen = stellenanzeigen;
-    }
-
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
+    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
     public List<Student> getStudenten() {
         return studenten;
     }
-    public void setStudenten(List<Student> studenten) {
-        this.studenten = studenten;
-    }
+
+
 }

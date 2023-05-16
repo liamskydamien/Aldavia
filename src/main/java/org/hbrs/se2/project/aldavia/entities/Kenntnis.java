@@ -4,17 +4,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-// import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="taetigkeitsfeld" , schema = "carlook" )
+@Table( name ="kenntnis" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
-public class Taetigkeitsfeld {
+public class Kenntnis  {
     private String bezeichnung;
-    private List<Stellenanzeige> stellenanzeigen;
     private List<Student> studenten;
     @Id
     @Column(name = "bezeichnung")
@@ -26,8 +24,8 @@ public class Taetigkeitsfeld {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Taetigkeitsfeld taetigkeitsfeld = (Taetigkeitsfeld) o;
-        return Objects.equals(bezeichnung, taetigkeitsfeld.bezeichnung);
+        Kenntnis kenntnis = (Kenntnis) o;
+        return Objects.equals(bezeichnung, kenntnis.bezeichnung);
     }
 
     @Override
@@ -35,20 +33,8 @@ public class Taetigkeitsfeld {
         return Objects.hash(bezeichnung);
     }
 
-
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
-    public void setStellenanzeigen(List<Stellenanzeige> stellenanzeigen) {
-        this.stellenanzeigen = stellenanzeigen;
-    }
-
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-    public List<Student> getStudenten() {
-        return studenten;
-    }
+    @ManyToMany(mappedBy = "kenntnisse", fetch = FetchType.EAGER)
+    public List<Student> getStudenten() {return studenten;}
     public void setStudenten(List<Student> studenten) {
         this.studenten = studenten;
     }

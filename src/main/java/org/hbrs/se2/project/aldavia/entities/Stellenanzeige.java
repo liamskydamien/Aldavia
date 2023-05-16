@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Stellenanzeige {
     @Id
     @GeneratedValue
+    @Column(name = "id", nullable = false)
     private int stellenanzeigeId;
 
     @Basic
@@ -77,8 +78,8 @@ public class Stellenanzeige {
     @ManyToMany
     private List<Taetigkeitsfeld> taetigkeitsfelder;
     @JoinTable(name = "stellenanzeige_hat_taetigkeitsfeld", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "bezeichnung", nullable = false))
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "id", nullable = false))
     public List<Taetigkeitsfeld> getTaetigkeitsfelder() {
         return taetigkeitsfelder;
     }
@@ -87,13 +88,23 @@ public class Stellenanzeige {
     @OneToMany
     private List<Bewerbung> bewerbungen;
     @JoinTable(name = "stellenanzeige_hat_bewerbung", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "bewerbungId", nullable = false))
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false))
     public List<Bewerbung> getBewerbung() {
         return bewerbungen;
     }
     public void setBewerbung(List<Bewerbung> bewerbungen) {
         this.bewerbungen = bewerbungen;
+    }
+
+    // student_favorisiert_stellenanzeige
+    @ManyToMany(mappedBy = "stellenanzeigen")
+    private List<Student> studenten;
+    public List<Student> getStudenten() {
+        return studenten;
+    }
+    public void setStudenten(List<Student> studenten) {
+        this.studenten = studenten;
     }
 
 }

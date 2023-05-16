@@ -38,10 +38,10 @@ public class Bewerbung  {
         return Objects.hash(bewerbungId, datum);
     }
 
-//    @ManyToOne
-//    private Student student;
-//    public Student getStudent() { return student; }
-//    public void setStudent(Student student) {this.student = student;}
+    @ManyToOne
+    private Student student;
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) {this.student = student;}
 
     @ManyToOne
     private Stellenanzeige stellenanzeige;

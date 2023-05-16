@@ -66,7 +66,7 @@ public class Unternehmen {
     // unternehmen_erstellt_stellenanzeige
     @OneToMany
     private List<Stellenanzeige> stellenanzeigen;
-    @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
+    @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
     public List<Stellenanzeige> getStellenanzeigen() {
