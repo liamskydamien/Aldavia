@@ -51,6 +51,16 @@ public class Student{
     private User user;
 
 
+    public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.matrikelNummer = matrikelNummer;
+        this.studiengang = studiengang;
+        this.studienbeginn = studienbeginn;
+        this.geburtsdatum = geburtsdatum;
+        this.lebenslauf = lebenslauf;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,4 +73,6 @@ public class Student{
     public int hashCode() {
         return Objects.hash(studentId, vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
     }
+
+
 }

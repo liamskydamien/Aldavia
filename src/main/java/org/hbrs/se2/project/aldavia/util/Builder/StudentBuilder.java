@@ -10,7 +10,7 @@ public class StudentBuilder {
     private String studiengang;
     private LocalDate studienbeginn;
     private LocalDate geburtsdatum;
-    private String email;
+    private String lebenslauf;
 
     public StudentBuilder setVorname(String vorname) {
         this.vorname = vorname;
@@ -42,12 +42,12 @@ public class StudentBuilder {
         return this;
     }
 
-    public StudentBuilder setEmail(String email) {
-        this.email = email;
+    public StudentBuilder setLebenslauf(String lebenslauf) {
+        this.lebenslauf = lebenslauf;
         return this;
     }
 
     public Student createProfile() {
-        return new Student(vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, email);
+        return new Student(vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf);
     }
 }

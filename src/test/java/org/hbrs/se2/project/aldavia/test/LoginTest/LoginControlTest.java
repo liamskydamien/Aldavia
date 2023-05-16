@@ -13,6 +13,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -24,7 +26,7 @@ public class LoginControlTest {
     @Autowired
     private UserRepository userRepository;
 
-    private UserDTOImpl testUser = new UserDTOImpl();
+    private final UserDTOImpl testUser = new UserDTOImpl();
 
     @BeforeAll
     public void setUp() {
@@ -42,8 +44,8 @@ public class LoginControlTest {
     @AfterAll
     public void tearDown() {
         try {
-            UserDTO user = userRepository.findUserByUseridAndPassword("sascha", "abc");
-            userRepository.deleteById(user.getId());
+            Optional<User> user = userRepository.findUserByUseridAndPassword("sascha", "abc");
+            userRepository.deleteById(user.get().getId());
         }
         catch (Exception e) {
             System.out.println("User not found");
@@ -58,6 +60,7 @@ public class LoginControlTest {
 
             boolean userIsThere2 = loginControl.authenticate("test@aldavia.de", "abc");
             assertTrue(userIsThere2);
+            assertEquals(loginControl.getCurrentUser().getUserid(), testUser.getUserid(), "Userid not equal");
         }
         catch (DatabaseUserException e) {
             assertEquals(e.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "User not found");
