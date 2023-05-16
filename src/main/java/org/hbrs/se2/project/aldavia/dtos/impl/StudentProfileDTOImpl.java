@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -21,4 +23,7 @@ public class StudentProfileDTOImpl implements StudentProfileDTO {
     private LocalDate studienbeginn;
     private LocalDate geburtsdatum;
     private String email;
+    private List<String> kenntnisse;
+    private List<Map<String, String>> qualifikationen;
+    private List<Map<String, String>> sprachen;
 }

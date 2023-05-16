@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.control;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.StudentProfileDTOImpl;
+import org.hbrs.se2.project.aldavia.entities.Kenntnis;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,12 @@ public class StudentProfileControl {
         }
     }
 
-    public StudentProfileDTO transformStudentProfileDTO(Student student) {
+    /**
+     * Transform Student to StudentProfileDTO
+     * @param student The student
+     * @return StudentProfileDTO
+     */
+    private StudentProfileDTO transformStudentProfileDTO(Student student) {
 
         // Get Email
         String email = student.getUser().getEmail();
@@ -84,7 +90,9 @@ public class StudentProfileControl {
         studentProfileDTO.setStudienbeginn(student.getStudienbeginn());
         studentProfileDTO.setGeburtsdatum(student.getGeburtsdatum());
         studentProfileDTO.setEmail(email);
-
+        studentProfileDTO.setKenntnisse(student.getKenntnisse().stream().map(Kenntnis::getBezeichnung).toList());
+        //studentProfileDTO.setSprachen();
+        //studentProfileDTO.setQualifikationen();
         //Return StudentProfileDTOImpl
         return studentProfileDTO;
     }
