@@ -7,7 +7,6 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +51,8 @@ public class StudentTest {
         userRepository.save(user);
 
         //Kenntnisse
+
+        kenntnisse = new ArrayList<>();
 
         Kenntnis kenntnis = new Kenntnis();
         kenntnis.setBezeichnung("Java_Test_Kenntnis");
