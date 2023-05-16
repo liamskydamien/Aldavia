@@ -53,10 +53,10 @@ public class LoginControlTest {
     @Test
     public void testLoginPositiv() {
         try {
-            boolean userIsThere = loginControl.authentificate("sascha", "abc");
+            boolean userIsThere = loginControl.authenticate("sascha", "abc");
             assertTrue(userIsThere);
 
-            boolean userIsThere2 = loginControl.authentificate("test@aldavia.de", "abc");
+            boolean userIsThere2 = loginControl.authenticate("test@aldavia.de", "abc");
             assertTrue(userIsThere2);
         }
         catch (DatabaseUserException e) {
@@ -68,17 +68,17 @@ public class LoginControlTest {
     public void testLoginNegativ() {
         DatabaseUserException exceptionWrongPassword = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authentificate("sascha", "abcd");
+                    loginControl.authenticate("sascha", "abcd");
         });
 
         DatabaseUserException exceptionWrongUsername = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authentificate("saschaa", "abc");
+                    loginControl.authenticate("saschaa", "abc");
         });
 
         DatabaseUserException exceptionWrongEmail = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authentificate("test2@aldavia.de", "abc");
+                    loginControl.authenticate("test2@aldavia.de", "abc");
         });
 
         assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "Wrong Exception thrown");
