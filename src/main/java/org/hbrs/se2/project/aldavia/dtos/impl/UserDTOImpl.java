@@ -12,10 +12,12 @@ import java.util.List;
 public class UserDTOImpl implements UserDTO {
 
     private int id;
-    private String firstname;
-    private String lastname;
-    private List<RolleDTO> roles;
+    private String email;
+    private String password;
     private String userid;
-
+    private String phone;
+    private String profilePicture;
+    private String beschreibung;
+    private List<RolleDTO> roles;
 
 }
