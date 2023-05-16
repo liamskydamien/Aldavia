@@ -120,7 +120,7 @@ public class RegViewCompany extends Div {
     }
 
     private Component createTitle() {
-        return new H3("Student Registrierung");
+        return new H3("Unternehmen Registrierung");
     }
 
     private Component createFormLayout() {
