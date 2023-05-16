@@ -20,7 +20,7 @@ public class Kenntnis {
     private String bezeichnung;
     private List<Student> students;
     @Id
-    @Column(name = "kenntnis")
+    @Column(name = "kenntnis", nullable = false, unique = true)
     public String getBezeichnung() {
         return bezeichnung;
     }

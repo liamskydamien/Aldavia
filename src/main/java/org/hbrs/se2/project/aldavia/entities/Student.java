@@ -25,7 +25,7 @@ public class Student{
     @Column(name = "nachname")
     private String nachname;
     @Basic
-    @Column(name = "matrikelnummer")
+    @Column(name = "matrikelnummer", nullable = false, unique = true)
     private String matrikelNummer;
 
     @Basic
