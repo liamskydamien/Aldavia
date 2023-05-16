@@ -1,0 +1,56 @@
+
+
+#header-neutral img{
+    width: 150px;
+    height: auto;
+    margin: 25px 25px 25px 70px;
+
+}
+
+#header-neutral{
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+
+}
+#top-right-layout{
+    padding: 25px 70px 25px 25px;
+}
+
+#login-tab{
+    background-color: transparent;
+    height: 50px;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+#login-tab:hover{
+    cursor: pointer;
+    color: #1a73e8;
+
+}
+
+#sign-up-tab{
+    background-color: transparent;
+    height: 50px;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+
+#sign-up-button{
+    background-color: #1a73e8;
+
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #1a73e8;
+    height: 50px;
+
+}
+
+#sign-up-button:hover{
+    cursor: pointer;
+}
+
