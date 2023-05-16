@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 // import java.sql.Date;
@@ -13,8 +11,12 @@ import java.util.Objects;
 @Entity
 @Table( name ="user" , schema = "carlook" )
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@ToString
+
 public class User {
     private int id;
     @Basic
@@ -25,7 +27,7 @@ public class User {
     @Column(name = "password")
     private String password;
     @Basic
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, unique = true)
     private String userid;
 
     @Basic

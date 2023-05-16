@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +11,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 public class Student{
     @Id
     @GeneratedValue
@@ -46,7 +47,7 @@ public class Student{
     private String lebenslauf;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
 
