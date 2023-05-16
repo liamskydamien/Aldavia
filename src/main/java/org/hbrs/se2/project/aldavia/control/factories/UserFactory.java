@@ -1,4 +1,6 @@
-package org.hbrs.se2.project.aldavia.registration;
+package org.hbrs.se2.project.aldavia.control.factories;
+
+import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 
 public class UserFactory {
 	

@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.registration;
+package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.Component;
@@ -21,6 +21,9 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.hbrs.se2.project.aldavia.control.RegistrationControl;
+import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
+import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
 
@@ -28,9 +31,9 @@ import org.hbrs.se2.project.aldavia.util.Utils;
 @Route(value = "registration", layout = RegistrationLayout.class)
 @PageTitle("Registration")
 @CssImport("./styles/views/entercar/enter-car-view.css")
-public class RegistrationView extends Div {
+public class RegistrationViewStudent extends Div {
 
-    private TextField username = new TextField("Username");
+    private TextField userName = new TextField("Username");
     private TextField mail = new TextField("Email-Adresse");
 
     private TextField vorname = new TextField("Vorname");
@@ -50,7 +53,7 @@ public class RegistrationView extends Div {
 
 
 
-    public RegistrationView(RegistrationControlCompany regControl) {
+    public RegistrationViewStudent(RegistrationControl regControl) {
         pbar.setWidth("680px");
 
 
@@ -67,7 +70,7 @@ public class RegistrationView extends Div {
 
 
 
-
+        //Aufsetzen der Progress-Bar
         password.addValueChangeListener(event -> {
             if (password.getValue().length() < 11 ) {
                 pbar.setValue(password.getValue().length());
@@ -76,9 +79,6 @@ public class RegistrationView extends Div {
         password.setValueChangeMode(ValueChangeMode.EAGER);
 
 
-
-        // Default Mapping of Cars attributes and the names of this View based on names
-        // Source: https://vaadin.com/docs/flow/binding-data/tutorial-flow-components-binder-beans.html
         binder.bindInstanceFields(this);
         clearForm();
 
@@ -96,15 +96,14 @@ public class RegistrationView extends Div {
             //carService.createCar(binder.getBean() ,  userDTO );
 
             RegistrationDTOStudent dto = binder.getBean();
-            dto.setStatusStudent(true);
-
-            //Password check
 
 
             if (dto.getMail().equals("") || dto.getUserName().equals("") || dto.getPassword().equals("")
-                       || passwordCheck.getValue().equals("") || vorname.equals("") || nachname.equals("")) {
+                       || passwordCheck.getValue().equals("") || dto.getVorname().equals("") || dto.getNachname().equals("")) {
 
                 Notification.show("Bitte alle Felder ausfüllen!");
+            }else if(dto.getPassword().length() < 10) {
+                Notification.show("Ihr Passwort erfüllt nicht die vorgeschiebene Länge!");
             } else if (!(dto.getPassword().equals(passwordCheck.getValue()))) {
                 Notification.show("Passwörter stimmen nicht überein!");
                 password.clear();
@@ -126,7 +125,7 @@ public class RegistrationView extends Div {
 
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(username, mail, vorname, nachname, password, passwordCheck);
+        formLayout.add(userName, mail, vorname, nachname, password, passwordCheck);
         return formLayout;
     }
 
@@ -159,19 +158,28 @@ public class RegistrationView extends Div {
 
     }
 
-    private VerticalLayout createDialogLayout(RegistrationControlCompany regControl) {
+    private VerticalLayout createDialogLayout(RegistrationControl regControl) {
         RegistrationDTOStudent dto = binder.getBean();
         VerticalLayout layout = new VerticalLayout();
         Div text = new Div();
         text.add("Wollen Sie mit den angegebenen Daten fortfahren?");
         layout.add(text);
         Button confirmButton = new Button("Confirm", e -> {
-            clearForm();
-            register(regControl);
-            Notification.show("Registrierung erfolgreich!");
+            RegistrationResult result  = register(regControl);
+            if (result.getResult() == true) {
+                Notification.show("Registrierung erfolgreich!");
+                UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+                clearForm();
+                dialog.close();
+            } else if (result.getReason().equals(RegistrationResult.EMAIL_ALREADY_EXISTS)) {
+                Notification.show("Die Email Adresse ist bereits vorhanden!");
+                dialog.close();
+            } else {
+                Notification.show("Der Username ist bereits belegt!");
+                dialog.close();
+            }
 
-            UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
-            dialog.close();
+
         } );
         Button cancelButton = new Button("Cancel", e -> dialog.close());
         cancelButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -184,13 +192,13 @@ public class RegistrationView extends Div {
         return layout;
     }
 
-    private void createDialog(RegistrationControlCompany regControl) {
+    private void createDialog(RegistrationControl regControl) {
         dialog.add(createDialogLayout(regControl));
     }
 
-    private void register(RegistrationControlCompany regControl) {
+    private RegistrationResult register(RegistrationControl regControl) {
         RegistrationDTOStudent dto = binder.getBean();
-        regControl.registerUser(dto);
+        return regControl.createStudent(dto);
     }
 
     private void createDetailsInformation(){

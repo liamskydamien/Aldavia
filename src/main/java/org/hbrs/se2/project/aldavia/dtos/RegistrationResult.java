@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.registration;
+package org.hbrs.se2.project.aldavia.dtos;
 
 public class RegistrationResult {
 
@@ -8,6 +8,8 @@ public class RegistrationResult {
 
     // Noch nicht verwendet, aber für zukünftige Zwecke
     public final static String EMAIL_ALREADY_EXISTS = "mail";
+
+	public final static String USERNAME_ALREADY_EXISTS = "username";
 	
 	private boolean result;
 	
