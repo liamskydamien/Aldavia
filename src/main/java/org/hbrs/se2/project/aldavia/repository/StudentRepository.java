@@ -12,4 +12,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("SELECT s FROM Student s WHERE s.user.userid = ?1")
     Optional<Student> findByUserID(String userid);
+
+    void deleteByMatrikelNummer(String matrikelNummer);
 }

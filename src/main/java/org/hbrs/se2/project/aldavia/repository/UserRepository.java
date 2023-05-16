@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findUserByEmailAndPassword ( String userid , String password);
 
+    void deleteByUserid(String userid);
 }

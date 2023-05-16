@@ -7,9 +7,7 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,6 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
 
     @Autowired
@@ -39,8 +38,18 @@ public class StudentTest {
 
     //TODO: Implement tests for Student
 
-    @BeforeEach
+    @BeforeAll
     public void setUp() {
+        try {
+            // Clean up
+            studentRepository.deleteByMatrikelNummer("9042069");
+            userRepository.deleteByUserid("Sascha");
+            kenntnisseRepository.deleteById("Java_Test_Kenntnis");
+            kenntnisseRepository.deleteById("BWL_Test_Kenntnis");
+        }
+        catch (Exception e) {
+            System.out.println("Nothing to clean-up: " + e.getMessage());
+        }
 
         //User
 
@@ -65,25 +74,40 @@ public class StudentTest {
         kenntnisse.add(kenntnis2);
 
         //TODO Qualifikationen und Sprachen
-
-        //Student
-
-        student = new Student();
-        student.setVorname("Sascha");
-        student.setNachname("Bonne");
-        student.setStudienbeginn(LocalDate.of(2018, 10, 1));
-        student.setStudiengang("Informatik");
-        student.setGeburtsdatum(LocalDate.of(1998, 8, 10));
-        student.setMatrikelNummer("9042069");
-        student.setLebenslauf("Lebenslauf");
-        student.setKenntnisse(kenntnisse);
-        student.setUser(user);
     }
 
     @AfterEach
+    public void cleanUp() {
+        try{
+            student = null;
+        }
+        catch (Exception e) {
+            System.out.println("Error while cleaning up: " + e.getMessage());
+        }
+    }
+
+    @BeforeEach
+    public void init() {
+        try{
+            student = new Student();
+            student.setVorname("Sascha");
+            student.setNachname("Bonne");
+            student.setStudienbeginn(LocalDate.of(2018, 10, 1));
+            student.setStudiengang("Informatik");
+            student.setGeburtsdatum(LocalDate.of(1998, 8, 10));
+            student.setMatrikelNummer("9042069");
+            student.setLebenslauf("Lebenslauf");
+            student.setKenntnisse(kenntnisse);
+            student.setUser(user);
+        }
+        catch (Exception e) {
+            System.out.println("Error while initializing: " + e.getMessage());
+        }
+    }
+
+    @AfterAll
     public void tearDown() {
         try{
-            studentRepository.delete(student);
             userRepository.delete(user);
             kenntnisseRepository.deleteById("Java_Test_Kenntnis");
             kenntnisseRepository.deleteById("BWL_Test_Kenntnis");
@@ -95,41 +119,45 @@ public class StudentTest {
 
    @Test
    public void testReadData(){
-       Optional<Student> awaitStudent = studentRepository.findById(student.getStudentId());
-         assertTrue(awaitStudent.isPresent());
-            Student awaitStudent2 = awaitStudent.get();
-                assertEquals(awaitStudent2.getVorname(), student.getVorname());
-                assertEquals(awaitStudent2.getNachname(), student.getNachname());
-                assertEquals(awaitStudent2.getStudienbeginn(), student.getStudienbeginn());
-                assertEquals(awaitStudent2.getStudiengang(), student.getStudiengang());
-                assertEquals(awaitStudent2.getGeburtsdatum(), student.getGeburtsdatum());
-                assertEquals(awaitStudent2.getMatrikelNummer(), student.getMatrikelNummer());
-                assertEquals(awaitStudent2.getLebenslauf(), student.getLebenslauf());
-                assertEquals(awaitStudent2.getKenntnisse(), student.getKenntnisse());
-                assertEquals(awaitStudent2.getUser(), student.getUser());
+        studentRepository.save(student);
+        Optional<Student> awaitStudent = studentRepository.findById(student.getStudentId());
+        assertTrue(awaitStudent.isPresent());
+        Student awaitStudent2 = awaitStudent.get();
+        assertEquals(awaitStudent2.getVorname(), student.getVorname());
+        assertEquals(awaitStudent2.getNachname(), student.getNachname());
+        assertEquals(awaitStudent2.getStudienbeginn(), student.getStudienbeginn());
+        assertEquals(awaitStudent2.getStudiengang(), student.getStudiengang());
+        assertEquals(awaitStudent2.getGeburtsdatum(), student.getGeburtsdatum());
+        assertEquals(awaitStudent2.getMatrikelNummer(), student.getMatrikelNummer());
+        assertEquals(awaitStudent2.getLebenslauf(), student.getLebenslauf());
+        assertEquals(awaitStudent2.getKenntnisse(), student.getKenntnisse());
+        assertEquals(awaitStudent2.getUser(), student.getUser());
+       studentRepository.delete(student);
    }
    @Test
    public void testFindByUser(){
-        Optional<Student> awaitStudent = studentRepository.findByUser(user);
-        assertTrue(awaitStudent.isPresent());
-            Student awaitStudent2 = awaitStudent.get();
-                assertEquals(awaitStudent2.getVorname(), student.getVorname());
-                assertEquals(awaitStudent2.getNachname(), student.getNachname());
-                assertEquals(awaitStudent2.getStudienbeginn(), student.getStudienbeginn());
-                assertEquals(awaitStudent2.getStudiengang(), student.getStudiengang());
-                assertEquals(awaitStudent2.getGeburtsdatum(), student.getGeburtsdatum());
-                assertEquals(awaitStudent2.getMatrikelNummer(), student.getMatrikelNummer());
-                assertEquals(awaitStudent2.getLebenslauf(), student.getLebenslauf());
-                assertEquals(awaitStudent2.getKenntnisse(), student.getKenntnisse());
-                assertEquals(awaitStudent2.getUser(), student.getUser());
+       studentRepository.save(student);
+       Optional<Student> awaitStudent = studentRepository.findByUser(user);
+       assertTrue(awaitStudent.isPresent());
+       Student awaitStudent2 = awaitStudent.get();
+        assertEquals(awaitStudent2.getVorname(), student.getVorname());
+        assertEquals(awaitStudent2.getNachname(), student.getNachname());
+        assertEquals(awaitStudent2.getStudienbeginn(), student.getStudienbeginn());
+        assertEquals(awaitStudent2.getStudiengang(), student.getStudiengang());
+        assertEquals(awaitStudent2.getGeburtsdatum(), student.getGeburtsdatum());
+        assertEquals(awaitStudent2.getMatrikelNummer(), student.getMatrikelNummer());
+        assertEquals(awaitStudent2.getLebenslauf(), student.getLebenslauf());
+        assertEquals(awaitStudent2.getKenntnisse(), student.getKenntnisse());
+        assertEquals(awaitStudent2.getUser(), student.getUser());
+        studentRepository.delete(student);
     }
 
     @Test
     public void testAddSameStudent(){
+        studentRepository.save(student);
         assertThrows(Exception.class, () -> {
             studentRepository.save(student);
         });
-
         Student student2 = new Student();
         student2.setVorname("Mareike");
         student2.setNachname("Blohm");
@@ -143,5 +171,6 @@ public class StudentTest {
         assertThrows(Exception.class, () -> {
             student2.setUser(user);
         });
+        studentRepository.delete(student);
     }
 }
