@@ -28,9 +28,9 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
 
 
-@Route(value = "registrationCompany", layout = RegistrationLayout.class)
+@Route(value = "registrationCompany")
 @PageTitle("RegistrationCompany")
-@CssImport("./styles/views/entercar/enter-car-view.css")
+@CssImport("./styles/views/regView/reg-view.css")
 public class RegViewCompany extends Div {
 
     private TextField username = new TextField("Username");
@@ -42,7 +42,7 @@ public class RegViewCompany extends Div {
     private ProgressBar pbar = new ProgressBar(0.0,10.0);
     private PasswordField passwordCheck = new PasswordField("Passwort check");
 
-    private Button register = new Button("Register");
+    private Button register = new Button("Sign Up");
     private Button generatePassword = new Button("Generate Password");
 
     private Dialog dialog = new Dialog();
@@ -54,7 +54,14 @@ public class RegViewCompany extends Div {
 
 
     public RegViewCompany(RegistrationControl regControl) {
-        pbar.setWidth("680px");
+        pbar.setWidth("390px");
+
+        username.setRequiredIndicatorVisible(true);
+        mail.setRequiredIndicatorVisible(true);
+        companyName.setRequiredIndicatorVisible(true);
+        standort.setRequiredIndicatorVisible(true);
+        password.setRequiredIndicatorVisible(true);
+        passwordCheck.setRequiredIndicatorVisible(true);
 
 
 
@@ -132,7 +139,7 @@ public class RegViewCompany extends Div {
     private Component createButtonLayout() {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.addClassName("button-layout");
-        register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        register.setClassName("register-button");
         buttonLayout.add(register);
         createDetailsInformation();
         buttonLayout.add(details);
@@ -145,6 +152,7 @@ public class RegViewCompany extends Div {
         progressBarLabel.setText("Password length");
         layout.add(pbar);
         layout.add(progressBarLabel);
+        layout.setClassName("progressBar");
         return layout;
 
     }
@@ -153,7 +161,7 @@ public class RegViewCompany extends Div {
         generatePassword.addThemeVariants(ButtonVariant.LUMO_SMALL);
         generatePassword.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         l.add(generatePassword);
-        l.setHeight("100px");
+        l.setHeight("60px");
         return l;
 
     }
