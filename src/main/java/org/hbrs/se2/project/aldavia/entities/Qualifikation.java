@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Table( name ="qualifikation" , schema = "carlook" )
 @NoArgsConstructor
+@Getter
 @Setter
 public class Qualifikation {
 
@@ -44,10 +46,11 @@ public class Qualifikation {
     }
 
 
-
-    public List<Student> getStudenten() {
-        return studenten;
+    public Qualifikation(int id){
+        this.id = id;
     }
+
+
 
 
 }
