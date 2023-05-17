@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,9 +16,6 @@ import java.util.Objects;
 @Builder
 
 public class Student{
-    @Id
-    @GeneratedValue
-    private int studentId;
 
     @Basic
     @Column(name = "vorname")
@@ -27,7 +25,7 @@ public class Student{
     @Column(name = "nachname")
     private String nachname;
     @Basic
-    @Column(name = "matrikelnummer")
+    @Column(name = "matrikelnummer", nullable = false, unique = true)
     private String matrikelNummer;
 
     @Basic
@@ -50,6 +48,30 @@ public class Student{
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
+    public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.matrikelNummer = matrikelNummer;
+        this.studiengang = studiengang;
+        this.studienbeginn = studienbeginn;
+        this.geburtsdatum = geburtsdatum;
+        this.lebenslauf = lebenslauf;
+    }
+
+    @Id
+    @GeneratedValue
+    @Column(name = "student_id")
+    private int studentId;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Kenntnis> kenntnisse;
+
+    @JoinTable(name = "student_to_kenntnis", catalog = "nmuese2s", schema = "carlook",
+            joinColumns = @JoinColumn(name = "studentId", referencedColumnName = "studentId"),
+            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung"))
+    public List<Kenntnis> getKenntnisse() {
+        return kenntnisse;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -63,4 +85,6 @@ public class Student{
     public int hashCode() {
         return Objects.hash(studentId, vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
     }
+
+
 }

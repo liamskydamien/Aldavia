@@ -2,9 +2,14 @@ package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
+import org.hbrs.se2.project.aldavia.dtos.impl.RolleDTOImpl;
+import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.util.Builder.UserDTOBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class LoginControl {
@@ -21,9 +26,9 @@ public class LoginControl {
      * @return true, wenn die Authentifizierung erfolgreich war, sonst false
      * @throws DatabaseUserException
      */
-    public boolean authentificate(String username, String password ) throws DatabaseUserException {
+    public boolean authenticate(String username, String password ) throws DatabaseUserException {
 
-        UserDTO tmpUser = this.getUserWithJPA( username , password );
+        User tmpUser = this.getUserWithJPA( username , password );
 
         if ( tmpUser == null ) {
             throw new DatabaseUserException(
@@ -32,7 +37,7 @@ public class LoginControl {
                             UserNotFound,
                     "No User could be found! Please check your credentials!");
         }
-        this.userDTO = tmpUser;
+        this.userDTO = buildUserDTO( tmpUser );
         return true;
     }
 
@@ -44,39 +49,6 @@ public class LoginControl {
         return this.userDTO;
 
     }
-
-    /*
-    private UserDTO getUserWithJDBC( String username , String password ) throws DatabaseUserException {
-        UserDTO userTmp = null;
-        UserDAO dao = new UserDAO();
-        try {
-            userDTO = dao.findUserByUseridAndPassword( username , password );
-        }
-        catch ( DatabaseLayerException e) {
-
-            // Analyse und Umwandlung der technischen Errors in 'lesbaren' Darstellungen
-            // Durchreichung und Behandlung der Fehler (Chain Of Responsibility Pattern (SE-1))
-            String reason = e.getReason();
-
-            if (reason.equals(Globals.Errors.NOUSERFOUND)) {
-                return userTmp;
-                // throw new DatabaseUserException("No User could be found! Please check your credentials!");
-            }
-            else if ( reason.equals((Globals.Errors.SQLERROR))) {
-                throw new DatabaseUserException(databaseUserExceptionType, "There were problems with the SQL code. Please contact the developer!");
-            }
-            else if ( reason.equals((Globals.Errors.DATABASE ) )) {
-                throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while trying to connect to database with JDBC. " +
-                        "Please contact the admin");
-            }
-            else {
-                throw new DatabaseUserException(databaseUserExceptionType, "A failure occured while");
-            }
-
-        }
-        return userDTO;
-    }
-     */
 
     /**
      * Backdoor für Testzwecke (JPA)
@@ -97,9 +69,8 @@ public class LoginControl {
      * @return UserDTO
      * @throws DatabaseUserException
      */
-    private UserDTO getUserWithJPA( String username , String password ) throws DatabaseUserException {
-        UserDTO userTmp;
-
+    private User getUserWithJPA( String username , String password ) throws DatabaseUserException {
+        Optional<User> userTmp;
         filterForCommonErrors(username, password);
 
         try {
@@ -116,7 +87,7 @@ public class LoginControl {
                         DatabaseConnectionFailed,
                    "A failure occured while trying to connect to database. Please try again later.");
         }
-        return userTmp;
+        return userTmp.orElse(null);
     }
 
     /**
@@ -147,8 +118,28 @@ public class LoginControl {
      * @param username Benutzername oder E-Mail-Adresse
      * @return true, wenn es sich um eine E-Mail-Adresse handelt, sonst false
      */
-    public boolean checkForEMailAdress(String username){
+    private boolean checkForEMailAdress(String username){
         return username.contains("@");
+    }
+
+    /**
+     * Methode zur Erstellung eines UserDTOs
+     * @param user User
+     * @return UserDTO
+     */
+    private UserDTO buildUserDTO(User user){
+        UserDTOBuilder builder = new UserDTOBuilder();
+        builder.setUserName(user.getUserid());
+        builder.setMail(user.getEmail());
+        builder.setPassword(user.getPassword());
+        builder.setPhone(user.getPhone());
+        builder.setProfilePicture(user.getProfilePicture());
+        builder.setRoles(user.getRoles()
+                             .stream()
+                             .map(role -> {RolleDTOImpl r = new RolleDTOImpl();
+                                           r.setBezeichnung(role.getBezeichnung());
+                                           return r;}).toList());
+        return builder.createUserDTO();
     }
 
 }
