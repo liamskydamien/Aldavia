@@ -29,16 +29,14 @@ public class SpracheTest {
         // Read
         Optional<Sprache> awaitSprache = sprachenRepository.findById(1);
         assertTrue(awaitSprache.isPresent());
-        Sprache awaitedSprache = awaitSprache.get();
-        assertEquals(awaitedSprache, sprache);
+        assertEquals(awaitSprache.get(), sprache);
 
         // Update
         sprache.setLevel("C1");
         sprachenRepository.save(sprache);
         awaitSprache = sprachenRepository.findById(1);
         assertTrue(awaitSprache.isPresent());
-        awaitedSprache = awaitSprache.get();
-        assertEquals(awaitedSprache, sprache);
+        assertEquals(awaitSprache.get(), sprache);
 
         // Delete
         sprachenRepository.deleteById(1);
