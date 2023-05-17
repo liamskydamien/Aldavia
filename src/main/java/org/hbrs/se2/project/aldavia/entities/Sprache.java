@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Table( name ="sprache" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
+@Getter
 public class Sprache {
     private String name;
     private String level;
@@ -41,7 +43,7 @@ public class Sprache {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Sprache sprache = (Sprache) o;
-        return spracheId == sprache.spracheId && Objects.equals(name, sprache.name) && Objects.equals(level, sprache.level) && Objects.equals(studenten, sprache.studenten);
+        return Objects.equals(name, sprache.name) && Objects.equals(level, sprache.level) && Objects.equals(spracheId, sprache.spracheId) && Objects.equals(studenten, sprache.studenten);
     }
 
     @Override
