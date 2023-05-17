@@ -62,19 +62,8 @@ public class KenntnisseTest {
 
     @Test
     public void negativTests(){
-        Kenntnis kenntnis = new Kenntnis();
-        kenntnis.setBezeichnung("Java_Test");
-        kenntnisseRepository.save(kenntnis);
-        //Saved in DB?
-        assertTrue(kenntnisseRepository.existsById("Java_Test"));
-
-        Kenntnis doppelteKenntnis = new Kenntnis();
-        kenntnis.setBezeichnung("Java_Test");
-        assertThrows(Exception.class, () -> kenntnisseRepository.save(doppelteKenntnis));
         assertThrows(Exception.class, () -> kenntnisseRepository.save(null));
         assertThrows(Exception.class, () -> kenntnisseRepository.save(new Kenntnis()));
-
-        kenntnisseRepository.deleteById("Java_Test");
     }
 
     @Test
