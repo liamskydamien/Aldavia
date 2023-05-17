@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -11,20 +12,24 @@ import java.util.Objects;
 @Entity
 @Table( name ="qualifikation" , schema = "carlook" )
 @NoArgsConstructor
+@Getter
 @Setter
 public class Qualifikation {
-    private String bezeichnung;
-    private String bereich;
-    private List<Student> studenten;
+
     @Id
+    @GeneratedValue
+    @Column(name= "qualifikation_id")
+    private int id;
+
+    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
+    private List<Student> studenten;
+
     @Column(name = "bezeichnung")
-    public String getBezeichnung() {
-        return bezeichnung;
-    }
+    private String bezeichnung;
 
     @Basic
     @Column(name = "bereich")
-    public String getBereich() { return bereich; }
+    private String bereich;
 
     @Override
     public boolean equals(Object o) {
@@ -41,10 +46,11 @@ public class Qualifikation {
     }
 
 
-    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
-    public List<Student> getStudenten() {
-        return studenten;
+    public Qualifikation(int id){
+        this.id = id;
     }
+
+
 
 
 }
