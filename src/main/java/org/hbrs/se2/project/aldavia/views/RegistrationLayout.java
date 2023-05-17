@@ -8,107 +8,94 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import org.hbrs.se2.project.aldavia.control.RegistrationControl;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.vaadin.flow.component.tabs.TabsVariant.LUMO_MINIMAL;
 
-@CssImport("./styles/views/main/main-view.css")
-@Route("layout")
+@CssImport("./styles/views/regView/reg-view.css")
+@Route(value = "registration", layout = NeutralLayout.class)
 @JsModule("./styles/shared-styles.js")
-public class RegistrationLayout extends AppLayout {
+public class RegistrationLayout extends VerticalLayout {
 
-    private Tab details = createTab("Student", RegistrationViewStudent.class);
-    private Tab payment = createTab("Unternehmen", RegViewCompany.class);
+    @Autowired
+    private RegistrationControl registrationControl;
+    private final Tabs tabs = new Tabs();;
+    private final Div pages = new Div();
+    private final Map<Tab, Component> tabsToPages = new HashMap<>();
+
     public RegistrationLayout() {
+        this.setId("reg-view");
+        pages.setClassName("pages");
+        tabs.setClassName("reg-tabs");
+
+        setBackgroundImage();
         setUpUI();
     }
 
     private void setUpUI() {
-        addToNavbar(true, createHeaderContent(createTabs()));
-        addToDrawer(createDrawerContent());
+
+
+
+        createTab("Student", new RegistrationViewStudent(registrationControl));
+        createTab("Company", new RegViewCompany(registrationControl));
+
+        //Defaukt tab
+        tabsToPages.get(tabs.getComponentAt(0)).setVisible(true);
+        tabsToPages.get(tabs.getComponentAt(1)).setVisible(false);
+
+        tabs.addSelectedChangeListener(event -> {
+            tabsToPages.values().forEach(page -> page.setVisible(false));
+            Component selectedPage = tabsToPages.get(tabs.getSelectedTab());
+            selectedPage.setVisible(true);
+        });
+
+        FlexLayout layout = new FlexLayout();
+        layout.setId("flex-layout");
+        layout.setFlexDirection(FlexLayout.FlexDirection.COLUMN);
+        layout.setAlignItems(FlexLayout.Alignment.START);
+
+        tabs.getElement().getStyle().set("position", "relative");
+        tabs.getElement().getStyle().set("left", "50px"); // 50px nach rechts verschieben
+
+        layout.add(tabs, pages);
+
+
+        add(layout);
+    }
+
+    private void createTab(String title, Component page){
+        Tab tab = new Tab(title);
+        tab.setClassName("reg-tab");
+        tabs.add(tab);
+        tabsToPages.put(tab, page);
+        pages.add(page);
 
     }
 
-    private Component createHeaderContent(Component tabs) {
-        // Ein paar Grund-Einstellungen. Alles wird in ein horizontales Layout gesteckt.
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.setId("header");
-        layout.getThemeList().set("dark", true);
-        layout.setWidthFull();
-        layout.setSpacing(false);
-        layout.add(tabs);
-        layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout.setJustifyContentMode( FlexComponent.JustifyContentMode.EVENLY );
+    private void setBackgroundImage() {
 
+        this.getElement().getStyle().set("background-image", "url('images/registration.png')");
+        this.getElement().getStyle().set("background-size", "cover");
+        this.getElement().getStyle().set("background-position", "center");
 
-        // Interner Layout
-        HorizontalLayout topRightPanel = new HorizontalLayout();
-        topRightPanel.setWidthFull();
-        topRightPanel.setJustifyContentMode( FlexComponent.JustifyContentMode.END );
-        topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
-
-        // Der Name des Users wird später reingesetzt, falls die Navigation stattfindet
-        //    helloUser = new H1();
-        //   topRightPanel.add(helloUser);
-
-        // Logout-Button am rechts-oberen Rand.
-        MenuBar bar = new MenuBar();
-        bar.addItem("Home" , e -> navigateToLogin());
-        topRightPanel.add(bar);
-
-        layout.add( topRightPanel );
-        return layout;
     }
 
-    private Component createDrawerContent() {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        layout.getThemeList().set("spacing-s", true);
-        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
-
-        HorizontalLayout logoLayout = new HorizontalLayout();
-
-        // Hinzufügen des Logos
-        logoLayout.setId("logo");
-        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
-        logoLayout.add(new H1("HelloCar"));
-
-        // Hinzufügen des Menus inklusive der Tabs
-        layout.add(logoLayout);
-        return layout;
-    }
-
-    private void navigateToLogin() {
-        UI ui = this.getUI().get();
-        ui.getPage().setLocation("/");
-    }
-
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
-        final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
-        ComponentUtil.setData(tab,Class.class, navigationTarget);
-        return tab;
-    }
-
-    private Component createTabs() {
-        FormLayout formLayout = new FormLayout();
 
 
-        Tabs tabs = new Tabs(details, payment);
-        tabs.addThemeVariants(LUMO_MINIMAL);
-        formLayout.add(tabs);
-        return formLayout;
-    }
 }

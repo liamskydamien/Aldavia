@@ -31,14 +31,13 @@ import java.util.Optional;
  */
 @CssImport("./styles/views/main/main-view.css")
 @Route("main")
-@PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
+//@PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
     private H1 viewTitle;
     private H1 helloUser;
-
 
     private AuthorizationControl authorizationControl;
 
@@ -162,7 +161,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         return tabs;
     }
 
-    private Component[] createMenuItems() {
+    private Component[]  createMenuItems() {
        // Abholung der Referenz auf den Authorisierungs-Service
        authorizationControl = new AuthorizationControl();
 
@@ -178,7 +177,6 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
            System.out.println("User is Admin!");
            tabs = Utils.append( tabs , createTab("Enter Car", EnterCarView.class)  );
        }
-
        // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
 
        return tabs;
