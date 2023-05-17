@@ -62,21 +62,6 @@ public class Student{
         this.lebenslauf = lebenslauf;
     }
 
-    @Id
-    @GeneratedValue
-    @Column(name = "student_id")
-    private int studentId;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Kenntnis> kenntnisse;
-
-    @JoinTable(name = "student_to_kenntnis", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "studentId", referencedColumnName = "studentId"),
-            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung"))
-    public List<Kenntnis> getKenntnisse() {
-        return kenntnisse;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

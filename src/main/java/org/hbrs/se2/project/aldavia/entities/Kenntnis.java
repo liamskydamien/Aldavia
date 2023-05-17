@@ -25,11 +25,6 @@ public class Kenntnis  {
         return bezeichnung;
     }
 
-    @ManyToMany(mappedBy = "kenntnisse", cascade = CascadeType.ALL)
-    private List<Student> getStudents(){
-        return students;
-    };
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,7 +40,4 @@ public class Kenntnis  {
 
     @ManyToMany(mappedBy = "kenntnisse", fetch = FetchType.EAGER)
     public List<Student> getStudenten() {return studenten;}
-    public void setStudenten(List<Student> studenten) {
-        this.studenten = studenten;
-    }
 }
