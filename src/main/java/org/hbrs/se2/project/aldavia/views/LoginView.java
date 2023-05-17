@@ -1,11 +1,7 @@
 package org.hbrs.se2.project.aldavia.views;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * ToDo: Integration einer Seite zur Registrierung von Benutzern
  */
 @CssImport("./styles/views/login/login-view.css")
-@Route(value = "", layout = NeutralView.class )
+@Route(value = Globals.Pages.LOGIN_VIEW, layout = NeutralLayout.class )
 @RouteAlias(value = "login")
 
 public class LoginView extends VerticalLayout {
@@ -32,7 +28,10 @@ public class LoginView extends VerticalLayout {
 
     public LoginView() {
 
+        this.setHeightFull();
+        this.setSizeFull();
         setBackgroundImage();
+
 
         LoginForm component = new LoginForm();
         component.setId("login-form");

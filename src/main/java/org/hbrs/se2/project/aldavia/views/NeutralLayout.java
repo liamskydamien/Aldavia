@@ -2,27 +2,22 @@ package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.tabs.TabsVariant;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
+import org.hbrs.se2.project.aldavia.util.Globals;
 
-@PWA(name = "Aldavia", shortName = "Aldavia", enableInstallPrompt = false)
 @CssImport("./styles/views/neutralView/neutral-view.css")
-public class NeutralView extends AppLayout {
+public class NeutralLayout extends AppLayout {
 
     private Tabs menu;
 
-    public NeutralView() {
+    public NeutralLayout() {
         setUpUI();
     }
 
@@ -59,7 +54,7 @@ public class NeutralView extends AppLayout {
         button.setId("sign-up-button");
         Tab[] tabs = new Tab[]{
                 createTab("Log In", LoginView.class),
-                createButtonInTab(button, AppView.class )
+                createButtonInTab(button, RegistrationLayout.class )
         };
         tabs[0].setId("login-tab");
         tabs[1].setId("sign-up-tab");
@@ -81,9 +76,9 @@ public class NeutralView extends AppLayout {
         return tab;
     }
 
-    //TODO cnavigate actually to the landing page
+//TODO Navigation to home: Check if user is log in or not!
     private static void navigateHomeLogo(Image img) {
-        img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate("")));
+        img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.MAIN_VIEW)));
     }
 }
 
