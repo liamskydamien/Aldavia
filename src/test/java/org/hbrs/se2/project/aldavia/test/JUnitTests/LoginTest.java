@@ -1,3 +1,5 @@
+package org.hbrs.se2.project.aldavia.test.JUnitTests;
+
 import org.junit.*;
 import static org.junit.Assert.*;
 
