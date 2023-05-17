@@ -1,5 +1,10 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import java.util.List;
+import java.util.Objects;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -19,6 +24,11 @@ public class Kenntnis  {
     public String getBezeichnung() {
         return bezeichnung;
     }
+
+    @ManyToMany(mappedBy = "kenntnisse", cascade = CascadeType.ALL)
+    private List<Student> getStudents(){
+        return students;
+    };
 
     @Override
     public boolean equals(Object o) {

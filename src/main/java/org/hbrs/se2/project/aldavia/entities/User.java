@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 // import java.sql.Date;
@@ -13,8 +11,12 @@ import java.util.Objects;
 @Entity
 @Table( name ="user" , schema = "carlook" )
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
+@ToString
+
 public class User {
     private int id;
     @Basic
@@ -25,7 +27,7 @@ public class User {
     @Column(name = "password")
     private String password;
     @Basic
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, unique = true)
     private String userid;
 
     @Basic
@@ -38,7 +40,7 @@ public class User {
 
     private List<Rolle> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "user_to_rolle", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung", nullable = false))
@@ -57,7 +59,7 @@ public class User {
         return id;
     }
     @Basic
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, length = 45, unique = true)
     public String getUserid() {
         return userid;
     }

@@ -4,7 +4,16 @@ import java.util.List;
 
 public interface UserDTO {
     public int getId();
-    public String getFirstName();
-    public String getLastName();
+
+    public String getEmail();
+
+    public String getPassword();
+
+    public String getUserid();
+
+    public String getPhone();
+
+    public String getProfilePicture();
+
     public List<RolleDTO> getRoles();
 }

@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +10,10 @@ import java.util.Objects;
 @Table(name = "unternehmen", schema = "carlook")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+
 public class Unternehmen {
     @Id
     @GeneratedValue
@@ -37,7 +40,7 @@ public class Unternehmen {
     private String website;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
     @Override

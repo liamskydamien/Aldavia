@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.test;
 
-import org.hbrs.se2.project.aldavia.dao.UserDAO;
 import org.hbrs.se2.project.aldavia.dtos.CarDTO;
 import org.hbrs.se2.project.aldavia.dtos.RolleDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
