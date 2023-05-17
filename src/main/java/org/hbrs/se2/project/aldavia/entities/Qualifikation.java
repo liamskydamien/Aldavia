@@ -13,18 +13,21 @@ import java.util.Objects;
 @NoArgsConstructor
 @Setter
 public class Qualifikation {
-    private String bezeichnung;
-    private String bereich;
-    private List<Student> studenten;
+
     @Id
+    @GeneratedValue
+    @Column(name= "qualifikation_id")
+    private int id;
+
+    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
+    private List<Student> studenten;
+
     @Column(name = "bezeichnung")
-    public String getBezeichnung() {
-        return bezeichnung;
-    }
+    private String bezeichnung;
 
     @Basic
     @Column(name = "bereich")
-    public String getBereich() { return bereich; }
+    private String bereich;
 
     @Override
     public boolean equals(Object o) {
@@ -41,7 +44,7 @@ public class Qualifikation {
     }
 
 
-    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
+
     public List<Student> getStudenten() {
         return studenten;
     }
