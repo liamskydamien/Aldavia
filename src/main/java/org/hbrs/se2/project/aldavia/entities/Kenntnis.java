@@ -25,7 +25,7 @@ public class Kenntnis {
         return bezeichnung;
     }
 
-    @ManyToMany(mappedBy = "kenntnisse")
+    @ManyToMany(mappedBy = "kenntnisse", cascade = CascadeType.ALL)
     private List<Student> getStudents(){
         return students;
     };

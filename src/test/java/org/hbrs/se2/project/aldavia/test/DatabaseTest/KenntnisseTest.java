@@ -19,31 +19,31 @@ public class KenntnisseTest {
     public void testeRoundTrip() {
         try {
             Kenntnis kenntnis = new Kenntnis();
-            kenntnis.setBezeichnung("Java");
+            kenntnis.setBezeichnung("Java_Test");
             kenntnisseRepository.save(kenntnis);
             //Saved in DB?
-            assertTrue(kenntnisseRepository.existsById("Java"));
+            assertTrue(kenntnisseRepository.existsById("Java_Test"));
 
             //Read
-            Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById("Java");
+            Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById("Java_Test");
             assertTrue(awaitKenntnis.isPresent());
             Kenntnis kenntnisFromDB = awaitKenntnis.get();
-            assertEquals("Java", kenntnisFromDB.getBezeichnung());
+            assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
 
             //Update
-            kenntnisFromDB.setBezeichnung("Java 8");
+            kenntnisFromDB.setBezeichnung("Java_Test_8");
             kenntnisseRepository.save(kenntnisFromDB);
-            awaitKenntnis = kenntnisseRepository.findById("Java 8");
+            awaitKenntnis = kenntnisseRepository.findById("Java_Test_8");
             assertTrue(awaitKenntnis.isPresent());
             kenntnisFromDB = awaitKenntnis.get();
-            assertEquals("Java 8", kenntnisFromDB.getBezeichnung());
+            assertEquals("Java_Test_8", kenntnisFromDB.getBezeichnung());
 
             //Delete
-            kenntnisseRepository.deleteById("Java 8");
-            assertFalse(kenntnisseRepository.existsById("Java 8"));
+            kenntnisseRepository.deleteById("Java_Test_8");
+            assertFalse(kenntnisseRepository.existsById("Java_Test_8"));
         }
         catch (Exception e) {
-            System.out.println("Fehler beim Speichern: " + e.getMessage());
+            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
         }
     }
 }
