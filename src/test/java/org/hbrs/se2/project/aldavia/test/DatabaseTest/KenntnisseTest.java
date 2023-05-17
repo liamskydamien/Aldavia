@@ -1,11 +1,18 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
 import org.hbrs.se2.project.aldavia.entities.Kenntnis;
+import org.hbrs.se2.project.aldavia.entities.Qualifikation;
+import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
+import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +21,12 @@ public class KenntnisseTest {
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     public void testeRoundTrip() {
@@ -62,5 +75,65 @@ public class KenntnisseTest {
         assertThrows(Exception.class, () -> kenntnisseRepository.save(new Kenntnis()));
 
         kenntnisseRepository.deleteById("Java_Test");
+    }
+
+    @Test
+    public void testeStudentKenntnis(){
+        // Setup
+
+        // Create User
+        User user = new User();
+        user.setUserid("test_user3");
+        user.setPassword("test_user3");
+        user.setEmail("test@test_user3.de");
+        userRepository.save(user);
+        int userId = user.getId();
+
+        // Create Student
+        Student student = new Student();
+        student.setVorname("Guido");
+        student.setNachname("Müller");
+        student.setMatrikelNummer("12345678901");
+        Optional<User> userOptional = userRepository.findById(userId);
+        assertTrue(userOptional.isPresent());
+        student.setUser(userOptional.get());
+        studentRepository.save(student);
+        int studentId = student.getStudentId();
+
+        List<Student> students = new ArrayList<>();
+        students.add(student);
+
+        // Create Qualifikation
+        Kenntnis kenntnis = new Kenntnis();
+        kenntnis.setBezeichnung("Java_Test");
+        kenntnis.setStudenten(students);
+        kenntnisseRepository.save(kenntnis);
+        String  kenntnisId = "Java_Test";
+
+        List<Kenntnis> kenntnisse = new ArrayList<>();
+        kenntnisse.add(kenntnis);
+        student.setKenntnisse(kenntnisse);
+        studentRepository.save(student);
+
+        // Read
+        Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisId);
+        assertTrue(awaitKenntnis.isPresent());
+        Kenntnis kenntnisFromDB = awaitKenntnis.get();
+        assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
+        assertEquals(1, kenntnisFromDB.getStudenten().size());
+        assertEquals(student.getStudentId(), kenntnisFromDB.getStudenten().get(0).getStudentId());
+
+        // Delete
+        student.setKenntnisse(null);
+        studentRepository.save(student);
+
+        kenntnisseRepository.deleteById(kenntnisId);
+        assertFalse(kenntnisseRepository.existsById(kenntnisId));
+
+        studentRepository.deleteById(studentId);
+        assertFalse(studentRepository.existsById(studentId));
+
+        userRepository.deleteById(userId);
+        assertFalse(userRepository.existsById(userId));
     }
 }

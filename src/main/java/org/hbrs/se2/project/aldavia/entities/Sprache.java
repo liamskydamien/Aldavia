@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Table( name ="sprache" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
+@Getter
 public class Sprache {
     private String name;
     private String level;
@@ -29,21 +31,6 @@ public class Sprache {
     @Column(name = "level")
     public String getLevel() { return level; }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Sprache sprache = (Sprache) o;
-        return spracheId == sprache.spracheId &&
-                Objects.equals(sprache, sprache.name) &&
-                Objects.equals(level, sprache.level);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(spracheId, name, level);
-    }
-
 
     @ManyToMany(mappedBy = "sprachen", fetch = FetchType.EAGER )
     private List<Student> studenten;
@@ -51,4 +38,16 @@ public class Sprache {
         return studenten;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sprache sprache = (Sprache) o;
+        return Objects.equals(name, sprache.name) && Objects.equals(level, sprache.level) && Objects.equals(spracheId, sprache.spracheId) && Objects.equals(studenten, sprache.studenten);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, level, spracheId, studenten);
+    }
 }
