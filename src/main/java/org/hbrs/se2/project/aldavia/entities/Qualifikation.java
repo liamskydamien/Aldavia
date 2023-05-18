@@ -17,7 +17,7 @@ import java.util.Objects;
 public class Qualifikation {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "qualifikation_id")
     private int id;
 

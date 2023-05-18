@@ -23,6 +23,7 @@ public class StudentProfileDTOImpl implements StudentProfileDTO {
     private LocalDate geburtsdatum;
     private String email;
     private String telefonnummer;
+    private String beschreibung;
     private List<QualifikationsDTO> qualifikationen;
     private List<KenntnisDTO> kenntnisse;
     private List<TaetigkeitsfeldDTO> taetigkeitsfelder;

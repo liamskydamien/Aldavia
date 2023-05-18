@@ -14,6 +14,9 @@ public interface StudentProfileDTO extends ProfileDTO {
     LocalDate getGeburtsdatum();
     String getEmail();
 
+    String getTelefonnummer();
+    String getBeschreibung();
+
     List<KenntnisDTO> getKenntnisse();
 
     List<QualifikationsDTO> getQualifikationen();

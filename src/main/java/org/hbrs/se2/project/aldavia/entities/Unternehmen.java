@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int unternehmenId;
 
     @Basic

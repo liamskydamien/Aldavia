@@ -19,7 +19,7 @@ public class Taetigkeitsfeld {
     private List<Stellenanzeige> stellenanzeigen;
     private List<Student> studenten;
     @Id
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false, unique = true)
     public String getBezeichnung() {
         return bezeichnung;
     }

@@ -19,8 +19,8 @@ public class Sprache {
     private String level;
 
     @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int spracheId;
 
     @Basic

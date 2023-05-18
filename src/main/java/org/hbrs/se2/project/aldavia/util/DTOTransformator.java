@@ -4,15 +4,53 @@ import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.dtos.impl.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
+import java.util.List;
+
 public class DTOTransformator {
     public static StudentProfileDTO transformStudentProfileDTO(Student student) {
+        // Create new StudentProfileDTOImpl
+        StudentProfileDTOImpl studentProfileDTO = new StudentProfileDTOImpl();
 
-        // Get Email & Phone number from User
+        // Get Email,Phone & Beschreibung number from User
         String email = student.getUser().getEmail();
         String telefonnummer = student.getUser().getPhone();
+        String beschreibung = student.getUser().getBeschreibung();
 
         //Create new StudentProfileDTOImpl and set values
-        StudentProfileDTOImpl studentProfileDTO = new StudentProfileDTOImpl();
+
+        List<Sprache> sprachen = student.getSprachen();
+        List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder();
+        List<Qualifikation> qualifikationen = student.getQualifikationen();
+        List<Kenntnis> kenntnisse = student.getKenntnisse();
+
+        if(sprachen != null){
+            studentProfileDTO.setSprachen(sprachen.stream().map(DTOTransformator::transformSpracheDTOImpl).toList());
+        }
+        else {
+            studentProfileDTO.setSprachen(null);
+        }
+
+        if(taetigkeitsfelder != null){
+            studentProfileDTO.setTaetigkeitsfelder(taetigkeitsfelder.stream().map(DTOTransformator::transformTaetigkeitsfeldDTOImpl).toList());
+        }
+        else {
+            studentProfileDTO.setTaetigkeitsfelder(null);
+        }
+
+        if(qualifikationen != null){
+            studentProfileDTO.setQualifikationen(qualifikationen.stream().map(DTOTransformator::transformQualifikationsDTOImpl).toList());
+        }
+        else {
+            studentProfileDTO.setQualifikationen(null);
+        }
+
+        if(kenntnisse != null){
+            studentProfileDTO.setKenntnisse(kenntnisse.stream().map(DTOTransformator::transformKenntnisDTOImpl).toList());
+        }
+        else {
+            studentProfileDTO.setKenntnisse(null);
+        }
+
         studentProfileDTO.setVorname(student.getVorname());
         studentProfileDTO.setNachname(student.getNachname());
         studentProfileDTO.setMatrikelNummer(student.getMatrikelNummer());
@@ -20,11 +58,8 @@ public class DTOTransformator {
         studentProfileDTO.setStudienbeginn(student.getStudienbeginn());
         studentProfileDTO.setGeburtsdatum(student.getGeburtsdatum());
         studentProfileDTO.setEmail(email);
+        studentProfileDTO.setBeschreibung(beschreibung);
         studentProfileDTO.setTelefonnummer(telefonnummer);
-        studentProfileDTO.setKenntnisse(student.getKenntnisse().stream().map(DTOTransformator::transformKenntnisDTOImpl).toList());
-        studentProfileDTO.setSprachen(student.getSprachen().stream().map(DTOTransformator::transformSpracheDTOImpl).toList());
-        studentProfileDTO.setQualifikationen(student.getQualifikationen().stream().map(DTOTransformator::transformQualifikationsDTOImpl).toList());
-        studentProfileDTO.setTaetigkeitsfelder(student.getTaetigkeitsfelder().stream().map(DTOTransformator::transformTaetigkeitsfeldDTOImpl).toList());
 
         //Return StudentProfileDTOImpl
         return studentProfileDTO;
