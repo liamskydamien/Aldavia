@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.dao;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class SpracheControl {
+public class SpracheDAO {
 
     @Autowired
     private SprachenRepository repository;

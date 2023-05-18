@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,9 +81,9 @@ public class SpracheTest {
 
         // Create User
         User user = new User();
-        user.setUserid("test_user3");
-        user.setPassword("test_user3");
-        user.setEmail("test@test_user3.de");
+        user.setUserid("test_user6");
+        user.setPassword("test_user6");
+        user.setEmail("test@test_user6.de");
         userRepository.save(user);
         userId = user.getId();
 

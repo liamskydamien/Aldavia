@@ -53,7 +53,7 @@ public class User {
     private String beschreibung;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     public int getId() {
         return id;

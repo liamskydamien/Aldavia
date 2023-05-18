@@ -5,6 +5,7 @@ import org.hbrs.se2.project.aldavia.dtos.impl.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
 import java.util.List;
+import java.util.Set;
 
 public class DTOTransformator {
     public static StudentProfileDTO transformStudentProfileDTO(Student student) {
