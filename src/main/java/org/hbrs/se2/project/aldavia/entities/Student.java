@@ -109,12 +109,14 @@ public class Student{
     }
 
     // student_favorisiert_stellenanzeige
+
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "student_favorisiert_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeige", referencedColumnName = "id", nullable = false))
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
+            joinColumns = @JoinColumn(name = "studentId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "stellenanzeigeId", nullable = false))
+    public List<Stellenanzeige> stellenanzeigenFavourisiert;
+
 
     // student_beherrscht_sprache
     @JoinTable(name = "student_beherrscht_sprache", catalog = "nmuese2s", schema = "carlook",

@@ -1,19 +1,21 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "stellenanzeige", schema = "carlook")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
+
 public class Stellenanzeige {
     @Id
     @GeneratedValue
@@ -48,6 +50,7 @@ public class Stellenanzeige {
     @Column(name = "beschreibung")
     private String beschreibung;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,10 +72,11 @@ public class Stellenanzeige {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @ManyToOne
-    private Unternehmen unternehmen;
-    public Unternehmen getUnternehmen() { return unternehmen; }
-    public void setUnternehmen(Unternehmen unternehmen) {this.unternehmen = unternehmen;}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ersteller_id")
+    private Unternehmen ersteller;
+
+
 
     // stellenanzeige_hat_taetigkeitsfeld
     @ManyToMany
@@ -93,12 +97,10 @@ public class Stellenanzeige {
     public List<Bewerbung> getBewerbung() {
         return bewerbungen;
     }
-    public void setBewerbung(List<Bewerbung> bewerbungen) {
-        this.bewerbungen = bewerbungen;
-    }
+
 
     // student_favorisiert_stellenanzeige
-    @ManyToMany(mappedBy = "stellenanzeigen")
+    @ManyToMany(mappedBy = "stellenanzeigenFavourisiert", cascade = CascadeType.PERSIST)
     private List<Student> studenten;
     public List<Student> getStudenten() {
         return studenten;

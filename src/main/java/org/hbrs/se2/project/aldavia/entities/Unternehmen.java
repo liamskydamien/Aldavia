@@ -39,8 +39,9 @@ public class Unternehmen {
     @Column(name = "website")
     private String website;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+
     @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Override
@@ -67,8 +68,11 @@ public class Unternehmen {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "ersteller")
     private List<Stellenanzeige> stellenanzeigen;
+
+
     @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
