@@ -20,5 +20,5 @@ public interface StudentProfileDTO extends ProfileDTO {
 
     List<Map<String, String>> getSprachen();
 
-    // more fields follow soon TODO! Add more fields
+    List<Map<String, String>> getPraktika();
 }
