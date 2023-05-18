@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import com.vaadin.flow.shared.BrowserDetails;
 import org.hbrs.se2.project.aldavia.control.SpracheControl;
-import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Sprache;
 import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
@@ -12,12 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -38,13 +34,16 @@ public class TesteSpracheControl {
         sprache.setLevel("Muttersprache");
         sprachenRepository.save(sprache);
         id = sprache.getSpracheId();
-
-
     }
 
     @AfterEach
     public void teardown() {
-        sprachenRepository.deleteById(id);
+        try{
+            sprachenRepository.deleteById(id);
+        }
+        catch (Exception e) {
+            System.out.println("Nothing to clean up");
+        }
     }
 
     @Test
@@ -90,11 +89,11 @@ public class TesteSpracheControl {
             SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
             spracheDTO.setBezeichnung("Deutsch_Test");
             spracheDTO.setLevel("Muttersprache");
-            spracheControl.deleteSprache(spracheDTO);
-            assertTrue(sprachenRepository.findByNameAndLevel("Deutsch_Test", "Muttersprache").isEmpty());
+            assertTrue(spracheControl.deleteSprache(spracheDTO));
+            assertFalse(sprachenRepository.existsByNameAndLevel("Deutsch_Test", "Muttersprache"));
         }
         catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Fehler beim Löschen"+ e.getMessage());
         }
     }
 

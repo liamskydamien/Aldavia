@@ -128,7 +128,7 @@ public class SpracheControl {
             Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getBezeichnung(), sprache.getLevel());
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
-                repository.delete(spracheFromDB);
+                repository.deleteById(spracheFromDB.getSpracheId());
                 return true;
             } else {
                 throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
