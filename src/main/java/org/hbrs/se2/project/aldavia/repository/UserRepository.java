@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.repository;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findUserByEmailAndPassword ( String userid , String password);
 
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.userid = ?1")
     void deleteByUserid(String userid);
 }
