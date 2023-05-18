@@ -16,11 +16,12 @@ import java.util.Objects;
 @Table( name ="kenntnis" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
+@Getter
 public class Kenntnis  {
     private String bezeichnung;
     private List<Student> studenten;
     @Id
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false, unique = true)
     public String getBezeichnung() {
         return bezeichnung;
     }

@@ -1,12 +1,18 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
 import org.hbrs.se2.project.aldavia.entities.Qualifikation;
+import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
+import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hibernate.loader.hql.QueryLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +25,12 @@ public class QualifikationTest {
     @Autowired
     private QualifikationRepository qualifikationRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     public void roundTripTest(){
         // Test create
@@ -26,11 +38,10 @@ public class QualifikationTest {
         qualifikation.setBereich("Qualitätsmanagement");
         qualifikation.setBezeichnung("Praktikum in Software-Testing");
         qualifikationRepository.save(qualifikation);
-
-        System.out.println(qualifikationRepository.findAll().get(0).getId());
+        int qualifikationId = qualifikation.getId();
 
         // Test Read
-        Optional<Qualifikation> awaitQualifikation = qualifikationRepository.findById(1);
+        Optional<Qualifikation> awaitQualifikation = qualifikationRepository.findById(qualifikationId);
         assertTrue(awaitQualifikation.isPresent());
         assertEquals(qualifikation, awaitQualifikation.get());
 
@@ -38,17 +49,81 @@ public class QualifikationTest {
         qualifikation.setBezeichnung("Testmanagement");
         qualifikationRepository.save(qualifikation);
 
-        Optional<Qualifikation> awaitNewQualifikation = qualifikationRepository.findById(1);
+        Optional<Qualifikation> awaitNewQualifikation = qualifikationRepository.findById(qualifikationId);
         assertTrue(awaitNewQualifikation.isPresent());
         assertEquals(qualifikation, awaitNewQualifikation.get());
 
         // Test Delete
-        qualifikationRepository.deleteById(1);
-        assertFalse(qualifikationRepository.existsById(1));
+        qualifikationRepository.deleteById(qualifikationId);
+        assertFalse(qualifikationRepository.existsById(qualifikationId));
     }
 
     @Test
     public void negativeTests(){
+        assertThrows(Exception.class, () -> {
+            qualifikationRepository.save(null);
+        });
+        assertThrows(Exception.class, () -> {
+            qualifikationRepository.deleteById(-1);
+        });
+    }
 
+    @Test
+    public void testStudentQualifikations(){
+        // Setup
+
+        // Create User
+        User user = new User();
+        user.setUserid("test_user3");
+        user.setPassword("test_user3");
+        user.setEmail("test@test_user3.de");
+        userRepository.save(user);
+        int userId = user.getId();
+
+        // Create Student
+        Student student = new Student();
+        student.setVorname("Guido");
+        student.setNachname("Müller");
+        student.setMatrikelNummer("12345678901");
+        Optional<User> userOptional = userRepository.findById(userId);
+        assertTrue(userOptional.isPresent());
+        student.setUser(userOptional.get());
+        studentRepository.save(student);
+        int studentId = student.getStudentId();
+
+        List<Student> students = new ArrayList<>();
+        students.add(student);
+
+        // Create Qualifikation
+        Qualifikation qualifikation = new Qualifikation();
+        qualifikation.setBereich("Qualitätsmanagement");
+        qualifikation.setBezeichnung("Praktikum in Software-Testing");
+        qualifikation.setStudenten(students);
+        qualifikationRepository.save(qualifikation);
+        int qualifikationId = qualifikation.getId();
+
+        List<Qualifikation> qualifikations = new ArrayList<>();
+        qualifikations.add(qualifikation);
+        student.setQualifikationen(qualifikations);
+        studentRepository.save(student);
+
+        // Test Read
+        Optional<Qualifikation> awaitQualifikation = qualifikationRepository.findById(qualifikationId);
+        assertTrue(awaitQualifikation.isPresent());
+        assertEquals(qualifikation.getStudenten().get(0).getStudentId(), awaitQualifikation.get().getStudenten().get(0).getStudentId());
+
+        // Test Delete
+        student.setQualifikationen(null);
+        studentRepository.save(student);
+        qualifikationRepository.deleteById(qualifikationId);
+        assertFalse(qualifikationRepository.existsById(qualifikationId));
+
+        // Delete Student
+        studentRepository.deleteById(studentId);
+        assertFalse(studentRepository.existsById(studentId));
+
+        // Delete User
+        userRepository.deleteById(userId);
+        assertFalse(userRepository.existsById(userId));
     }
 }

@@ -51,7 +51,7 @@ public class Student{
     private String beschreibung;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false)
     private User user;
 
     @OneToMany
