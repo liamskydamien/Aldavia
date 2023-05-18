@@ -1,11 +1,15 @@
 package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
 import org.hbrs.se2.project.aldavia.dtos.impl.StudentProfileDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Kenntnis;
+import org.hbrs.se2.project.aldavia.entities.Sprache;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.util.DTOTransformator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +33,7 @@ public class StudentProfileControl {
             if (awaitStudent.isPresent()) {
                 Student student = awaitStudent.get();
                 System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
-                return transformStudentProfileDTO(student);
+                return DTOTransformator.transformStudentProfileDTO(student);
             } else {
                 throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
             }
@@ -70,31 +74,4 @@ public class StudentProfileControl {
             throw new ProfileException("Error while saving student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
     }
-
-    /**
-     * Transform Student to StudentProfileDTO
-     * @param student The student
-     * @return StudentProfileDTO
-     */
-    private StudentProfileDTO transformStudentProfileDTO(Student student) {
-
-        // Get Email
-        String email = student.getUser().getEmail();
-
-        //Create new StudentProfileDTOImpl and set values
-        StudentProfileDTOImpl studentProfileDTO = new StudentProfileDTOImpl();
-        studentProfileDTO.setVorname(student.getVorname());
-        studentProfileDTO.setNachname(student.getNachname());
-        studentProfileDTO.setMatrikelNummer(student.getMatrikelNummer());
-        studentProfileDTO.setStudiengang(student.getStudiengang());
-        studentProfileDTO.setStudienbeginn(student.getStudienbeginn());
-        studentProfileDTO.setGeburtsdatum(student.getGeburtsdatum());
-        studentProfileDTO.setEmail(email);
-        studentProfileDTO.setKenntnisse(student.getKenntnisse().stream().map(Kenntnis::getBezeichnung).toList());
-        //studentProfileDTO.setSprachen();
-        //studentProfileDTO.setQualifikationen();
-        //Return StudentProfileDTOImpl
-        return studentProfileDTO;
-    }
-
 }

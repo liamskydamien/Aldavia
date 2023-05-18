@@ -14,11 +14,11 @@ public interface StudentProfileDTO extends ProfileDTO {
     LocalDate getGeburtsdatum();
     String getEmail();
 
-    List<String> getKenntnisse();
+    List<KenntnisDTO> getKenntnisse();
 
-    List<Map<String, String >> getQualifikationen();
+    List<QualifikationsDTO> getQualifikationen();
 
-    List<Map<String, String>> getSprachen();
+    List<SpracheDTO> getSprachen();
 
-    List<Map<String, String>> getPraktika();
+    List<TaetigkeitsfeldDTO> getTaetigkeitsfelder();
 }
