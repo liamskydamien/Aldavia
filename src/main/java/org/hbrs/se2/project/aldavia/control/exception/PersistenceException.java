@@ -8,7 +8,7 @@ public class PersistenceException extends Exception{
         ErrorWhileCreatingUser,
         ErrorWhileCreatingBewerbung,
         ErrorWhileCreatingStellenanzeige,
-        DatabaseConnectionFailed, ErrorWhileDeletingSprache, ErrorWhileFetchingKenntnis, ErrorWhileRemovingStudentFromKenntnis, ErrorWhileAddingStudentToKenntnis,
+        DatabaseConnectionFailed, ErrorWhileDeletingSprache, ErrorWhileFetchingKenntnis, ErrorWhileRemovingStudentFromKenntnis, ErrorWhileAddingStudentToKenntnis, ErrorWhileFetchingQualifikation, ErrorWhileDeletingQualifikation, ErrorWhileAddingStudentToQualifikation, ErrorWhileRemovingStudentFromQualifikation,
     }
 
     private final PersistenceExceptionType persistenceExceptionType;
