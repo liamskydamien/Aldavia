@@ -29,6 +29,7 @@ public class StudentProfileControl {
      */
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
+            System.out.println("Loading student profile for user: " + username);
             Optional<Student> awaitStudent = studentRepository.findByUserID(username);
             if (awaitStudent.isPresent()) {
                 Student student = awaitStudent.get();
@@ -53,9 +54,11 @@ public class StudentProfileControl {
     public boolean createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
         // Gets student from database
         try {
+            System.out.println("Finding student with username: " + username);
             Optional<Student> awaitStudent = studentRepository.findByUserID(username);
             if (awaitStudent.isPresent()) {
                 Student studentFromDB = awaitStudent.get();
+                System.out.println("Found student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
                 // Set values
                 studentFromDB.setVorname(student.getVorname());
                 studentFromDB.setNachname(student.getNachname());
@@ -73,5 +76,15 @@ public class StudentProfileControl {
         catch (Exception e) {
             throw new ProfileException("Error while saving student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
+    }
+
+    private Student updateStudentProfile(Student student ,StudentProfileDTO studentDTO){
+        student.setVorname(studentDTO.getVorname());
+        student.setNachname(studentDTO.getNachname());
+        student.setMatrikelNummer(studentDTO.getMatrikelNummer());
+        student.setStudiengang(studentDTO.getStudiengang());
+        student.setStudienbeginn(studentDTO.getStudienbeginn());
+        student.setGeburtsdatum(studentDTO.getGeburtsdatum());
+        return student;
     }
 }

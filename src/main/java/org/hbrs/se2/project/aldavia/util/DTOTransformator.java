@@ -65,6 +65,22 @@ public class DTOTransformator {
         return studentProfileDTO;
     }
 
+    public static Student transformStudent(StudentProfileDTO studentProfileDTO) {
+        Student student = new Student();
+        student.setVorname(studentProfileDTO.getVorname());
+        student.setNachname(studentProfileDTO.getNachname());
+        student.setMatrikelNummer(studentProfileDTO.getMatrikelNummer());
+        student.setStudiengang(studentProfileDTO.getStudiengang());
+        student.setStudienbeginn(studentProfileDTO.getStudienbeginn());
+        student.setGeburtsdatum(studentProfileDTO.getGeburtsdatum());
+        student.setSprachen(studentProfileDTO.getSprachen().stream().map(DTOTransformator::transformSpracheDTO).toList());
+        student.setTaetigkeitsfelder(studentProfileDTO.getTaetigkeitsfelder().stream().map(DTOTransformator::transformTaetigkeitsfeldDTO).toList());
+        student.setQualifikationen(studentProfileDTO.getQualifikationen().stream().map(DTOTransformator::transformQualifikationsDTO).toList());
+        student.setKenntnisse(studentProfileDTO.getKenntnisse().stream().map(DTOTransformator::transformKenntnisDTO).toList());
+        return student;
+    }
+
+
     private static SpracheDTO transformSpracheDTOImpl(Sprache sprache) {
         SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
         spracheDTO.setBezeichnung(sprache.getName());
