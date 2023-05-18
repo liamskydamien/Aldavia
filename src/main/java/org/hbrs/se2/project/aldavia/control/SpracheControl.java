@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.control;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.entities.Sprache;
+import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,15 +48,65 @@ public class SpracheControl {
      * @return Sprache
      * @throws PersistenceException with type ErrorWhileUpdatingSprache if an error occurs while updating the sprache
      */
-    public Sprache updateSprache(SpracheDTO sprache) throws PersistenceException {
+    public Sprache updateSprache(SpracheDTO sprache, int sprachenId) throws PersistenceException {
         try {
-            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getBezeichnung(), sprache.getLevel());
+            Optional<Sprache> awaitSprache = repository.findById(sprachenId);
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
                 spracheFromDB.setName(sprache.getBezeichnung());
                 spracheFromDB.setLevel(sprache.getLevel());
                 repository.save(spracheFromDB);
                 return spracheFromDB;
+            }
+            else {
+                throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
+            }
+        }
+        catch (Exception e) {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileUpdatingSprache, "Error while updating sprache");
+        }
+    }
+
+    /**
+     * Add a student to a sprache
+     * @param student The student
+     * @param sprachenId The sprache
+     * @return boolean
+     * @throws PersistenceException with type ErrorWhileUpdatingSprache if an error occurs while updating the sprache
+     */
+    public boolean addStudentToSprache(Student student, int sprachenId) throws PersistenceException {
+        try {
+            Optional<Sprache> awaitSprache = repository.findById(sprachenId);
+            if (awaitSprache.isPresent()) {
+                Sprache spracheFromDB = awaitSprache.get();
+                spracheFromDB.getStudenten().add(student);
+                repository.save(spracheFromDB);
+                return true;
+            }
+            else {
+                throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
+            }
+        }
+        catch (Exception e) {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileUpdatingSprache, "Error while updating sprache");
+        }
+    }
+
+    /**
+     * Remove a student from a sprache
+     * @param student The student
+     * @param sprachenId The sprache
+     * @return boolean
+     * @throws PersistenceException with type ErrorWhileUpdatingSprache if an error occurs while updating the sprache
+     */
+    public boolean removeStudentFromSprache(Student student, int sprachenId) throws PersistenceException {
+        try {
+            Optional<Sprache> awaitSprache = repository.findById(sprachenId);
+            if (awaitSprache.isPresent()) {
+                Sprache spracheFromDB = awaitSprache.get();
+                spracheFromDB.getStudenten().remove(student);
+                repository.save(spracheFromDB);
+                return true;
             }
             else {
                 throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");

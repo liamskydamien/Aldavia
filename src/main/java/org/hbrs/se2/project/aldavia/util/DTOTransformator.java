@@ -65,7 +65,7 @@ public class DTOTransformator {
         return studentProfileDTO;
     }
 
-    public static Student transformStudent(StudentProfileDTO studentProfileDTO) {
+    /*public static Student transformStudent(StudentProfileDTO studentProfileDTO) {
         Student student = new Student();
         student.setVorname(studentProfileDTO.getVorname());
         student.setNachname(studentProfileDTO.getNachname());
@@ -78,7 +78,7 @@ public class DTOTransformator {
         student.setQualifikationen(studentProfileDTO.getQualifikationen().stream().map(DTOTransformator::transformQualifikationsDTO).toList());
         student.setKenntnisse(studentProfileDTO.getKenntnisse().stream().map(DTOTransformator::transformKenntnisDTO).toList());
         return student;
-    }
+    }*/
 
 
     private static SpracheDTO transformSpracheDTOImpl(Sprache sprache) {
