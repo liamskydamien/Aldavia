@@ -57,12 +57,12 @@ public class RegistrationViewStudent extends Div {
         pbar.setWidth("390px");
 
         //Required field
-        userName.setRequiredIndicatorVisible(true);
+        /*userName.setRequiredIndicatorVisible(true);
         mail.setRequiredIndicatorVisible(true);
         vorname.setRequiredIndicatorVisible(true);
         nachname.setRequiredIndicatorVisible(true);
         password.setRequiredIndicatorVisible(true);
-        passwordCheck.setRequiredIndicatorVisible(true);
+        passwordCheck.setRequiredIndicatorVisible(true);*/
 
         addClassName("RegistrationStudent");
 

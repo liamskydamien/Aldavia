@@ -38,6 +38,9 @@ public class User {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Basic
+    @Column(name = "beschreibung")
+    private String beschreibung;
     private List<Rolle> roles;
 
     @ManyToMany
@@ -47,10 +50,6 @@ public class User {
     public List<Rolle> getRoles() {
         return roles;
     }
-
-    @Basic
-    @Column(name = "beschreibung")
-    private String beschreibung;
 
     @Id
     @GeneratedValue
@@ -68,7 +67,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        User user  = (User) o;
         return id == user.id
                 && Objects.equals(email, user.email)
                 && Objects.equals(password, user.password)
