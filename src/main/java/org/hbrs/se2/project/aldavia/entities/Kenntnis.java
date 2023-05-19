@@ -1,5 +1,10 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import java.util.List;
+import java.util.Objects;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -8,30 +13,25 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Setter
-@Table( name ="rolle" , schema = "carlook" )
+@Table( name ="kenntnis" , schema = "carlook" )
 @NoArgsConstructor
-public class Rolle {
+@Setter
+@Getter
+public class Kenntnis  {
     private String bezeichnung;
-    private List<User> users;
-
-    public Rolle(String roleStudent) {
-        bezeichnung = roleStudent;
-    }
-
+    private List<Student> studenten;
     @Id
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false, unique = true)
     public String getBezeichnung() {
         return bezeichnung;
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Rolle rolle = (Rolle) o;
-        return Objects.equals(bezeichnung, rolle.bezeichnung);
+        Kenntnis kenntnis = (Kenntnis) o;
+        return Objects.equals(bezeichnung, kenntnis.bezeichnung);
     }
 
     @Override
@@ -39,9 +39,6 @@ public class Rolle {
         return Objects.hash(bezeichnung);
     }
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER )
-    public List<User> getUsers() {
-        return users;
-    }
-
+    @ManyToMany(mappedBy = "kenntnisse", fetch = FetchType.EAGER)
+    public List<Student> getStudenten() {return studenten;}
 }
