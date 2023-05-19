@@ -15,21 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RegistrationTest {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
 
     @Autowired
-    private StudentRepository studentRepository;
+    StudentRepository studentRepository;
 
     @Autowired
-    private UnternehmenRepository unternehmenRepository;
+    UnternehmenRepository unternehmenRepository;
 
     @Test
     public void testUser() {
-        User dbUser = new User();
-        dbUser.setUserid("t");
-        dbUser.setEmail("123");
-        userRepository.save(dbUser);
-
         User user = userRepository.findUserByEmail("123").get();
         assertEquals("t", user.getUserid());
 

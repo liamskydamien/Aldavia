@@ -49,7 +49,7 @@ public class LoginView extends VerticalLayout {
             boolean isAuthenticated = false;
 
             try {
-                isAuthenticated = loginControl.authenticate( e.getUsername() , e.getPassword() );
+                isAuthenticated = loginControl.authentificate( e.getUsername() , e.getPassword() );
 
             } catch (DatabaseUserException databaseException) {
                 /*Dialog dialog = new Dialog();

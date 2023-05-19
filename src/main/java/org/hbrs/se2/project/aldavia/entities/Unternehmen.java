@@ -3,7 +3,6 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -43,6 +42,7 @@ public class Unternehmen {
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,25 +55,4 @@ public class Unternehmen {
     public int hashCode() {
         return Objects.hash(unternehmenId, name, beschreibung, ansprechpartnerVorname, ansprechpartnerNachname, website, user);
     }
-
-    // unternehmen_hat_adresse
-    @ManyToMany
-    private List<Adresse> adressen;
-    @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "adresse_id", referencedColumnName = "adresseId", nullable = false))
-    public List<Adresse> getAdressen() {
-        return adressen;
-    }
-
-    // unternehmen_erstellt_stellenanzeige
-    @OneToMany
-    private List<Stellenanzeige> stellenanzeigen;
-    @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
-
 }
