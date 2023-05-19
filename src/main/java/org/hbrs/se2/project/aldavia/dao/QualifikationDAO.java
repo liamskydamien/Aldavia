@@ -102,4 +102,22 @@ public class QualifikationDAO {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileRemovingStudentFromQualifikation, "Error while removing student from qualifikation");
         }
     }
+
+    /**
+     * Updates a qualifikation
+     * @param qualifikationsDTO the qualifikation to update
+     * @throws PersistenceException if the qualifikation could not be updated
+     */
+    public void updateQualifikation(QualifikationsDTO qualifikationsDTO, Qualifikation qualifikation) throws PersistenceException {
+        if(qualifikationRepository.existsById(qualifikation.getId())) {
+            qualifikation.setBezeichnung(qualifikationsDTO.getBezeichnung());
+            qualifikation.setBereich(qualifikationsDTO.getBereich());
+            qualifikation.setBeschreibung(qualifikationsDTO.getBeschreibung());
+            qualifikation.setBeschaeftigungsart(qualifikationsDTO.getBeschaeftigungsart());
+            qualifikationRepository.save(qualifikation);
+        }
+        else {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileUpdatingQualifikation, "Error while updating qualifikation");
+        }
+    }
 }
