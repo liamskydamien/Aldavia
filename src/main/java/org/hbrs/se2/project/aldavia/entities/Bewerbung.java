@@ -17,12 +17,17 @@ import java.util.Objects;
 public class Bewerbung  {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true)
     private int bewerbungId;
 
     @Basic
     @Column(name = "datum", nullable = false)
-    private LocalDate datum;
+    private LocalDate datum = LocalDate.now();
+
+    @PrePersist
+    public void prePersist() {
+        datum = LocalDate.now();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -41,10 +46,20 @@ public class Bewerbung  {
     @ManyToOne
     private Student student;
     public Student getStudent() { return student; }
-    public void setStudent(Student student) {this.student = student;}
+    public void setStudent(Student student) {
+        if (student == null) {
+            throw new NullPointerException("Student cannot be null");
+        }
+        this.student = student;
+    }
 
     @ManyToOne
     private Stellenanzeige stellenanzeige;
     public Stellenanzeige getStellenanzeige() { return stellenanzeige; }
-    public void setStellenanzeige(Stellenanzeige stellenanzeige) {this.stellenanzeige = stellenanzeige;}
+    public void setStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeige == null) {
+            throw new NullPointerException("Stellenanzeige cannot be null");
+        }
+    this.stellenanzeige = stellenanzeige;
+    }
 }
