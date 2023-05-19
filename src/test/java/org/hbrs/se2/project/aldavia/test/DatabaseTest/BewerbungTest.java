@@ -3,11 +3,12 @@ package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 //import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 //import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.repository.BewerbungRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
-import org.hbrs.se2.project.aldavia.repository.BewerbungRepository;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -123,9 +124,9 @@ public class BewerbungTest {
 
         // Create User
         User user = new User();
-        user.setUserid("test_user");
-        user.setPassword("test_user");
-        user.setEmail("test@test_user.de");
+        user.setUserid("test_user12");
+        user.setPassword("test_user12");
+        user.setEmail("test12@test_user.de");
         userRepository.save(user);
         int userId = user.getId();
 
@@ -133,7 +134,7 @@ public class BewerbungTest {
         Student student = new Student();
         student.setVorname("Guido");
         student.setNachname("Müller");
-        student.setMatrikelNummer("12345678901");
+        student.setMatrikelNummer("123456789012");
         Optional<User> userOptional = userRepository.findById(userId);
         assertTrue(userOptional.isPresent());
         student.setUser(userOptional.get());

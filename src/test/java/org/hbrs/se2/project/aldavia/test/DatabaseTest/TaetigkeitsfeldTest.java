@@ -92,9 +92,9 @@ public class TaetigkeitsfeldTest {
 
         // Create User
         User user = new User();
-        user.setUserid("test_user123");
-        user.setPassword("test_user123");
-        user.setEmail("test123@test_user.de");
+        user.setUserid("test_user12");
+        user.setPassword("test_user12");
+        user.setEmail("test12@test_user.de");
         userRepository.save(user);
         int userId = user.getId();
 
