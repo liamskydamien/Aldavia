@@ -131,9 +131,9 @@ public class SpracheDAO {
      * @return boolean
      * @throws PersistenceException with type ErrorWhileDeletingSprache if an error occurs while deleting the sprache
      */
-    public boolean deleteSprache(SpracheDTO sprache) throws PersistenceException {
+    public boolean deleteSprache(Sprache sprache) throws PersistenceException {
         try {
-            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getBezeichnung(), sprache.getLevel());
+            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getName(), sprache.getLevel());
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
                 repository.deleteById(spracheFromDB.getSpracheId());

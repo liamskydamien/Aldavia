@@ -3,8 +3,10 @@ package org.hbrs.se2.project.aldavia.test.ProfileTest;
 import org.checkerframework.checker.units.qual.A;
 import org.hbrs.se2.project.aldavia.dao.*;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
+import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.KenntnisDTOImpl;
 import org.hbrs.se2.project.aldavia.dtos.impl.QualifikationsDTOImpl;
+import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
 import org.hbrs.se2.project.aldavia.dtos.impl.TaetigkeitsfeldDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.test.TestStudentFactory;
@@ -58,7 +60,10 @@ public class TestStudentDAO {
     public void testAddAndDeleteSprache(){
         try {
            Student student = testStudentFactory.createStudent();
-           Sprache sprache = spracheDAO.createSprache("TestSprache", "Muttersprache");
+            SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
+            spracheDTO.setBezeichnung("TestSprache");
+            spracheDTO.setLevel("Muttersprache");
+           Sprache sprache = spracheDAO.createSprache(spracheDTO);
            studentDAO.addSprache(student, sprache);
            assertEquals(student.getSprachen().get(0), sprache);
            assertEquals(sprache.getStudenten().get(0), student);

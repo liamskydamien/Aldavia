@@ -2,9 +2,7 @@ package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dao.TaetigkeitsfeldDAO;
-import org.hbrs.se2.project.aldavia.dtos.impl.KenntnisDTOImpl;
 import org.hbrs.se2.project.aldavia.dtos.impl.TaetigkeitsfeldDTOImpl;
-import org.hbrs.se2.project.aldavia.entities.Kenntnis;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
@@ -49,7 +47,7 @@ public class TesteTaetigkeitsfeldDAO {
         taetigkeitsfeld.setBezeichnung("Test");
         try{
             Taetigkeitsfeld testTaetigkeitsfeld = taetigkeitsfeldDAO.addTaetigkeitsfeld(taetigkeitsfeld);
-            taetigkeitsfeldDAO.removeTaetigkeitsfeld(testTaetigkeitsfeld);
+            taetigkeitsfeldDAO.deleteTaetigkeitsfeld(testTaetigkeitsfeld);
             assertFalse(taetigkeitsfeldRepository.findById(testTaetigkeitsfeld.getBezeichnung()).isPresent());
         }
         catch (PersistenceException e){
@@ -68,7 +66,7 @@ public class TesteTaetigkeitsfeldDAO {
             assertTrue(taetigkeitsfeld.getStudenten().contains(student));
             taetigkeitsfeldDAO.removeStudentFromTaetigkeitsfeld(student, taetigkeitsfeld);
             assertFalse(taetigkeitsfeld.getStudenten().contains(student));
-            taetigkeitsfeldDAO.removeTaetigkeitsfeld(taetigkeitsfeld);
+            taetigkeitsfeldDAO.deleteTaetigkeitsfeld(taetigkeitsfeld);
             assertFalse(taetigkeitsfeldRepository.findById(taetigkeitsfeld.getBezeichnung()).isPresent());
         }
         catch (PersistenceException e){

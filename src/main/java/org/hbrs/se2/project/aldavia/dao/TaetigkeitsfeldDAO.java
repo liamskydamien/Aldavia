@@ -47,7 +47,7 @@ public class TaetigkeitsfeldDAO {
      * @return true, falls das Taetigkeitsfeld erfolgreich entfernt wurde.
      * @throws PersistenceException Falls das Taetigkeitsfeld nicht entfernt werden konnte.
      */
-    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
+    public void deleteTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
         if (taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung())) {
             taetigkeitsfeldRepository.delete(taetigkeitsfeld);
         } else {
