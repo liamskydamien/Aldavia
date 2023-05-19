@@ -1,45 +1,38 @@
-#header {
-  height: var(--lumo-size-xl);
-  box-shadow: var(--lumo-box-shadow-s);
-}
-#header vaadin-avatar {
-  margin-left: auto;
-  margin-right: var(--lumo-space-m);
-}
-vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
-  margin-left: var(--lumo-space-m);
-  margin-right: auto;
-}
-#header h1 {
-  font-size: var(--lumo-font-size-l);
-  margin: 0;
-}
-#logo {
-  box-sizing: border-box;
-  box-shadow: inset 0 -1px var(--lumo-contrast-10pct);
-  padding: var(--lumo-space-s) var(--lumo-space-m);
-}
-#logo img {
-  height: calc(var(--lumo-size-l) * 1.5);
-}
-#logo h1 {
-  font-size: var(--lumo-font-size-xl);
-  font-weight: 600;
-  margin: 0 var(--lumo-space-s);
+#main-view{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  height: 100%;
 }
 
-vaadin-tab {
-  font-size: var(--lumo-font-size-s);
-  height: var(--lumo-size-l);
-  font-weight: 600;
-  color: var(--lumo-body-text-color);
+#search-layout{
+  margin-left: 5%;
+  margin-top: 200px;
 }
 
-vaadin-tab:hover {
-  background-color: var(--lumo-contrast-5pct);
+#search-button{
+    background-color: #1a73e8;
+
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 40px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #1a73e8;
+    height: 71px;
+    width: 150px;
+    line-height: 20px;
+    cursor: pointer;
 }
 
-vaadin-tab[selected] {
-  background-color: var(--lumo-primary-color-10pct);
-  color: var(--lumo-primary-text-color);
+
+.search-field::part(input-field){
+    border-radius: 40px;
+  border: 3px solid #1a73e8;
+  border-right: none;
+    width: 650px;
+  height: 70px;
+  padding: 0 0 0 20px;
+    font-size: 1.25rem;
 }

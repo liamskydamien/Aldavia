@@ -24,11 +24,11 @@ public class Sprache {
     private int spracheId;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() { return name; }
 
     @Basic
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     public String getLevel() { return level; }
 
 

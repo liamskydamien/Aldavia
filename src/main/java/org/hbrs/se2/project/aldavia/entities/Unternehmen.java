@@ -20,7 +20,7 @@ public class Unternehmen {
     private int unternehmenId;
 
     @Basic
-    @Column(name = "firmenname")
+    @Column(name = "firmenname", nullable = false)
     private String name;
 
     @Basic
@@ -75,5 +75,7 @@ public class Unternehmen {
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
     }
+
+
 
 }

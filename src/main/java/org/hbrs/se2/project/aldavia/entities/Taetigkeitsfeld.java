@@ -39,19 +39,13 @@ public class Taetigkeitsfeld {
 
 
     @ManyToMany(mappedBy = "taetigkeitsfelder")
-
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
-    }
-    public void setStellenanzeigen(List<Stellenanzeige> stellenanzeigen) {
-        this.stellenanzeigen = stellenanzeigen;
     }
 
     @ManyToMany(mappedBy = "taetigkeitsfelder")
     public List<Student> getStudenten() {
         return studenten;
     }
-    public void setStudenten(List<Student> studenten) {
-        this.studenten = studenten;
-    }
+
 }

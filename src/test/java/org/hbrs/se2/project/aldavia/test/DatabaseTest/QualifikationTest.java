@@ -41,7 +41,7 @@ public class QualifikationTest {
         Qualifikation qualifikation = new Qualifikation();
         qualifikation.setBereich("Qualitätsmanagement");
         qualifikation.setBezeichnung("Praktikum in Software-Testing");
-        qualifikation.setBeschreibung("Testen von Software");
+        qualifikation.setBeschreibung("Ich bin zustaendig fuer das Testen von Software");
         qualifikation.setBeschaeftigungsart("Praktikum");
         qualifikationRepository.save(qualifikation);
         int qualifikationId = qualifikation.getId();
@@ -89,7 +89,7 @@ public class QualifikationTest {
         Qualifikation qualifikation = new Qualifikation();
         qualifikation.setBereich("Qualitätsmanagement");
         qualifikation.setBezeichnung("Praktikum in Software-Testing");
-        qualifikation.setBeschreibung("Testen von Software");
+        qualifikation.setBeschreibung("Ich bin zustaendig fuer das Testen von Software");
         qualifikation.setBeschaeftigungsart("Praktikum");
         qualifikation.setStudenten(students);
         qualifikationRepository.save(qualifikation);
