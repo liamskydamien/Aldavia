@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dao.StudentDAO;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
@@ -19,7 +21,7 @@ import java.util.Optional;
 public class StudentProfileControl {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentDAO studentDAO;
 
     /**
      * Get the student profile of a student
@@ -30,14 +32,12 @@ public class StudentProfileControl {
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
             System.out.println("Loading student profile for user: " + username);
-            Optional<Student> awaitStudent = studentRepository.findByUserID(username);
-            if (awaitStudent.isPresent()) {
-                Student student = awaitStudent.get();
-                System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
-                return DTOTransformator.transformStudentProfileDTO(student);
-            } else {
-                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
-            }
+            Student student = studentDAO.getStudent(username);
+            System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
+            return DTOTransformator.transformStudentProfileDTO(student);
+        }
+        catch (PersistenceException persistenceException){
+            throw new ProfileException("Profile not found", ProfileException.ProfileExceptionType.ProfileNotFound);
         }
         catch (Exception e) {
             throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
@@ -51,40 +51,17 @@ public class StudentProfileControl {
      * @return boolean
      * @throws ProfileException
      */
-    public boolean createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
+    public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
         // Gets student from database
         try {
             System.out.println("Finding student with username: " + username);
-            Optional<Student> awaitStudent = studentRepository.findByUserID(username);
-            if (awaitStudent.isPresent()) {
-                Student studentFromDB = awaitStudent.get();
-                System.out.println("Found student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
-                // Set values
-                studentFromDB.setVorname(student.getVorname());
-                studentFromDB.setNachname(student.getNachname());
-                studentFromDB.setMatrikelNummer(student.getMatrikelNummer());
-                studentFromDB.setStudiengang(student.getStudiengang());
-                studentFromDB.setStudienbeginn(student.getStudienbeginn());
-                studentFromDB.setGeburtsdatum(student.getGeburtsdatum());
-                // Save student
-                studentRepository.save(studentFromDB);
-                return true;
-            } else {
-                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
-            }
-        }
-        catch (Exception e) {
-            throw new ProfileException("Error while saving student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
-        }
+            Student studentFromDB = studentDAO.getStudent(username);
+            System.out.println("Found student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
+            studentDAO.createAndUpdateStudent(student, studentFromDB);
+            System.out.println("Updated student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
     }
-
-    private Student updateStudentProfile(Student student ,StudentProfileDTO studentDTO){
-        student.setVorname(studentDTO.getVorname());
-        student.setNachname(studentDTO.getNachname());
-        student.setMatrikelNummer(studentDTO.getMatrikelNummer());
-        student.setStudiengang(studentDTO.getStudiengang());
-        student.setStudienbeginn(studentDTO.getStudienbeginn());
-        student.setGeburtsdatum(studentDTO.getGeburtsdatum());
-        return student;
+        catch (PersistenceException e) {
+            throw new ProfileException("Error while updating student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+        }
     }
 }

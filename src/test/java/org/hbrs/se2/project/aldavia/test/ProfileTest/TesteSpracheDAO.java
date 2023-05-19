@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
 import org.hbrs.se2.project.aldavia.dao.SpracheDAO;
+import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Sprache;
 import org.hbrs.se2.project.aldavia.entities.Student;
@@ -35,10 +36,10 @@ public class TesteSpracheDAO {
     private TestStudentFactory testStudentFactory;
 
     private int id;
-
+    private Sprache sprache;
     @BeforeEach
     public void setup() {
-        Sprache sprache = new Sprache();
+        sprache = new Sprache();
         sprache.setName("Deutsch_Test");
         sprache.setLevel("Muttersprache");
         sprachenRepository.save(sprache);
@@ -58,9 +59,12 @@ public class TesteSpracheDAO {
     @Test
     public void testeCreateSprache(){
         try{
-            Sprache englisch = spracheDAO.createSprache("Englisch_Test", "Muttersprache");
+            SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
+            spracheDTO.setBezeichnung("Englisch_Test");
+            spracheDTO.setLevel("Muttersprache");
+            Sprache englisch = spracheDAO.createSprache(spracheDTO);
             assertTrue(sprachenRepository.findByNameAndLevel("Englisch_Test", "Muttersprache").isPresent());
-            Sprache englisch2 = spracheDAO.createSprache("Englisch_Test", "Muttersprache");
+            Sprache englisch2 = spracheDAO.createSprache(spracheDTO);
             assertEquals(englisch.getSpracheId(), englisch2.getSpracheId());
             sprachenRepository.deleteById(englisch.getSpracheId());
         }
@@ -95,10 +99,7 @@ public class TesteSpracheDAO {
     @Test
     public void testeDelete(){
         try{
-            SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
-            spracheDTO.setBezeichnung("Deutsch_Test");
-            spracheDTO.setLevel("Muttersprache");
-            assertTrue(spracheDAO.deleteSprache(spracheDTO));
+            assertTrue(spracheDAO.deleteSprache(sprache));
             assertFalse(sprachenRepository.existsByNameAndLevel("Deutsch_Test", "Muttersprache"));
         }
         catch (Exception e){

@@ -21,17 +21,16 @@ public class SpracheDAO {
     /**
      * Create a new sprache
      * @param sprache The sprache
-     * @param level The level
      * @return Sprache
      * @throws PersistenceException with type ErrorWhileCreatingSprache if an error occurs while creating the sprache
      */
-    public Sprache createSprache(String sprache, String level) throws PersistenceException {
+    public Sprache createSprache(SpracheDTO sprache) throws PersistenceException {
         try {
-            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache, level);
+            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getBezeichnung(), sprache.getLevel());
             if (awaitSprache.isEmpty()) {
                 Sprache newSprache = new Sprache();
-                newSprache.setName(sprache);
-                newSprache.setLevel(level);
+                newSprache.setName(sprache.getBezeichnung());
+                newSprache.setLevel(sprache.getLevel());
                 repository.save(newSprache);
                 return newSprache;
             }
@@ -132,9 +131,9 @@ public class SpracheDAO {
      * @return boolean
      * @throws PersistenceException with type ErrorWhileDeletingSprache if an error occurs while deleting the sprache
      */
-    public boolean deleteSprache(SpracheDTO sprache) throws PersistenceException {
+    public boolean deleteSprache(Sprache sprache) throws PersistenceException {
         try {
-            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getBezeichnung(), sprache.getLevel());
+            Optional<Sprache> awaitSprache = repository.findByNameAndLevel(sprache.getName(), sprache.getLevel());
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
                 repository.deleteById(spracheFromDB.getSpracheId());
