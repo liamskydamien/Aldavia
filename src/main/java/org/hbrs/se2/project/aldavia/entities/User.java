@@ -20,11 +20,11 @@ import java.util.Objects;
 public class User {
     private int id;
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @Basic
     @Column(name = "userid", nullable = false, unique = true)
@@ -41,6 +41,7 @@ public class User {
     @Basic
     @Column(name = "beschreibung")
     private String beschreibung;
+
     private List<Rolle> roles;
 
     @ManyToMany

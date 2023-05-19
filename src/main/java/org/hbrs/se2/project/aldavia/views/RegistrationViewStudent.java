@@ -26,6 +26,7 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route(value = "registrationStudent")
@@ -57,12 +58,12 @@ public class RegistrationViewStudent extends Div {
         pbar.setWidth("390px");
 
         //Required field
-        /*userName.setRequiredIndicatorVisible(true);
+        userName.setRequiredIndicatorVisible(true);
         mail.setRequiredIndicatorVisible(true);
         vorname.setRequiredIndicatorVisible(true);
         nachname.setRequiredIndicatorVisible(true);
         password.setRequiredIndicatorVisible(true);
-        passwordCheck.setRequiredIndicatorVisible(true);*/
+        passwordCheck.setRequiredIndicatorVisible(true);
 
         addClassName("RegistrationStudent");
 
@@ -73,7 +74,6 @@ public class RegistrationViewStudent extends Div {
         add(createButtonLayout());
 
         createDialog(regControl);
-
 
 
         //Aufsetzen der Progress-Bar

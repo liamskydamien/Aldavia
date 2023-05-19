@@ -18,15 +18,15 @@ import java.util.Set;
 
 public class Student{
     @Basic
-    @Column(name = "vorname")
+    @Column(name = "vorname", nullable = false)
     private String vorname;
 
     @Basic
-    @Column(name = "nachname")
+    @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @Basic
-    @Column(name = "matrikelnummer", nullable = false, unique = true)
+    @Column(name = "matrikelnummer")
     private String matrikelNummer;
 
     @Basic
@@ -40,7 +40,6 @@ public class Student{
     @Basic
     @Column(name = "geburtsdatum")
     private LocalDate geburtsdatum;
-
 
     @Basic
     @Column(name = "lebenslauf")

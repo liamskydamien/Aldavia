@@ -26,6 +26,7 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOCompany;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route(value = "registrationCompany")
@@ -50,7 +51,6 @@ public class RegViewCompany extends Div {
     private Details details;
 
     private Binder<RegistrationDTOCompany> binder = new Binder<>(RegistrationDTOCompany.class);
-
 
 
     public RegViewCompany(RegistrationControl regControl) {

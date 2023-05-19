@@ -33,17 +33,20 @@ import static com.vaadin.flow.component.tabs.TabsVariant.LUMO_MINIMAL;
 @JsModule("./styles/shared-styles.js")
 public class RegistrationLayout extends VerticalLayout {
 
-
-    private final RegistrationControl registrationControl;
     private final Tabs tabs = new Tabs();
     private final Div pages = new Div();
     private final Map<Tab, Div> tabsToPages = new HashMap<>();
 
-    public RegistrationLayout() {
+    private final RegistrationControl regControl;
+
+
+    @Autowired
+    public RegistrationLayout(RegistrationControl regControl) {
+        this.regControl = regControl;
         this.setId("reg-view");
         pages.setClassName("pages");
         tabs.setClassName("reg-tabs");
-        this.registrationControl = new RegistrationControl();
+
 
         setBackgroundImage();
         setUpUI();
@@ -51,12 +54,12 @@ public class RegistrationLayout extends VerticalLayout {
 
     private void setUpUI() {
 
-        createTab("Student", new RegistrationViewStudent(registrationControl));
-        createTab("Company", new RegViewCompany(registrationControl));
+        createTab("Student", new RegistrationViewStudent(regControl));
+        createTab("Company", new RegViewCompany(regControl));
 
         //Default tab
-        /*tabsToPages.get(tabs.getComponentAt(0)).setVisible(true);
-        tabsToPages.get(tabs.getComponentAt(1)).setVisible(false);*/
+        tabsToPages.get(tabs.getComponentAt(0)).setVisible(true);
+        tabsToPages.get(tabs.getComponentAt(1)).setVisible(false);
 
         tabs.addSelectedChangeListener(event -> {
             tabsToPages.values().forEach(page -> page.setVisible(false));
