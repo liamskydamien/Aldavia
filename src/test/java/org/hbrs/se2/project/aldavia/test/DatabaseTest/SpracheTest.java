@@ -7,6 +7,7 @@ import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.test.TestStudentFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -31,6 +32,9 @@ public class SpracheTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TestStudentFactory testStudentFactory;
 
     int studentId, userId, sprachenId;
 
@@ -77,25 +81,7 @@ public class SpracheTest {
 
     @Test
     public void studentTest() {
-        // Setup
-
-        // Create User
-        User user = new User();
-        user.setUserid("test_user6");
-        user.setPassword("test_user6");
-        user.setEmail("test@test_user6.de");
-        userRepository.save(user);
-        userId = user.getId();
-
-        // Create Student
-        Student student = new Student();
-        student.setVorname("Guido");
-        student.setNachname("Müller");
-        student.setMatrikelNummer("12345678901");
-        Optional<User> userOptional = userRepository.findById(userId);
-        assertTrue(userOptional.isPresent());
-        student.setUser(userOptional.get());
-        studentRepository.save(student);
+        Student student = testStudentFactory.createStudent();
         studentId = student.getStudentId();
 
         List<Student> students = new ArrayList<>();
@@ -129,7 +115,6 @@ public class SpracheTest {
         studentRepository.save(student);
 
         sprachenRepository.deleteById(sprachenId);
-        studentRepository.deleteById(studentId);
-        userRepository.deleteById(userId);
+        testStudentFactory.deleteStudent();
     }
 }
