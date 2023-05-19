@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -12,12 +13,13 @@ import java.util.Objects;
 @Table( name ="taetigkeitsfeld" , schema = "carlook" )
 @NoArgsConstructor
 @Setter
+@Getter
 public class Taetigkeitsfeld {
     private String bezeichnung;
     private List<Stellenanzeige> stellenanzeigen;
     private List<Student> studenten;
     @Id
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false, unique = true)
     public String getBezeichnung() {
         return bezeichnung;
     }

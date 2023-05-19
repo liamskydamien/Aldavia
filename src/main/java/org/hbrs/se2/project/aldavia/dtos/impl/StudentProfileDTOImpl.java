@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.dtos.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +23,10 @@ public class StudentProfileDTOImpl implements StudentProfileDTO {
     private LocalDate studienbeginn;
     private LocalDate geburtsdatum;
     private String email;
-    private List<String> kenntnisse;
-    private List<Map<String, String>> qualifikationen;
-    private List<Map<String, String>> sprachen;
+    private String telefonnummer;
+    private String beschreibung;
+    private List<QualifikationsDTO> qualifikationen;
+    private List<KenntnisDTO> kenntnisse;
+    private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
+    private List<SpracheDTO> sprachen;
 }
