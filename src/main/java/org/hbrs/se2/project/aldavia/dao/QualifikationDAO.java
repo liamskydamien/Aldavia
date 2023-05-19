@@ -55,16 +55,14 @@ public class QualifikationDAO {
 
     /**
      * Adds a student to a qualifikation
-     * @param student the student to add
+     * @param student       the student to add
      * @param qualifikation the qualifikation to add the student to
-     * @return true if the student was added successfully
      * @throws PersistenceException if the student was not added to the qualifikation
      */
-    public boolean addStudentToQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
+    public void addStudentToQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
         if (!qualifikation.getStudenten().contains(student)) {
             qualifikation.getStudenten().add(student);
             qualifikationRepository.save(qualifikation);
-            return true;
         } else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileAddingStudentToQualifikation, "Error while adding student to qualifikation");
         }
@@ -72,18 +70,16 @@ public class QualifikationDAO {
 
     /**
      * Removes a student from a qualifikation
-     * @param qualifikation
-     * @param student
-     * @return true if the student was removed successfully
+     * @param student the student to remove
+     * @param qualifikation the qualifikation to remove the student from
      * @throws PersistenceException if the student was not added to the qualifikation
      */
-    public boolean removeStudentFromQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
+    public void removeStudentFromQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
         List<Student> studenten = qualifikation.getStudenten();
         if(studenten.contains(student)) {
             studenten.remove(student);
             qualifikation.setStudenten(studenten);
             qualifikationRepository.save(qualifikation);
-            return true;
         }
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileRemovingStudentFromQualifikation, "Error while removing student from qualifikation");
