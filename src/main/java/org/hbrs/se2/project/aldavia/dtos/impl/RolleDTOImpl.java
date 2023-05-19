@@ -11,7 +11,7 @@ public class RolleDTOImpl implements RolleDTO {
     }
 
     @Override
-    public String getBezeichnung() {
+    public String getBezeichhnung() {
         return this.bezeichnung;
     }
 

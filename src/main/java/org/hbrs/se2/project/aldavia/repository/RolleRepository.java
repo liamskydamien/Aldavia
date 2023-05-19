@@ -1,11 +1,8 @@
 package org.hbrs.se2.project.aldavia.repository;
 
-import org.aspectj.apache.bcel.classfile.Module;
 import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 /**
@@ -17,8 +14,6 @@ import java.util.Optional;
  * https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods
  *
  */
-public interface RolleRepository extends JpaRepository<Rolle, String> {
-
-    Optional<Rolle> findByBezeichnung(String bezeichnung);
+public interface RolleRepository extends JpaRepository<Rolle, Integer> {
 
 }

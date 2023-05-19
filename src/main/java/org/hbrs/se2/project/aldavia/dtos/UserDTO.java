@@ -15,5 +15,7 @@ public interface UserDTO {
 
     public String getProfilePicture();
 
+    public String getBeschreibung();
+
     public List<RolleDTO> getRoles();
 }
