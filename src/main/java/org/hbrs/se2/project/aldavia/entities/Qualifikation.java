@@ -31,6 +31,14 @@ public class Qualifikation {
     @Column(name = "bereich")
     private String bereich;
 
+    @Basic
+    @Column(name = "beschreibung")
+    private String beschreibung;
+
+    @Basic
+    @Column(name = "beschaeftigungsart")
+    private String beschaeftigungsart;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

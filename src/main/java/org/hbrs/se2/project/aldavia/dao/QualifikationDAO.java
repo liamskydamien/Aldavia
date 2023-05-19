@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.dao;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
+import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.entities.Qualifikation;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
@@ -23,31 +24,39 @@ public class QualifikationDAO {
      * @return the added Qualifikation
      * @throws PersistenceException if the Qualifikation could not be fetched or created
      */
-    public Qualifikation addQualifikation(Qualifikation qualifikation) throws PersistenceException {
-        if (qualifikationRepository.existsById(qualifikation.getId())) {
-            Optional<Qualifikation> fetchedQualifikation = qualifikationRepository.findById(qualifikation.getId());
+    public Qualifikation addQualifikation(QualifikationsDTO qualifikation) throws PersistenceException {
+        try {
+            Qualifikation newQualifikation = new Qualifikation();
+            newQualifikation.setBezeichnung(qualifikation.getBezeichnung());
+            newQualifikation.setBereich(qualifikation.getBereich());
+            newQualifikation.setBeschreibung(qualifikation.getBeschreibung());
+            newQualifikation.setBeschaeftigungsart(qualifikation.getBeschaeftigungsart());
+            Optional<Qualifikation> fetchedQualifikation = qualifikationRepository.findQualifikationByBereichAndBeschaeftigungsartAndBeschreibungAndBezeichnung(qualifikation.getBereich(),
+                    qualifikation.getBeschaeftigungsart(),
+                    qualifikation.getBeschreibung(),
+                    qualifikation.getBezeichnung());
             if (fetchedQualifikation.isPresent()) {
                 return fetchedQualifikation.get();
             } else {
-                throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileFetchingQualifikation, "Error while fetching qualifikation");
+                qualifikationRepository.save(newQualifikation);
+                return newQualifikation;
             }
-        } else {
-            qualifikationRepository.save(qualifikation);
-            return qualifikation;
         }
+        catch (Exception e) {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileAddingQualifikation, "Error while adding qualifikation");
+        }
+
     }
 
     /**
      * Deletes a Qualifikation from the database if it exists.
      *
      * @param qualifikation the Qualifikation to delete
-     * @return true if the Qualifikation was deleted successfully
      * @throws PersistenceException if the Qualifikation could not be deleted
      */
-    public boolean deleteQualifikation(Qualifikation qualifikation) throws PersistenceException {
+    public void deleteQualifikation(Qualifikation qualifikation) throws PersistenceException {
         if (qualifikationRepository.existsById(qualifikation.getId())) {
             qualifikationRepository.delete(qualifikation);
-            return true;
         } else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileDeletingQualifikation, "Error while deleting qualifikation");
         }
@@ -60,11 +69,16 @@ public class QualifikationDAO {
      * @throws PersistenceException if the student was not added to the qualifikation
      */
     public void addStudentToQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
-        if (!qualifikation.getStudenten().contains(student)) {
-            qualifikation.getStudenten().add(student);
+        if (qualifikation.getStudenten() == null) {
+            qualifikation.setStudenten(List.of(student));
             qualifikationRepository.save(qualifikation);
         } else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileAddingStudentToQualifikation, "Error while adding student to qualifikation");
+            if (!qualifikation.getStudenten().contains(student)) {
+                qualifikation.getStudenten().add(student);
+                qualifikationRepository.save(qualifikation);
+            } else {
+                throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileAddingStudentToQualifikation, "Error while adding student to qualifikation");
+            }
         }
     }
 

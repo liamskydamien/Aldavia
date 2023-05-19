@@ -9,4 +9,6 @@ import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 public class QualifikationsDTOImpl implements QualifikationsDTO {
     private String bezeichnung;
     private String bereich;
+    private String beschreibung;
+    private String beschaeftigungsart;
 }

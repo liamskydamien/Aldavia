@@ -69,19 +69,18 @@ public class SpracheDAO {
 
     /**
      * Add a student to a sprache
-     * @param student The student
+     *
+     * @param student    The student
      * @param sprachenId The sprache
-     * @return boolean
      * @throws PersistenceException with type ErrorWhileUpdatingSprache if an error occurs while updating the sprache
      */
-    public boolean addStudentToSprache(Student student, int sprachenId) throws PersistenceException {
+    public void addStudentToSprache(Student student, int sprachenId) throws PersistenceException {
         try {
             Optional<Sprache> awaitSprache = repository.findById(sprachenId);
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
                 spracheFromDB.getStudenten().add(student);
                 repository.save(spracheFromDB);
-                return true;
             }
             else {
                 throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");

@@ -4,6 +4,7 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.util.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +32,17 @@ public class TestStudentFactory {
     private Student addStudent(){
         // Create User
         User user = new User();
-        user.setUserid("test_user3");
-        user.setPassword("test_user3");
-        user.setEmail("test@test_user3.de");
+        user.setUserid(RandomStringGenerator.generateRandomString(10));
+        user.setPassword(RandomStringGenerator.generateRandomString(10));
+        user.setEmail(RandomStringGenerator.generateRandomString(10) + "@test.de");
 
         userRepository.save(user);
 
         // Create Student
         Student student = new Student();
-        student.setVorname("Guido");
-        student.setNachname("Müller");
-        student.setMatrikelNummer("12345678901");
+        student.setVorname("Test");
+        student.setNachname("Schmidt");
+        student.setMatrikelNummer(RandomStringGenerator.generateRandomString(10));
         student.setGeburtsdatum(LocalDate.of(1990, 1, 1));
         student.setStudienbeginn(LocalDate.of(2010, 1, 1));
         student.setStudiengang("Informatik");
