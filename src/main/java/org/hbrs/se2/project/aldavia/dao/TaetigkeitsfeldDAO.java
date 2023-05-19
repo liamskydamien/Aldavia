@@ -1,12 +1,15 @@
 package org.hbrs.se2.project.aldavia.dao;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -21,7 +24,7 @@ public class TaetigkeitsfeldDAO {
      * @return Das hinzugefügte Taetigkeitsfeld.
      * @throws PersistenceException Falls das Taetigkeitsfeld nicht hinzugefügt werden konnte.
      */
-    public Taetigkeitsfeld addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
+    public Taetigkeitsfeld addTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeld) throws PersistenceException {
         if(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung())) {
             Optional<Taetigkeitsfeld> fetchedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeld.getBezeichnung());
             if(fetchedTaetigkeitsfeld.isPresent()) {
@@ -32,7 +35,9 @@ public class TaetigkeitsfeldDAO {
             }
         }
         else {
-                return taetigkeitsfeldRepository.save(taetigkeitsfeld);
+                Taetigkeitsfeld taetigkeitsfeld1 = new Taetigkeitsfeld();
+                taetigkeitsfeld1.setBezeichnung(taetigkeitsfeld.getBezeichnung());
+                return taetigkeitsfeldRepository.save(taetigkeitsfeld1);
             }
     }
 
@@ -42,10 +47,9 @@ public class TaetigkeitsfeldDAO {
      * @return true, falls das Taetigkeitsfeld erfolgreich entfernt wurde.
      * @throws PersistenceException Falls das Taetigkeitsfeld nicht entfernt werden konnte.
      */
-    public boolean removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
+    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
         if (taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung())) {
             taetigkeitsfeldRepository.delete(taetigkeitsfeld);
-            return true;
         } else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileRemovingTaetigkeitsfeld, "Error while removing taetigkeitsfeld");
         }
@@ -58,14 +62,21 @@ public class TaetigkeitsfeldDAO {
      * @return true, falls der Student erfolgreich hinzugefügt wurde.
      * @throws PersistenceException Falls der Student nicht hinzugefügt werden konnte.
      */
-    public boolean addStudentToTaetigkeitsfeld(Student student, Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
-        if (taetigkeitsfeld.getStudenten().contains(student)) {
+    public void addStudentToTaetigkeitsfeld(Student student, Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
+        if(taetigkeitsfeld.getStudenten() == null) {
+            List<Student> students = new ArrayList<>();
+            students.add(student);
+            taetigkeitsfeld.setStudenten(students);
+            taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        }
+        else if (taetigkeitsfeld.getStudenten().contains(student)) {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileAddingStudentToTaetigkeitsfeld, "Error while adding student to taetigkeitsfeld");
         }
         else {
-            taetigkeitsfeld.getStudenten().add(student);
+            List<Student> students = taetigkeitsfeld.getStudenten();
+            students.add(student);
+            taetigkeitsfeld.setStudenten(students);
             taetigkeitsfeldRepository.save(taetigkeitsfeld);
-            return true;
         }
     }
 
@@ -76,11 +87,12 @@ public class TaetigkeitsfeldDAO {
      * @return true, falls der Student erfolgreich entfernt wurde.
      * @throws PersistenceException Falls der Student nicht entfernt werden konnte.
      */
-    public boolean removeStudentFromTaetigkeitsfeld(Student student, Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
+    public void removeStudentFromTaetigkeitsfeld(Student student, Taetigkeitsfeld taetigkeitsfeld) throws PersistenceException {
         if (taetigkeitsfeld.getStudenten().contains(student)) {
-            taetigkeitsfeld.getStudenten().remove(student);
+            List<Student> studenten = taetigkeitsfeld.getStudenten();
+            studenten.remove(student);
+            taetigkeitsfeld.setStudenten(studenten);
             taetigkeitsfeldRepository.save(taetigkeitsfeld);
-            return true;
         }
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileRemovingStudentFromTaetigkeitsfeld, "Error while removing student from taetigkeitsfeld");

@@ -8,6 +8,8 @@ import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -79,6 +81,15 @@ public class SpracheDAO {
             Optional<Sprache> awaitSprache = repository.findById(sprachenId);
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
+                if (spracheFromDB.getStudenten() == null){
+                    List<Student> studenten = new ArrayList<>();
+                    studenten.add(student);
+                    spracheFromDB.setStudenten(studenten);
+                    repository.save(spracheFromDB);
+                }
+                else if(spracheFromDB.getStudenten().contains(student)) {
+                    throw new PersistenceException(PersistenceException.PersistenceExceptionType.StudentAlreadyInSprache, "Student already in sprache");
+                }
                 spracheFromDB.getStudenten().add(student);
                 repository.save(spracheFromDB);
             }
@@ -98,14 +109,13 @@ public class SpracheDAO {
      * @return boolean
      * @throws PersistenceException with type ErrorWhileUpdatingSprache if an error occurs while updating the sprache
      */
-    public boolean removeStudentFromSprache(Student student, int sprachenId) throws PersistenceException {
+    public void removeStudentFromSprache(Student student, int sprachenId) throws PersistenceException {
         try {
             Optional<Sprache> awaitSprache = repository.findById(sprachenId);
             if (awaitSprache.isPresent()) {
                 Sprache spracheFromDB = awaitSprache.get();
                 spracheFromDB.getStudenten().remove(student);
                 repository.save(spracheFromDB);
-                return true;
             }
             else {
                 throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");

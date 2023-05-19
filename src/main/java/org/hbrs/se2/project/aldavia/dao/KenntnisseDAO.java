@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +83,9 @@ public class KenntnisseDAO {
      */
     public void addStudentToKenntnis(Kenntnis kenntnis, Student student) throws PersistenceException {
         if (kenntnis.getStudenten() == null) {
-            kenntnis.setStudenten(List.of(student));
+            List<Student> studenten = new ArrayList<>();
+            studenten.add(student);
+            kenntnis.setStudenten(studenten);
             kenntnisseRepository.save(kenntnis);
         }
         else if (!kenntnis.getStudenten().contains(student)) {

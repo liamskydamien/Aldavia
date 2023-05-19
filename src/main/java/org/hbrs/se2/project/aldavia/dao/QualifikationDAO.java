@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +71,9 @@ public class QualifikationDAO {
      */
     public void addStudentToQualifikation(Student student, Qualifikation qualifikation) throws PersistenceException {
         if (qualifikation.getStudenten() == null) {
-            qualifikation.setStudenten(List.of(student));
+            List<Student> studenten = new ArrayList<>();
+            studenten.add(student);
+            qualifikation.setStudenten(studenten);
             qualifikationRepository.save(qualifikation);
         } else {
             if (!qualifikation.getStudenten().contains(student)) {
