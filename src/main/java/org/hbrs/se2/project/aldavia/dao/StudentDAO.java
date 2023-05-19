@@ -26,6 +26,13 @@ public class StudentDAO {
     @Autowired
     private TaetigkeitsfeldDAO taetigkeitsfeldDAO;
 
+    /**
+     * Add a sprache to a student
+     * @param student The student
+     * @param sprache  The sprache
+     * @return Student
+     * @throws PersistenceException
+     */
     public Student addSprache(Student student, Sprache sprache) throws PersistenceException {
         List<Sprache> sprachen = student.getSprachen();
         sprachen.add(sprache);
