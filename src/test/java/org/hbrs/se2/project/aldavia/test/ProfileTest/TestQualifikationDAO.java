@@ -44,7 +44,10 @@ public class TestQualifikationDAO {
             assertEquals(testQualifikation.getBeschaeftigungsart(), qualifikation.getBeschaeftigungsart());
             assertTrue(qualifikationRepository.findById(testQualifikation.getId()).isPresent());
             Qualifikation testQualifikation2 = qualifikationDAO.addQualifikation(qualifikation);
-            assertEquals(testQualifikation2, qualifikation);
+            assertEquals(testQualifikation2.getBezeichnung(), qualifikation.getBezeichnung());
+            assertEquals(testQualifikation2.getBereich(), qualifikation.getBereich());
+            assertEquals(testQualifikation2.getBeschreibung(), qualifikation.getBeschreibung());
+            assertEquals(testQualifikation2.getBeschaeftigungsart(), qualifikation.getBeschaeftigungsart());
             qualifikationRepository.deleteById(testQualifikation.getId());
         }
         catch (PersistenceException e){
