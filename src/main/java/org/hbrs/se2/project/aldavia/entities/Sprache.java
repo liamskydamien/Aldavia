@@ -20,7 +20,7 @@ public class Sprache {
 
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int spracheId;
 
     @Basic

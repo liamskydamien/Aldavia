@@ -7,6 +7,7 @@ import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.test.TestStudentFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,9 @@ public class KenntnisseTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TestStudentFactory testStudentFactory;
 
     @Test
     public void testeRoundTrip() {
@@ -71,22 +75,7 @@ public class KenntnisseTest {
         // Setup
 
         // Create User
-        User user = new User();
-        user.setUserid("test_user3");
-        user.setPassword("test_user3");
-        user.setEmail("test@test_user3.de");
-        userRepository.save(user);
-        int userId = user.getId();
-
-        // Create Student
-        Student student = new Student();
-        student.setVorname("Guido");
-        student.setNachname("Müller");
-        student.setMatrikelNummer("12345678901");
-        Optional<User> userOptional = userRepository.findById(userId);
-        assertTrue(userOptional.isPresent());
-        student.setUser(userOptional.get());
-        studentRepository.save(student);
+        Student student = testStudentFactory.createStudent();
         int studentId = student.getStudentId();
 
         List<Student> students = new ArrayList<>();
@@ -119,10 +108,6 @@ public class KenntnisseTest {
         kenntnisseRepository.deleteById(kenntnisId);
         assertFalse(kenntnisseRepository.existsById(kenntnisId));
 
-        studentRepository.deleteById(studentId);
-        assertFalse(studentRepository.existsById(studentId));
-
-        userRepository.deleteById(userId);
-        assertFalse(userRepository.existsById(userId));
+        testStudentFactory.deleteStudent();
     }
 }

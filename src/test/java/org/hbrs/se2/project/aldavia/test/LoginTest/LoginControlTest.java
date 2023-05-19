@@ -72,6 +72,7 @@ public class LoginControlTest {
     }
 
     @Test
+    @Transactional
     public void testLoginPositiv() {
         try {
             boolean userIsThere = loginControl.authenticate("sascha", "abc");

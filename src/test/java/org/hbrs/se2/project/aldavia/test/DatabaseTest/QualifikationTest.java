@@ -6,6 +6,7 @@ import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.test.TestStudentFactory;
 import org.hibernate.loader.hql.QueryLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,6 +31,9 @@ public class QualifikationTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TestStudentFactory testStudentFactory;
 
     @Test
     public void roundTripTest(){
@@ -74,23 +78,8 @@ public class QualifikationTest {
     public void testStudentQualifikations(){
         // Setup
 
-        // Create User
-        User user = new User();
-        user.setUserid("test_user3");
-        user.setPassword("test_user3");
-        user.setEmail("test@test_user3.de");
-        userRepository.save(user);
-        int userId = user.getId();
+        Student student = testStudentFactory.createStudent();
 
-        // Create Student
-        Student student = new Student();
-        student.setVorname("Guido");
-        student.setNachname("Müller");
-        student.setMatrikelNummer("12345678901");
-        Optional<User> userOptional = userRepository.findById(userId);
-        assertTrue(userOptional.isPresent());
-        student.setUser(userOptional.get());
-        studentRepository.save(student);
         int studentId = student.getStudentId();
 
         List<Student> students = new ArrayList<>();
@@ -123,11 +112,6 @@ public class QualifikationTest {
         assertFalse(qualifikationRepository.existsById(qualifikationId));
 
         // Delete Student
-        studentRepository.deleteById(studentId);
-        assertFalse(studentRepository.existsById(studentId));
-
-        // Delete User
-        userRepository.deleteById(userId);
-        assertFalse(userRepository.existsById(userId));
+        testStudentFactory.deleteStudent();
     }
 }
