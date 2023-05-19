@@ -1,12 +1,16 @@
 package org.hbrs.se2.project.aldavia.dao;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
+import org.hbrs.se2.project.aldavia.dtos.*;
+import org.hbrs.se2.project.aldavia.dtos.impl.StudentProfileDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
 
 @Component
 public class StudentDAO {
@@ -25,6 +29,34 @@ public class StudentDAO {
 
     @Autowired
     private TaetigkeitsfeldDAO taetigkeitsfeldDAO;
+
+    /**
+     * Load student by username from database
+     * @param username The username
+     * @return Student
+     * @throws PersistenceException with type ErrorWhileGettingStudent if an error occurs while getting the student
+     */
+    public Student getStudent(String username) throws PersistenceException {
+        Optional<Student> student = studentRepository.findByUserID(username);
+        if(student.isPresent()){
+            return student.get();
+        }
+        throw new PersistenceException(PersistenceException.PersistenceExceptionType.ErrorWhileGettingStudent, "Student not found");
+    }
+
+    public void createAndUpdateStudent(StudentProfileDTO studentProfileDTO, Student student) throws PersistenceException {
+        student.setVorname(studentProfileDTO.getVorname());
+        student.setNachname(studentProfileDTO.getNachname());
+        student.setGeburtsdatum(studentProfileDTO.getGeburtsdatum());
+        student.setMatrikelNummer(studentProfileDTO.getMatrikelNummer());
+        student.setStudiengang(studentProfileDTO.getStudiengang());
+        student.setStudienbeginn(studentProfileDTO.getStudienbeginn());
+        student = updateKenntnisse(studentProfileDTO.getKenntnisse(), student);
+        student = updateQualifikationen(studentProfileDTO.getQualifikationen(), student);
+        student = updateSprachen(studentProfileDTO.getSprachen(), student);
+        student = updateTaetigkeitsfelder(studentProfileDTO.getTaetigkeitsfelder(), student);
+        studentRepository.save(student);
+    }
 
     /**
      * Add a sprache to a student
@@ -151,6 +183,54 @@ public class StudentDAO {
         student.setTaetigkeitsfelder(taetigkeitsfelder);
         studentRepository.save(student);
         taetigkeitsfeldDAO.removeStudentFromTaetigkeitsfeld(student, taetigkeitsfeld);
+        return student;
+    }
+
+    public Student updateSprachen(List<SpracheDTO> spracheDTOS, Student student) throws PersistenceException {
+        List<Sprache> sprachen = new ArrayList<>();
+        for (SpracheDTO spracheDTO : spracheDTOS) {
+            Sprache sprache = spracheDAO.createSprache(spracheDTO);
+            sprachen.add(sprache);
+            spracheDAO.addStudentToSprache(student, sprache.getSpracheId());
+        }
+        student.setSprachen(sprachen);
+        studentRepository.save(student);
+        return student;
+    }
+
+    public Student updateKenntnisse(List<KenntnisDTO> kenntnisDTOS, Student student) throws PersistenceException {
+        List<Kenntnis> kenntnisse = new ArrayList<>();
+        for (KenntnisDTO kenntnisDTO : kenntnisDTOS) {
+            Kenntnis kenntnis = kenntnisseDAO.addKenntnis(kenntnisDTO);
+            kenntnisse.add(kenntnis);
+            kenntnisseDAO.addStudentToKenntnis(kenntnis, student);
+        }
+        student.setKenntnisse(kenntnisse);
+        studentRepository.save(student);
+        return student;
+    }
+
+    public Student updateQualifikationen(List<QualifikationsDTO> qualifikationDTOS, Student student) throws PersistenceException {
+        List<Qualifikation> qualifikationen = new ArrayList<>();
+        for (QualifikationsDTO qualifikationDTO : qualifikationDTOS) {
+            Qualifikation qualifikation = qualifikationDAO.addQualifikation(qualifikationDTO);
+            qualifikationen.add(qualifikation);
+            qualifikationDAO.addStudentToQualifikation(student, qualifikation);
+        }
+        student.setQualifikationen(qualifikationen);
+        studentRepository.save(student);
+        return student;
+    }
+
+    public Student updateTaetigkeitsfelder(List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOS, Student student) throws PersistenceException {
+        List<Taetigkeitsfeld> taetigkeitsfelder = new ArrayList<>();
+        for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : taetigkeitsfeldDTOS) {
+            Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldDAO.addTaetigkeitsfeld(taetigkeitsfeldDTO);
+            taetigkeitsfelder.add(taetigkeitsfeld);
+            taetigkeitsfeldDAO.addStudentToTaetigkeitsfeld(student, taetigkeitsfeld);
+        }
+        student.setTaetigkeitsfelder(taetigkeitsfelder);
+        studentRepository.save(student);
         return student;
     }
 }
