@@ -91,17 +91,52 @@ public class TestQualifikationDAO {
             Qualifikation newQualifikation = qualifikationDAO.addQualifikation(qualifikation);
             Student student = testStudentFactory.createStudent();
             qualifikationDAO.addStudentToQualifikation(student, newQualifikation);
-            Optional<Qualifikation> optionalQualifikation = qualifikationRepository.findById(newQualifikation.getId());
-            assertTrue(optionalQualifikation.isPresent());
-            Qualifikation testQualifikation = optionalQualifikation.get();
-            assertTrue(testQualifikation.getStudenten().contains(student));
-            PersistenceException persistenceException = assertThrows(PersistenceException.class, () -> qualifikationDAO.addStudentToQualifikation(student, testQualifikation));
+            assertTrue(newQualifikation.getStudenten().contains(student));
+            PersistenceException persistenceException = assertThrows(PersistenceException.class, () -> qualifikationDAO.addStudentToQualifikation(student, newQualifikation));
             assertEquals(persistenceException.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.ErrorWhileAddingStudentToQualifikation);
-            qualifikationDAO.removeStudentFromQualifikation(student, testQualifikation);
-            assertFalse(testQualifikation.getStudenten().contains(student));
-            qualifikationDAO.deleteQualifikation(testQualifikation);
+            qualifikationDAO.removeStudentFromQualifikation(student, newQualifikation);
+            assertFalse(newQualifikation.getStudenten().contains(student));
+            qualifikationDAO.deleteQualifikation(newQualifikation);
             testStudentFactory.deleteStudent();
         } catch (PersistenceException e) {
+            System.out.println("Fehler");
+        }
+    }
+
+    @Test
+    public void testUpdateQualifikation(){
+        QualifikationsDTOImpl qualifikation = new QualifikationsDTOImpl();
+        qualifikation.setBezeichnung("Test");
+        qualifikation.setBereich("Test");
+        qualifikation.setBeschreibung("Test");
+        qualifikation.setBeschaeftigungsart("Test");
+
+        QualifikationsDTOImpl qualifikation2 = new QualifikationsDTOImpl();
+        qualifikation2.setBezeichnung("Test2");
+        qualifikation2.setBereich("Test2");
+        qualifikation2.setBeschreibung("Test2");
+        qualifikation2.setBeschaeftigungsart("Test2");
+
+        try{
+            Qualifikation testQualifikation = qualifikationDAO.addQualifikation(qualifikation);
+            assertEquals(testQualifikation.getBezeichnung(), qualifikation.getBezeichnung());
+            assertEquals(testQualifikation.getBereich(), qualifikation.getBereich());
+            assertEquals(testQualifikation.getBeschreibung(), qualifikation.getBeschreibung());
+            assertEquals(testQualifikation.getBeschaeftigungsart(), qualifikation.getBeschaeftigungsart());
+            assertTrue(qualifikationRepository.findById(testQualifikation.getId()).isPresent());
+            Qualifikation testQualifikation2 = qualifikationDAO.addQualifikation(qualifikation);
+            assertEquals(testQualifikation2.getBezeichnung(), qualifikation.getBezeichnung());
+            assertEquals(testQualifikation2.getBereich(), qualifikation.getBereich());
+            assertEquals(testQualifikation2.getBeschreibung(), qualifikation.getBeschreibung());
+            assertEquals(testQualifikation2.getBeschaeftigungsart(), qualifikation.getBeschaeftigungsart());
+            qualifikationDAO.updateQualifikation(qualifikation2, testQualifikation2);
+            assertEquals(testQualifikation2.getBezeichnung(), qualifikation2.getBezeichnung());
+            assertEquals(testQualifikation2.getBereich(), qualifikation2.getBereich());
+            assertEquals(testQualifikation2.getBeschreibung(), qualifikation2.getBeschreibung());
+            assertEquals(testQualifikation2.getBeschaeftigungsart(), qualifikation2.getBeschaeftigungsart());
+            qualifikationRepository.deleteById(testQualifikation.getId());
+        }
+        catch (PersistenceException e){
             System.out.println("Fehler");
         }
     }
