@@ -72,21 +72,27 @@ public class Stellenanzeige {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ersteller_id")
     private Unternehmen ersteller;
+
+    public void setErsteller(Unternehmen ersteller) {
+        this.ersteller = ersteller;
+        if (ersteller!= null && !ersteller.getStellenanzeigen().contains(this)) {
+            ersteller.getStellenanzeigen().add(this);
+        }
+    }
 
 
 
     // stellenanzeige_hat_taetigkeitsfeld
-    @ManyToMany
-    private List<Taetigkeitsfeld> taetigkeitsfelder;
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "stellenanzeige_hat_taetigkeitsfeld", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "id", nullable = false))
-    public List<Taetigkeitsfeld> getTaetigkeitsfelder() {
-        return taetigkeitsfelder;
-    }
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "bezeichnung", nullable = false))
+    private List<Taetigkeitsfeld> taetigkeitsfelder;
+
+
 
     // stellenanzeige_hat_bewerbung
     @OneToMany

@@ -15,14 +15,11 @@ import java.util.Objects;
 @Setter
 @Getter
 public class Taetigkeitsfeld {
-    private String bezeichnung;
-    private List<Stellenanzeige> stellenanzeigen;
-    private List<Student> studenten;
+
+
     @Id
     @Column(name = "bezeichnung", nullable = false, unique = true)
-    public String getBezeichnung() {
-        return bezeichnung;
-    }
+    private String bezeichnung;
 
     @Override
     public boolean equals(Object o) {
@@ -38,14 +35,12 @@ public class Taetigkeitsfeld {
     }
 
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
+    @ManyToMany(mappedBy = "taetigkeitsfelder", cascade = CascadeType.ALL)
+    private List<Stellenanzeige> stellenanzeigen;
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-    public List<Student> getStudenten() {
-        return studenten;
-    }
+    @ManyToMany(mappedBy = " taetigkeitsfelder")
+    private List<Student> studenten;
+
+
 
 }
