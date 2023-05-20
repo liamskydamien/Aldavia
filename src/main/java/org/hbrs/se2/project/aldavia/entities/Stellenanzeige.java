@@ -75,7 +75,7 @@ public class Stellenanzeige {
     public void setUnternehmen(Unternehmen unternehmen) {this.unternehmen = unternehmen;}
 
     // stellenanzeige_hat_taetigkeitsfeld
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Taetigkeitsfeld> taetigkeitsfelder;
     @JoinTable(name = "stellenanzeige_hat_taetigkeitsfeld", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
@@ -85,7 +85,7 @@ public class Stellenanzeige {
     }
 
     // stellenanzeige_hat_bewerbung
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Bewerbung> bewerbungen;
     @JoinTable(name = "stellenanzeige_hat_bewerbung", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),

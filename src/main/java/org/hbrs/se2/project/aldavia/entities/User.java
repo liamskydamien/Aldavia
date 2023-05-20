@@ -44,7 +44,7 @@ public class User {
 
     private List<Rolle> roles;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_to_rolle", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung", nullable = false))

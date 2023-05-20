@@ -60,19 +60,19 @@ public class Student{
     @OneToMany
     private List<Bewerbung> bewerbungen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Kenntnis> kenntnisse;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Qualifikation> qualifikationen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Sprache> sprachen;
 
     @Id
