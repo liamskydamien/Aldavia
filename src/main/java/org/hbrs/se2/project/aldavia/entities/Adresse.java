@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 // import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,5 +61,23 @@ public class Adresse {
     private List<Unternehmen> unternehmen;
     public List<Unternehmen> getUnternehmen() {
         return unternehmen;
+    }
+
+    public void addUnternehmen(Unternehmen unternehmen) {
+        if (this.unternehmen == null)
+            this.unternehmen = new ArrayList<>();
+        if (!this.unternehmen.contains(unternehmen))
+            return;
+        this.unternehmen.add(unternehmen);
+        unternehmen.addAdresse(this);
+    }
+
+    public void removeUnternehmen(Unternehmen unternehmen) {
+        if (this.unternehmen == null)
+            return;
+        if (!this.unternehmen.contains(unternehmen))
+            return;
+        this.unternehmen.remove(unternehmen);
+        unternehmen.removeAdresse(this);
     }
 }

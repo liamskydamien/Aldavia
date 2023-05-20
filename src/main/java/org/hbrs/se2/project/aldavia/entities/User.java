@@ -5,20 +5,23 @@ import lombok.*;
 import javax.persistence.*;
 // import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="user" , schema = "carlook" )
-@NoArgsConstructor
-@AllArgsConstructor
+@Table( name ="user" , schema = "aldavia" )
 @Getter
 @Setter
 @Builder
-@ToString
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private int id;
+
     @Basic
     @Column(name = "email", nullable = false)
     private String email;
@@ -26,6 +29,7 @@ public class User {
     @Basic
     @Column(name = "password", nullable = false)
     private String password;
+
     @Basic
     @Column(name = "userid", nullable = false, unique = true)
     private String userid;
@@ -42,9 +46,8 @@ public class User {
     @Column(name = "beschreibung")
     private String beschreibung;
 
-    private List<Rolle> roles;
-
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Rolle> roles;
     @JoinTable(name = "user_to_rolle", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung", nullable = false))
@@ -52,16 +55,26 @@ public class User {
         return roles;
     }
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    public void addRolle(Rolle rolle) {
+        if (this.roles == null) {
+            this.roles = new ArrayList<>();
+        }
+        if (this.roles.contains(rolle)) {
+            return;
+        }
+        this.roles.add(rolle);
+        rolle.addUser(this);
     }
-    @Basic
-    @Column(name = "userid", nullable = false, length = 45, unique = true)
-    public String getUserid() {
-        return userid;
+
+    public void removeRolle(Rolle rolle) {
+        if (this.roles == null) {
+            roles = new ArrayList<>();
+        }
+        if (!this.roles.contains(rolle)) {
+            return;
+        }
+        this.roles.remove(rolle);
+        rolle.removeUser(this);
     }
 
     @Override

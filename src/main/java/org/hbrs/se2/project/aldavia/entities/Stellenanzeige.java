@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,6 +92,16 @@ public class Stellenanzeige {
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "bezeichnung", nullable = false))
     private List<Taetigkeitsfeld> taetigkeitsfelder;
+    
+    public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if (taetigkeitsfelder == null) {
+            taetigkeitsfelder = new ArrayList<>();
+        }
+        if (taetigkeitsfelder.contains(taetigkeitsfeld)){
+            return;
+        }
+        taetigkeitsfelder.add(taetigkeitsfeld);
+    }
 
 
 
@@ -111,8 +122,41 @@ public class Stellenanzeige {
     public List<Student> getStudenten() {
         return studenten;
     }
+    
+    public void addStudent(Student student) {
+        if (studenten == null) {
+            studenten = new ArrayList<>();
+        }
+        if (studenten.contains(student)){
+            return;
+        }
+        studenten.add(student);
+    }
+    
+    public void removeStudent(Student student) {
+        if (studenten == null) {
+            studenten = new ArrayList<>();
+        }
+        if (!studenten.contains(student)){
+            return;
+        }
+        studenten.remove(student);
+        student.removeStellenanzeige(this);
+    }
+    
     public void setStudenten(List<Student> studenten) {
         this.studenten = studenten;
     }
 
+    public void removeUnternehmen(Unternehmen unternehmen) {
+    }
+
+    public void addUnternehmen(Unternehmen unternehmen) {
+    }
+
+    public void addStellenanzeige(Taetigkeitsfeld taetigkeitsfeld) {
+    }
+
+    public void removeStellenanzeige(Taetigkeitsfeld taetigkeitsfeld) {
+    }
 }

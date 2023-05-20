@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int unternehmenId;
 
     @Basic
@@ -40,9 +40,8 @@ public class Unternehmen {
     @Column(name = "website")
     private String website;
 
-
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
     @Override
@@ -59,7 +58,7 @@ public class Unternehmen {
     }
 
     // unternehmen_hat_adresse
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Adresse> adressen;
     @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
@@ -68,37 +67,59 @@ public class Unternehmen {
         return adressen;
     }
 
-    // unternehmen_erstellt_stellenanzeige
-
-    @OneToMany(mappedBy = "ersteller", cascade = CascadeType.ALL)
-    private List<Stellenanzeige> stellenanzeigen;
-
-    public List<Stellenanzeige> getStellenanzeigen() {
-        if (stellenanzeigen == null) {
-            stellenanzeigen = new ArrayList<>();
+    public void addAdresse(Adresse adresse) {
+        if(adressen == null) {
+            adressen = new ArrayList<>();
         }
-        return stellenanzeigen;
+        adressen.add(adresse);
+        adresse.addUnternehmen(this);
     }
 
+    public void removeAdresse(Adresse adresse) {
+        if (adressen == null) {
+            adressen = new ArrayList<>();
+        }
+        if (!adressen.contains(adresse)) {
+            return;
+        }
+        adressen.remove(adresse);
+        adresse.removeUnternehmen(this);
+    }
 
- /*   @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
+    // unternehmen_erstellt_stellenanzeige
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Stellenanzeige> stellenanzeigen;
+    @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
-    } */
+    }
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if(stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        else {
+            if(stellenanzeigen.contains(stellenanzeige)) {
+                return;
+            }
+            stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.addUnternehmen(this);
+        }
+    }
+
+
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
         if (stellenanzeigen == null) {
             stellenanzeigen = new ArrayList<>();
         }
-        stellenanzeigen.add(stellenanzeige);
-        stellenanzeige.setErsteller(this);
+        else {
+            if (!stellenanzeigen.contains(stellenanzeige)) {
+                return;
+            }
+            stellenanzeigen.remove(stellenanzeige);
+            stellenanzeige.removeUnternehmen(this);
+        }
     }
-
-    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
-        stellenanzeigen.remove(stellenanzeige);
-        stellenanzeige.setErsteller(null);
-    }
-
 }

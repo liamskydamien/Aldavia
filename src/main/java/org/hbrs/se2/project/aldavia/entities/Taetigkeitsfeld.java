@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 // import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,11 +16,14 @@ import java.util.Objects;
 @Setter
 @Getter
 public class Taetigkeitsfeld {
-
-
+    private String bezeichnung;
+    private List<Stellenanzeige> stellenanzeigen;
+    private List<Student> studenten;
     @Id
     @Column(name = "bezeichnung", nullable = false, unique = true)
-    private String bezeichnung;
+    public String getBezeichnung() {
+        return bezeichnung;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -35,12 +39,51 @@ public class Taetigkeitsfeld {
     }
 
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder", cascade = CascadeType.ALL)
-    private List<Stellenanzeige> stellenanzeigen;
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
+    public List<Stellenanzeige> getStellenanzeigen() {
+        return stellenanzeigen;
+    }
 
-    @ManyToMany(mappedBy = " taetigkeitsfelder")
-    private List<Student> studenten;
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeige == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        else {
+            if (this.stellenanzeigen.contains(stellenanzeige))
+                return;
+            this.stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.addStellenanzeige(this);
+        }
+    }
 
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeige == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        else {
+            if (!this.stellenanzeigen.contains(stellenanzeige))
+                return;
+            this.stellenanzeigen.remove(stellenanzeige);
+            stellenanzeige.removeStellenanzeige(this);
+        }
+    }
 
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
+    public List<Student> getStudenten() {
+        return studenten;
+    }
+
+    public void addStudent(Student student) {
+        if (student == null) {
+            studenten = new ArrayList<>();
+        }
+        else {
+            if (this.studenten.contains(student)) {
+                return;
+            }
+            this.studenten.add(student);
+            student.addTaetigkeitsfeld(this);
+        }
+    }
 
 }

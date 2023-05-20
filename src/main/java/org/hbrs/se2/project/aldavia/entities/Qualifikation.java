@@ -55,7 +55,21 @@ public class Qualifikation {
         return Objects.hash(bezeichnung, bereich, beschreibung, beschaeftigungsart);
     }
 
+    public void addStudent(Student student) {
+        if (studenten == null)
+            studenten = new java.util.ArrayList<>();
+        if (this.studenten.contains(student))
+            return;
+        studenten.add(student);
+    }
 
+    public void removeStudent(Student student) {
+        if (studenten == null)
+            studenten = new java.util.ArrayList<>();
+        if (!this.studenten.contains(student))
+            return;
+        studenten.remove(student);
+    }
 
 
 

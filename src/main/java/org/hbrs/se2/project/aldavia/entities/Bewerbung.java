@@ -53,6 +53,12 @@ public class Bewerbung  {
         this.student = student;
     }
 
+    public void removeStudent() {
+        this.student = null;
+    }
+
+
+
     @ManyToOne
     private Stellenanzeige stellenanzeige;
     public Stellenanzeige getStellenanzeige() { return stellenanzeige; }
@@ -61,5 +67,9 @@ public class Bewerbung  {
             throw new NullPointerException("Stellenanzeige cannot be null");
         }
     this.stellenanzeige = stellenanzeige;
+    }
+
+    public void removeStellenanzeige() {
+        this.stellenanzeige = null;
     }
 }
