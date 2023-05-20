@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Stellenanzeige {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @Column(name = "stellenanzeigeId", nullable = false)
     private int stellenanzeigeId;
 
     @Basic
@@ -73,7 +73,7 @@ public class Stellenanzeige {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ersteller_id")
     private Unternehmen ersteller;
 
@@ -107,11 +107,11 @@ public class Stellenanzeige {
 
 
     // stellenanzeige_hat_bewerbung
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Bewerbung> bewerbungen;
     @JoinTable(name = "stellenanzeige_hat_bewerbung", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false))
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "stellenanzeigeId", nullable = false))
     public List<Bewerbung> getBewerbung() {
         return bewerbungen;
     }
@@ -142,7 +142,7 @@ public class Stellenanzeige {
 
 
     // student_favorisiert_stellenanzeige
-    @ManyToMany(mappedBy = "stellenanzeigenFavourisiert", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "stellenanzeigenFavourisiert", cascade = CascadeType.ALL)
     private List<Student> studenten;
     public List<Student> getStudenten() {
         return studenten;

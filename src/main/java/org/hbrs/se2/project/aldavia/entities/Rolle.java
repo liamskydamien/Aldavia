@@ -42,7 +42,7 @@ public class Rolle {
         return Objects.hash(bezeichnung);
     }
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles")
     public List<User> getUsers() {
         return users;
     }

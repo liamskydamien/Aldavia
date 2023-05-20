@@ -39,7 +39,7 @@ public class Taetigkeitsfeld {
     }
 
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
+    @ManyToMany(mappedBy = "taetigkeitsfelder", fetch = FetchType.LAZY)
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
     }
@@ -68,7 +68,7 @@ public class Taetigkeitsfeld {
         }
     }
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
+    @ManyToMany(mappedBy = "taetigkeitsfelder", fetch = FetchType.LAZY)
     public List<Student> getStudenten() {
         return studenten;
     }

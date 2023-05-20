@@ -58,7 +58,7 @@ public class Unternehmen {
     }
 
     // unternehmen_hat_adresse
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Adresse> adressen;
     @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
@@ -93,7 +93,7 @@ public class Unternehmen {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Stellenanzeige> stellenanzeigen;
     @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),

@@ -57,7 +57,7 @@ public class Adresse {
         return Objects.hash(adresseId, land, ort, postleitzahl, strasse, hausnummer);
     }
 
-    @ManyToMany(mappedBy = "adressen", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "adressen")
     private List<Unternehmen> unternehmen;
     public List<Unternehmen> getUnternehmen() {
         return unternehmen;
