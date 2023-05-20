@@ -47,6 +47,7 @@ public class Kenntnis  {
         if (this.studenten.contains(student))
             return;
         this.studenten.add(student);
+        student.addKenntnis(this);
     }
 
     public void removeStudent(Student student) {
@@ -55,5 +56,6 @@ public class Kenntnis  {
         if (!this.studenten.contains(student))
             return;
         this.studenten.remove(student);
+        student.removeKenntnis(this);
     }
 }

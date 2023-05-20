@@ -70,9 +70,13 @@ public class Unternehmen {
     public void addAdresse(Adresse adresse) {
         if(adressen == null) {
             adressen = new ArrayList<>();
+        } else {
+            if (adressen.contains(adresse)) {
+                return;
+            }
+            adressen.add(adresse);
+            adresse.addUnternehmen(this);
         }
-        adressen.add(adresse);
-        adresse.addUnternehmen(this);
     }
 
     public void removeAdresse(Adresse adresse) {

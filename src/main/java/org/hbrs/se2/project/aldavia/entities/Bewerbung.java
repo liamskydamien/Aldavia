@@ -69,7 +69,23 @@ public class Bewerbung  {
     this.stellenanzeige = stellenanzeige;
     }
 
-    public void removeStellenanzeige() {
-        this.stellenanzeige = null;
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (this.stellenanzeige == stellenanzeige) {
+            this.stellenanzeige = null;
+        }
+    }
+
+    public void addStudent(Student student) {
+        this.student = student;
+    }
+
+    public void removeStudent(Student student) {
+        if (this.student == student) {
+            this.student = null;
+        }
+    }
+
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        this.stellenanzeige = stellenanzeige;
     }
 }

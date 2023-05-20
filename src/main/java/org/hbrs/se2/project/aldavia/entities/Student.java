@@ -13,7 +13,6 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Student{
     @Basic
     @Column(name = "vorname", nullable = false)
@@ -76,18 +75,7 @@ public class Student{
     @GeneratedValue
     @Column(name = "id")
     private int studentId;
-
-    public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
-        this.vorname = vorname;
-        this.nachname = nachname;
-        this.matrikelNummer = matrikelNummer;
-        this.studiengang = studiengang;
-        this.studienbeginn = studienbeginn;
-        this.geburtsdatum = geburtsdatum;
-        this.lebenslauf = lebenslauf;
-
-    }
-
+    
     // student_hat_qualifikation
     @JoinTable(name = "student_hat_qualifikation", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
@@ -99,11 +87,14 @@ public class Student{
     public void addQualifikation(Qualifikation qualifikation) {
         if (this.qualifikationen == null){
             this.qualifikationen = new ArrayList<>();
+        } 
+        else {
+            if (this.qualifikationen.contains(qualifikation)) {
+                return;
+            }
+            this.qualifikationen.add(qualifikation);
+            qualifikation.addStudent(this);
         }
-        if (this.qualifikationen.contains(qualifikation)){
-            return;
-        }
-        this.qualifikationen.add(qualifikation);
     }
 
     // student_hat_kenntnis
@@ -117,11 +108,13 @@ public class Student{
     public void addKenntnis(Kenntnis kenntnis) {
         if (this.kenntnisse == null){
             this.kenntnisse = new ArrayList<>();
+        } else {
+            if (this.kenntnisse.contains(kenntnis)) {
+                return;
+            }
+            this.kenntnisse.add(kenntnis);
+            kenntnis.addStudent(this);
         }
-        if (this.kenntnisse.contains(kenntnis)){
-            return;
-        }
-        this.kenntnisse.add(kenntnis);
     }
 
     // student_interessiert_sich_fuer_taetigkeitsfeld
@@ -150,6 +143,7 @@ public class Student{
             return;
         }
         this.stellenanzeigen.add(stellenanzeige);
+        stellenanzeige.addStudent(this);
     }
 
     // student_beherrscht_sprache
@@ -168,6 +162,7 @@ public class Student{
             return;
         }
         this.sprachen.add(sprache);
+        sprache.addStudent(this);
     }
 
     // student_bewirbt_sich
@@ -178,13 +173,16 @@ public class Student{
     public List<Bewerbung> getBewerbungen() {return bewerbungen;}
     
     public void addBewertung(Bewertung bewertung) {
-        if (this.bewertungen == null){
+        if (this.bewertungen == null) {
             this.bewertungen = new ArrayList<>();
+        } else {
+
+            if (this.bewertungen.contains(bewertung)) {
+                return;
+            }
+            this.bewertungen.add(bewertung);
+            bewertung.addStudent(this);
         }
-        if (this.bewertungen.contains(bewertung)){
-            return;
-        }
-        this.bewertungen.add(bewertung);
     }
 
 
@@ -199,11 +197,13 @@ public class Student{
     public void addBewerbung(Bewerbung bewerbung) {
         if (this.bewerbungen == null){
             this.bewerbungen = new ArrayList<>();
+        } else {
+            if (this.bewerbungen.contains(bewerbung)) {
+                return;
+            }
+            this.bewerbungen.add(bewerbung);
+            bewerbung.addStudent(this);
         }
-        if (this.bewerbungen.contains(bewerbung)){
-            return;
-        }
-        this.bewerbungen.add(bewerbung);
     }
 
     @Override
@@ -229,14 +229,51 @@ public class Student{
     public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
         if(taetigkeitsfelder == null) {
             taetigkeitsfelder = new ArrayList<>();
+        } else {
+            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
+                return;
+            }
+            taetigkeitsfelder.add(taetigkeitsfeld);
+            taetigkeitsfeld.addStudent(this);
         }
-        if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
-            return;
-        }
-        taetigkeitsfelder.add(taetigkeitsfeld);
-        taetigkeitsfeld.addStudent(this);
     }
 
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        } else {
+            if (stellenanzeigen.contains(stellenanzeige)) {
+                stellenanzeigen.remove(stellenanzeige);
+                stellenanzeige.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if (taetigkeitsfelder == null) {
+            stellenanzeigen = new ArrayList<>();
+        } else {
+            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
+                taetigkeitsfelder.remove(taetigkeitsfeld);
+                taetigkeitsfeld.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeSprache(Sprache sprache) {
+        if (sprachen == null) {
+            sprachen = new ArrayList<>();
+        } else {
+            if (sprachen.contains(sprache)) {
+                sprachen.remove(sprache);
+                sprache.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeQualifikation(Qualifikation qualifikation) {
+    }
+
+    public void removeKenntnis(Kenntnis kenntnis) {
     }
 }

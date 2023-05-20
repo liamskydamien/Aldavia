@@ -48,19 +48,22 @@ public class Rolle {
     }
 
     public void addUser(User user) {
-        if (user == null)
+        if (user == null) {
             users = null;
-        if (this.users.contains(user))
-            return;
-        this.users.add(user);
+        } else {
+            if (this.users.contains(user))
+                return;
+            this.users.add(user);
+            user.addRolle(this);
+        }
     }
 
     public void removeUser(User user) {
-        if (user == null)
-            return;
-        if (!this.users.contains(user))
-            return;
-        this.users.remove(user);
+        if (user != null) {
+            if (!this.users.contains(user))
+                return;
+            this.users.remove(user);
+        }
     }
 
 }

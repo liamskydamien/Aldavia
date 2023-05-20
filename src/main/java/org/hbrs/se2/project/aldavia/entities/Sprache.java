@@ -45,6 +45,7 @@ public class Sprache {
         if (this.studenten.contains(student))
             return;
         studenten.add(student);
+        student.addSprache(this);
     }
 
     public void removeStudent(Student student) {
@@ -53,6 +54,7 @@ public class Sprache {
         if (!this.studenten.contains(student))
             return;
         studenten.remove(student);
+        student.removeSprache(this);
     }
 
     @Override

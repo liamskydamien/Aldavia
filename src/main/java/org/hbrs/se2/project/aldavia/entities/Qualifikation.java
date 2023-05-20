@@ -61,6 +61,7 @@ public class Qualifikation {
         if (this.studenten.contains(student))
             return;
         studenten.add(student);
+        student.addQualifikation(this);
     }
 
     public void removeStudent(Student student) {
@@ -69,6 +70,7 @@ public class Qualifikation {
         if (!this.studenten.contains(student))
             return;
         studenten.remove(student);
+        student.removeQualifikation(this);
     }
 
 

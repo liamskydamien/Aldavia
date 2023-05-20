@@ -52,7 +52,7 @@ public class Taetigkeitsfeld {
             if (this.stellenanzeigen.contains(stellenanzeige))
                 return;
             this.stellenanzeigen.add(stellenanzeige);
-            stellenanzeige.addStellenanzeige(this);
+            stellenanzeige.addTaetigkeitsfeld(this);
         }
     }
 
@@ -64,7 +64,7 @@ public class Taetigkeitsfeld {
             if (!this.stellenanzeigen.contains(stellenanzeige))
                 return;
             this.stellenanzeigen.remove(stellenanzeige);
-            stellenanzeige.removeStellenanzeige(this);
+            stellenanzeige.removeTaetigkeitsfeld(this);
         }
     }
 
@@ -83,6 +83,19 @@ public class Taetigkeitsfeld {
             }
             this.studenten.add(student);
             student.addTaetigkeitsfeld(this);
+        }
+    }
+
+    public void removeStudent(Student student) {
+        if (student == null) {
+            studenten = new ArrayList<>();
+        }
+        else {
+            if (!this.studenten.contains(student)) {
+                return;
+            }
+            this.studenten.remove(student);
+            student.removeTaetigkeitsfeld(this);
         }
     }
 
