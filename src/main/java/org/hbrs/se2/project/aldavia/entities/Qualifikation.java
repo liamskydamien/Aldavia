@@ -21,7 +21,7 @@ public class Qualifikation {
     @Column(name= "qualifikation_id")
     private int id;
 
-    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "qualifikationen")
     private List<Student> studenten;
 
     @Column(name = "bezeichnung", nullable = false)
@@ -55,7 +55,23 @@ public class Qualifikation {
         return Objects.hash(bezeichnung, bereich, beschreibung, beschaeftigungsart);
     }
 
+    public void addStudent(Student student) {
+        if (studenten == null)
+            studenten = new java.util.ArrayList<>();
+        if (this.studenten.contains(student))
+            return;
+        studenten.add(student);
+        student.addQualifikation(this);
+    }
 
+    public void removeStudent(Student student) {
+        if (studenten == null)
+            studenten = new java.util.ArrayList<>();
+        if (!this.studenten.contains(student))
+            return;
+        studenten.remove(student);
+        student.removeQualifikation(this);
+    }
 
 
 

@@ -42,9 +42,28 @@ public class Rolle {
         return Objects.hash(bezeichnung);
     }
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "roles")
     public List<User> getUsers() {
         return users;
+    }
+
+    public void addUser(User user) {
+        if (user == null) {
+            users = null;
+        } else {
+            if (this.users.contains(user))
+                return;
+            this.users.add(user);
+            user.addRolle(this);
+        }
+    }
+
+    public void removeUser(User user) {
+        if (user != null) {
+            if (!this.users.contains(user))
+                return;
+            this.users.remove(user);
+        }
     }
 
 }

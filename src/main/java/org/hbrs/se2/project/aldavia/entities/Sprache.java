@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 // import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,10 +33,28 @@ public class Sprache {
     public String getLevel() { return level; }
 
 
-    @ManyToMany(mappedBy = "sprachen", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "sprachen")
     private List<Student> studenten;
     public List<Student> getStudenten() {
         return studenten;
+    }
+
+    public void addStudent(Student student) {
+        if (studenten == null)
+            studenten = new ArrayList<>();
+        if (this.studenten.contains(student))
+            return;
+        studenten.add(student);
+        student.addSprache(this);
+    }
+
+    public void removeStudent(Student student) {
+        if (studenten == null)
+            studenten = new ArrayList<>();
+        if (!this.studenten.contains(student))
+            return;
+        studenten.remove(student);
+        student.removeSprache(this);
     }
 
     @Override

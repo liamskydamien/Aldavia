@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int unternehmenId;
 
     @Basic
@@ -57,7 +58,7 @@ public class Unternehmen {
     }
 
     // unternehmen_hat_adresse
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Adresse> adressen;
     @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
@@ -66,8 +67,33 @@ public class Unternehmen {
         return adressen;
     }
 
+    public void addAdresse(Adresse adresse) {
+        if(adressen == null) {
+            adressen = new ArrayList<>();
+        } else {
+            if (adressen.contains(adresse)) {
+                return;
+            }
+            adressen.add(adresse);
+            adresse.addUnternehmen(this);
+        }
+    }
+
+    public void removeAdresse(Adresse adresse) {
+        if (adressen == null) {
+            adressen = new ArrayList<>();
+        }
+        else {
+            if (!adressen.contains(adresse)) {
+                return;
+            }
+            adressen.remove(adresse);
+            adresse.removeUnternehmen(this);
+        }
+    }
+
     // unternehmen_erstellt_stellenanzeige
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
     @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
@@ -76,6 +102,30 @@ public class Unternehmen {
         return stellenanzeigen;
     }
 
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if(stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        else {
+            if(stellenanzeigen.contains(stellenanzeige)) {
+                return;
+            }
+            stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.addUnternehmen(this);
+        }
+    }
 
 
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        else {
+            if (!stellenanzeigen.contains(stellenanzeige)) {
+                return;
+            }
+            stellenanzeigen.remove(stellenanzeige);
+            stellenanzeige.removeUnternehmen(this);
+        }
+    }
 }

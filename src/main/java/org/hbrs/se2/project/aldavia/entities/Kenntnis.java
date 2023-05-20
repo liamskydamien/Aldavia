@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +38,24 @@ public class Kenntnis  {
         return Objects.hash(bezeichnung);
     }
 
-    @ManyToMany(mappedBy = "kenntnisse", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "kenntnisse")
     public List<Student> getStudenten() {return studenten;}
+
+    public void addStudent(Student student) {
+        if (studenten == null)
+            studenten = new ArrayList<>();
+        if (this.studenten.contains(student))
+            return;
+        this.studenten.add(student);
+        student.addKenntnis(this);
+    }
+
+    public void removeStudent(Student student) {
+        if (studenten == null)
+            studenten = new ArrayList<>();
+        if (!this.studenten.contains(student))
+            return;
+        this.studenten.remove(student);
+        student.removeKenntnis(this);
+    }
 }

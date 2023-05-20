@@ -4,10 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "student", schema = "carlook")
@@ -16,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Student{
     @Basic
     @Column(name = "vorname", nullable = false)
@@ -60,37 +56,26 @@ public class Student{
     @OneToMany
     private List<Bewerbung> bewerbungen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Kenntnis> kenntnisse;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Qualifikation> qualifikationen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Sprache> sprachen;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int studentId;
-
-    public Student(String vorname, String nachname, String matrikelNummer, String studiengang, LocalDate studienbeginn, LocalDate geburtsdatum, String lebenslauf) {
-        this.vorname = vorname;
-        this.nachname = nachname;
-        this.matrikelNummer = matrikelNummer;
-        this.studiengang = studiengang;
-        this.studienbeginn = studienbeginn;
-        this.geburtsdatum = geburtsdatum;
-        this.lebenslauf = lebenslauf;
-
-    }
-
+    
     // student_hat_qualifikation
     @JoinTable(name = "student_hat_qualifikation", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
@@ -99,12 +84,37 @@ public class Student{
         return qualifikationen;
     }
 
+    public void addQualifikation(Qualifikation qualifikation) {
+        if (this.qualifikationen == null){
+            this.qualifikationen = new ArrayList<>();
+        } 
+        else {
+            if (this.qualifikationen.contains(qualifikation)) {
+                return;
+            }
+            this.qualifikationen.add(qualifikation);
+            qualifikation.addStudent(this);
+        }
+    }
+
     // student_hat_kenntnis
     @JoinTable(name = "student_hat_kenntnis", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "kenntnis", referencedColumnName = "bezeichnung", nullable = false))
     public List<Kenntnis> getKenntnisse() {
         return kenntnisse;
+    }
+
+    public void addKenntnis(Kenntnis kenntnis) {
+        if (this.kenntnisse == null){
+            this.kenntnisse = new ArrayList<>();
+        } else {
+            if (this.kenntnisse.contains(kenntnis)) {
+                return;
+            }
+            this.kenntnisse.add(kenntnis);
+            kenntnis.addStudent(this);
+        }
     }
 
     // student_interessiert_sich_fuer_taetigkeitsfeld
@@ -116,11 +126,24 @@ public class Student{
     }
 
     // student_favorisiert_stellenanzeige
+
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "student_favorisiert_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeige", referencedColumnName = "id", nullable = false))
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
+            joinColumns = @JoinColumn(name = "studentId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "stellenanzeigeId", nullable = false))
+    public List<Stellenanzeige> stellenanzeigenFavourisiert;
+
+
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (this.stellenanzeigen == null){
+            this.stellenanzeigen = new ArrayList<>();
+        }
+        if (this.stellenanzeigen.contains(stellenanzeige)){
+            return;
+        }
+        this.stellenanzeigen.add(stellenanzeige);
+        stellenanzeige.addStudent(this);
     }
 
     // student_beherrscht_sprache
@@ -131,12 +154,38 @@ public class Student{
         return sprachen;
     }
 
+    public void addSprache(Sprache sprache) {
+        if (this.sprachen == null){
+            this.sprachen = new ArrayList<>();
+        }
+        if (this.sprachen.contains(sprache)){
+            return;
+        }
+        this.sprachen.add(sprache);
+        sprache.addStudent(this);
+    }
+
     // student_bewirbt_sich
     @JoinTable(name = "student_bewirbt_sich", catalog = "nmuese2s",
             schema = "carlook",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false))
     public List<Bewerbung> getBewerbungen() {return bewerbungen;}
+    
+    public void addBewertung(Bewertung bewertung) {
+        if (this.bewertungen == null) {
+            this.bewertungen = new ArrayList<>();
+        } else {
+
+            if (this.bewertungen.contains(bewertung)) {
+                return;
+            }
+            this.bewertungen.add(bewertung);
+            bewertung.addStudent(this);
+        }
+    }
+
+
 
     // student_bewertet_unternehmen
     @JoinTable(name = "student_bewertet_unternehmen", catalog = "nmuese2s",
@@ -144,6 +193,18 @@ public class Student{
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "bewertung_id", referencedColumnName = "id", nullable = false))
     public List<Bewertung> getBewertungen() {return bewertungen;}
+    
+    public void addBewerbung(Bewerbung bewerbung) {
+        if (this.bewerbungen == null){
+            this.bewerbungen = new ArrayList<>();
+        } else {
+            if (this.bewerbungen.contains(bewerbung)) {
+                return;
+            }
+            this.bewerbungen.add(bewerbung);
+            bewerbung.addStudent(this);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -163,5 +224,56 @@ public class Student{
     @Override
     public int hashCode() {
         return Objects.hash(studentId, vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
+    }
+
+    public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if(taetigkeitsfelder == null) {
+            taetigkeitsfelder = new ArrayList<>();
+        } else {
+            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
+                return;
+            }
+            taetigkeitsfelder.add(taetigkeitsfeld);
+            taetigkeitsfeld.addStudent(this);
+        }
+    }
+
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        } else {
+            if (stellenanzeigen.contains(stellenanzeige)) {
+                stellenanzeigen.remove(stellenanzeige);
+                stellenanzeige.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if (taetigkeitsfelder == null) {
+            stellenanzeigen = new ArrayList<>();
+        } else {
+            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
+                taetigkeitsfelder.remove(taetigkeitsfeld);
+                taetigkeitsfeld.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeSprache(Sprache sprache) {
+        if (sprachen == null) {
+            sprachen = new ArrayList<>();
+        } else {
+            if (sprachen.contains(sprache)) {
+                sprachen.remove(sprache);
+                sprache.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeQualifikation(Qualifikation qualifikation) {
+    }
+
+    public void removeKenntnis(Kenntnis kenntnis) {
     }
 }

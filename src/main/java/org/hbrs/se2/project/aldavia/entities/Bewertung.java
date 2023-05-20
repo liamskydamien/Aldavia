@@ -46,4 +46,7 @@ public class Bewertung  {
     private Unternehmen unternehmen;
     public Unternehmen getUnternehmen() { return unternehmen; }
     public void setUnternehmen(Unternehmen unternehmen) {this.unternehmen = unternehmen;}
+
+    public void addStudent(Student student) {
+    }
 }
