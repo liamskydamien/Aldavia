@@ -23,7 +23,7 @@ public class Stellenanzeige {
     private int stellenanzeigeId;
 
     @Basic
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false)
     private String bezeichnung;
 
     @Basic

@@ -24,31 +24,39 @@ public class Qualifikation {
     @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
     private List<Student> studenten;
 
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", nullable = false)
     private String bezeichnung;
 
     @Basic
     @Column(name = "bereich")
     private String bereich;
 
+    @Basic
+    @Column(name = "beschreibung")
+    private String beschreibung;
+
+    @Basic
+    @Column(name = "beschaeftigungsart")
+    private String beschaeftigungsart;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Qualifikation qualifikation = (Qualifikation) o;
-        return Objects.equals(bezeichnung, qualifikation.bezeichnung) &&
-                Objects.equals(bereich, qualifikation.bereich);
+        return Objects.equals(bezeichnung, qualifikation.bezeichnung)
+                && Objects.equals(bereich, qualifikation.bereich)
+                && Objects.equals(beschreibung, qualifikation.beschreibung)
+                && Objects.equals(beschaeftigungsart, qualifikation.beschaeftigungsart);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bezeichnung);
+        return Objects.hash(bezeichnung, bereich, beschreibung, beschaeftigungsart);
     }
 
 
-    public Qualifikation(int id){
-        this.id = id;
-    }
+
 
 
 

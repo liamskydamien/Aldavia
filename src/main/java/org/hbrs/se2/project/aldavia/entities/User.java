@@ -20,11 +20,11 @@ import java.util.Objects;
 public class User {
     private int id;
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @Basic
     @Column(name = "userid", nullable = false, unique = true)
@@ -38,6 +38,10 @@ public class User {
     @Column(name = "profile_picture")
     private String profilePicture;
 
+    @Basic
+    @Column(name = "beschreibung")
+    private String beschreibung;
+
     private List<Rolle> roles;
 
     @ManyToMany
@@ -47,10 +51,6 @@ public class User {
     public List<Rolle> getRoles() {
         return roles;
     }
-
-    @Basic
-    @Column(name = "beschreibung")
-    private String beschreibung;
 
     @Id
     @GeneratedValue
@@ -68,7 +68,7 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        User user  = (User) o;
         return id == user.id
                 && Objects.equals(email, user.email)
                 && Objects.equals(password, user.password)

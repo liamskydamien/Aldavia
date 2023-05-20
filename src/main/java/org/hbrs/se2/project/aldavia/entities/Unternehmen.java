@@ -16,11 +16,11 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int unternehmenId;
 
     @Basic
-    @Column(name = "firmenname")
+    @Column(name = "firmenname", nullable = false)
     private String name;
 
     @Basic
@@ -79,5 +79,7 @@ public class Unternehmen {
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
     }
+
+
 
 }

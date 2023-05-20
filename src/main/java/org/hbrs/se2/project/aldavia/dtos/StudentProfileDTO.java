@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface StudentProfileDTO extends ProfileDTO {
     String getVorname();
@@ -14,11 +15,14 @@ public interface StudentProfileDTO extends ProfileDTO {
     LocalDate getGeburtsdatum();
     String getEmail();
 
-    List<String> getKenntnisse();
+    String getTelefonnummer();
+    String getBeschreibung();
 
-    List<Map<String, String >> getQualifikationen();
+    List<KenntnisDTO> getKenntnisse();
 
-    List<Map<String, String>> getSprachen();
+    List<QualifikationsDTO> getQualifikationen();
 
-    // more fields follow soon TODO! Add more fields
+    List<SpracheDTO> getSprachen();
+
+    List<TaetigkeitsfeldDTO> getTaetigkeitsfelder();
 }

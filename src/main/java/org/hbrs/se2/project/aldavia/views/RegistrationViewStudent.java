@@ -26,11 +26,12 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
-@Route(value = "registration", layout = RegistrationLayout.class)
+@Route(value = "registrationStudent")
 @PageTitle("Registration")
-@CssImport("./styles/views/entercar/enter-car-view.css")
+@CssImport("./styles/views/regView/reg-view.css")
 public class RegistrationViewStudent extends Div {
 
     private TextField userName = new TextField("Username");
@@ -42,7 +43,7 @@ public class RegistrationViewStudent extends Div {
     private ProgressBar pbar = new ProgressBar(0.0,10.0);
     private PasswordField passwordCheck = new PasswordField("Passwort check");
 
-    private Button register = new Button("Register");
+    private Button register = new Button("Sign Up");
     private Button generatePassword = new Button("Generate Password");
 
     private Dialog dialog = new Dialog();
@@ -54,9 +55,15 @@ public class RegistrationViewStudent extends Div {
 
 
     public RegistrationViewStudent(RegistrationControl regControl) {
-        pbar.setWidth("680px");
+        pbar.setWidth("390px");
 
-
+        //Required field
+        userName.setRequiredIndicatorVisible(true);
+        mail.setRequiredIndicatorVisible(true);
+        vorname.setRequiredIndicatorVisible(true);
+        nachname.setRequiredIndicatorVisible(true);
+        password.setRequiredIndicatorVisible(true);
+        passwordCheck.setRequiredIndicatorVisible(true);
 
         addClassName("RegistrationStudent");
 
@@ -67,7 +74,6 @@ public class RegistrationViewStudent extends Div {
         add(createButtonLayout());
 
         createDialog(regControl);
-
 
 
         //Aufsetzen der Progress-Bar
@@ -132,7 +138,7 @@ public class RegistrationViewStudent extends Div {
     private Component createButtonLayout() {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.addClassName("button-layout");
-        register.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        register.setClassName("register-button");
         buttonLayout.add(register);
         createDetailsInformation();
         buttonLayout.add(details);
@@ -141,6 +147,7 @@ public class RegistrationViewStudent extends Div {
     }
     private Component progressBar() {
         HorizontalLayout layout = new HorizontalLayout();
+        layout.setClassName("progressBar");
         Div progressBarLabel = new Div();
         progressBarLabel.setText("Password length");
         layout.add(pbar);
@@ -153,7 +160,7 @@ public class RegistrationViewStudent extends Div {
         generatePassword.addThemeVariants(ButtonVariant.LUMO_SMALL);
         generatePassword.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         l.add(generatePassword);
-        l.setHeight("100px");
+        l.setHeight("60px");
         return l;
 
     }

@@ -4,8 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "student", schema = "carlook")
@@ -17,15 +19,15 @@ import java.util.Objects;
 
 public class Student{
     @Basic
-    @Column(name = "vorname")
+    @Column(name = "vorname", nullable = false)
     private String vorname;
 
     @Basic
-    @Column(name = "nachname")
+    @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @Basic
-    @Column(name = "matrikelnummer", nullable = false, unique = true)
+    @Column(name = "matrikelnummer")
     private String matrikelNummer;
 
     @Basic
@@ -43,6 +45,10 @@ public class Student{
     @Basic
     @Column(name = "lebenslauf")
     private String lebenslauf;
+
+    @Basic
+    @Column(name = "beschreibung")
+    private String beschreibung;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne(optional = false)
@@ -82,6 +88,7 @@ public class Student{
         this.studienbeginn = studienbeginn;
         this.geburtsdatum = geburtsdatum;
         this.lebenslauf = lebenslauf;
+
     }
 
     // student_hat_qualifikation
@@ -143,9 +150,16 @@ public class Student{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Student student = (Student) o;
-        return studentId == student.studentId && Objects.equals(vorname, student.vorname) && Objects.equals(nachname, student.nachname) && Objects.equals(matrikelNummer, student.matrikelNummer) && Objects.equals(studiengang, student.studiengang) && Objects.equals(studienbeginn, student.studienbeginn) && Objects.equals(geburtsdatum, student.geburtsdatum) && Objects.equals(lebenslauf, student.lebenslauf) && Objects.equals(user, student.user);
+        if (o == null || !(o instanceof Student student)) return false;
+        return studentId == student.studentId
+                && Objects.equals(vorname, student.vorname)
+                && Objects.equals(nachname, student.nachname)
+                && Objects.equals(matrikelNummer, student.matrikelNummer)
+                && Objects.equals(studiengang, student.studiengang)
+                && Objects.equals(studienbeginn, student.studienbeginn)
+                && Objects.equals(geburtsdatum, student.geburtsdatum)
+                && Objects.equals(lebenslauf, student.lebenslauf)
+                && Objects.equals(user, student.user);
     }
 
     @Override

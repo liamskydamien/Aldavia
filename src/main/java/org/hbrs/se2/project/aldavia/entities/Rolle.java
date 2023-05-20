@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.entities;
 
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.Objects;
 @Setter
 @Table( name ="rolle" , schema = "carlook" )
 @NoArgsConstructor
+
+
 public class Rolle {
     private String bezeichnung;
     private List<User> users;

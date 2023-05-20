@@ -20,15 +20,15 @@ public class Sprache {
 
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int spracheId;
 
     @Basic
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     public String getName() { return name; }
 
     @Basic
-    @Column(name = "level")
+    @Column(name = "level", nullable = false)
     public String getLevel() { return level; }
 
 

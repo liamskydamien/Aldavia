@@ -49,6 +49,7 @@ public class RegistrationControl {
                             .password(dto.getPassword())
                             .userid(dto.getUserName())
                             .build();
+            repositoryU.save(userNeu);
 
             Student studentNeu =
                     Student.builder()
@@ -85,6 +86,7 @@ public class RegistrationControl {
                             .password(dto.getPassword())
                             .userid(dto.getUserName())
                             .build();
+            repositoryU.save(userNeu);
 
             Unternehmen unternehmenNeu =
                     Unternehmen.builder()
