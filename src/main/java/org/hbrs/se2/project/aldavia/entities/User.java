@@ -58,23 +58,25 @@ public class User {
     public void addRolle(Rolle rolle) {
         if (this.roles == null) {
             this.roles = new ArrayList<>();
+        } else {
+            if (this.roles.contains(rolle)) {
+                return;
+            }
+            this.roles.add(rolle);
+            rolle.addUser(this);
         }
-        if (this.roles.contains(rolle)) {
-            return;
-        }
-        this.roles.add(rolle);
-        rolle.addUser(this);
     }
 
     public void removeRolle(Rolle rolle) {
         if (this.roles == null) {
             roles = new ArrayList<>();
+        } else {
+            if (!this.roles.contains(rolle)) {
+                return;
+            }
+            this.roles.remove(rolle);
+            rolle.removeUser(this);
         }
-        if (!this.roles.contains(rolle)) {
-            return;
-        }
-        this.roles.remove(rolle);
-        rolle.removeUser(this);
     }
 
     @Override

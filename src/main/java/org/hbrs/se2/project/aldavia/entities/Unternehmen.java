@@ -79,11 +79,13 @@ public class Unternehmen {
         if (adressen == null) {
             adressen = new ArrayList<>();
         }
-        if (!adressen.contains(adresse)) {
-            return;
+        else {
+            if (!adressen.contains(adresse)) {
+                return;
+            }
+            adressen.remove(adresse);
+            adresse.removeUnternehmen(this);
         }
-        adressen.remove(adresse);
-        adresse.removeUnternehmen(this);
     }
 
     // unternehmen_erstellt_stellenanzeige
