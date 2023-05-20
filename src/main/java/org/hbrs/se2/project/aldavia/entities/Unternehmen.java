@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int unternehmenId;
 
     @Basic
@@ -93,7 +93,7 @@ public class Unternehmen {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
     @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),

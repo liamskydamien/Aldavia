@@ -33,7 +33,7 @@ public class Sprache {
     public String getLevel() { return level; }
 
 
-    @ManyToMany(mappedBy = "sprachen", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "sprachen")
     private List<Student> studenten;
     public List<Student> getStudenten() {
         return studenten;

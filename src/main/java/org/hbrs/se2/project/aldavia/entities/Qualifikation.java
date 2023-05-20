@@ -21,7 +21,7 @@ public class Qualifikation {
     @Column(name= "qualifikation_id")
     private int id;
 
-    @ManyToMany(mappedBy = "qualifikationen", fetch = FetchType.EAGER )
+    @ManyToMany(mappedBy = "qualifikationen")
     private List<Student> studenten;
 
     @Column(name = "bezeichnung", nullable = false)

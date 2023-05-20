@@ -38,7 +38,7 @@ public class Kenntnis  {
         return Objects.hash(bezeichnung);
     }
 
-    @ManyToMany(mappedBy = "kenntnisse", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "kenntnisse")
     public List<Student> getStudenten() {return studenten;}
 
     public void addStudent(Student student) {

@@ -128,7 +128,7 @@ public class Student{
     // student_favorisiert_stellenanzeige
 
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "student_favorisiert_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "studentId", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "stellenanzeigeId", nullable = false))
