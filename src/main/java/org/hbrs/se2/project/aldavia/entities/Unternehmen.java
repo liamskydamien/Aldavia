@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 public class Unternehmen {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private int unternehmenId;
 
     @Basic
@@ -39,8 +40,9 @@ public class Unternehmen {
     @Column(name = "website")
     private String website;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+
     @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Override
@@ -57,7 +59,7 @@ public class Unternehmen {
     }
 
     // unternehmen_hat_adresse
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Adresse> adressen;
     @JoinTable(name = "unternehmen_hat_adresse", catalog = "nmuese2s", schema = "carlook",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
@@ -67,15 +69,36 @@ public class Unternehmen {
     }
 
     // unternehmen_erstellt_stellenanzeige
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "ersteller", cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
-    @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
+
     public List<Stellenanzeige> getStellenanzeigen() {
+        if (stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
         return stellenanzeigen;
     }
 
 
+ /*   @JoinTable(name = "unternehmen_erstellt_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
+            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "unternehmenId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false))
+    public List<Stellenanzeige> getStellenanzeigen() {
+        return stellenanzeigen;
+    } */
+
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen == null) {
+            stellenanzeigen = new ArrayList<>();
+        }
+        stellenanzeigen.add(stellenanzeige);
+        stellenanzeige.setErsteller(this);
+    }
+
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        stellenanzeigen.remove(stellenanzeige);
+        stellenanzeige.setErsteller(null);
+    }
 
 }
