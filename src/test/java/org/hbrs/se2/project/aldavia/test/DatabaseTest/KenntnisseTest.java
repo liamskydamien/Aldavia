@@ -33,35 +33,31 @@ public class KenntnisseTest {
     private TestStudentFactory testStudentFactory;
 
     @Test
-    public void testeRoundTrip() {
-        try {
-            Kenntnis kenntnis = new Kenntnis();
-            kenntnis.setBezeichnung("Java_Test");
-            kenntnisseRepository.save(kenntnis);
-            //Saved in DB?
-            assertTrue(kenntnisseRepository.existsById("Java_Test"));
+    public void roundTrip() {
 
-            //Read
-            Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById("Java_Test");
-            assertTrue(awaitKenntnis.isPresent());
-            Kenntnis kenntnisFromDB = awaitKenntnis.get();
-            assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
+        Kenntnis kenntnis = new Kenntnis();
+        kenntnis.setBezeichnung("Java_Test");
+        kenntnisseRepository.save(kenntnis);
+        //Saved in DB?
+        assertTrue(kenntnisseRepository.existsById("Java_Test"));
 
-            //Update
-            kenntnisFromDB.setBezeichnung("Java_Test_8");
-            kenntnisseRepository.save(kenntnisFromDB);
-            awaitKenntnis = kenntnisseRepository.findById("Java_Test_8");
-            assertTrue(awaitKenntnis.isPresent());
-            kenntnisFromDB = awaitKenntnis.get();
-            assertEquals("Java_Test_8", kenntnisFromDB.getBezeichnung());
+        //Read
+        Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById("Java_Test");
+        assertTrue(awaitKenntnis.isPresent());
+        Kenntnis kenntnisFromDB = awaitKenntnis.get();
+        assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
 
-            //Delete
-            kenntnisseRepository.deleteById("Java_Test_8");
-            assertFalse(kenntnisseRepository.existsById("Java_Test_8"));
-        }
-        catch (Exception e) {
-            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
-        }
+        //Update
+        kenntnisFromDB.setBezeichnung("Java_Test_8");
+        kenntnisseRepository.save(kenntnisFromDB);
+        awaitKenntnis = kenntnisseRepository.findById("Java_Test_8");
+        assertTrue(awaitKenntnis.isPresent());
+        kenntnisFromDB = awaitKenntnis.get();
+        assertEquals("Java_Test_8", kenntnisFromDB.getBezeichnung());
+
+        //Delete
+        kenntnisseRepository.deleteById("Java_Test_8");
+        assertFalse(kenntnisseRepository.existsById("Java_Test_8"));
     }
 
     @Test
