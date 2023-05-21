@@ -16,10 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class KenntnisseTest {
-    //TODO: Fix this test
-    //TODO: Add round trip test for Kenntnisse
-    //TODO: Test Constraints if student gets deleted (cascade) -> Kenntnisse should not get deleted too
-    //TODO: Test add... and remove... methods
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
