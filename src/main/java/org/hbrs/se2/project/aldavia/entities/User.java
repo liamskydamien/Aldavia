@@ -58,6 +58,8 @@ public class User {
     public void addRolle(Rolle rolle) {
         if (this.roles == null) {
             this.roles = new ArrayList<>();
+            this.roles.add(rolle);
+            rolle.addUser(this);
         } else {
             if (this.roles.contains(rolle)) {
                 return;

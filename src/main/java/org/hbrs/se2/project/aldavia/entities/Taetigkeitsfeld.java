@@ -45,8 +45,10 @@ public class Taetigkeitsfeld {
     }
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (stellenanzeige == null) {
+        if (stellenanzeigen == null) {
             stellenanzeigen = new ArrayList<>();
+            this.stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.addTaetigkeitsfeld(this);
         }
         else {
             if (this.stellenanzeigen.contains(stellenanzeige))
@@ -74,16 +76,16 @@ public class Taetigkeitsfeld {
     }
 
     public void addStudent(Student student) {
-        if (student == null) {
+        if (studenten == null) {
             studenten = new ArrayList<>();
         }
         else {
             if (this.studenten.contains(student)) {
                 return;
             }
-            this.studenten.add(student);
-            student.addTaetigkeitsfeld(this);
         }
+        this.studenten.add(student);
+        student.addTaetigkeitsfeld(this);
     }
 
     public void removeStudent(Student student) {

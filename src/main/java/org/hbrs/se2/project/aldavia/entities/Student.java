@@ -92,9 +92,9 @@ public class Student{
             if (this.qualifikationen.contains(qualifikation)) {
                 return;
             }
-            this.qualifikationen.add(qualifikation);
-            qualifikation.addStudent(this);
         }
+        this.qualifikationen.add(qualifikation);
+        qualifikation.addStudent(this);
     }
 
     // student_hat_kenntnis
@@ -112,9 +112,9 @@ public class Student{
             if (this.kenntnisse.contains(kenntnis)) {
                 return;
             }
-            this.kenntnisse.add(kenntnis);
-            kenntnis.addStudent(this);
         }
+        this.kenntnisse.add(kenntnis);
+        kenntnis.addStudent(this);
     }
 
     // student_interessiert_sich_fuer_taetigkeitsfeld
@@ -180,9 +180,9 @@ public class Student{
             if (this.bewertungen.contains(bewertung)) {
                 return;
             }
-            this.bewertungen.add(bewertung);
-            bewertung.addStudent(this);
         }
+        this.bewertungen.add(bewertung);
+        bewertung.addStudent(this);
     }
 
 
@@ -201,9 +201,9 @@ public class Student{
             if (this.bewerbungen.contains(bewerbung)) {
                 return;
             }
-            this.bewerbungen.add(bewerbung);
-            bewerbung.addStudent(this);
         }
+        this.bewerbungen.add(bewerbung);
+        bewerbung.addStudent(this);
     }
 
     @Override
@@ -233,9 +233,9 @@ public class Student{
             if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
                 return;
             }
-            taetigkeitsfelder.add(taetigkeitsfeld);
-            taetigkeitsfeld.addStudent(this);
         }
+        taetigkeitsfelder.add(taetigkeitsfeld);
+        taetigkeitsfeld.addStudent(this);
     }
 
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
@@ -272,8 +272,30 @@ public class Student{
     }
 
     public void removeQualifikation(Qualifikation qualifikation) {
+        if (qualifikationen == null) {
+            qualifikationen = new ArrayList<>();
+        } else {
+            if (qualifikationen.contains(qualifikation)) {
+                qualifikationen.remove(qualifikation);
+                qualifikation.removeStudent(this);
+            }
+        }
     }
 
     public void removeKenntnis(Kenntnis kenntnis) {
+        if (kenntnisse == null) {
+            kenntnisse = new ArrayList<>();
+        } else {
+            if (kenntnisse.contains(kenntnis)) {
+                kenntnisse.remove(kenntnis);
+                kenntnis.removeStudent(this);
+            }
+        }
+    }
+
+    public void removeBewertung(Bewertung bewertung) {
+    }
+
+    public void removeBewerbung(Bewerbung bewerbung) {
     }
 }

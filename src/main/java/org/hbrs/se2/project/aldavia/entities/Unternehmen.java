@@ -70,6 +70,8 @@ public class Unternehmen {
     public void addAdresse(Adresse adresse) {
         if(adressen == null) {
             adressen = new ArrayList<>();
+            adressen.add(adresse);
+            adresse.addUnternehmen(this);
         } else {
             if (adressen.contains(adresse)) {
                 return;
@@ -105,6 +107,8 @@ public class Unternehmen {
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
         if(stellenanzeigen == null) {
             stellenanzeigen = new ArrayList<>();
+            stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.addUnternehmen(this);
         }
         else {
             if(stellenanzeigen.contains(stellenanzeige)) {
@@ -127,5 +131,11 @@ public class Unternehmen {
             stellenanzeigen.remove(stellenanzeige);
             stellenanzeige.removeUnternehmen(this);
         }
+    }
+
+    public void addBewertung(Bewertung bewertung) {
+    }
+
+    public void removeBewertung(Bewertung bewertung) {
     }
 }

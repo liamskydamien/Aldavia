@@ -72,20 +72,24 @@ public class Bewerbung  {
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
         if (this.stellenanzeige == stellenanzeige) {
             this.stellenanzeige = null;
+            stellenanzeige.removeBewerbung(this);
         }
     }
 
     public void addStudent(Student student) {
         this.student = student;
+        student.addBewerbung(this);
     }
 
     public void removeStudent(Student student) {
         if (this.student == student) {
             this.student = null;
+            student.removeBewerbung(this);
         }
     }
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
         this.stellenanzeige = stellenanzeige;
+        stellenanzeige.addBewerbung(this);
     }
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,18 +49,18 @@ public class Rolle {
     }
 
     public void addUser(User user) {
-        if (user == null) {
-            users = null;
+        if (users == null) {
+            users = new ArrayList<>();
         } else {
             if (this.users.contains(user))
                 return;
-            this.users.add(user);
-            user.addRolle(this);
         }
+        this.users.add(user);
+        user.addRolle(this);
     }
 
     public void removeUser(User user) {
-        if (user != null) {
+        if (users != null) {
             if (!this.users.contains(user))
                 return;
             this.users.remove(user);

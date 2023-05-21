@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Transactional
@@ -133,7 +134,7 @@ public class StellenanzeigeTest {
         assertEquals(awaitS3.getErsteller().getUnternehmenId(),idU1);
 
         unternehmen1.removeStellenanzeige(s3);
-        assertEquals(true, stellenanzeigeRepository.existsById(idS3));
+        assertEquals(false, stellenanzeigeRepository.existsById(idS3));
         assertEquals(stellenanzeigeRepository.findById(idS3).get().getErsteller(),null);
 
 
@@ -152,8 +153,8 @@ public class StellenanzeigeTest {
     }
     @Test
     public void testStellenanzeigeVariante1() {
-        s1.setErsteller(unternehmen1);
-        s2.setErsteller(unternehmen1);
+        s1.addUnternehmen(unternehmen1);
+        s2.addUnternehmen(unternehmen1);
 
         stellenanzeigeRepository.save(s1);
         stellenanzeigeRepository.save(s2);
@@ -194,8 +195,8 @@ public class StellenanzeigeTest {
 
     @Test
     public void testStellenanzeigeVariante2() {
-        s1.setErsteller(unternehmen1);
-        s2.setErsteller(unternehmen1);
+        s1.addUnternehmen(unternehmen1);
+        s2.addUnternehmen(unternehmen1);
 
         stellenanzeigeRepository.save(s1);
         stellenanzeigeRepository.save(s2);
@@ -208,7 +209,7 @@ public class StellenanzeigeTest {
 
         assertEquals(awaitS1.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
         assertEquals(awaitS2.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
-        assertEquals(true, unternehmenRepository.existsById(idU1));
+        assertTrue(unternehmenRepository.existsById(idU1));
 
         int idU12 = awaitS2.getErsteller().getUnternehmenId();
 

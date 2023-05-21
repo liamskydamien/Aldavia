@@ -123,9 +123,9 @@ public class Stellenanzeige {
             if (bewerbungen.contains(bewerbung)) {
                 return;
             }
-            bewerbungen.add(bewerbung);
-            bewerbung.addStellenanzeige(this);
         }
+        bewerbungen.add(bewerbung);
+        bewerbung.addStellenanzeige(this);
     }
 
     public void removeBewerbung(Bewerbung bewerbung) {
@@ -188,6 +188,7 @@ public class Stellenanzeige {
     public void addUnternehmen(Unternehmen unternehmen) {
         if (ersteller == null) {
             ersteller = unternehmen;
+            unternehmen.addStellenanzeige(this);
         }
     }
 
