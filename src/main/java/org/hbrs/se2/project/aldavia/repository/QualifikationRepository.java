@@ -8,5 +8,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QualifikationRepository extends JpaRepository<Qualifikation, Integer> {
-    Optional<Qualifikation> findQualifikationByBereichAndBeschaeftigungsartAndBeschreibungAndBezeichnung(String bereich, String beschaeftigungsart, String beschreibung, String bezeichnung);
-}
+    }

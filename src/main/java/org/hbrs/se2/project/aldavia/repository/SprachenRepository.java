@@ -8,6 +8,4 @@ import java.util.Optional;
 
 @Repository("sprachenRepository")
 public interface SprachenRepository extends JpaRepository<Sprache, Integer> {
-    Optional<Sprache> findByNameAndLevel(String name, String level);
-    boolean existsByNameAndLevel(String name, String level);
 }

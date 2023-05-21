@@ -2,7 +2,6 @@ package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dao.StudentDAO;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
@@ -20,8 +19,6 @@ import java.util.Optional;
 @Component
 public class StudentProfileControl {
 
-    @Autowired
-    private StudentDAO studentDAO;
 
     /**
      * Get the student profile of a student
@@ -32,13 +29,14 @@ public class StudentProfileControl {
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
             System.out.println("Loading student profile for user: " + username);
-            Student student = studentDAO.getStudent(username);
-            System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
-            return DTOTransformator.transformStudentProfileDTO(student);
+            //Student student = studentDAO.getStudent(username);
+            //System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
+            //return DTOTransformator.transformStudentProfileDTO(student);
+            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
-        catch (PersistenceException persistenceException){
-            throw new ProfileException("Profile not found", ProfileException.ProfileExceptionType.ProfileNotFound);
-        }
+//        catch (PersistenceException persistenceException){
+//            throw new ProfileException("Profile not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+//        }
         catch (Exception e) {
             throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
@@ -51,7 +49,7 @@ public class StudentProfileControl {
      * @return boolean
      * @throws ProfileException
      */
-    public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
+    /*public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
         // Gets student from database
         try {
             System.out.println("Finding student with username: " + username);
@@ -63,5 +61,5 @@ public class StudentProfileControl {
         catch (PersistenceException e) {
             throw new ProfileException("Error while updating student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
-    }
+    }*/
 }
