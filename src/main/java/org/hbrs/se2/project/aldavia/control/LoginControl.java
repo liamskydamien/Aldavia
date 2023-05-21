@@ -134,7 +134,7 @@ public class LoginControl {
         builder.setPassword(user.getPassword());
         builder.setPhone(user.getPhone());
         builder.setProfilePicture(user.getProfilePicture());
-        builder.setRoles(user.getRoles()
+        builder.setRoles(user.getRollen()
                              .stream()
                              .map(role -> {RolleDTOImpl r = new RolleDTOImpl();
                                            r.setBezeichnung(role.getBezeichnung());

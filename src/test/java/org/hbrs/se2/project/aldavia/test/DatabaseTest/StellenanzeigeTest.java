@@ -5,7 +5,6 @@ import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
-import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;

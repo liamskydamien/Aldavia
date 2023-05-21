@@ -84,7 +84,7 @@ public class DTOTransformator {
 
     private static SpracheDTO transformSpracheDTOImpl(Sprache sprache) {
         SpracheDTOImpl spracheDTO = new SpracheDTOImpl();
-        spracheDTO.setBezeichnung(sprache.getName());
+        spracheDTO.setBezeichnung(sprache.getBezeichnung());
         spracheDTO.setLevel(sprache.getLevel());
         return spracheDTO;
     }
