@@ -21,19 +21,19 @@ public class KenntnisseControl {
      * @param student The student
      * @return Kenntnis
      */
-    public Kenntnis addKenntnis(KenntnisDTO kenntnisDTO, Student student) {
+    public void addKenntnis(KenntnisDTO kenntnisDTO, Student student) {
         Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName());
         if (awaitKenntnis.isPresent()){
             Kenntnis kenntnis = awaitKenntnis.get();
             kenntnis.addStudent(student);
-            return kenntnisseRepository.save(kenntnis);
+           kenntnisseRepository.save(kenntnis);
         }
         else {
             Kenntnis kenntnis = Kenntnis.builder()
                     .bezeichnung(kenntnisDTO.getName())
                     .build();
             kenntnis.addStudent(student);
-            return kenntnisseRepository.save(kenntnis);
+            kenntnisseRepository.save(kenntnis);
         }
     }
 

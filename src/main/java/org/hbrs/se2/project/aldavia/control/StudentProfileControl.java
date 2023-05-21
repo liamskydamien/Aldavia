@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
@@ -15,6 +17,8 @@ public class StudentProfileControl {
 
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private KenntnisseControl kenntnisseControl;
 
     private StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
@@ -49,17 +53,24 @@ public class StudentProfileControl {
      * @return boolean
      * @throws ProfileException
      */
-    /*public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
+    public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
         // Gets student from database
         try {
             System.out.println("Finding student with username: " + username);
-            Student studentFromDB = studentDAO.getStudent(username);
-            System.out.println("Found student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
-            studentDAO.createAndUpdateStudent(student, studentFromDB);
-            System.out.println("Updated student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
-    }
+            Optional<Student> awaitStudent = studentRepository.findByUserID(username);
+            if (awaitStudent.isPresent()) {
+                Student studentFromDB = awaitStudent.get();
+
+                // Add Kenntnisse
+                for (KenntnisDTO kenntnis : student.getKenntnisse()) {
+                    kenntnisseControl.removeStudentFromKenntnis(kenntnis, studentFromDB);
+                }
+
+
+            }
+        }
         catch (PersistenceException e) {
             throw new ProfileException("Error while updating student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
-    }*/
+    }
 }
