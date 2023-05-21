@@ -294,8 +294,24 @@ public class Student{
     }
 
     public void removeBewertung(Bewertung bewertung) {
+        if (bewertungen == null) {
+            bewertungen = new ArrayList<>();
+        } else {
+            if (bewertungen.contains(bewertung)) {
+                bewertungen.remove(bewertung);
+                bewertung.removeStudent(this);
+            }
+        }
     }
 
     public void removeBewerbung(Bewerbung bewerbung) {
+        if (bewerbungen == null) {
+            bewerbungen = new ArrayList<>();
+        } else {
+            if (bewerbungen.contains(bewerbung)) {
+                bewerbungen.remove(bewerbung);
+                bewerbung.removeStudent(this);
+            }
+        }
     }
 }
