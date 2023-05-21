@@ -21,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class BewerbungTest {
+
+    //TODO: Fix this test
+    //TODO: Add round trip test for Bewerbung
+    //TODO: Test Constraints if student or stellenanzeige gets deleted (cascade) -> Bewerbung gets deleted too
+    //TODO: Test add... and remove... methods
     /*
 
     @Autowired

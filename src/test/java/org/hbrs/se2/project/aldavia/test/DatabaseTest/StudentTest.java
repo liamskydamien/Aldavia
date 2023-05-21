@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
+    //TODO: Fix this test
+    //TODO: Add round trip test for Student
+    //TODO: Test Constraints if student gets deleted (cascade) -> User, Qualification get deleted too. Sprache, Kenntnisse, Taetigkeitsfeld not
+    //TODO: Test add... and remove... methods
     /*
 
     @Autowired

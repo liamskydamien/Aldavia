@@ -21,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TaetigkeitsfeldTest {
+    //TODO: Fix this test
+    //TODO: Add round trip test for Taetigkeitsfeld
+    //TODO: Test Constraints if student or stellenanzeige gets deleted (cascade) -> Taetigkeitsfeld should not get deleted too
+    //TODO: Test add... and remove... methods
+
     /*
 
     @Autowired

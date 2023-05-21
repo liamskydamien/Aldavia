@@ -21,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QualifikationTest {
+    //TODO: Fix this test
+    //TODO: Add round trip test for Qualifikation
+    //TODO: Test Constraints if student gets deleted (cascade) -> Qualifikation get deleted too
+    //TODO: Test add... and remove... methods
+
     /*
 
     @Autowired

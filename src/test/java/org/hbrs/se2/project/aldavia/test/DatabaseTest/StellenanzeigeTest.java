@@ -22,6 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Transactional
 public class StellenanzeigeTest {
+    //TODO: Fix this test
+    //TODO: Add round trip test for Stellenanzeige
+    //TODO: Test Constraints if unternehmen gets deleted (cascade) -> Stellenanzeige should get deleted too
+    //TODO: Test add... and remove... methods
     /*
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;
