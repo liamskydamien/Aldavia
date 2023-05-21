@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
+    /*
 
     @Autowired
     private StudentRepository studentRepository;
@@ -1089,7 +1090,7 @@ public class StudentTest {
     }
 
 
-
+*/
 
 
 

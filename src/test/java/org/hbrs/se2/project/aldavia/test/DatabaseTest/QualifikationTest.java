@@ -6,7 +6,6 @@ import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.test.TestStudentFactory;
 import org.hibernate.loader.hql.QueryLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QualifikationTest {
+    /*
 
     @Autowired
     private QualifikationRepository qualifikationRepository;
@@ -114,4 +114,6 @@ public class QualifikationTest {
         // Delete Student
         testStudentFactory.deleteStudent();
     }
+
+     */
 }

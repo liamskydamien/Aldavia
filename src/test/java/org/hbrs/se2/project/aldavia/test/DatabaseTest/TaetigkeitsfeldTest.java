@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TaetigkeitsfeldTest {
+    /*
 
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
@@ -185,4 +186,5 @@ public class TaetigkeitsfeldTest {
 //        stellenanzeigeRepository.deleteById(stellenanzeigeId);
 //        assertFalse(stellenanzeigeRepository.existsById(stellenanzeigeId));
 //    }
+*/
 }

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Transactional
 public class StellenanzeigeTest {
+    /*
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;
 

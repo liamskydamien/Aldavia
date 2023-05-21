@@ -50,7 +50,7 @@ public class LoginControlTest {
         user.setUserid("sascha");
         user.setPassword("abc");
         user.setEmail("test@aldavia.de");
-        user.setRoles(rollen);
+        user.setRollen(rollen);
         userRepository.save(user);
 
         testUser.setUserid("sascha");
