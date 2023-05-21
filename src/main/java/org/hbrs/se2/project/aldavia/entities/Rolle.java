@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "rolle", schema = "test_schema")
+@Table(name = "rolle", schema = "aldavia_new")
 @Getter
 @Setter
 @Builder

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "student", schema = "test_schema")
+@Table(name = "student", schema = "aldavia_new")
 @Getter
 @Setter
 @Builder

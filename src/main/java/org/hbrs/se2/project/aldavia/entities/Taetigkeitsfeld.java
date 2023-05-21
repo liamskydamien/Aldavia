@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "taetigkeitsfelder", schema = "test_schema")
+@Table(name = "taetigkeitsfelder", schema = "aldavia_new")
 @Getter
 @Setter
 @Builder

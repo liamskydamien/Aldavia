@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "bewerbungen", schema = "test_schema")
+@Table(name = "bewerbungen", schema = "aldavia_new")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

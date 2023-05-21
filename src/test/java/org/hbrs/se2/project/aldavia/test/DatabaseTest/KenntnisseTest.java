@@ -1,28 +1,25 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
 import org.hbrs.se2.project.aldavia.entities.Kenntnis;
-import org.hbrs.se2.project.aldavia.entities.Qualifikation;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class KenntnisseTest {
     //TODO: Fix this test
     //TODO: Add round trip test for Kenntnisse
     //TODO: Test Constraints if student gets deleted (cascade) -> Kenntnisse should not get deleted too
     //TODO: Test add... and remove... methods
-    /*
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
@@ -30,15 +27,8 @@ public class KenntnisseTest {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TestStudentFactory testStudentFactory;
-
     @Test
     public void roundTrip() {
-
         Kenntnis kenntnis = new Kenntnis();
         kenntnis.setBezeichnung("Java_Test");
         kenntnisseRepository.save(kenntnis);
@@ -52,16 +42,11 @@ public class KenntnisseTest {
         assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
 
         //Update
-        kenntnisFromDB.setBezeichnung("Java_Test_8");
-        kenntnisseRepository.save(kenntnisFromDB);
-        awaitKenntnis = kenntnisseRepository.findById("Java_Test_8");
-        assertTrue(awaitKenntnis.isPresent());
-        kenntnisFromDB = awaitKenntnis.get();
-        assertEquals("Java_Test_8", kenntnisFromDB.getBezeichnung());
+        // Da Kenntnisse nicht verändert werden können/sollen, wird hier nichts getestet
 
         //Delete
-        kenntnisseRepository.deleteById("Java_Test_8");
-        assertFalse(kenntnisseRepository.existsById("Java_Test_8"));
+        kenntnisseRepository.deleteById("Java_Test");
+        assertFalse(kenntnisseRepository.existsById("Java_Test"));
     }
 
     @Test
@@ -71,45 +56,50 @@ public class KenntnisseTest {
     }
 
     @Test
-    public void testeStudentKenntnis(){
-        // Setup
+    public void testAddKenntnisToStudent(){
+        Kenntnis kenntnis = Kenntnis.builder()
+                .bezeichnung("Java_Test_Kenntnis")
+                .build();
 
-        // Create User
-        Student student = testStudentFactory.createStudent();
-        int studentId = student.getStudentId();
+        User user = User.builder()
+                .userid("testuserKenntnis")
+                .password("test")
+                .email("test@kenntnis.de")
+                .build();
 
-        List<Student> students = new ArrayList<>();
-        students.add(student);
+        Student student = Student.builder()
+                .matrikelNummer("1234567")
+                .vorname("Max")
+                .nachname("Mustermann")
+                .user(user)
+                .build();
 
-        // Create Qualifikation
-        Kenntnis kenntnis = new Kenntnis();
-        kenntnis.setBezeichnung("Java_Test");
-        kenntnis.setStudenten(students);
+        student.addKenntnis(kenntnis);
+        studentRepository.save(student);
+
+        assertTrue(studentRepository.existsById(student.getId()));
+        assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
+
+        Optional<Student> awaitStudent = studentRepository.findById(student.getId());
+        assertTrue(awaitStudent.isPresent());
+        Student studentFromDB = awaitStudent.get();
+        assertEquals(kenntnis.getBezeichnung(), studentFromDB.getKenntnisse().get(0).getBezeichnung());
+
+        kenntnis.removeStudent(student);
         kenntnisseRepository.save(kenntnis);
-        String  kenntnisId = "Java_Test";
 
-        List<Kenntnis> kenntnisse = new ArrayList<>();
-        kenntnisse.add(kenntnis);
-        student.setKenntnisse(kenntnisse);
-        studentRepository.save(student);
+        Optional<Student> awaitStudent2 = studentRepository.findById(student.getId());
+        assertTrue(awaitStudent2.isPresent());
+        Student studentFromDB2 = awaitStudent.get();
+        assertTrue(studentFromDB2.getKenntnisse().isEmpty());
+        assertTrue(kenntnis.getStudents().isEmpty());
 
-        // Read
-        Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisId);
-        assertTrue(awaitKenntnis.isPresent());
-        Kenntnis kenntnisFromDB = awaitKenntnis.get();
-        assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
-        assertEquals(1, kenntnisFromDB.getStudenten().size());
-        assertEquals(student.getStudentId(), kenntnisFromDB.getStudenten().get(0).getStudentId());
+        studentRepository.deleteById(student.getId());
+        assertFalse(studentRepository.existsById(student.getId()));
+        assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
 
-        // Delete
-        student.setKenntnisse(null);
-        studentRepository.save(student);
+        kenntnisseRepository.deleteById(kenntnis.getBezeichnung());
 
-        kenntnisseRepository.deleteById(kenntnisId);
-        assertFalse(kenntnisseRepository.existsById(kenntnisId));
-
-        testStudentFactory.deleteStudent();
     }
 
-    */
 }

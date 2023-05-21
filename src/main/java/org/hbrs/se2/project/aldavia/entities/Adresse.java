@@ -8,7 +8,7 @@ import java.util.Objects;
 import lombok.*;
 
 @Entity
-@Table(name = "adressen", schema = "test_schema")
+@Table(name = "adressen", schema = "aldavia_new")
 @Getter
 @Setter
 @NoArgsConstructor

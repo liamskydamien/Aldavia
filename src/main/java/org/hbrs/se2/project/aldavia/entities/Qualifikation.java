@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "qualifikationen", schema = "test_schema")
+@Table(name = "qualifikationen", schema = "aldavia_new")
 @Getter
 @Setter
 @Builder
