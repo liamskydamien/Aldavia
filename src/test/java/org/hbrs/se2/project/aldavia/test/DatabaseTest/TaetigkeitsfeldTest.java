@@ -40,8 +40,7 @@ public class TaetigkeitsfeldTest {
         String bezeichnung = "IT";
         Taetigkeitsfeld taetigkeitsfeld = new Taetigkeitsfeld();
         taetigkeitsfeld.setBezeichnung(bezeichnung);
-        taetigkeitsfeldRepository.save(taetigkeitsfeld);
-        //Saved in DB?
+        taetigkeitsfeldRepository.save(taetigkeitsfeld); //Saved in DB?
         assertTrue(taetigkeitsfeldRepository.existsById(bezeichnung));
 
         //Read
@@ -63,6 +62,7 @@ public class TaetigkeitsfeldTest {
         taetigkeitsfeldRepository.deleteById(newBezeichnung);
         assertFalse(taetigkeitsfeldRepository.existsById(newBezeichnung));
     }
+
     @Test
     public void negativTests(){
 //        Taetigkeitsfeld taetigkeitsfeld1 = new Taetigkeitsfeld();
