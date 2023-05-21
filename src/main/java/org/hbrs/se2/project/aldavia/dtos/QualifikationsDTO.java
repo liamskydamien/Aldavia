@@ -1,10 +1,21 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
-public interface QualifikationsDTO {
-    String getBezeichnung();
-    String getBereich();
+import lombok.*;
 
-    String getBeschreibung();
+import java.time.LocalDate;
 
-    String getBeschaeftigungsart();
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class QualifikationsDTO {
+    private String bezeichnung;
+    private String beschreibung;
+    private String bereich;
+    private String institution;
+    private String beschaeftigungsart;
+    private LocalDate von;
+    private LocalDate bis;
+    private int id;
 }
