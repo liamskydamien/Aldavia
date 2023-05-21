@@ -36,37 +36,32 @@ public class TaetigkeitsfeldTest {
 
 
     @Test
-    public void testeRoundTrip() {
-        try {
-            String bezeichnung = "IT";
-            Taetigkeitsfeld taetigkeitsfeld = new Taetigkeitsfeld();
-            taetigkeitsfeld.setBezeichnung(bezeichnung);
-            taetigkeitsfeldRepository.save(taetigkeitsfeld);
-            //Saved in DB?
-            assertTrue(taetigkeitsfeldRepository.existsById(bezeichnung));
+    public void roundTrip() {
+        String bezeichnung = "IT";
+        Taetigkeitsfeld taetigkeitsfeld = new Taetigkeitsfeld();
+        taetigkeitsfeld.setBezeichnung(bezeichnung);
+        taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        //Saved in DB?
+        assertTrue(taetigkeitsfeldRepository.existsById(bezeichnung));
 
-            //Read
-            Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(bezeichnung);
-            assertTrue(awaitTaetigkeitsfeld.isPresent());
-            Taetigkeitsfeld taetigkeitsfeldFromDB = awaitTaetigkeitsfeld.get();
-            assertEquals(bezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
+        //Read
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(bezeichnung);
+        assertTrue(awaitTaetigkeitsfeld.isPresent());
+        Taetigkeitsfeld taetigkeitsfeldFromDB = awaitTaetigkeitsfeld.get();
+        assertEquals(bezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
 
-            //Update
-            String newBezeichnung = "Informatik";
-            taetigkeitsfeldFromDB.setBezeichnung(newBezeichnung);
-            taetigkeitsfeldRepository.save(taetigkeitsfeldFromDB);
-            awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(newBezeichnung);
-            assertTrue(awaitTaetigkeitsfeld.isPresent());
-            taetigkeitsfeldFromDB = awaitTaetigkeitsfeld.get();
-            assertEquals(newBezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
+        //Update
+        String newBezeichnung = "Informatik";
+        taetigkeitsfeldFromDB.setBezeichnung(newBezeichnung);
+        taetigkeitsfeldRepository.save(taetigkeitsfeldFromDB);
+        awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(newBezeichnung);
+        assertTrue(awaitTaetigkeitsfeld.isPresent());
+        taetigkeitsfeldFromDB = awaitTaetigkeitsfeld.get();
+        assertEquals(newBezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
 
-            //Delete
-            taetigkeitsfeldRepository.deleteById(newBezeichnung);
-            assertFalse(taetigkeitsfeldRepository.existsById(newBezeichnung));
-        }
-        catch (Exception e) {
-            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
-        }
+        //Delete
+        taetigkeitsfeldRepository.deleteById(newBezeichnung);
+        assertFalse(taetigkeitsfeldRepository.existsById(newBezeichnung));
     }
     @Test
     public void negativTests(){
