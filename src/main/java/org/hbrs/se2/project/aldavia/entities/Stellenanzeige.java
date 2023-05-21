@@ -10,29 +10,36 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "stellenanzeige", schema = "carlook")
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "stellenanzeigen", schema = "test_schema")
 @Getter
 @Setter
 @Builder
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class Stellenanzeige {
+
     @Id
     @GeneratedValue
-    @Column(name = "stellenanzeigeId", nullable = false)
-    private int stellenanzeigeId;
+    private int id;
 
     @Basic
     @Column(name = "bezeichnung", nullable = false)
     private String bezeichnung;
 
     @Basic
-    @Column(name = "start")
+    @Column(name = "beschreibung", nullable = false)
+    private String beschreibung;
+
+    @Basic
+    @Column(name = "beschaeftigungsverhaeltnis", nullable = false)
+    private String beschaeftigungsverhaeltnis;
+
+    @Basic
+    @Column(name = "start", nullable = false)
     private LocalDate start;
 
     @Basic
-    @Column(name = "ende")
+    @Column(name = "ende", nullable = false)
     private LocalDate ende;
 
     @Basic
@@ -47,160 +54,99 @@ public class Stellenanzeige {
     @Column(name = "beschaeftigungsumfang")
     private String beschaeftigungsumfang;
 
-    @Basic
-    @Column(name = "beschreibung")
-    private String beschreibung;
+    // stellenanzeige_taeitgkeitsfeld
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Stellenanzeige stellenanzeige = (Stellenanzeige) o;
-        return stellenanzeigeId == stellenanzeige.stellenanzeigeId &&
-                Objects.equals(bezeichnung, stellenanzeige.bezeichnung) &&
-                Objects.equals(beschreibung, stellenanzeige.beschreibung) &&
-                Objects.equals(start, stellenanzeige.start) &&
-                Objects.equals(ende, stellenanzeige.ende) &&
-                Objects.equals(erstellungsdatum, stellenanzeige.erstellungsdatum) &&
-                Objects.equals(bezahlung, stellenanzeige.bezahlung) &&
-                Objects.equals(beschaeftigungsumfang, stellenanzeige.beschaeftigungsumfang);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(stellenanzeigeId, bezeichnung, beschreibung, start, ende, erstellungsdatum, bezahlung, beschaeftigungsumfang);
-    }
-
-    // unternehmen_erstellt_stellenanzeige
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ersteller_id")
-    private Unternehmen ersteller;
-
-    public void setErsteller(Unternehmen ersteller) {
-        this.ersteller = ersteller;
-        if (ersteller!= null && !ersteller.getStellenanzeigen().contains(this)) {
-            ersteller.getStellenanzeigen().add(this);
-        }
-    }
-
-
-
-    // stellenanzeige_hat_taetigkeitsfeld
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "stellenanzeige_hat_taetigkeitsfeld", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "bezeichnung", nullable = false))
+    @ManyToMany(mappedBy = "stellenanzeigen")
     private List<Taetigkeitsfeld> taetigkeitsfelder;
-    
+
+    @JoinTable(
+            name = "stellenanzeige_qualifikation",
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Taetigkeitsfeld> getTaetigkeitsbereiche() {
+        return taetigkeitsfelder;
+    }
+
     public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
         if (taetigkeitsfelder == null) {
             taetigkeitsfelder = new ArrayList<>();
         }
-        if (taetigkeitsfelder.contains(taetigkeitsfeld)){
-            return;
-        }
-        taetigkeitsfelder.add(taetigkeitsfeld);
-        taetigkeitsfeld.addStellenanzeige(this);
-    }
-
-
-
-    // stellenanzeige_hat_bewerbung
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Bewerbung> bewerbungen;
-    @JoinTable(name = "stellenanzeige_hat_bewerbung", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "stellenanzeigeId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "stellenanzeigeId", nullable = false))
-    public List<Bewerbung> getBewerbung() {
-        return bewerbungen;
-    }
-
-    public void addBewerbung(Bewerbung bewerbung) {
-        if (bewerbungen == null) {
-            bewerbungen = new ArrayList<>();
-        } else {
-            if (bewerbungen.contains(bewerbung)) {
-                return;
-            }
-        }
-        bewerbungen.add(bewerbung);
-        bewerbung.addStellenanzeige(this);
-    }
-
-    public void removeBewerbung(Bewerbung bewerbung) {
-        if (bewerbungen == null) {
-            bewerbungen = new ArrayList<>();
-        } else {
-            if (!bewerbungen.contains(bewerbung)) {
-                return;
-            }
-            bewerbungen.remove(bewerbung);
-            bewerbung.removeStellenanzeige(this);
-        }
-    }
-
-
-    // student_favorisiert_stellenanzeige
-    @ManyToMany(mappedBy = "stellenanzeigenFavourisiert", cascade = CascadeType.ALL)
-    private List<Student> studenten;
-    public List<Student> getStudenten() {
-        return studenten;
-    }
-    
-    public void addStudent(Student student) {
-        if (studenten == null) {
-            studenten = new ArrayList<>();
-        }
-        if (studenten.contains(student)){
-            return;
-        }
-        studenten.add(student);
-        student.addStellenanzeige(this);
-    }
-    
-    public void removeStudent(Student student) {
-        if (studenten == null) {
-            studenten = new ArrayList<>();
-        }
-        if (!studenten.contains(student)){
-            return;
-        }
-        studenten.remove(student);
-        student.removeStellenanzeige(this);
-    }
-    
-    public void setStudenten(List<Student> studenten) {
-        this.studenten = studenten;
-    }
-
-    public void removeUnternehmen(Unternehmen unternehmen) {
-        if (ersteller == null) {
-            return;
-        }
-        if (!ersteller.equals(unternehmen)) {
-            return;
-        }
-        ersteller = null;
-        unternehmen.removeStellenanzeige(this);
-    }
-
-    public void addUnternehmen(Unternehmen unternehmen) {
-        if (ersteller == null) {
-            ersteller = unternehmen;
-            unternehmen.addStellenanzeige(this);
+        if (!taetigkeitsfelder.contains(taetigkeitsfeld)){
+            taetigkeitsfelder.add(taetigkeitsfeld);
+            taetigkeitsfeld.addStellenanzeige(this);
         }
     }
 
     public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
         if (taetigkeitsfelder == null) {
-            taetigkeitsfelder = new ArrayList<>();
-        } else {
-            if (!taetigkeitsfelder.contains(taetigkeitsfeld)) {
-                return;
-            }
-            taetigkeitsfelder.remove(taetigkeitsfeld);
-            taetigkeitsfeld.removeStellenanzeige(this);
+            return;
         }
+        taetigkeitsfelder.remove(taetigkeitsfeld);
+        taetigkeitsfeld.removeStellenanzeige(this);
+    }
+
+    // stellenanzeige_hat_bewerbungen
+    @OneToMany(mappedBy = "stellenanzeige", cascade = CascadeType.ALL)
+    private List<Bewerbung> bewerbungen;
+
+    @JoinTable(
+            name = "stellenanzeige_bewerbung",
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Bewerbung> getBewerbungen() {
+        return bewerbungen;
+    }
+
+    public void addBewerbung(Bewerbung bewerbung){
+        if (bewerbungen == null) {
+            bewerbungen = new ArrayList<>();
+        }
+        if (!bewerbungen.contains(bewerbung)) {
+            bewerbungen.add(bewerbung);
+            bewerbung.setStellenanzeige(this);
+        }
+    }
+
+    public void removeBewerbung(Bewerbung bewerbung) {
+        if (bewerbungen == null) {
+            return;
+        }
+        bewerbungen.remove(bewerbung);
+        bewerbung.setStellenanzeige(null);
+    }
+
+    // stellenanzeige_hat_unternehmen
+    @ManyToOne
+    @JoinColumn(name = "unternehmen_id", referencedColumnName = "id", nullable = false)
+    private Unternehmen unternehmen_stellenanzeigen;
+
+    public void setUnternehmen(Unternehmen unternehmen) {
+        if (this.unternehmen_stellenanzeigen != null) {
+            this.unternehmen_stellenanzeigen.removeStellenanzeige(this);
+        }
+        this.unternehmen_stellenanzeigen = unternehmen;
+        if (unternehmen != null) {
+            unternehmen.addStellenanzeige(this);
+        }
+    }
+
+
+    // Methoden
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Stellenanzeige that = (Stellenanzeige) o;
+        return id == that.id && Objects.equals(bezeichnung, that.bezeichnung) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(beschaeftigungsverhaeltnis, that.beschaeftigungsverhaeltnis) && Objects.equals(start, that.start) && Objects.equals(ende, that.ende) && Objects.equals(erstellungsdatum, that.erstellungsdatum) && Objects.equals(bezahlung, that.bezahlung) && Objects.equals(beschaeftigungsumfang, that.beschaeftigungsumfang) && Objects.equals(taetigkeitsfelder, that.taetigkeitsfelder) && Objects.equals(bewerbungen, that.bewerbungen) && Objects.equals(unternehmen_stellenanzeigen, that.unternehmen_stellenanzeigen);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, bezeichnung, beschreibung, beschaeftigungsverhaeltnis, start, ende, erstellungsdatum, bezahlung, beschaeftigungsumfang, taetigkeitsfelder, bewerbungen, unternehmen_stellenanzeigen);
     }
 }

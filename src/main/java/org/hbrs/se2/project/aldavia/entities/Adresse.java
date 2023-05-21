@@ -1,83 +1,78 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
-// import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.*;
+
 @Entity
-@Table( name ="adresse" , schema = "carlook" )
-@NoArgsConstructor
+@Table(name = "adressen", schema = "test_schema")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Adresse {
     @Id
     @GeneratedValue
-    private int adresseId;
+    private int id;
 
     @Basic
-    @Column(name = "land")
-    private String land;
-
-    @Basic
-    @Column(name = "ort")
-    private String ort;
-    @Basic
-    @Column(name = "postleitzahl")
-    private String postleitzahl;
-
-    @Basic
-    @Column(name = "strasse")
+    @Column(name = "strasse", nullable = false)
     private String strasse;
 
     @Basic
-    @Column(name = "hausnummer")
+    @Column(name = "hausnummer", nullable = false)
     private String hausnummer;
+
+    @Basic
+    @Column(name = "plz", nullable = false)
+    private String plz;
+
+    @Basic
+    @Column(name = "ort", nullable = false)
+    private String ort;
+
+    @Basic
+    @Column(name = "land", nullable = false)
+    private String land;
+
+
+    // adresse_hat_unternehmen
+    @ManyToMany
+    private List<Unternehmen> unternehmen;
+
+    public void addUnternehmen(Unternehmen unternehmen) {
+        if (this.unternehmen == null) {
+            this.unternehmen = new ArrayList<>();
+        }
+        if (!this.unternehmen.contains(unternehmen)) {
+            this.unternehmen.add(unternehmen);
+            unternehmen.addAdresse(this);
+        }
+    }
+
+    public void removeUnternehmen(Unternehmen unternehmen) {
+        if (this.unternehmen != null && this.unternehmen.contains(unternehmen)) {
+            this.unternehmen.remove(unternehmen);
+            unternehmen.removeAdresse(this);
+        }
+    }
+
+    // Methoden
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
-        return adresseId == adresse.adresseId
-                && Objects.equals(land, adresse.land)
-                && Objects.equals(ort, adresse.ort)
-                && Objects.equals(postleitzahl, adresse.postleitzahl)
-                && Objects.equals(strasse, adresse.strasse)
-                && Objects.equals(hausnummer, adresse.hausnummer);
+        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land) && Objects.equals(unternehmen, adresse.unternehmen);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(adresseId, land, ort, postleitzahl, strasse, hausnummer);
-    }
-
-    @ManyToMany(mappedBy = "adressen")
-    private List<Unternehmen> unternehmen;
-    public List<Unternehmen> getUnternehmen() {
-        return unternehmen;
-    }
-
-    public void addUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen == null)
-            this.unternehmen = new ArrayList<>();
-        if (!this.unternehmen.contains(unternehmen))
-            return;
-        this.unternehmen.add(unternehmen);
-        unternehmen.addAdresse(this);
-    }
-
-    public void removeUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen == null)
-            return;
-        if (!this.unternehmen.contains(unternehmen))
-            return;
-        this.unternehmen.remove(unternehmen);
-        unternehmen.removeAdresse(this);
+        return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
     }
 }

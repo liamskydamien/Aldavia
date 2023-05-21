@@ -7,23 +7,28 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "student", schema = "carlook")
+@Table(name = "student", schema = "test_schema")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class Student{
-    @Basic
-    @Column(name = "vorname", nullable = false)
-    private String vorname;
+@AllArgsConstructor
+@NoArgsConstructor
+public class Student {
+
+    @Id
+    @GeneratedValue
+    private int id;
 
     @Basic
     @Column(name = "nachname", nullable = false)
     private String nachname;
 
     @Basic
-    @Column(name = "matrikelnummer")
+    @Column(name = "vorname", nullable = false)
+    private String vorname;
+
+    @Basic
+    @Column(name = "matrikelnummer", unique = true)
     private String matrikelNummer;
 
     @Basic
@@ -42,276 +47,199 @@ public class Student{
     @Column(name = "lebenslauf")
     private String lebenslauf;
 
-    @Basic
-    @Column(name = "beschreibung")
-    private String beschreibung;
+    // student_hat_user
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @OneToOne(optional = false)
     private User user;
 
-    @OneToMany
-    private List<Bewertung> bewertungen;
+    // student_hat_kenntnis
 
-    @OneToMany
-    private List<Bewerbung> bewerbungen;
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
     private List<Kenntnis> kenntnisse;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Qualifikation> qualifikationen;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Taetigkeitsfeld> taetigkeitsfelder;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Stellenanzeige> stellenanzeigen;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Sprache> sprachen;
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private int studentId;
-    
-    // student_hat_qualifikation
-    @JoinTable(name = "student_hat_qualifikation", catalog = "nmuese2s", schema = "carlook",
+    @JoinTable(
+            name = "student_to_kenntnis",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "qualifikation", referencedColumnName = "qualifikation_id", nullable = false))
-    public List<Qualifikation> getQualifikationen() {
-        return qualifikationen;
-    }
-
-    public void addQualifikation(Qualifikation qualifikation) {
-        if (this.qualifikationen == null){
-            this.qualifikationen = new ArrayList<>();
-        } 
-        else {
-            if (this.qualifikationen.contains(qualifikation)) {
-                return;
-            }
-        }
-        this.qualifikationen.add(qualifikation);
-        qualifikation.addStudent(this);
-    }
-
-    // student_hat_kenntnis
-    @JoinTable(name = "student_hat_kenntnis", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "kenntnis", referencedColumnName = "bezeichnung", nullable = false))
+            inverseJoinColumns = @JoinColumn(name = "kenntnis_id", referencedColumnName = "bezeichnung", nullable = false),
+            schema = "test_schema"
+    )
     public List<Kenntnis> getKenntnisse() {
         return kenntnisse;
     }
 
     public void addKenntnis(Kenntnis kenntnis) {
-        if (this.kenntnisse == null){
-            this.kenntnisse = new ArrayList<>();
-        } else {
-            if (this.kenntnisse.contains(kenntnis)) {
-                return;
-            }
+        if (kenntnisse == null) {
+            kenntnisse = new ArrayList<>();
         }
-        this.kenntnisse.add(kenntnis);
-        kenntnis.addStudent(this);
-    }
-
-    // student_interessiert_sich_fuer_taetigkeitsfeld
-    @JoinTable(name = "student_interessiert_sich_fuer_taetigkeitsfeld", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld", referencedColumnName = "bezeichnung", nullable = false))
-    public List<Taetigkeitsfeld> getTaetigkeitsfelder() {
-        return taetigkeitsfelder;
-    }
-
-    // student_favorisiert_stellenanzeige
-
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "student_favorisiert_stellenanzeige", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "studentId", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeigeId", nullable = false))
-    public List<Stellenanzeige> stellenanzeigenFavourisiert;
-
-
-    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (this.stellenanzeigen == null){
-            this.stellenanzeigen = new ArrayList<>();
-        }
-        if (this.stellenanzeigen.contains(stellenanzeige)){
-            return;
-        }
-        this.stellenanzeigen.add(stellenanzeige);
-        stellenanzeige.addStudent(this);
-    }
-
-    // student_beherrscht_sprache
-    @JoinTable(name = "student_beherrscht_sprache", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "sprache_id", referencedColumnName = "id", nullable = false))
-    public List<Sprache> getSprachen() {
-        return sprachen;
-    }
-
-    public void addSprache(Sprache sprache) {
-        if (this.sprachen == null){
-            this.sprachen = new ArrayList<>();
-        }
-        if (this.sprachen.contains(sprache)){
-            return;
-        }
-        this.sprachen.add(sprache);
-        sprache.addStudent(this);
-    }
-
-    // student_bewirbt_sich
-    @JoinTable(name = "student_bewirbt_sich", catalog = "nmuese2s",
-            schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false))
-    public List<Bewerbung> getBewerbungen() {return bewerbungen;}
-    
-    public void addBewertung(Bewertung bewertung) {
-        if (this.bewertungen == null) {
-            this.bewertungen = new ArrayList<>();
-        } else {
-
-            if (this.bewertungen.contains(bewertung)) {
-                return;
-            }
-        }
-        this.bewertungen.add(bewertung);
-        bewertung.addStudent(this);
-    }
-
-
-
-    // student_bewertet_unternehmen
-    @JoinTable(name = "student_bewertet_unternehmen", catalog = "nmuese2s",
-            schema = "carlook",
-            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewertung_id", referencedColumnName = "id", nullable = false))
-    public List<Bewertung> getBewertungen() {return bewertungen;}
-    
-    public void addBewerbung(Bewerbung bewerbung) {
-        if (this.bewerbungen == null){
-            this.bewerbungen = new ArrayList<>();
-        } else {
-            if (this.bewerbungen.contains(bewerbung)) {
-                return;
-            }
-        }
-        this.bewerbungen.add(bewerbung);
-        bewerbung.addStudent(this);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || !(o instanceof Student student)) return false;
-        return studentId == student.studentId
-                && Objects.equals(vorname, student.vorname)
-                && Objects.equals(nachname, student.nachname)
-                && Objects.equals(matrikelNummer, student.matrikelNummer)
-                && Objects.equals(studiengang, student.studiengang)
-                && Objects.equals(studienbeginn, student.studienbeginn)
-                && Objects.equals(geburtsdatum, student.geburtsdatum)
-                && Objects.equals(lebenslauf, student.lebenslauf)
-                && Objects.equals(user, student.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(studentId, vorname, nachname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
-    }
-
-    public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
-        if(taetigkeitsfelder == null) {
-            taetigkeitsfelder = new ArrayList<>();
-        } else {
-            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
-                return;
-            }
-        }
-        taetigkeitsfelder.add(taetigkeitsfeld);
-        taetigkeitsfeld.addStudent(this);
-    }
-
-    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (stellenanzeigen == null) {
-            stellenanzeigen = new ArrayList<>();
-        } else {
-            if (stellenanzeigen.contains(stellenanzeige)) {
-                stellenanzeigen.remove(stellenanzeige);
-                stellenanzeige.removeStudent(this);
-            }
-        }
-    }
-
-    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
-        if (taetigkeitsfelder == null) {
-            stellenanzeigen = new ArrayList<>();
-        } else {
-            if (taetigkeitsfelder.contains(taetigkeitsfeld)) {
-                taetigkeitsfelder.remove(taetigkeitsfeld);
-                taetigkeitsfeld.removeStudent(this);
-            }
-        }
-    }
-
-    public void removeSprache(Sprache sprache) {
-        if (sprachen == null) {
-            sprachen = new ArrayList<>();
-        } else {
-            if (sprachen.contains(sprache)) {
-                sprachen.remove(sprache);
-                sprache.removeStudent(this);
-            }
-        }
-    }
-
-    public void removeQualifikation(Qualifikation qualifikation) {
-        if (qualifikationen == null) {
-            qualifikationen = new ArrayList<>();
-        } else {
-            if (qualifikationen.contains(qualifikation)) {
-                qualifikationen.remove(qualifikation);
-                qualifikation.removeStudent(this);
-            }
+        if (!this.kenntnisse.contains(kenntnis)) {
+            this.kenntnisse.add(kenntnis);
+            kenntnis.addStudent(this);
         }
     }
 
     public void removeKenntnis(Kenntnis kenntnis) {
         if (kenntnisse == null) {
-            kenntnisse = new ArrayList<>();
-        } else {
-            if (kenntnisse.contains(kenntnis)) {
-                kenntnisse.remove(kenntnis);
-                kenntnis.removeStudent(this);
-            }
+            return;
+        }
+        if (this.kenntnisse.contains(kenntnis)) {
+            this.kenntnisse.remove(kenntnis);
+            kenntnis.removeStudent(this);
         }
     }
 
-    public void removeBewertung(Bewertung bewertung) {
-        if (bewertungen == null) {
-            bewertungen = new ArrayList<>();
-        } else {
-            if (bewertungen.contains(bewertung)) {
-                bewertungen.remove(bewertung);
-                bewertung.removeStudent(this);
-            }
+    // student_hat_qualifikation
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Qualifikation> qualifikationen;
+
+    @JoinTable(
+            name = "student_to_qualifikation",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "qualifikation_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Qualifikation> getQualifikationen() {
+        return qualifikationen;
+    }
+
+    public void addQualifikation(Qualifikation qualifikation) {
+        if (qualifikationen == null) {
+            qualifikationen = new ArrayList<>();
+        }
+        if (!this.qualifikationen.contains(qualifikation)) {
+            this.qualifikationen.add(qualifikation);
+            qualifikation.setStudent(this);
         }
     }
 
-    public void removeBewerbung(Bewerbung bewerbung) {
+    public void removeQualifikation(Qualifikation qualifikation) {
+        if (qualifikationen == null) {
+            return;
+        }
+        if (this.qualifikationen.contains(qualifikation)) {
+            this.qualifikationen.remove(qualifikation);
+            qualifikation.setStudent(null);
+        }
+    }
+
+    // student_hat_sprachen
+
+    @ManyToMany(mappedBy = "students",cascade = CascadeType.PERSIST)
+    private List<Sprache> sprachen;
+
+    @JoinTable(
+            name = "student_to_sprache",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "sprache_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Sprache> getSprachen() {
+        return sprachen;
+    }
+
+    public void addSprache(Sprache sprache) {
+        if (sprachen == null) {
+            sprachen = new ArrayList<>();
+        }
+        if (!this.sprachen.contains(sprache)) {
+            this.sprachen.add(sprache);
+            sprache.addStudent(this);
+        }
+    }
+
+    public void removeSprache(Sprache sprache) {
+        if (sprachen == null) {
+            return;
+        }
+        if (this.sprachen.contains(sprache)) {
+            this.sprachen.remove(sprache);
+            sprache.removeStudent(this);
+        }
+    }
+
+    // student_interssiert_sich_fuer_taetigkeitsfeld
+
+    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
+    private List<Taetigkeitsfeld> taetigkeitsfelder;
+
+    @JoinTable(
+            name = "student_to_taetigkeitsfeld",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Taetigkeitsfeld> getTaetigkeitsfelder() {
+        return taetigkeitsfelder;
+    }
+
+    public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if (taetigkeitsfelder == null) {
+            taetigkeitsfelder = new ArrayList<>();
+        }
+        if (!this.taetigkeitsfelder.contains(taetigkeitsfeld)) {
+            this.taetigkeitsfelder.add(taetigkeitsfeld);
+            taetigkeitsfeld.addStudent(this);
+        }
+    }
+
+    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+        if (taetigkeitsfelder == null) {
+            return;
+        }
+        if (this.taetigkeitsfelder.contains(taetigkeitsfeld)) {
+            this.taetigkeitsfelder.remove(taetigkeitsfeld);
+            taetigkeitsfeld.removeStudent(this);
+        }
+    }
+
+    // student_beweirbt_sich_auf_stellenanzeige
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<Bewerbung> bewerbungen;
+
+    @JoinTable(
+            name = "student_to_bewerbung",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Bewerbung> getBewerbungen() {
+        return bewerbungen;
+    }
+
+    public void addBewerbung(Bewerbung bewerbung) {
         if (bewerbungen == null) {
             bewerbungen = new ArrayList<>();
-        } else {
-            if (bewerbungen.contains(bewerbung)) {
-                bewerbungen.remove(bewerbung);
-                bewerbung.removeStudent(this);
-            }
         }
+        if (!this.bewerbungen.contains(bewerbung)) {
+            this.bewerbungen.add(bewerbung);
+            bewerbung.setStudent(this);
+        }
+    }
+
+    public void removeBewerbung(Bewerbung bewerbung){
+        if (bewerbungen == null) {
+            return;
+        }
+        if(bewerbungen.contains(bewerbung)){
+            bewerbungen.remove(bewerbung);
+            bewerbung.setStudent(null);
+        }
+    }
+
+    // Methoden
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return id == student.id && Objects.equals(nachname, student.nachname) && Objects.equals(vorname, student.vorname) && Objects.equals(matrikelNummer, student.matrikelNummer) && Objects.equals(studiengang, student.studiengang) && Objects.equals(studienbeginn, student.studienbeginn) && Objects.equals(geburtsdatum, student.geburtsdatum) && Objects.equals(lebenslauf, student.lebenslauf) && Objects.equals(user, student.user) && Objects.equals(kenntnisse, student.kenntnisse) && Objects.equals(qualifikationen, student.qualifikationen) && Objects.equals(sprachen, student.sprachen) && Objects.equals(taetigkeitsfelder, student.taetigkeitsfelder) && Objects.equals(bewerbungen, student.bewerbungen);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nachname, vorname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user, kenntnisse, qualifikationen, sprachen, taetigkeitsfelder, bewerbungen);
     }
 }

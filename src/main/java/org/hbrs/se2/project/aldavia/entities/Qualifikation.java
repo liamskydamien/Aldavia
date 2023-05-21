@@ -1,80 +1,89 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 // import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="qualifikation" , schema = "carlook" )
-@NoArgsConstructor
+@Table(name = "qualifikationen", schema = "test_schema")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Qualifikation {
-
     @Id
     @GeneratedValue
-    @Column(name= "qualifikation_id")
     private int id;
 
-    @ManyToMany(mappedBy = "qualifikationen")
-    private List<Student> studenten;
-
-    @Column(name = "bezeichnung", nullable = false)
-    private String bezeichnung;
-
     @Basic
-    @Column(name = "bereich")
-    private String bereich;
+    @Column(name = "bezeichnung")
+    private String bezeichnung;
 
     @Basic
     @Column(name = "beschreibung")
     private String beschreibung;
 
     @Basic
-    @Column(name = "beschaeftigungsart")
-    private String beschaeftigungsart;
+    @Column(name = "bereich")
+    private String bereich;
+
+    @Basic
+    @Column(name = "institution")
+    private String institution;
+
+    @Basic
+    @Column(name = "beschaftigungsverhaltnis")
+    private String beschaftigungsverhaltnis;
+
+    @Basic
+    @Column(name = "von")
+    private LocalDate von;
+
+    @Basic
+    @Column(name = "bis")
+    private LocalDate bis;
+
+    // qualifikation_hat_student
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
+    private Student student;
+
+    public void setStudent(Student student) {
+        if (this.student != null) {
+            this.student.removeQualifikation(this);
+        }
+        this.student = student;
+        if (student != null) {
+            student.addQualifikation(this);
+        }
+    }
+
+    public void removeStudent(Student student) {
+        if (this.student == null) {
+            return;
+        }
+        this.student = null;
+        student.removeQualifikation(this);
+    }
+
+    // Methods
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Qualifikation qualifikation = (Qualifikation) o;
-        return Objects.equals(bezeichnung, qualifikation.bezeichnung)
-                && Objects.equals(bereich, qualifikation.bereich)
-                && Objects.equals(beschreibung, qualifikation.beschreibung)
-                && Objects.equals(beschaeftigungsart, qualifikation.beschaeftigungsart);
+        Qualifikation that = (Qualifikation) o;
+        return id == that.id && Objects.equals(bezeichnung, that.bezeichnung) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(bereich, that.bereich) && Objects.equals(institution, that.institution) && Objects.equals(beschaftigungsverhaltnis, that.beschaftigungsverhaltnis) && Objects.equals(von, that.von) && Objects.equals(bis, that.bis) && Objects.equals(student, that.student);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bezeichnung, bereich, beschreibung, beschaeftigungsart);
+        return Objects.hash(id, bezeichnung, beschreibung, bereich, institution, beschaftigungsverhaltnis, von, bis, student);
     }
-
-    public void addStudent(Student student) {
-        if (studenten == null)
-            studenten = new java.util.ArrayList<>();
-        if (this.studenten.contains(student))
-            return;
-        studenten.add(student);
-        student.addQualifikation(this);
-    }
-
-    public void removeStudent(Student student) {
-        if (studenten == null)
-            studenten = new java.util.ArrayList<>();
-        if (!this.studenten.contains(student))
-            return;
-        studenten.remove(student);
-        student.removeQualifikation(this);
-    }
-
-
-
-
-
 }

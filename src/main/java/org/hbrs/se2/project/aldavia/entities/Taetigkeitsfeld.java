@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 // import java.sql.Date;
@@ -11,94 +9,80 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="taetigkeitsfeld" , schema = "carlook" )
-@NoArgsConstructor
-@Setter
+@Table(name = "taetigkeitsfelder", schema = "test_schema")
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Taetigkeitsfeld {
-    private String bezeichnung;
-    private List<Stellenanzeige> stellenanzeigen;
-    private List<Student> studenten;
+
     @Id
-    @Column(name = "bezeichnung", nullable = false, unique = true)
-    public String getBezeichnung() {
-        return bezeichnung;
+    @Column(name = "bezeichnung")
+    private String bezeichnung;
+
+    // taetigkeitsfeld_hat_studenten
+
+    @ManyToMany
+    private List<Student> students;
+
+    public void addStudent(Student student) {
+        if (students == null) {
+            students = new ArrayList<>();
+        }
+        if (!this.students.contains(student)) {
+            this.students.add(student);
+            student.addTaetigkeitsfeld(this);
+        }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Taetigkeitsfeld taetigkeitsfeld = (Taetigkeitsfeld) o;
-        return Objects.equals(bezeichnung, taetigkeitsfeld.bezeichnung);
+    public void removeStudent(Student student) {
+        if (students == null) {
+            return;
+        }
+        if (this.students.contains(student)) {
+            this.students.remove(student);
+            student.removeTaetigkeitsfeld(this);
+        }
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(bezeichnung);
-    }
+    // taetigkeitsfeld_hat_stellenanzeigen
 
-
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-    public List<Stellenanzeige> getStellenanzeigen() {
-        return stellenanzeigen;
-    }
+    @ManyToMany
+    private List<Stellenanzeige> stellenanzeigen;
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
         if (stellenanzeigen == null) {
             stellenanzeigen = new ArrayList<>();
-            this.stellenanzeigen.add(stellenanzeige);
-            stellenanzeige.addTaetigkeitsfeld(this);
         }
-        else {
-            if (this.stellenanzeigen.contains(stellenanzeige))
-                return;
+        if (!this.stellenanzeigen.contains(stellenanzeige)) {
             this.stellenanzeigen.add(stellenanzeige);
             stellenanzeige.addTaetigkeitsfeld(this);
         }
     }
 
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (stellenanzeige == null) {
-            stellenanzeigen = new ArrayList<>();
+        if (stellenanzeigen == null) {
+            return;
         }
-        else {
-            if (!this.stellenanzeigen.contains(stellenanzeige))
-                return;
+        if (this.stellenanzeigen.contains(stellenanzeige)) {
             this.stellenanzeigen.remove(stellenanzeige);
             stellenanzeige.removeTaetigkeitsfeld(this);
         }
     }
 
-    @ManyToMany(mappedBy = "taetigkeitsfelder")
-    public List<Student> getStudenten() {
-        return studenten;
+    // Methoden
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Taetigkeitsfeld that = (Taetigkeitsfeld) o;
+        return Objects.equals(bezeichnung, that.bezeichnung) && Objects.equals(students, that.students) && Objects.equals(stellenanzeigen, that.stellenanzeigen);
     }
 
-    public void addStudent(Student student) {
-        if (studenten == null) {
-            studenten = new ArrayList<>();
-        }
-        else {
-            if (this.studenten.contains(student)) {
-                return;
-            }
-        }
-        this.studenten.add(student);
-        student.addTaetigkeitsfeld(this);
+    @Override
+    public int hashCode() {
+        return Objects.hash(bezeichnung, students, stellenanzeigen);
     }
-
-    public void removeStudent(Student student) {
-        if (student == null) {
-            studenten = new ArrayList<>();
-        }
-        else {
-            if (!this.studenten.contains(student)) {
-                return;
-            }
-            this.studenten.remove(student);
-            student.removeTaetigkeitsfeld(this);
-        }
-    }
-
 }

@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 //import java.util.List;
@@ -10,15 +8,15 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table( name ="bewerbung" , schema = "carlook" )
-@NoArgsConstructor
+@Table(name = "bewerbungen", schema = "test_schema")
 @Getter
-@Setter
-public class Bewerbung  {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Bewerbung {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false, unique = true)
-    private int bewerbungId;
+    private int id;
 
     @Basic
     @Column(name = "datum", nullable = false)
@@ -29,67 +27,58 @@ public class Bewerbung  {
         datum = LocalDate.now();
     }
 
+    // bewerbung_hat_student
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
+    private Student student;
+
+
+    public void setStudent(Student student){
+        if (this.student != null) {
+            this.student.removeBewerbung(this);
+        }
+        this.student = student;
+        if (student != null) {
+            student.addBewerbung(this);
+        }
+    }
+
+    // bewerbung_hat_stellenanzeige
+
+    @ManyToOne
+    @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false)
+    private Stellenanzeige stellenanzeige;
+
+    public void setStellenanzeige(Stellenanzeige stellenanzeige){
+        if (this.stellenanzeige != null) {
+            this.stellenanzeige.removeBewerbung(this);
+        }
+        this.stellenanzeige = stellenanzeige;
+        if (stellenanzeige != null) {
+            stellenanzeige.addBewerbung(this);
+        }
+    }
+
+    public void removeStudent(Student student) {
+        if (this.student != null) {
+            this.student.removeBewerbung(this);
+        }
+        this.student = null;
+    }
+
+    // Methoden
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bewerbung bewerbung = (Bewerbung) o;
-        return bewerbungId == bewerbung.bewerbungId &&
-                Objects.equals(datum, bewerbung.datum);
+        return id == bewerbung.id && Objects.equals(datum, bewerbung.datum) && Objects.equals(student, bewerbung.student) && Objects.equals(stellenanzeige, bewerbung.stellenanzeige);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bewerbungId, datum);
-    }
-
-    @ManyToOne
-    private Student student;
-    public Student getStudent() { return student; }
-    public void setStudent(Student student) {
-        if (student == null) {
-            throw new NullPointerException("Student cannot be null");
-        }
-        this.student = student;
-    }
-
-    public void removeStudent() {
-        this.student = null;
-    }
-
-
-
-    @ManyToOne
-    private Stellenanzeige stellenanzeige;
-    public Stellenanzeige getStellenanzeige() { return stellenanzeige; }
-    public void setStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (stellenanzeige == null) {
-            throw new NullPointerException("Stellenanzeige cannot be null");
-        }
-    this.stellenanzeige = stellenanzeige;
-    }
-
-    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (this.stellenanzeige == stellenanzeige) {
-            this.stellenanzeige = null;
-            stellenanzeige.removeBewerbung(this);
-        }
-    }
-
-    public void addStudent(Student student) {
-        this.student = student;
-        student.addBewerbung(this);
-    }
-
-    public void removeStudent(Student student) {
-        if (this.student == student) {
-            this.student = null;
-            student.removeBewerbung(this);
-        }
-    }
-
-    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
-        this.stellenanzeige = stellenanzeige;
-        stellenanzeige.addBewerbung(this);
+        return Objects.hash(id, datum, student, stellenanzeige);
     }
 }
