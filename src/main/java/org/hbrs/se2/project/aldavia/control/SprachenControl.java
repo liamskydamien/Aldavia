@@ -21,7 +21,7 @@ public class SprachenControl {
      * @param spracheDTO The SpracheDTO
      * @return Sprache
      */
-    public Sprache createSprache(SpracheDTO spracheDTO, Student student) throws PersistenceException {
+    public Sprache addStudentToSprache (SpracheDTO spracheDTO, Student student) throws PersistenceException {
         if(sprachenRepository.existsByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel())){
             Optional<Sprache> awaitSprache = sprachenRepository.findByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel());
             if (awaitSprache.isPresent()){
@@ -48,7 +48,7 @@ public class SprachenControl {
      * @param student The student
      * @throws PersistenceException If the Sprache is not found
      */
-    public void deleteStudentFromSprache(SpracheDTO spracheDTO, Student student) throws PersistenceException {
+    public void removeStudentFromSprache(SpracheDTO spracheDTO, Student student) throws PersistenceException {
         Optional<Sprache> awaitSprache = sprachenRepository.findById(spracheDTO.getId());
         if (awaitSprache.isPresent()){
             Sprache sprache = awaitSprache.get();

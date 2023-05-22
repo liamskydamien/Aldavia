@@ -19,7 +19,7 @@ public class TaetigkeitsfeldControl {
      * @param taetigkeitsfeldDTO The TaetigkeitsfeldDTO
      * @return Taetigkeitsfeld
      */
-    public Taetigkeitsfeld addTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
+    public Taetigkeitsfeld addStudentToTaetigkeitsfeld (TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
         Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
         if (awaitTaetigkeitsfeld.isPresent()){
             Taetigkeitsfeld taetigkeitsfeld = awaitTaetigkeitsfeld.get();
@@ -39,18 +39,22 @@ public class TaetigkeitsfeldControl {
      * @param taetigkeitsfeldDTO The TaetigkeitsfeldDTO
      * @param student The student
      */
-    public void removeTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
+    public void removeStudentFromTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
         Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
         if (awaitTaetigkeitsfeld.isPresent()){
             Taetigkeitsfeld taetigkeitsfeld = awaitTaetigkeitsfeld.get();
             taetigkeitsfeld.removeStudent(student);
             if(taetigkeitsfeld.getStudents().isEmpty()){
-                taetigkeitsfeldRepository.delete(taetigkeitsfeld);
+                if (taetigkeitsfeld.getStellenanzeigen().isEmpty()) {
+                    taetigkeitsfeldRepository.delete(taetigkeitsfeld);
+                }
+                else {
+                    taetigkeitsfeldRepository.save(taetigkeitsfeld);
+                }
             }
             else {
                 taetigkeitsfeldRepository.save(taetigkeitsfeld);
             }
-            taetigkeitsfeldRepository.delete(taetigkeitsfeld);
         }
     }
 }

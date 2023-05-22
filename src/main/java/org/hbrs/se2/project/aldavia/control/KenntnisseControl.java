@@ -21,7 +21,7 @@ public class KenntnisseControl {
      * @param student The student
      * @return Kenntnis
      */
-    public void addKenntnis(KenntnisDTO kenntnisDTO, Student student) {
+    public void addStudentToKenntnis(KenntnisDTO kenntnisDTO, Student student) {
         Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName());
         if (awaitKenntnis.isPresent()){
             Kenntnis kenntnis = awaitKenntnis.get();
