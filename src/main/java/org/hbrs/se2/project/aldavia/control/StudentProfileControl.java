@@ -5,6 +5,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.dtos.UpdateStudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,24 +49,14 @@ public class StudentProfileControl {
 
     /**
      * Create and update a student profile
-     * @param student The student profile
      * @param username The username of the student
      * @return boolean
      * @throws ProfileException
      */
-    public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
+    public void createAndUpdateStudentProfile(UpdateStudentProfileDTO updateStudentProfileDTO, String username) throws ProfileException {
         // Gets student from database
         try {
             System.out.println("Finding student with username: " + username);
-            Optional<Student> awaitStudent = studentRepository.findByUserID(username);
-            if (awaitStudent.isPresent()) {
-                Student studentFromDB = awaitStudent.get();
-
-                // Add Kenntnisse
-                for (KenntnisDTO kenntnis : student.getKenntnisse()) {
-                    kenntnisseControl.removeStudentFromKenntnis(kenntnis, studentFromDB);
-                }
-
 
             }
         }
