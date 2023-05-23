@@ -7,10 +7,12 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Component
+@Transactional
 public class KenntnisseControl {
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
@@ -23,18 +25,17 @@ public class KenntnisseControl {
      */
     public void addStudentToKenntnis(KenntnisDTO kenntnisDTO, Student student) {
         Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName());
+        Kenntnis kenntnis;
         if (awaitKenntnis.isPresent()){
-            Kenntnis kenntnis = awaitKenntnis.get();
-            kenntnis.addStudent(student);
-           kenntnisseRepository.save(kenntnis);
+            kenntnis = awaitKenntnis.get();
         }
         else {
-            Kenntnis kenntnis = Kenntnis.builder()
+            kenntnis = Kenntnis.builder()
                     .bezeichnung(kenntnisDTO.getName())
                     .build();
-            kenntnis.addStudent(student);
-            kenntnisseRepository.save(kenntnis);
         }
+        kenntnis = kenntnis.addStudent(student);
+        kenntnisseRepository.save(kenntnis);
     }
 
     /**
@@ -43,17 +44,12 @@ public class KenntnisseControl {
      * @param student The student
      * @throws PersistenceException If the Kenntnis is not found
      */
-    public void removeStudentFromKenntnis(KenntnisDTO kenntnisDTO, Student student) throws PersistenceException {
+    public Kenntnis removeStudentFromKenntnis(KenntnisDTO kenntnisDTO, Student student) throws PersistenceException {
         Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName());
         if (awaitKenntnis.isPresent()){
             Kenntnis kenntnis = awaitKenntnis.get();
-            kenntnis.removeStudent(student);
-            if(kenntnis.getStudents().isEmpty()){
-                kenntnisseRepository.delete(kenntnis);
-            }
-            else {
-                kenntnisseRepository.save(kenntnis);
-            }
+            kenntnis = kenntnis.removeStudent(student);
+            return kenntnisseRepository.save(kenntnis);
         }
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.KenntnisNotFound, "Kenntnis not found");

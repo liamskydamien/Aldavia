@@ -23,7 +23,7 @@ public class Taetigkeitsfeld {
 
     // taetigkeitsfeld_hat_studenten
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Student> students;
 
     public void addStudent(Student student) {

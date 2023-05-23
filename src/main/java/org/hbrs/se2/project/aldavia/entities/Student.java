@@ -68,7 +68,7 @@ public class Student {
         return kenntnisse;
     }
 
-    public void addKenntnis(Kenntnis kenntnis) {
+    public Student addKenntnis(Kenntnis kenntnis) {
         if (kenntnisse == null) {
             kenntnisse = new ArrayList<>();
         }
@@ -76,16 +76,18 @@ public class Student {
             this.kenntnisse.add(kenntnis);
             kenntnis.addStudent(this);
         }
+        return this;
     }
 
-    public void removeKenntnis(Kenntnis kenntnis) {
+    public Student removeKenntnis(Kenntnis kenntnis) {
         if (kenntnisse == null) {
-            return;
+            return null;
         }
         if (this.kenntnisse.contains(kenntnis)) {
             this.kenntnisse.remove(kenntnis);
             kenntnis.removeStudent(this);
         }
+        return this;
     }
 
     // student_hat_qualifikation
@@ -138,7 +140,7 @@ public class Student {
         return sprachen;
     }
 
-    public void addSprache(Sprache sprache) {
+    public Student addSprache(Sprache sprache) {
         if (sprachen == null) {
             sprachen = new ArrayList<>();
         }
@@ -146,16 +148,18 @@ public class Student {
             this.sprachen.add(sprache);
             sprache.addStudent(this);
         }
+        return this;
     }
 
-    public void removeSprache(Sprache sprache) {
+    public Student removeSprache(Sprache sprache) {
         if (sprachen == null) {
-            return;
+            return this;
         }
         if (this.sprachen.contains(sprache)) {
             this.sprachen.remove(sprache);
             sprache.removeStudent(this);
         }
+        return this;
     }
 
     // student_interssiert_sich_fuer_taetigkeitsfeld

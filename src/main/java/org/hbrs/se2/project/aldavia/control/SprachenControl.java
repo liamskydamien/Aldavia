@@ -7,11 +7,13 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 
 @Component
+@Transactional
 public class SprachenControl {
     @Autowired
     private SprachenRepository sprachenRepository;
@@ -22,24 +24,19 @@ public class SprachenControl {
      * @return Sprache
      */
     public Sprache addStudentToSprache (SpracheDTO spracheDTO, Student student) throws PersistenceException {
-        if(sprachenRepository.existsByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel())){
-            Optional<Sprache> awaitSprache = sprachenRepository.findByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel());
-            if (awaitSprache.isPresent()){
-                Sprache sprache = awaitSprache.get();
-                sprache.addStudent(student);
-                return sprachenRepository.save(sprache);
-            }
-            else {
-                throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
-            }
+        Optional<Sprache> awaitSprache = sprachenRepository.findById(spracheDTO.getId());
+        Sprache sprache;
+        if (awaitSprache.isPresent()){
+            sprache = awaitSprache.get();
         }
         else {
-            Sprache sprache = Sprache.builder()
+            sprache = Sprache.builder()
                     .bezeichnung(spracheDTO.getName())
                     .level(spracheDTO.getLevel())
                     .build();
-            return sprachenRepository.save(sprache);
         }
+        sprache = sprache.addStudent(student);
+        return sprachenRepository.save(sprache);
     }
 
     /**
@@ -48,22 +45,15 @@ public class SprachenControl {
      * @param student The student
      * @throws PersistenceException If the Sprache is not found
      */
-    public void removeStudentFromSprache(SpracheDTO spracheDTO, Student student) throws PersistenceException {
+    public Sprache removeStudentFromSprache(SpracheDTO spracheDTO, Student student) throws PersistenceException {
         Optional<Sprache> awaitSprache = sprachenRepository.findById(spracheDTO.getId());
         if (awaitSprache.isPresent()){
             Sprache sprache = awaitSprache.get();
-            sprache.removeStudent(student);
-            if(sprache.getStudents().isEmpty()){
-                sprachenRepository.delete(sprache);
-            }
-            else {
-                sprachenRepository.save(sprache);
-            }
+            sprache = sprache.removeStudent(student);
+            return sprachenRepository.save(sprache);
         }
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
         }
     }
-
-
 }
