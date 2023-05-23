@@ -20,8 +20,8 @@ public class StudentProfileControl {
     @Autowired
     private KenntnisseControl kenntnisseControl;
 
-    //@Autowired
-    //private QualifikationenControl qualifikationenControl;
+    @Autowired
+    private QualifikationenControl qualifikationenControl;
 
     @Autowired
     private SprachenControl sprachenControl;
@@ -29,7 +29,7 @@ public class StudentProfileControl {
     @Autowired
     private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
-    private StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+    private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
     /**
      * Get the student profile of a student
@@ -88,13 +88,13 @@ public class StudentProfileControl {
                 }
             }
 
-            /*
+
             if (deletionStudentInformationDTO.getQualifikationen() != null) {
                 for (QualifikationsDTO qualifikationsDTO : deletionStudentInformationDTO.getQualifikationen()) {
-                    qualifikationControl.removeStudentFromTaetigkeitsfeld(qualifikationsDTO, student);
+                    qualifikationenControl.removeQualifikation(qualifikationsDTO);
                 }
             }
-            */
+
 
             // Add Information
 
@@ -116,13 +116,12 @@ public class StudentProfileControl {
                 }
             }
 
-            /*
+
             if (addStudentInformationDTO.getQualifikationen() != null) {
                 for (QualifikationsDTO qualifikationsDTO : addStudentInformationDTO.getQualifikationen()) {
-                    qualifikationControl.addStudentToTaetigkeitsfeld(qualifikationsDTO, student);
+                    qualifikationenControl.addUpdateQualifikation(qualifikationsDTO, student);
                 }
             }
-            */
 
             // Change Information
             studentControl.updateStudentInformation(student, changeStudentInformationDTO);
