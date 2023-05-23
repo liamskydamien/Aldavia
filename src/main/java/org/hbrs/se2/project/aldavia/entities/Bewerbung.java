@@ -51,11 +51,11 @@ public class Bewerbung {
     private Stellenanzeige stellenanzeige;
 
     public void setStellenanzeige(Stellenanzeige stellenanzeige){
-        if (this.stellenanzeige != null) {
+        if (this.stellenanzeige != null && !(this.stellenanzeige.equals(stellenanzeige))) {
             this.stellenanzeige.removeBewerbung(this);
         }
         this.stellenanzeige = stellenanzeige;
-        if (stellenanzeige != null) {
+        if (stellenanzeige != null ) {
             stellenanzeige.addBewerbung(this);
         }
     }

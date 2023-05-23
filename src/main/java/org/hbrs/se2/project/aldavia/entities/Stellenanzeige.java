@@ -16,6 +16,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Stellenanzeige {
 
     @Id
@@ -56,7 +57,7 @@ public class Stellenanzeige {
 
     // stellenanzeige_taeitgkeitsfeld
 
-    @ManyToMany(mappedBy = "stellenanzeigen")
+    @ManyToMany()
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
     @JoinTable(
@@ -125,7 +126,7 @@ public class Stellenanzeige {
     private Unternehmen unternehmen_stellenanzeigen;
 
     public void setUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen_stellenanzeigen != null) {
+        if (this.unternehmen_stellenanzeigen != null && !(this.unternehmen_stellenanzeigen.equals(unternehmen))) {
             this.unternehmen_stellenanzeigen.removeStellenanzeige(this);
         }
         this.unternehmen_stellenanzeigen = unternehmen;

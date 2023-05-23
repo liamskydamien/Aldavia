@@ -18,7 +18,11 @@ import java.util.Objects;
 public class Taetigkeitsfeld {
 
     @Id
-    @Column(name = "bezeichnung")
+    @GeneratedValue
+    private int id;
+
+
+    @Column(name = "bezeichnung", unique = true, nullable = false)
     private String bezeichnung;
 
     // taetigkeitsfeld_hat_studenten
@@ -48,7 +52,7 @@ public class Taetigkeitsfeld {
 
     // taetigkeitsfeld_hat_stellenanzeigen
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
     private List<Stellenanzeige> stellenanzeigen;
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
