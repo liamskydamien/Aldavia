@@ -35,7 +35,10 @@ public class Bewerbung {
 
 
     public void setStudent(Student student){
-        if (this.student != null) {
+        if(this.student == student){
+            return;
+        }
+        else if (this.student != null) {
             this.student.removeBewerbung(this);
         }
         this.student = student;
@@ -51,7 +54,10 @@ public class Bewerbung {
     private Stellenanzeige stellenanzeige;
 
     public void setStellenanzeige(Stellenanzeige stellenanzeige){
-        if (this.stellenanzeige != null) {
+        if(this.stellenanzeige == stellenanzeige){
+            return;
+        }
+        else if (this.stellenanzeige != null) {
             this.stellenanzeige.removeBewerbung(this);
         }
         this.stellenanzeige = stellenanzeige;

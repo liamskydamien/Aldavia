@@ -1,5 +1,8 @@
 
 
+
+
+
 #header-neutral img{
     width: 140px;
     height: 50px;
@@ -9,12 +12,17 @@
 }
 
 #header-neutral{
-    background-color: white;
+    background-color: transparent !important;
     border-bottom: 1px solid #e0e0e0;
 
 }
+vaadin-app-layout::part(navbar) {
+
+}
+
 #top-right-layout{
     padding: 20px 50px 20px 25px;
+
 }
 
 #login-tab{

@@ -28,6 +28,7 @@ public class NeutralLayout extends AppLayout {
     private Component createHeaderContent() {
 
 
+
         HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
         layout.setId("header-neutral");
@@ -80,5 +81,9 @@ public class NeutralLayout extends AppLayout {
     private static void navigateHomeLogo(Image img) {
         img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.MAIN_VIEW)));
     }
+
+
+
+
 }
 
