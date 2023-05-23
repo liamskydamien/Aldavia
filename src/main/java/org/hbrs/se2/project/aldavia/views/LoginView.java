@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.aldavia.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -52,11 +54,11 @@ public class LoginView extends VerticalLayout {
                 isAuthenticated = loginControl.authenticate( e.getUsername() , e.getPassword() );
 
             } catch (DatabaseUserException databaseException) {
-                /*Dialog dialog = new Dialog();
+                Dialog dialog = new Dialog();
                 dialog.add( new Text( databaseException.getReason()) );
                 dialog.setWidth("400px");
                 dialog.setHeight("150px");
-                dialog.open();*/
+                dialog.open();
             }
             if (isAuthenticated) {
 

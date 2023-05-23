@@ -39,7 +39,7 @@ public class Stellenanzeige {
     private LocalDate start;
 
     @Basic
-    @Column(name = "ende", nullable = false)
+    @Column(name = "ende")
     private LocalDate ende;
 
     @Basic
@@ -93,7 +93,7 @@ public class Stellenanzeige {
 
     @JoinTable(
             name = "stellenanzeige_bewerbung",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
             schema = "test_schema"
     )
@@ -125,7 +125,10 @@ public class Stellenanzeige {
     private Unternehmen unternehmen_stellenanzeigen;
 
     public void setUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen_stellenanzeigen != null) {
+        if(this.unternehmen_stellenanzeigen == unternehmen) {
+            return;
+        }
+        else if (this.unternehmen_stellenanzeigen != null) {
             this.unternehmen_stellenanzeigen.removeStellenanzeige(this);
         }
         this.unternehmen_stellenanzeigen = unternehmen;

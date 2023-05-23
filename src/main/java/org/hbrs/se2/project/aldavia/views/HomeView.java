@@ -51,8 +51,6 @@ public class HomeView extends VerticalLayout {
         add(searchLayout);
     }
 
-
-
     private void setBackgroundImage() {
 
         this.getElement().getStyle().set("background-image", "url('images/Home.png')");
@@ -60,6 +58,10 @@ public class HomeView extends VerticalLayout {
         this.getElement().getStyle().set("background-position", "center");
 
     }
+
+
+
+
 
 
 }
