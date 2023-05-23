@@ -5,6 +5,7 @@ import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
+import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class StellenanzeigeTest {
     //TODO: Add round trip test for Stellenanzeige
     //TODO: Test Constraints if unternehmen gets deleted (cascade) -> Stellenanzeige should get deleted too
     //TODO: Test add... and remove... methods
-    /*
+
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;
 
@@ -38,24 +40,6 @@ public class StellenanzeigeTest {
 
     @Autowired
     StudentRepository studentRepository;
-
-    Stellenanzeige s1 = Stellenanzeige.builder()
-            .bezeichnung("Java Praktikum")
-            .beschreibung("Hier lernst du professionell Java.")
-            .bezahlung("12,5€")
-            .build();
-
-    Stellenanzeige s2 = Stellenanzeige.builder()
-            .bezeichnung("Tätigkeit RE")
-            .beschreibung("Hier lernst du professionell RE.")
-            .bezahlung("20,5€")
-            .build();
-
-    Stellenanzeige s3 = Stellenanzeige.builder()
-            .bezeichnung("C++ Praktikum")
-            .beschreibung("Hier lernst du professionell C++.")
-            .bezahlung("18,5€")
-            .build();
 
     User u1 = User.builder()
             .email("121311324@web.de")
@@ -81,14 +65,46 @@ public class StellenanzeigeTest {
             .user(u2)
             .matrikelNummer("123")
             .build();
+
+    Stellenanzeige s1 = Stellenanzeige.builder()
+            .bezeichnung("Java Praktikum")
+            .beschreibung("Hier lernst du professionell Java.")
+            .bezahlung("12,5€")
+            .beschaeftigungsverhaeltnis("Praktikum")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .build();
+
+    Stellenanzeige s2 = Stellenanzeige.builder()
+            .bezeichnung("Tätigkeit RE")
+            .beschreibung("Hier lernst du professionell RE.")
+            .bezahlung("20,5€")
+            .beschaeftigungsverhaeltnis("Vollzeit")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .build();
+
+    Stellenanzeige s3 = Stellenanzeige.builder()
+            .bezeichnung("C++ Praktikum")
+            .beschreibung("Hier lernst du professionell C++.")
+            .bezahlung("18,5€")
+            .beschaeftigungsverhaeltnis("Teilzeit")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .build();
+
+
     @Test
     public void roundTrip() {
         //Create
         stellenanzeigeRepository.save(s1);
-        int idS1 = s1.getStellenanzeigeId();
+        int idS1 = s1.getId();
         Stellenanzeige s1Test = stellenanzeigeRepository.findById(idS1).get();
 
-        assertEquals(s1.getStellenanzeigeId(), s1Test.getStellenanzeigeId());
+        assertEquals(s1.getId(), s1Test.getId());
 
         //Update
         s1.setBezeichnung("Java Job");
@@ -102,7 +118,7 @@ public class StellenanzeigeTest {
         assertEquals(false, stellenanzeigeRepository.existsById(idS1));
 
     }
-
+/*
     @Test
     public void testErstellen() {
 
@@ -229,7 +245,7 @@ public class StellenanzeigeTest {
 
 
 
-    }
+    } /*
   /*  @Test
     public void testFavourisiert() {
         student1.setStellenanzeigenFavourisiert(List.of(s2,s3));
