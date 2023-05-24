@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface UnternehmenRepository extends JpaRepository<Unternehmen, Integer> {
     Optional<Unternehmen> findByUser(User user);
+    Optional<Unternehmen> findByName(String name);
 
 
 
