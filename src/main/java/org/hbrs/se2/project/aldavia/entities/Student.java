@@ -246,6 +246,6 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nachname, vorname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user, kenntnisse, qualifikationen, sprachen, taetigkeitsfelder, bewerbungen);
+        return Objects.hash(id, nachname, vorname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
     }
 }
