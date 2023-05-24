@@ -12,4 +12,5 @@ public interface UnternehmenRepository extends JpaRepository<Unternehmen, Intege
     Optional<Unternehmen> findByUser(User user);
 
 
+
 }

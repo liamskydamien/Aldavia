@@ -41,7 +41,7 @@ public class Adresse {
 
 
     // adresse_hat_unternehmen
-    @ManyToMany
+    @ManyToMany(mappedBy = "adressen")
     private List<Unternehmen> unternehmen;
 
     public void addUnternehmen(Unternehmen unternehmen) {

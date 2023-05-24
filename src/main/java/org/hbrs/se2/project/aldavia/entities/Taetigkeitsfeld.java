@@ -27,7 +27,7 @@ public class Taetigkeitsfeld {
 
     // taetigkeitsfeld_hat_studenten
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
     private List<Student> students;
 
     public void addStudent(Student student) {

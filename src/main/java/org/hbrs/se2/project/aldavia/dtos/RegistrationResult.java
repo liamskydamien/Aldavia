@@ -10,7 +10,13 @@ public class RegistrationResult {
     public final static String EMAIL_ALREADY_EXISTS = "mail";
 
 	public final static String USERNAME_ALREADY_EXISTS = "username";
-	
+
+	public final static String EMAIL_INVALID = "email_invalid";
+
+	public final static String PASSWORD_INVALID = "password_invalid";
+
+	public final static String USERNAME_INVALID = "username_invalid";
+
 	private boolean result;
 	
 	private String reason;

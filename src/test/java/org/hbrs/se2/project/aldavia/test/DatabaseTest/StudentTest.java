@@ -23,6 +23,207 @@ public class StudentTest {
     //TODO: Add round trip test for Student
     //TODO: Test Constraints if student gets deleted (cascade) -> User, Qualification get deleted too. Sprache, Kenntnisse, Taetigkeitsfeld not
     //TODO: Test add... and remove... methods
+
+        @Autowired
+        private StudentRepository studentRepository;
+        @Autowired
+        private UserRepository userRepository;
+        @Autowired
+        private KenntnisseRepository kenntnisseRepository;
+        @Autowired
+        private QualifikationRepository qualifikationRepository;
+        @Autowired
+        private SprachenRepository sprachenRepository;
+        @Autowired
+        private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
+        @Autowired
+        private BewerbungRepository bewerbungRepository;
+        @Autowired
+        private StellenanzeigeRepsitory stellenanzeigeRepository;
+        @Autowired
+        private UnternehmenRepository unternehmenRepository;
+
+        @Test
+        public void testStudentRoundTrip() {
+            Student student = new Student();
+
+
+            student.setNachname("Smith");
+            student.setVorname("John");
+            student.setMatrikelNummer("123456");
+            student.setStudiengang("Computer Science");
+            student.setStudienbeginn(LocalDate.of(2018, 1, 1));
+            student.setGeburtsdatum(LocalDate.of(2000, 1, 1));
+            student.setLebenslauf("My life story");
+
+            User user = User.builder()
+                    .email("test@test.de")
+                    .userid("test_user")
+                    .password("test")
+                    .build();
+            student.setUser(user);
+
+            Kenntnis kenntnis = Kenntnis.builder()
+                    .bezeichnung("Java")
+                    .build();
+            student.addKenntnis(kenntnis);
+
+            Qualifikation qualifikation = Qualifikation.builder()
+                    .bezeichnung("Bachelor")
+                    .build();
+            student.addQualifikation(qualifikation);
+
+            Sprache sprache = Sprache.builder()
+                    .bezeichnung("English")
+                    .level("C2")
+                    .build();
+            student.addSprache(sprache);
+
+            Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
+                    .bezeichnung("Software Development")
+                    .build();
+            student.addTaetigkeitsfeld(taetigkeitsfeld);
+
+
+
+            User userUnternehmen = User.builder()
+                    .email("unternehmen@info.de")
+                    .userid("unternehmen")
+                    .password("123")
+                    .build();
+
+            Unternehmen unternehmen = Unternehmen.builder()
+                    .name("Test GmbH")
+                    .user(userUnternehmen)
+                    .build();
+            unternehmenRepository.save(unternehmen);
+
+            Taetigkeitsfeld taetigkeitsfeldStellenanzeige = Taetigkeitsfeld.builder()
+                    .bezeichnung("Software Development")
+                    .build();
+
+            // Save the student to the database
+            studentRepository.save(student);
+
+            Stellenanzeige stellenanzeige = Stellenanzeige.builder()
+                    .bezeichnung("Werkstudent inSoftware Developer")
+                    .beschreibung("Wir suchen einen Werkstudenten in Software Development")
+                    .beschaeftigungsverhaeltnis("Werkstudent")
+                    .start(LocalDate.of(2021, 1, 1))
+                    .ende(LocalDate.of(2021, 12, 31))
+                    .build();
+            stellenanzeige.addTaetigkeitsfeld(taetigkeitsfeldStellenanzeige);
+            stellenanzeige.setUnternehmen(unternehmen);
+
+
+
+            stellenanzeigeRepository.save(stellenanzeige);
+
+            Bewerbung bewerbung = Bewerbung.builder()
+                    .datum(LocalDate.of(2023, 1, 1))
+                    .stellenanzeige(stellenanzeige)
+                    .build();
+            bewerbung.setStudent(student);
+            bewerbungRepository.save(bewerbung);
+            studentRepository.save(student);
+
+
+            assertTrue(studentRepository.existsById(student.getId()));
+            assertTrue(userRepository.existsById(user.getId()));
+            assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
+            assertTrue(qualifikationRepository.existsById(qualifikation.getId()));
+            assertTrue(sprachenRepository.existsById(sprache.getId()));
+            assertTrue(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung()));
+            assertTrue(bewerbungRepository.existsById(bewerbung.getId()));
+            assertTrue(stellenanzeigeRepository.existsById(stellenanzeige.getId()));
+
+
+            // Retrieve the student
+            Student retrievedStudent = studentRepository.findById(student.getId()).orElse(null);
+            assertNotNull(retrievedStudent);
+            assertEquals("Smith", retrievedStudent.getNachname());
+            assertEquals(user, retrievedStudent.getUser());
+            assertTrue(retrievedStudent.getKenntnisse().contains(kenntnis));
+            assertTrue(retrievedStudent.getQualifikationen().contains(qualifikation));
+            assertTrue(retrievedStudent.getSprachen().contains(sprache));
+            assertTrue(retrievedStudent.getTaetigkeitsfelder().contains(taetigkeitsfeld));
+            assertTrue(retrievedStudent.getBewerbungen().contains(bewerbung));
+            assertEquals(retrievedStudent.getBewerbungen().get(0).getStellenanzeige(), stellenanzeige);
+
+            // Modify the student, schema = "aldavia_new"
+            retrievedStudent.setNachname("Johnson");
+            studentRepository.save(retrievedStudent);
+
+            // Retrieve the student again
+            Student modifiedStudent = studentRepository.findById(student.getId()).orElse(null);
+            assertNotNull(modifiedStudent);
+            assertEquals("Johnson", modifiedStudent.getNachname());
+
+            //Delete Kenntnis
+            modifiedStudent.removeKenntnis(kenntnis);
+            studentRepository.save(modifiedStudent);
+            assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
+            assertFalse(modifiedStudent.getKenntnisse().contains(kenntnis));
+
+            //Delete Qualifikation
+            modifiedStudent.removeQualifikation(qualifikation);
+            studentRepository.save(modifiedStudent);
+            qualifikationRepository.delete(qualifikation);
+            assertFalse(qualifikationRepository.existsById(qualifikation.getId()));
+            assertFalse(modifiedStudent.getQualifikationen().contains(qualifikation));
+
+            //Delete Sprache
+            modifiedStudent.removeSprache(sprache);
+            studentRepository.save(modifiedStudent);
+            sprachenRepository.delete(sprache);
+            assertFalse(sprachenRepository.existsById(sprache.getId()));
+            assertFalse(modifiedStudent.getSprachen().contains(sprache));
+
+            //Delete Taetigkeitsfeld
+            modifiedStudent.removeTaetigkeitsfeld(taetigkeitsfeld);
+            studentRepository.save(modifiedStudent);
+            taetigkeitsfeldRepository.delete(taetigkeitsfeld);
+            assertFalse(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung()));
+            assertFalse(modifiedStudent.getTaetigkeitsfelder().contains(taetigkeitsfeld));
+
+            //Delete Bewerbung
+
+            modifiedStudent.removeBewerbung(bewerbung);
+            studentRepository.save(modifiedStudent);
+            bewerbungRepository.delete(bewerbung);
+            assertFalse(bewerbungRepository.existsById(bewerbung.getId()));
+            assertFalse(modifiedStudent.getBewerbungen().contains(bewerbung));
+            assertTrue(stellenanzeigeRepository.existsById(stellenanzeige.getId()));
+
+            //Delete Stellenanzeige
+            unternehmen.removeStellenanzeige(stellenanzeige);
+            stellenanzeigeRepository.delete(stellenanzeige);
+            assertFalse(stellenanzeigeRepository.existsById(stellenanzeige.getId()));
+
+            // Delete the student
+            studentRepository.delete(modifiedStudent);
+            assertFalse(userRepository.existsById(user.getId()));
+
+            //studentRepository.findByUser(user);
+
+
+            assertFalse(studentRepository.existsById(student.getId()));
+            assertFalse(userRepository.existsById(user.getId()));
+            assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
+            assertFalse(qualifikationRepository.existsById(qualifikation.getId()));
+            assertFalse(sprachenRepository.existsById(sprache.getId()));
+            assertFalse(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung()));
+
+            //Delete Unternehmen
+            unternehmenRepository.delete(unternehmen);
+            assertFalse(unternehmenRepository.existsById(unternehmen.getId()));
+
+
+            // Try to retrieve the student again
+            Student deletedStudent = studentRepository.findById(student.getId()).orElse(null);
+            assertNull(deletedStudent);
+        }
+    }
     /*
 
     @Autowired
@@ -1098,6 +1299,6 @@ public class StudentTest {
 
 
 
-}
+
 
 

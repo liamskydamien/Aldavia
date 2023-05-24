@@ -28,7 +28,7 @@ public class AuthorizationControl {
      * Feature (hier: ein Web-Seite bzw. eine View) zu einem bestimmten Kontext (Bsp: ein Tageszeit, mit
      * einem bestimmten Device etc.) angezeigt bekommt
      */
-    public boolean isUserisAllowedToAccessThisFeature(UserDTO user , String role , String feature , String[] context  ) {
+    /*public boolean isUserisAllowedToAccessThisFeature(UserDTO user , String role , String feature , String[] context  ) {
         List<RolleDTO> rolleList = user.getRoles();
         // Check, ob ein Benutzer eine Rolle besitzt:
         for (  RolleDTO rolle : rolleList ) {
@@ -43,7 +43,7 @@ public class AuthorizationControl {
         return false;
     }
 
-    private boolean checkRolleWithFeature(RolleDTO rolle, String feature) {
+    /*private boolean checkRolleWithFeature(RolleDTO rolle, String feature) {
         String[] rolles = getRollesForFeature(feature);
         if  ( rolles.length == 0 || rolles == null ) return false;
         return Arrays.asList(rolles).contains(rolle);
@@ -58,7 +58,7 @@ public class AuthorizationControl {
      * @param feature
      * @return
      */
-    private String[] getRollesForFeature(String feature) {
+    /*private String[] getRollesForFeature(String feature) {
         // Da im Framework nur zwei Views unterstützt werden, werden auch diese nur unterschieden
         if ( feature.equals( Globals.Pages.ENTER_CAR ) ) {
             return new String[]{ Globals.Roles.ADMIN };
@@ -66,7 +66,7 @@ public class AuthorizationControl {
             return (  new String[] { Globals.Roles.USER , Globals.Roles.ADMIN }  );
         }
         return new String[] {};
-    }
+    }*/
 
 
 }

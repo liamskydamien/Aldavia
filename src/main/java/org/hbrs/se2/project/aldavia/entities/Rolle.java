@@ -21,7 +21,7 @@ public class Rolle {
     @Column(name = "bezeichnung")
     private String bezeichnung;
 
-    @ManyToMany
+    @ManyToMany (mappedBy = "rollen")
     private List<User> users;
 
     /**
