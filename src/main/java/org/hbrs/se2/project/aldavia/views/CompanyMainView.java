@@ -5,9 +5,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
-@Route(value = Globals.Pages.STUDENT_MAIN, layout = LoggedInStateLayout.class)
-public class StudentMainView extends SearchView {
-    public StudentMainView() {
-        super();
+@Route(value = Globals.Pages.COMPANY_MAIN, layout = LoggedInStateLayout.class)
+public class CompanyMainView extends VerticalLayout {
+    public CompanyMainView() {
+        add(new Text("CompanyMainView "));
     }
 }

@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.views;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -18,25 +19,43 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
+import org.hbrs.se2.project.aldavia.control.StudentControl;
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
+import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
+import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
+
+
+
 
 @CssImport("./styles/views/navbar/navbar.css")
 
 public class LoggedInStateLayout extends AppLayout {
 
+    //@Autowired
+    //private StudentControl studentControl;
+
     private AuthorizationControl authorizationControl;
-    public LoggedInStateLayout() {
+
+
+    public LoggedInStateLayout() throws ProfileException {
+
         setUpUI();
+
     }
 
-    public void setUpUI() {
+    public void setUpUI() throws ProfileException {
         addToNavbar(true, createHeaderContent());
     }
 
 
-
-    private Component createHeaderContent() {
+    private Component createHeaderContent() throws ProfileException {
 
 
 
@@ -44,7 +63,13 @@ public class LoggedInStateLayout extends AppLayout {
         layout.setSizeFull();
         layout.setId("header-neutral");
         Image logo = new Image("images/aldavia.png", "AldaVia logo");
-        navigateHomeLogo(logo);
+
+        if(checkIfUserIsLoggedIn()){
+            navigateStudentHomeLogo(logo);
+        } else {
+            navigateCompanyHomeLogo(logo);
+        }
+
         layout.add(logo);
 
         HorizontalLayout topRightLayout = new HorizontalLayout();
@@ -56,20 +81,20 @@ public class LoggedInStateLayout extends AppLayout {
 
         if(checkIfUserIsLoggedIn()){
 
+
             if(checkIfUserIsStudent()){
+                topRightLayout.add(new Label("Hallo, " + getCurrentUserName()));
                 topRightLayout.add(createMenuItemsStudent());
                 // Logout-Button am rechts-oberen Rand.
                 topRightLayout.add(createLogOutButton());
 
             } else if (checkIfUserIsUnternehmen()){
+                topRightLayout.add(new Label("Hallo, " + getCurrentUserName()));
                 topRightLayout.add(createMenuItemsUnternehmen());
                 // Logout-Button am rechts-oberen Rand.
                 topRightLayout.add(createLogOutButton());
             }
         }
-
-
-
 
         layout.add(topRightLayout);
 
@@ -82,7 +107,7 @@ public class LoggedInStateLayout extends AppLayout {
 
         Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", LoginView.class, iconUser)
+                createTabWithIcon("Profile", ProfileView.class, iconUser)
         };
         tabs[0].setId("student-srofil-tab");
         return tabs;
@@ -93,7 +118,7 @@ public class LoggedInStateLayout extends AppLayout {
         Button button = new Button("Erstellen");
         Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", LoginView.class, iconUser),
+                createTabWithIcon("Profile", ProfileView.class, iconUser),
                 createButtonInTab(button, CreateStellenanzeigeView.class)
         };
         tabs[0].setId("unternehmen-srofil-tab");
@@ -143,10 +168,13 @@ public class LoggedInStateLayout extends AppLayout {
     }
 
 
-    private static void navigateHomeLogo(Image img) {
-        img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.MAIN_VIEW)));
+    private static void navigateStudentHomeLogo(Image img) {
+        img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.STUDENT_MAIN)));
     }
 
+    private static void navigateCompanyHomeLogo(Image img) {
+        img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.COMPANY_MAIN)));
+    }
 
 
     private UserDTO getCurrentUser() {
@@ -184,6 +212,17 @@ public class LoggedInStateLayout extends AppLayout {
         ui.getSession().close();
         ui.getPage().setLocation("/");
     }
+
+    //TODO:Methode spezifisch für Student und unternehmen
+
+    private String getCurrentUserName() {
+        return getCurrentUser().getUserid();
+    }
+
+    /*private String getCurrentStudentName() throws ProfileException {
+        Student student = studentControl.getStudent(getCurrentUserName());
+        return student.getVorname();
+    }*/
 
 
 

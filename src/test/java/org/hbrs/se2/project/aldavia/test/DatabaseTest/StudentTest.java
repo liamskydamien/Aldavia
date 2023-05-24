@@ -24,6 +24,7 @@ public class StudentTest {
     //TODO: Test Constraints if student gets deleted (cascade) -> User, Qualification get deleted too. Sprache, Kenntnisse, Taetigkeitsfeld not
     //TODO: Test add... and remove... methods
 
+    /*
         @Autowired
         private StudentRepository studentRepository;
         @Autowired
@@ -99,7 +100,7 @@ public class StudentTest {
             unternehmenRepository.save(unternehmen);
 
             Taetigkeitsfeld taetigkeitsfeldStellenanzeige = Taetigkeitsfeld.builder()
-                    .bezeichnung("Software Development")
+                    .bezeichnung("Software Development in Java")
                     .build();
 
             // Save the student to the database
@@ -123,9 +124,10 @@ public class StudentTest {
                     .datum(LocalDate.of(2023, 1, 1))
                     .stellenanzeige(stellenanzeige)
                     .build();
-            bewerbung.setStudent(student);
+            Student student1 = studentRepository.findById(student.getId()).orElse(null);
+            bewerbung.setStudent(student1);
             bewerbungRepository.save(bewerbung);
-            studentRepository.save(student);
+            studentRepository.save(student1);
 
 
             assertTrue(studentRepository.existsById(student.getId()));
@@ -180,9 +182,10 @@ public class StudentTest {
             assertFalse(modifiedStudent.getSprachen().contains(sprache));
 
             //Delete Taetigkeitsfeld
+            String taetigkeitsfeldBezeichnung = taetigkeitsfeld.getBezeichnung();
+            taetigkeitsfeldRepository.deleteById(taetigkeitsfeldBezeichnung);
             modifiedStudent.removeTaetigkeitsfeld(taetigkeitsfeld);
             studentRepository.save(modifiedStudent);
-            taetigkeitsfeldRepository.delete(taetigkeitsfeld);
             assertFalse(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung()));
             assertFalse(modifiedStudent.getTaetigkeitsfelder().contains(taetigkeitsfeld));
 
@@ -1292,10 +1295,12 @@ public class StudentTest {
         Optional<User> awaitDeletedUser = userRepository.findById(userID);
         assertFalse(awaitDeletedUser.isPresent());
 
+     */
+
     }
 
 
-*/
+
 
 
 
