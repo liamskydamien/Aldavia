@@ -22,7 +22,7 @@ public class QualifikationenControl {
      * @param student The student
      * @throws PersistenceException If the Qualifikation is not found
      */
-    public void addUpdateQualifikation(QualifikationsDTO qualifikationsDTO, Student student) throws PersistenceException {
+    public Qualifikation addUpdateQualifikation(QualifikationsDTO qualifikationsDTO, Student student) throws PersistenceException {
         if (qualifikationsDTO.getId() == -1) {
             Qualifikation qualifikation = Qualifikation.builder()
                     .bezeichnung(qualifikationsDTO.getBezeichnung())
@@ -34,7 +34,7 @@ public class QualifikationenControl {
                     .institution(qualifikationsDTO.getInstitution())
                     .build();
             qualifikation.setStudent(student);
-            qualifikationRepository.save(qualifikation);
+            return qualifikationRepository.save(qualifikation);
         } else {
             Optional<Qualifikation> awaitQualifikation = qualifikationRepository.findById(qualifikationsDTO.getId());
             if (awaitQualifikation.isPresent()) {
@@ -46,7 +46,8 @@ public class QualifikationenControl {
                 qualifikation.setBis(qualifikationsDTO.getBis());
                 qualifikation.setBeschaftigungsverhaltnis(qualifikationsDTO.getBeschaeftigungsart());
                 qualifikation.setInstitution(qualifikationsDTO.getInstitution());
-                qualifikationRepository.save(qualifikation);
+                qualifikation.setStudent(student);
+                return qualifikationRepository.save(qualifikation);
             } else {
                 throw new PersistenceException(PersistenceException.PersistenceExceptionType.QualifikationNotFound, "Qualifikation not found");
             }

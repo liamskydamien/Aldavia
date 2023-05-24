@@ -13,10 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class TaetigkeitsfeldControlTest {
 
 
@@ -63,7 +65,7 @@ public class TaetigkeitsfeldControlTest {
         try {
             taetigkeitsfeldTest = taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
             taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
-            taetigkeitsfeldRepository.deleteByBezeichnung(taetigkeitsfeldTest.getBezeichnung());
+            taetigkeitsfeldRepository.deleteById(taetigkeitsfeldTest.getBezeichnung());
         }
         catch (Exception e) {
             System.out.println("Kenntnis not found");
@@ -80,7 +82,7 @@ public class TaetigkeitsfeldControlTest {
 
         taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
 
-        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName()).get();
+        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
         student = studentRepository.findById(student.getId()).get();
         assertEquals(updatedTaetigkeitsfeld.getStudents().get(0).getId(), student.getId());
     }
@@ -88,7 +90,7 @@ public class TaetigkeitsfeldControlTest {
     @Test
     public void testAddStudentToKenntnis_whenTaetigkeitsfeldIsNotPresent() {
         taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
-        taetigkeitsfeldTest = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName()).get();
+        taetigkeitsfeldTest = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
         student = studentRepository.findById(student.getId()).get();
         assertEquals(taetigkeitsfeldTest.getStudents().get(0).getId(), student.getId());
     }
@@ -101,7 +103,7 @@ public class TaetigkeitsfeldControlTest {
 
         taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
 
-        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName()).orElse(null);
+        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).orElse(null);
         assertTrue(updatedTaetigkeitsfeld == null || !updatedTaetigkeitsfeld.getStudents().contains(student));
     }
 

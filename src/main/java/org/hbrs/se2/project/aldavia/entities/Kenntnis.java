@@ -23,7 +23,7 @@ public class Kenntnis {
     @ManyToMany(mappedBy = "kenntnisse")
     private List<Student> students;
 
-    public void addStudent(Student student) {
+    public Kenntnis addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -31,15 +31,17 @@ public class Kenntnis {
             this.students.add(student);
             student.addKenntnis(this);
         }
+        return this;
     }
 
-    public void removeStudent(Student student) {
+    public Kenntnis removeStudent(Student student) {
         if (students == null) {
-            return;
+            return this;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeKenntnis(this);
         }
+        return this;
     }
 }

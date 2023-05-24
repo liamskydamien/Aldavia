@@ -23,7 +23,7 @@ public class TaetigkeitsfeldControl {
      * @return Taetigkeitsfeld
      */
     public Taetigkeitsfeld addStudentToTaetigkeitsfeld (TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
-        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName());
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
         Taetigkeitsfeld taetigkeitsfeld;
         if (awaitTaetigkeitsfeld.isPresent()){
             taetigkeitsfeld = awaitTaetigkeitsfeld.get();
@@ -43,7 +43,7 @@ public class TaetigkeitsfeldControl {
      * @param student The student
      */
     public Taetigkeitsfeld removeStudentFromTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) throws PersistenceException {
-        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName());
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
         if (awaitTaetigkeitsfeld.isPresent()){
             Taetigkeitsfeld taetigkeitsfeld = awaitTaetigkeitsfeld.get();
             taetigkeitsfeld = taetigkeitsfeld.removeStudent(student);
