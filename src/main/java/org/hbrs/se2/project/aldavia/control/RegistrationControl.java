@@ -60,6 +60,8 @@ public class RegistrationControl {
                     .build();
 
             userNeu.addRolle(rolle); // Add the role to the user
+            result.setReason(RegistrationResult.REGISTRATION_SUCCESSFULL);
+            result.setResult(true);
 
 
             repositoryU.save(userNeu); // Save the user in the repository
