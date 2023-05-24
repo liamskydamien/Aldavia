@@ -7,11 +7,13 @@ import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional
 public class StudentProfileControl {
 
     @Autowired
@@ -77,6 +79,7 @@ public class StudentProfileControl {
                     kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
                 }
             }
+
             if (deletionStudentInformationDTO.getSprachen() != null) {
                 List<SpracheDTO> deletionSprachen = new ArrayList<>(deletionStudentInformationDTO.getSprachen());
                 for (SpracheDTO spracheDTO : deletionSprachen) {

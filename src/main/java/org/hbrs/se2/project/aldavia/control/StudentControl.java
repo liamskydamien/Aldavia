@@ -124,25 +124,34 @@ public class StudentControl {
     @Transactional
     public void deleteStudent(Student student) throws ProfileException {
         try {
-            List<Qualifikation> qualifikationen = new ArrayList<>(student.getQualifikationen());
-            for (Qualifikation qualifikation : qualifikationen) {
-                student.setQualifikationen(null);
-                qualifikationenControl.removeQualifikation(qualifikation);
+
+            if (student.getQualifikationen() != null) {
+                List<Qualifikation> qualifikationen = new ArrayList<>(student.getQualifikationen());
+                for (Qualifikation qualifikation : qualifikationen) {
+                    student.setQualifikationen(null);
+                    qualifikationenControl.removeQualifikation(qualifikation);
+                }
             }
 
-            List<Taetigkeitsfeld> taetigkeitsfelder = new ArrayList<>(student.getTaetigkeitsfelder());
-            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
-                student.removeTaetigkeitsfeld(taetigkeitsfeld);
+            if(student.getTaetigkeitsfelder() != null) {
+                List<Taetigkeitsfeld> taetigkeitsfelder = new ArrayList<>(student.getTaetigkeitsfelder());
+                for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
+                    student.removeTaetigkeitsfeld(taetigkeitsfeld);
+                }
             }
 
-            List<Sprache> sprachen = new ArrayList<>(student.getSprachen());
-            for (Sprache sprache : sprachen) {
-                student.removeSprache(sprache);
+            if (student.getSprachen() != null) {
+                List<Sprache> sprachen = new ArrayList<>(student.getSprachen());
+                for (Sprache sprache : sprachen) {
+                    student.removeSprache(sprache);
+                }
             }
 
-            List<Kenntnis> kenntnisse = new ArrayList<>(student.getKenntnisse());
-            for (Kenntnis kenntnis : kenntnisse) {
-                student.removeKenntnis(kenntnis);
+            if (student.getKenntnisse() != null) {
+                List<Kenntnis> kenntnisse = new ArrayList<>(student.getKenntnisse());
+                for (Kenntnis kenntnis : kenntnisse) {
+                    student.removeKenntnis(kenntnis);
+                }
             }
 
             studentRepository.save(student);

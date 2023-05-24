@@ -25,6 +25,7 @@ public class StudentProfileDTOFactory{
         List<KenntnisDTO> kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
         List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
         List<SpracheDTO> spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+        List<QualifikationsDTO> qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
         return StudentProfileDTO.builder()
                 .email(user.getEmail())
                 .vorname(student.getVorname())
@@ -39,6 +40,7 @@ public class StudentProfileDTOFactory{
                 .telefonnummer(user.getPhone())
                 .profilbild(user.getProfilePicture())
                 .sprachen(spracheDTOList)
+                .qualifikationen(qualifikationsDTOList)
                 .beschreibung(user.getBeschreibung())
                 .build();
     }

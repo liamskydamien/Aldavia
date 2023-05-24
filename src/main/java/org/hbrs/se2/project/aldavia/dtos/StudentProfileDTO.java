@@ -19,6 +19,7 @@ public class StudentProfileDTO{
     private LocalDate geburtsdatum;
     private List<KenntnisDTO> kenntnisse;
     private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
+    private List<QualifikationsDTO> qualifikationen;
     private String lebenslauf;
     private String email;
     private String telefonnummer;
