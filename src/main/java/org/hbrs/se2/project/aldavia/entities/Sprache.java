@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
+// import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,10 +31,10 @@ public class Sprache {
 
     // sprache_hat_student
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "sprachen")
     private List<Student> students;
 
-    public Sprache addStudent(Student student) {
+    public void addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -41,18 +42,16 @@ public class Sprache {
             this.students.add(student);
             student.addSprache(this);
         }
-        return this;
     }
 
-    public Sprache removeStudent(Student student) {
+    public void removeStudent(Student student) {
         if (students == null) {
-            return this;
+            return;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeSprache(this);
         }
-        return this;
     }
 
     // Methoden

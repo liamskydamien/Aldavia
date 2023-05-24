@@ -15,36 +15,26 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
-import org.hbrs.se2.project.aldavia.dtos.RolleDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.util.Globals;
-
-import java.util.List;
 
 @CssImport("./styles/views/navbar/navbar.css")
 
-
-public class NeutralLayout extends AppLayout {
+public class LoggedInStateLayout extends AppLayout {
 
     private AuthorizationControl authorizationControl;
-
-    private Tabs menu;
-
-    public NeutralLayout() {
+    public LoggedInStateLayout() {
         setUpUI();
     }
 
     public void setUpUI() {
         addToNavbar(true, createHeaderContent());
     }
+
+
 
     private Component createHeaderContent() {
 
@@ -64,19 +54,22 @@ public class NeutralLayout extends AppLayout {
         topRightLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
 
-            topRightLayout.add(createMenuItems());
+        if(checkIfUserIsLoggedIn()){
 
+            if(checkIfUserIsStudent()){
+                topRightLayout.add(createMenuItemsStudent());
+                // Logout-Button am rechts-oberen Rand.
+                topRightLayout.add(createLogOutButton());
 
-        if(checkIfUserIsStudent()){
-            topRightLayout.add(createMenuItemsStudent());
-            // Logout-Button am rechts-oberen Rand.
-            MenuBar bar = new MenuBar();
-            Icon iconSignOut = VaadinIcon.SIGN_OUT.create();
-            Text textLogOut = new Text("Log out");
-            MenuItem item = bar.addItem(new HorizontalLayout(iconSignOut,textLogOut ), e -> logoutUser());
-            item.setId("logout-button");
-            topRightLayout.add(bar);
+            } else if (checkIfUserIsUnternehmen()){
+                topRightLayout.add(createMenuItemsUnternehmen());
+                // Logout-Button am rechts-oberen Rand.
+                topRightLayout.add(createLogOutButton());
+            }
         }
+
+
+
 
         layout.add(topRightLayout);
 
@@ -84,26 +77,10 @@ public class NeutralLayout extends AppLayout {
         return layout;
     }
 
-    private Component[] createMenuItems() {
-
-        Button button = new Button("Sign Up");
-        button.setId("sign-up-button");
-        Tab[] tabs = new Tab[]{
-                createTab("Log In", LoginView.class),
-                createButtonInTab(button, RegistrationLayout.class )
-        };
-        tabs[0].setId("login-tab");
-        tabs[1].setId("sign-up-tab");
-        return tabs;
-    }
 
     private Component[] createMenuItemsStudent() {
 
-
         Icon iconUser = VaadinIcon.USER.create();
-
-
-
         Tab[] tabs = new Tab[]{
                 createTabWithIcon("Profile", LoginView.class, iconUser)
         };
@@ -111,6 +88,17 @@ public class NeutralLayout extends AppLayout {
         return tabs;
     }
 
+    private Component[] createMenuItemsUnternehmen() {
+
+        Button button = new Button("Erstellen");
+        Icon iconUser = VaadinIcon.USER.create();
+        Tab[] tabs = new Tab[]{
+                createTabWithIcon("Profile", LoginView.class, iconUser),
+                createButtonInTab(button, CreateStellenanzeigeView.class)
+        };
+        tabs[0].setId("unternehmen-srofil-tab");
+        return tabs;
+    }
 
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
@@ -143,6 +131,15 @@ public class NeutralLayout extends AppLayout {
         button.addClickListener(event -> button.getUI().ifPresent(ui -> ui.navigate(navigationTarget)));
         tab.add(button);
         return tab;
+    }
+
+    private MenuBar createLogOutButton() {
+        MenuBar bar = new MenuBar();
+        Icon iconSignOut = VaadinIcon.SIGN_OUT.create();
+        Text textLogOut = new Text("Log out");
+        MenuItem item = bar.addItem(new HorizontalLayout(iconSignOut,textLogOut ), e -> logoutUser());
+        item.setId("logout-button");
+        return bar;
     }
 
 
@@ -190,5 +187,7 @@ public class NeutralLayout extends AppLayout {
 
 
 
-}
 
+
+
+}

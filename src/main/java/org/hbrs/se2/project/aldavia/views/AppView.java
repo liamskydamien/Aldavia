@@ -64,6 +64,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
+
         if (userDTO == null) {
             UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
             return false;

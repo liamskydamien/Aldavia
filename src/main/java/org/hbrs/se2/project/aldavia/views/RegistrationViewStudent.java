@@ -178,13 +178,13 @@ public class RegistrationViewStudent extends Div {
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
                 dialog.close();
-            } else if (result.getReason().equals(RegistrationResult.EMAIL_ALREADY_EXISTS)) {
-                Notification.show("Die Email Adresse ist bereits vorhanden!");
-                dialog.close();
+            }  else if (RegistrationResult.EMAIL_ALREADY_EXISTS.equals(result.getReason())) {
+            Notification.show("Die Email Adresse ist bereits vorhanden!");
+            dialog.close();
             } else {
-                Notification.show("Der Username ist bereits belegt!");
-                dialog.close();
-            }
+            Notification.show("Der Username ist bereits belegt!");
+            dialog.close();
+        }
 
 
         } );

@@ -20,10 +20,10 @@ public class Kenntnis {
     @Column(name = "bezeichnung")
     private String bezeichnung;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "kenntnisse")
     private List<Student> students;
 
-    public Kenntnis addStudent(Student student) {
+    public void addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -31,17 +31,15 @@ public class Kenntnis {
             this.students.add(student);
             student.addKenntnis(this);
         }
-        return this;
     }
 
-    public Kenntnis removeStudent(Student student) {
+    public void removeStudent(Student student) {
         if (students == null) {
-            return this;
+            return;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeKenntnis(this);
         }
-        return this;
     }
 }
