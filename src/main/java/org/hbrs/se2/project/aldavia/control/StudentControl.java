@@ -19,16 +19,8 @@ public class StudentControl {
     private StudentRepository studentRepository;
 
     @Autowired
-    private KenntnisseControl kenntnisseControl;
-
-    @Autowired
-    private SprachenControl sprachenControl;
-
-    @Autowired
     private QualifikationenControl qualifikationenControl;
 
-    @Autowired
-    private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
 
     /**

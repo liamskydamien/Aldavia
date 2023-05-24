@@ -313,6 +313,9 @@ public class ProfileControlTest {
 
         studentRepository.save(student1);
 
+        Student student = studentRepository.findByUserID("SaschaAldaFan").get();
+        System.out.println("Student:" + student.getUser().getUserid());
+
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
                 .studiengang("Wirtschaftsinformatik")

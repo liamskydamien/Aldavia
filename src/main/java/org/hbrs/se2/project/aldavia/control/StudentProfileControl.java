@@ -127,6 +127,7 @@ public class StudentProfileControl {
                 }
             }
 
+            System.out.println("Qualifikationen: " + addStudentInformationDTO.getQualifikationen());
 
             if (addStudentInformationDTO.getQualifikationen() != null) {
                 List<QualifikationsDTO> addQualifikationen = new ArrayList<>(addStudentInformationDTO.getQualifikationen());

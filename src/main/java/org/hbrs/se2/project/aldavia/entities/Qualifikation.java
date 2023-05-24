@@ -55,16 +55,11 @@ public class Qualifikation {
     private Student student;
 
     public void setStudent(Student student) {
-        if (this.student != null) {
-            this.student.removeQualifikation(this);
+        if (this.student == student) {
+            return;
         }
         this.student = student;
-        if (student != null) {
-            if(student == this.student){
-                return;
-            }
-            student.addQualifikation(this);
-        }
+        student.addQualifikation(this);
     }
 
     public void removeStudent(Student student) {

@@ -4,6 +4,7 @@ import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentProfileDTOFactory{
@@ -21,28 +22,46 @@ public class StudentProfileDTOFactory{
     }
 
     public StudentProfileDTO createStudentProfileDTO(Student student){
-        User user = student.getUser();
-        List<KenntnisDTO> kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
-        List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
-        List<SpracheDTO> spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
-        List<QualifikationsDTO> qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
-        return StudentProfileDTO.builder()
-                .email(user.getEmail())
-                .vorname(student.getVorname())
-                .nachname(student.getNachname())
-                .matrikelNummer(student.getMatrikelNummer())
-                .studiengang(student.getStudiengang())
-                .studienbeginn(student.getStudienbeginn())
-                .geburtsdatum(student.getGeburtsdatum())
-                .kenntnisse(kenntnisDTOList)
-                .taetigkeitsfelder(taetigkeitsfeldDTOList)
-                .lebenslauf(student.getLebenslauf())
-                .telefonnummer(user.getPhone())
-                .profilbild(user.getProfilePicture())
-                .sprachen(spracheDTOList)
-                .qualifikationen(qualifikationsDTOList)
-                .beschreibung(user.getBeschreibung())
-                .build();
+        try {
+            User user = student.getUser();
+            List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = new ArrayList<>();
+            List<QualifikationsDTO> qualifikationsDTOList = new ArrayList<>();
+            List<SpracheDTO> spracheDTOList = new ArrayList<>();
+            List<KenntnisDTO> kenntnisDTOList = new ArrayList<>();
+            if (!student.getKenntnisse().isEmpty()) {
+                kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
+            }
+            if (!student.getSprachen().isEmpty()) {
+                spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+            }
+            if (!student.getTaetigkeitsfelder().isEmpty()) {
+                taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
+            }
+            if (!student.getQualifikationen().isEmpty()) {
+                qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
+            }
+            return StudentProfileDTO.builder()
+                    .email(user.getEmail())
+                    .vorname(student.getVorname())
+                    .nachname(student.getNachname())
+                    .matrikelNummer(student.getMatrikelNummer())
+                    .studiengang(student.getStudiengang())
+                    .studienbeginn(student.getStudienbeginn())
+                    .geburtsdatum(student.getGeburtsdatum())
+                    .kenntnisse(kenntnisDTOList)
+                    .taetigkeitsfelder(taetigkeitsfeldDTOList)
+                    .lebenslauf(student.getLebenslauf())
+                    .telefonnummer(user.getPhone())
+                    .profilbild(user.getProfilePicture())
+                    .sprachen(spracheDTOList)
+                    .qualifikationen(qualifikationsDTOList)
+                    .beschreibung(user.getBeschreibung())
+                    .build();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private SpracheDTO createSpracheDTO(Sprache sprache) {
