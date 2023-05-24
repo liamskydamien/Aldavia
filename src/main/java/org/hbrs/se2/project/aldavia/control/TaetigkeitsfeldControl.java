@@ -1,15 +1,18 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Component
+@Transactional
 public class TaetigkeitsfeldControl {
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
@@ -20,18 +23,18 @@ public class TaetigkeitsfeldControl {
      * @return Taetigkeitsfeld
      */
     public Taetigkeitsfeld addStudentToTaetigkeitsfeld (TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
-        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName());
+        Taetigkeitsfeld taetigkeitsfeld;
         if (awaitTaetigkeitsfeld.isPresent()){
-            Taetigkeitsfeld taetigkeitsfeld = awaitTaetigkeitsfeld.get();
-            taetigkeitsfeld.addStudent(student);
-            return taetigkeitsfeldRepository.save(taetigkeitsfeld);
+            taetigkeitsfeld = awaitTaetigkeitsfeld.get();
         }
         else {
-            Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
-                    .bezeichnung(taetigkeitsfeldDTO.getName())
-                    .build();
-            return taetigkeitsfeldRepository.save(taetigkeitsfeld);
+            taetigkeitsfeld = new Taetigkeitsfeld();
+            taetigkeitsfeld.setBezeichnung(taetigkeitsfeldDTO.getName());
         }
+        taetigkeitsfeld = taetigkeitsfeld.addStudent(student);
+        System.out.println(taetigkeitsfeld.getBezeichnung()+ " " + taetigkeitsfeld.getStudents().get(0).getNachname());
+        return taetigkeitsfeldRepository.save(taetigkeitsfeld);
     }
 
     /**
@@ -39,22 +42,15 @@ public class TaetigkeitsfeldControl {
      * @param taetigkeitsfeldDTO The TaetigkeitsfeldDTO
      * @param student The student
      */
-    public void removeStudentFromTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
-        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
+    public Taetigkeitsfeld removeStudentFromTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) throws PersistenceException {
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findByBezeichnung(taetigkeitsfeldDTO.getName());
         if (awaitTaetigkeitsfeld.isPresent()){
             Taetigkeitsfeld taetigkeitsfeld = awaitTaetigkeitsfeld.get();
-            taetigkeitsfeld.removeStudent(student);
-            if(taetigkeitsfeld.getStudents().isEmpty()){
-                if (taetigkeitsfeld.getStellenanzeigen().isEmpty()) {
-                    taetigkeitsfeldRepository.delete(taetigkeitsfeld);
-                }
-                else {
-                    taetigkeitsfeldRepository.save(taetigkeitsfeld);
-                }
-            }
-            else {
-                taetigkeitsfeldRepository.save(taetigkeitsfeld);
-            }
+            taetigkeitsfeld = taetigkeitsfeld.removeStudent(student);
+            return taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        }
+        else {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.TaetigkeitsfeldNotFound, "Taetigkeitsfeld not found");
         }
     }
 }

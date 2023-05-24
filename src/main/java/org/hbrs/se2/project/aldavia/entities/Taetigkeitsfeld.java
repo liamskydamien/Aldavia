@@ -3,7 +3,6 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-// import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +17,10 @@ import java.util.Objects;
 public class Taetigkeitsfeld {
 
     @Id
-    @Column(name = "bezeichnung")
+    @GeneratedValue
+    private int id;
+
+    @Column(name = "bezeichnung", unique = true)
     private String bezeichnung;
 
     // taetigkeitsfeld_hat_studenten
@@ -26,7 +28,7 @@ public class Taetigkeitsfeld {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Student> students;
 
-    public void addStudent(Student student) {
+    public Taetigkeitsfeld addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -34,16 +36,18 @@ public class Taetigkeitsfeld {
             this.students.add(student);
             student.addTaetigkeitsfeld(this);
         }
+        return this;
     }
 
-    public void removeStudent(Student student) {
+    public Taetigkeitsfeld removeStudent(Student student) {
         if (students == null) {
-            return;
+            return this;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeTaetigkeitsfeld(this);
         }
+        return this;
     }
 
     // taetigkeitsfeld_hat_stellenanzeigen

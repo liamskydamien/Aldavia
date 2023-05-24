@@ -1,15 +1,11 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.KenntnisseControl;
 import org.hbrs.se2.project.aldavia.control.SprachenControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
-import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
-import org.hbrs.se2.project.aldavia.entities.Kenntnis;
 import org.hbrs.se2.project.aldavia.entities.Sprache;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.User;
-import org.hbrs.se2.project.aldavia.repository.KenntnisseRepository;
 import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;

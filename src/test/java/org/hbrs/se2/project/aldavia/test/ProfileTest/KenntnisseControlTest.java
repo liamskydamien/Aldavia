@@ -93,7 +93,6 @@ public class KenntnisseControlTest {
     public void testRemoveStudentFromKenntnis_whenKenntnisIsPresent() throws org.hbrs.se2.project.aldavia.control.exception.PersistenceException {
         Kenntnis existingKenntnis = Kenntnis.builder().bezeichnung(kenntnisDTO.getName()).build();
         kenntnisTest = existingKenntnis.addStudent(student);
-        System.out.println(student.getNachname());
         kenntnisseRepository.save(kenntnisTest);
 
         kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);

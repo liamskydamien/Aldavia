@@ -177,7 +177,7 @@ public class Student {
         return taetigkeitsfelder;
     }
 
-    public void addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+    public Student addTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
         if (taetigkeitsfelder == null) {
             taetigkeitsfelder = new ArrayList<>();
         }
@@ -185,16 +185,18 @@ public class Student {
             this.taetigkeitsfelder.add(taetigkeitsfeld);
             taetigkeitsfeld.addStudent(this);
         }
+        return this;
     }
 
-    public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
+    public Student removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
         if (taetigkeitsfelder == null) {
-            return;
+            return this;
         }
         if (this.taetigkeitsfelder.contains(taetigkeitsfeld)) {
             this.taetigkeitsfelder.remove(taetigkeitsfeld);
             taetigkeitsfeld.removeStudent(this);
         }
+        return this;
     }
 
     // student_beweirbt_sich_auf_stellenanzeige
