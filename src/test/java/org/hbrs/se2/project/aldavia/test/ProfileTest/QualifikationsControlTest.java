@@ -136,7 +136,7 @@ public class QualifikationsControlTest {
 
         qualifikationControl.removeQualifikation(qualifikationDTO);
 
-        assertFalse(qualifikationsRepository.existsById(qualifikationDTO.getId()));
+        assertFalse(qualifikationsRepository.existsById(qualifikationDTO.getId()), "Qualifikation wurde nicht gelöscht " + qualifikationDTO.getId());
     }
 
     @Test

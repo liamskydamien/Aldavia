@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -60,16 +61,14 @@ public class QualifikationenControl {
      * @throws PersistenceException If the Qualifikation is not found
      */
     public void removeQualifikation(QualifikationsDTO qualifikationsDTO) throws PersistenceException {
-        Optional<Qualifikation> awaitQualifikation = qualifikationRepository.findById(qualifikationsDTO.getId());
-        if (awaitQualifikation.isPresent()) {
-            Qualifikation qualifikation = awaitQualifikation.get();
-            qualifikationRepository.delete(qualifikation);
+        if (qualifikationRepository.existsById(qualifikationsDTO.getId())) {
+            qualifikationRepository.deleteById(qualifikationsDTO.getId());
         } else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.QualifikationNotFound, "Qualifikation not found");
         }
     }
 
-    public void removeQualifikation(Qualifikation qualifikation) throws PersistenceException {
+    public void removeQualifikation(Qualifikation qualifikation) {
         qualifikationRepository.delete(qualifikation);
     }
 }
