@@ -17,8 +17,9 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Taetigkeitsfeld {
 
+
     @Id
-    @Column(name = "bezeichnung")
+    @Column(name = "bezeichnung", unique = true, nullable = false)
     private String bezeichnung;
 
     // taetigkeitsfeld_hat_studenten
