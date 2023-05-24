@@ -2,23 +2,36 @@ package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
-import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
-import org.hbrs.se2.project.aldavia.dtos.impl.SpracheDTOImpl;
-import org.hbrs.se2.project.aldavia.dtos.impl.StudentProfileDTOImpl;
-import org.hbrs.se2.project.aldavia.entities.Kenntnis;
-import org.hbrs.se2.project.aldavia.entities.Sprache;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.util.DTOTransformator;
+import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.*;
+import org.hbrs.se2.project.aldavia.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
+@Transactional
 public class StudentProfileControl {
 
+    @Autowired
+    private StudentControl studentControl;
+
+    @Autowired
+    private KenntnisseControl kenntnisseControl;
+
+    @Autowired
+    private QualifikationenControl qualifikationenControl;
+
+    @Autowired
+    private SprachenControl sprachenControl;
+
+    @Autowired
+    private TaetigkeitsfeldControl taetigkeitsfeldControl;
+
+    private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
     /**
      * Get the student profile of a student
@@ -28,15 +41,12 @@ public class StudentProfileControl {
      */
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
-            System.out.println("Loading student profile for user: " + username);
-            //Student student = studentDAO.getStudent(username);
-            //System.out.println("Loaded student: " + student.getVorname() + " " + student.getNachname());
-            //return DTOTransformator.transformStudentProfileDTO(student);
-            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            System.out.println("Finding student with username: " + username);
+            Student student = studentControl.getStudent(username);
+            StudentProfileDTO studentProfileDTO = studentProfileDTOFactory.createStudentProfileDTO(student);
+            System.out.println("Found student: " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
+            return studentProfileDTO;
         }
-//        catch (PersistenceException persistenceException){
-//            throw new ProfileException("Profile not found", ProfileException.ProfileExceptionType.ProfileNotFound);
-//        }
         catch (Exception e) {
             throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
@@ -44,22 +54,96 @@ public class StudentProfileControl {
 
     /**
      * Create and update a student profile
-     * @param student The student profile
      * @param username The username of the student
      * @return boolean
      * @throws ProfileException
      */
-    /*public void createAndUpdateStudentProfile(StudentProfileDTO student, String username) throws ProfileException {
+    public void createAndUpdateStudentProfile(UpdateStudentProfileDTO updateStudentProfileDTO, String username) throws ProfileException {
         // Gets student from database
         try {
+            // Get student from database
             System.out.println("Finding student with username: " + username);
-            Student studentFromDB = studentDAO.getStudent(username);
-            System.out.println("Found student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
-            studentDAO.createAndUpdateStudent(student, studentFromDB);
-            System.out.println("Updated student: " + studentFromDB.getVorname() + " " + studentFromDB.getNachname());
-    }
-        catch (PersistenceException e) {
-            throw new ProfileException("Error while updating student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            Student student = studentControl.getStudent(username);
+            System.out.println("Found student: " + student.getVorname() + " " + student.getNachname());
+
+            // Update student information
+            DeletionStudentInformationDTO deletionStudentInformationDTO = updateStudentProfileDTO.getDeletionStudentInformationDTO();
+            ChangeStudentInformationDTO changeStudentInformationDTO = updateStudentProfileDTO.getChangeStudentInformationDTO();
+            AddStudentInformationDTO addStudentInformationDTO = updateStudentProfileDTO.getAddStudentInformationDTO();
+
+            // Delete Information
+
+            if (deletionStudentInformationDTO.getKenntnisse() != null) {
+                List<KenntnisDTO> deletionKenntnisse = new ArrayList<>(deletionStudentInformationDTO.getKenntnisse());
+                for (KenntnisDTO kenntnisDTO : deletionKenntnisse) {
+                    kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
+                }
+            }
+
+            if (deletionStudentInformationDTO.getSprachen() != null) {
+                List<SpracheDTO> deletionSprachen = new ArrayList<>(deletionStudentInformationDTO.getSprachen());
+                for (SpracheDTO spracheDTO : deletionSprachen) {
+                    sprachenControl.removeStudentFromSprache(spracheDTO, student);
+                }
+            }
+
+            if (deletionStudentInformationDTO.getTaetigkeitsfelder() != null) {
+                List<TaetigkeitsfeldDTO> deletionTaetigkeitsfelder = new ArrayList<>(deletionStudentInformationDTO.getTaetigkeitsfelder());
+                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : deletionTaetigkeitsfelder) {
+                    taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+                }
+            }
+
+
+            if (deletionStudentInformationDTO.getQualifikationen() != null) {
+                List<QualifikationsDTO> deletionQualifikationen = new ArrayList<>(deletionStudentInformationDTO.getQualifikationen());
+                for (QualifikationsDTO qualifikationsDTO : deletionQualifikationen) {
+                    student.setQualifikationen(null);
+                    qualifikationenControl.removeQualifikation(qualifikationsDTO);
+                }
+            }
+
+
+            // Add Information
+
+            if (addStudentInformationDTO.getKenntnisse() != null) {
+                List<KenntnisDTO> addKenntnisse = new ArrayList<>(addStudentInformationDTO.getKenntnisse());
+                for (KenntnisDTO kenntnisDTO : addKenntnisse) {
+                    kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
+                }
+            }
+
+            if (addStudentInformationDTO.getSprachen() != null) {
+                List<SpracheDTO> addSprachen = new ArrayList<>(addStudentInformationDTO.getSprachen());
+                for (SpracheDTO spracheDTO : addSprachen) {
+                    sprachenControl.addStudentToSprache(spracheDTO, student);
+                }
+            }
+
+            if (addStudentInformationDTO.getTaetigkeitsfelder() != null) {
+                List<TaetigkeitsfeldDTO> addTaetigkeitsfelder = new ArrayList<>(addStudentInformationDTO.getTaetigkeitsfelder());
+                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : addTaetigkeitsfelder) {
+                    taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+                }
+            }
+
+
+            if (addStudentInformationDTO.getQualifikationen() != null) {
+                List<QualifikationsDTO> addQualifikationen = new ArrayList<>(addStudentInformationDTO.getQualifikationen());
+                for (QualifikationsDTO qualifikationsDTO : addQualifikationen) {
+                    qualifikationenControl.addUpdateQualifikation(qualifikationsDTO, student);
+                }
+            }
+
+            // Change Information
+            studentControl.updateStudentInformation(student, changeStudentInformationDTO);
+
+            // Save student information
+            studentControl.createOrUpdateStudent(student);
+
         }
-    }*/
+            catch (PersistenceException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

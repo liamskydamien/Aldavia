@@ -27,7 +27,7 @@ public class Taetigkeitsfeld {
     @ManyToMany(mappedBy = "taetigkeitsfelder")
     private List<Student> students;
 
-    public void addStudent(Student student) {
+    public Taetigkeitsfeld addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -35,16 +35,18 @@ public class Taetigkeitsfeld {
             this.students.add(student);
             student.addTaetigkeitsfeld(this);
         }
+        return this;
     }
 
-    public void removeStudent(Student student) {
+    public Taetigkeitsfeld removeStudent(Student student) {
         if (students == null) {
-            return;
+            return this;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeTaetigkeitsfeld(this);
         }
+        return this;
     }
 
     // taetigkeitsfeld_hat_stellenanzeigen

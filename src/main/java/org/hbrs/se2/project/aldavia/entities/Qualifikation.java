@@ -60,6 +60,9 @@ public class Qualifikation {
         }
         this.student = student;
         if (student != null) {
+            if(student == this.student){
+                return;
+            }
             student.addQualifikation(this);
         }
     }

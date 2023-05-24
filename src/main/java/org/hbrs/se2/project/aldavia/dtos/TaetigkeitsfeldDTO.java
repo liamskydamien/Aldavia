@@ -1,5 +1,12 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
-public interface TaetigkeitsfeldDTO {
-    String getBezeichnung();
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TaetigkeitsfeldDTO {
+    private String name;
 }
