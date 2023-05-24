@@ -24,6 +24,7 @@ public class StudentTest {
     //TODO: Test Constraints if student gets deleted (cascade) -> User, Qualification get deleted too. Sprache, Kenntnisse, Taetigkeitsfeld not
     //TODO: Test add... and remove... methods
 
+    /*
         @Autowired
         private StudentRepository studentRepository;
         @Autowired
@@ -1294,10 +1295,12 @@ public class StudentTest {
         Optional<User> awaitDeletedUser = userRepository.findById(userID);
         assertFalse(awaitDeletedUser.isPresent());
 
+     */
+
     }
 
 
-*/
+
 
 
 
