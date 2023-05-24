@@ -68,4 +68,8 @@ public class QualifikationenControl {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.QualifikationNotFound, "Qualifikation not found");
         }
     }
+
+    public void removeQualifikation(Qualifikation qualifikation) throws PersistenceException {
+        qualifikationRepository.delete(qualifikation);
+    }
 }

@@ -1,13 +1,15 @@
-package org.hbrs.se2.project.aldavia.control.factories;
+package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.entities.User;
+import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -15,6 +17,19 @@ public class StudentControl {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private KenntnisseControl kenntnisseControl;
+
+    @Autowired
+    private SprachenControl sprachenControl;
+
+    @Autowired
+    private QualifikationenControl qualifikationenControl;
+
+    @Autowired
+    private TaetigkeitsfeldControl taetigkeitsfeldControl;
+
 
     /**
      * Get the student profile of a student
@@ -40,14 +55,6 @@ public class StudentControl {
      */
     public void updateStudentInformation(Student student, ChangeStudentInformationDTO changeStudentInformationDTO) throws ProfileException {
         try {
-            if (changeStudentInformationDTO.getProfilbild() == null) {
-                changeStudentInformationDTO.setProfilbild(student.getUser().getProfilePicture());
-            }
-
-            if (changeStudentInformationDTO.getLebenslauf() == null) {
-                changeStudentInformationDTO.setLebenslauf(student.getLebenslauf());
-            }
-
 
             User user = student.getUser();
             if (changeStudentInformationDTO.getBeschreibung() != null) {
@@ -66,6 +73,10 @@ public class StudentControl {
                 user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
             }
 
+            if (changeStudentInformationDTO.getProfilbild() != null) {
+                user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
+            }
+
             if (changeStudentInformationDTO.getVorname() != null) {
                 student.setVorname(changeStudentInformationDTO.getVorname());
             }
@@ -76,6 +87,10 @@ public class StudentControl {
 
             if (changeStudentInformationDTO.getGeburtsdatum() != null) {
                 student.setGeburtsdatum(changeStudentInformationDTO.getGeburtsdatum());
+            }
+
+            if (changeStudentInformationDTO.getLebenslauf() != null) {
+                student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
             }
 
             if (changeStudentInformationDTO.getStudienbeginn() != null) {
@@ -106,11 +121,35 @@ public class StudentControl {
      * @param student The student
      * @throws ProfileException if student not found
      */
+    @Transactional
     public void deleteStudent(Student student) throws ProfileException {
         try {
+            List<Qualifikation> qualifikationen = new ArrayList<>(student.getQualifikationen());
+            for (Qualifikation qualifikation : qualifikationen) {
+                student.setQualifikationen(null);
+                qualifikationenControl.removeQualifikation(qualifikation);
+            }
+
+            List<Taetigkeitsfeld> taetigkeitsfelder = new ArrayList<>(student.getTaetigkeitsfelder());
+            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
+                student.removeTaetigkeitsfeld(taetigkeitsfeld);
+            }
+
+            List<Sprache> sprachen = new ArrayList<>(student.getSprachen());
+            for (Sprache sprache : sprachen) {
+                student.removeSprache(sprache);
+            }
+
+            List<Kenntnis> kenntnisse = new ArrayList<>(student.getKenntnisse());
+            for (Kenntnis kenntnis : kenntnisse) {
+                student.removeKenntnis(kenntnis);
+            }
+
+            studentRepository.save(student);
             studentRepository.delete(student);
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
     }

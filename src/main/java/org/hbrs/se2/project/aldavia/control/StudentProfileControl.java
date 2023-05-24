@@ -2,12 +2,14 @@ package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.control.factories.StudentControl;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class StudentProfileControl {
@@ -70,25 +72,30 @@ public class StudentProfileControl {
             // Delete Information
 
             if (deletionStudentInformationDTO.getKenntnisse() != null) {
-                for (KenntnisDTO kenntnisDTO : deletionStudentInformationDTO.getKenntnisse()) {
+                List<KenntnisDTO> deletionKenntnisse = new ArrayList<>(deletionStudentInformationDTO.getKenntnisse());
+                for (KenntnisDTO kenntnisDTO : deletionKenntnisse) {
                     kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
                 }
             }
             if (deletionStudentInformationDTO.getSprachen() != null) {
-                for (SpracheDTO spracheDTO : deletionStudentInformationDTO.getSprachen()) {
+                List<SpracheDTO> deletionSprachen = new ArrayList<>(deletionStudentInformationDTO.getSprachen());
+                for (SpracheDTO spracheDTO : deletionSprachen) {
                     sprachenControl.removeStudentFromSprache(spracheDTO, student);
                 }
             }
 
             if (deletionStudentInformationDTO.getTaetigkeitsfelder() != null) {
-                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : deletionStudentInformationDTO.getTaetigkeitsfelder()) {
+                List<TaetigkeitsfeldDTO> deletionTaetigkeitsfelder = new ArrayList<>(deletionStudentInformationDTO.getTaetigkeitsfelder());
+                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : deletionTaetigkeitsfelder) {
                     taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
                 }
             }
 
 
             if (deletionStudentInformationDTO.getQualifikationen() != null) {
-                for (QualifikationsDTO qualifikationsDTO : deletionStudentInformationDTO.getQualifikationen()) {
+                List<QualifikationsDTO> deletionQualifikationen = new ArrayList<>(deletionStudentInformationDTO.getQualifikationen());
+                for (QualifikationsDTO qualifikationsDTO : deletionQualifikationen) {
+                    student.setQualifikationen(null);
                     qualifikationenControl.removeQualifikation(qualifikationsDTO);
                 }
             }
@@ -97,26 +104,30 @@ public class StudentProfileControl {
             // Add Information
 
             if (addStudentInformationDTO.getKenntnisse() != null) {
-                for (KenntnisDTO kenntnisDTO : addStudentInformationDTO.getKenntnisse()) {
+                List<KenntnisDTO> addKenntnisse = new ArrayList<>(addStudentInformationDTO.getKenntnisse());
+                for (KenntnisDTO kenntnisDTO : addKenntnisse) {
                     kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
                 }
             }
 
             if (addStudentInformationDTO.getSprachen() != null) {
-                for (SpracheDTO spracheDTO : addStudentInformationDTO.getSprachen()) {
+                List<SpracheDTO> addSprachen = new ArrayList<>(addStudentInformationDTO.getSprachen());
+                for (SpracheDTO spracheDTO : addSprachen) {
                     sprachenControl.addStudentToSprache(spracheDTO, student);
                 }
             }
 
             if (addStudentInformationDTO.getTaetigkeitsfelder() != null) {
-                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : addStudentInformationDTO.getTaetigkeitsfelder()) {
+                List<TaetigkeitsfeldDTO> addTaetigkeitsfelder = new ArrayList<>(addStudentInformationDTO.getTaetigkeitsfelder());
+                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : addTaetigkeitsfelder) {
                     taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
                 }
             }
 
 
             if (addStudentInformationDTO.getQualifikationen() != null) {
-                for (QualifikationsDTO qualifikationsDTO : addStudentInformationDTO.getQualifikationen()) {
+                List<QualifikationsDTO> addQualifikationen = new ArrayList<>(addStudentInformationDTO.getQualifikationen());
+                for (QualifikationsDTO qualifikationsDTO : addQualifikationen) {
                     qualifikationenControl.addUpdateQualifikation(qualifikationsDTO, student);
                 }
             }
