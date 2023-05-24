@@ -173,7 +173,7 @@ public class RegistrationViewStudent extends Div {
         layout.add(text);
         Button confirmButton = new Button("Confirm", e -> {
             RegistrationResult result  = register(regControl);
-            if (result.getResult() == true) {
+            if (result.getResult()) {
                 Notification.show("Registrierung erfolgreich!");
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
