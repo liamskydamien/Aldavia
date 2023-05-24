@@ -46,10 +46,11 @@ public class User {
     @Column(name = "beschreibung")
     private String beschreibung;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Rolle> rollen;
     @JoinTable(
             name = "user_to_rolle",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "rolle", referencedColumnName = "bezeichnung", nullable = false)
     )

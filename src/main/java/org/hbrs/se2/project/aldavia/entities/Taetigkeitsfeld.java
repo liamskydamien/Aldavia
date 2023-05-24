@@ -23,7 +23,7 @@ public class Taetigkeitsfeld {
 
     // taetigkeitsfeld_hat_studenten
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
     private List<Student> students;
 
     public void addStudent(Student student) {
@@ -48,7 +48,7 @@ public class Taetigkeitsfeld {
 
     // taetigkeitsfeld_hat_stellenanzeigen
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "taetigkeitsfelder")
     private List<Stellenanzeige> stellenanzeigen;
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {

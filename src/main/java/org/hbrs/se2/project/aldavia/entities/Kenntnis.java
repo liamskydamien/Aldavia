@@ -20,7 +20,7 @@ public class Kenntnis {
     @Column(name = "bezeichnung")
     private String bezeichnung;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "kenntnisse")
     private List<Student> students;
 
     public void addStudent(Student student) {

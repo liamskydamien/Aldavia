@@ -31,7 +31,7 @@ public class Sprache {
 
     // sprache_hat_student
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "sprachen")
     private List<Student> students;
 
     public void addStudent(Student student) {
