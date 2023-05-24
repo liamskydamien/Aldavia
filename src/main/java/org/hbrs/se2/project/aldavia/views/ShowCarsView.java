@@ -25,7 +25,7 @@ import java.util.List;
  * https://vaadin.com/components/vaadin-grid/java-examples/header-and-footer
  *
  */
-@Route(value = Globals.Pages.SHOW_CARS, layout = AppView.class)
+@Route( layout = AppView.class)
 @PageTitle("Show Cars")
 @CssImport("./styles/views/showcars/show-cars-view.css")
 public class ShowCarsView extends Div  {

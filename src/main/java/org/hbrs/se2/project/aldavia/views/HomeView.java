@@ -12,10 +12,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
-@PWA(name = "Aldavia", shortName = "Aldavia", enableInstallPrompt = false)
+
 @CssImport("./styles/views/main/main-view.css")
 @Route(value = Globals.Pages.MAIN_VIEW, layout = NeutralLayout.class)
-
+@PWA(name = "Aldavia", shortName = "Aldavia", enableInstallPrompt = false)
 public class HomeView extends VerticalLayout {
 
     private TextField searchField = new TextField();

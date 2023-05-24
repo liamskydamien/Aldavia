@@ -56,14 +56,15 @@ public class Stellenanzeige {
 
     // stellenanzeige_taeitgkeitsfeld
 
-    @ManyToMany(mappedBy = "stellenanzeigen")
+    @ManyToMany
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
     @JoinTable(
             name = "stellenanzeige_qualifikation",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false)
+
     )
     public List<Taetigkeitsfeld> getTaetigkeitsbereiche() {
         return taetigkeitsfelder;
@@ -88,14 +89,14 @@ public class Stellenanzeige {
     }
 
     // stellenanzeige_hat_bewerbungen
-    @OneToMany(mappedBy = "stellenanzeige", cascade = CascadeType.ALL)
+    @OneToMany( cascade = CascadeType.ALL)
     private List<Bewerbung> bewerbungen;
 
     @JoinTable(
             name = "stellenanzeige_bewerbung",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false)
     )
     public List<Bewerbung> getBewerbungen() {
         return bewerbungen;

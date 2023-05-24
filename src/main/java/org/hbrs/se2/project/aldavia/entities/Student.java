@@ -55,14 +55,14 @@ public class Student {
 
     // student_hat_kenntnis
 
-    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Kenntnis> kenntnisse;
 
     @JoinTable(
             name = "student_to_kenntnis",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "kenntnis_id", referencedColumnName = "bezeichnung", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "kenntnis_id", referencedColumnName = "bezeichnung", nullable = false)
     )
     public List<Kenntnis> getKenntnisse() {
         return kenntnisse;
@@ -95,9 +95,9 @@ public class Student {
 
     @JoinTable(
             name = "student_to_qualifikation",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "qualifikation_id", referencedColumnName = "id", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "qualifikation_id", referencedColumnName = "id", nullable = false)
     )
     public List<Qualifikation> getQualifikationen() {
         return qualifikationen;
@@ -125,14 +125,14 @@ public class Student {
 
     // student_hat_sprachen
 
-    @ManyToMany(mappedBy = "students",cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Sprache> sprachen;
 
     @JoinTable(
             name = "student_to_sprache",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "sprache_id", referencedColumnName = "id", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "sprache_id", referencedColumnName = "id", nullable = false)
     )
     public List<Sprache> getSprachen() {
         return sprachen;
@@ -160,14 +160,14 @@ public class Student {
 
     // student_interssiert_sich_fuer_taetigkeitsfeld
 
-    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
+    @ManyToMany( cascade = CascadeType.PERSIST)
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
     @JoinTable(
             name = "student_to_taetigkeitsfeld",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false)
     )
     public List<Taetigkeitsfeld> getTaetigkeitsfelder() {
         return taetigkeitsfelder;
@@ -200,9 +200,9 @@ public class Student {
 
     @JoinTable(
             name = "student_to_bewerbung",
+            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
-            schema = "test_schema"
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false)
     )
     public List<Bewerbung> getBewerbungen() {
         return bewerbungen;
