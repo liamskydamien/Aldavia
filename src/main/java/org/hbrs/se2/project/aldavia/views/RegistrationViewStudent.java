@@ -36,7 +36,6 @@ public class RegistrationViewStudent extends Div {
 
     private TextField userName = new TextField("Username");
     private TextField mail = new TextField("Email-Adresse");
-
     private TextField vorname = new TextField("Vorname");
     private TextField nachname = new TextField("Nachnaname");
     private PasswordField password = new PasswordField("Passwort");
@@ -83,6 +82,21 @@ public class RegistrationViewStudent extends Div {
             }
         });
         password.setValueChangeMode(ValueChangeMode.EAGER);
+
+       mail.addKeyDownListener(event -> {
+           if (!(mail.getValue().contains("@"))) {
+               mail.setErrorMessage("Bitte geben Sie ein '@' Zeichen ein");
+               mail.setInvalid(true);
+           }
+       });
+       mail.setValueChangeMode(ValueChangeMode.EAGER);
+
+       passwordCheck.addKeyDownListener(event -> {
+           if(!password.getValue().equals(passwordCheck.getValue())){
+               passwordCheck.setErrorMessage("Passwörter stimmen nicht überein!");
+               passwordCheck.setInvalid(true);
+           }
+       });
 
 
         binder.bindInstanceFields(this);
