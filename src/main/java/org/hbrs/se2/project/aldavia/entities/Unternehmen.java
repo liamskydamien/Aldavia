@@ -14,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Unternehmen {
     @Id
     @GeneratedValue
@@ -49,12 +50,7 @@ public class Unternehmen {
     @OneToMany(mappedBy = "unternehmen_stellenanzeigen", cascade = CascadeType.ALL)
     private List<Stellenanzeige> stellenanzeigen;
 
-    @JoinTable(
-            name = "unternehmen_erstellt_stellenanzeige",
-            schema = "aldavia_new",
-            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false)
-    )
+
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
     }
@@ -78,14 +74,14 @@ public class Unternehmen {
 
     // unternehmen_hat_adresse
 
-    @ManyToMany
+    @ManyToMany()
     private List<Adresse> adressen;
 
     @JoinTable(
             name = "unternehmen_hat_adresse",
-            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "adresse_id", referencedColumnName = "id", nullable = false)
+            inverseJoinColumns = @JoinColumn(name = "adresse_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
     )
     public List<Adresse> getAdressen() {
         return adressen;

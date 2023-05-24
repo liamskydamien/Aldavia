@@ -1,18 +1,14 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
 import org.checkerframework.checker.units.qual.A;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
-import org.hbrs.se2.project.aldavia.entities.User;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
-import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.entities.*;
+import org.hbrs.se2.project.aldavia.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Transactional
 public class StellenanzeigeTest {
-    //TODO: Fix this test
-    //TODO: Add round trip test for Stellenanzeige
-    //TODO: Test Constraints if unternehmen gets deleted (cascade) -> Stellenanzeige should get deleted too
-    //TODO: Test add... and remove... methods
-    /*
+
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;
 
@@ -39,24 +31,19 @@ public class StellenanzeigeTest {
     @Autowired
     StudentRepository studentRepository;
 
-    Stellenanzeige s1 = Stellenanzeige.builder()
-            .bezeichnung("Java Praktikum")
-            .beschreibung("Hier lernst du professionell Java.")
-            .bezahlung("12,5€")
-            .build();
+    @Autowired
+    TaetigkeitsfeldRepository taetigkeitsfeldRepository;
 
-    Stellenanzeige s2 = Stellenanzeige.builder()
-            .bezeichnung("Tätigkeit RE")
-            .beschreibung("Hier lernst du professionell RE.")
-            .bezahlung("20,5€")
-            .build();
+    @Autowired
+    BewerbungRepository bewerbungRepository;
 
-    Stellenanzeige s3 = Stellenanzeige.builder()
-            .bezeichnung("C++ Praktikum")
-            .beschreibung("Hier lernst du professionell C++.")
-            .bezahlung("18,5€")
-            .build();
 
+    Taetigkeitsfeld t1 = Taetigkeitsfeld.builder()
+            .bezeichnung("Softare Entwicklung")
+            .build();
+    Taetigkeitsfeld t2 = Taetigkeitsfeld.builder()
+            .bezeichnung("RE")
+            .build();
     User u1 = User.builder()
             .email("121311324@web.de")
             .userid("Th1o12mas12")
@@ -81,14 +68,50 @@ public class StellenanzeigeTest {
             .user(u2)
             .matrikelNummer("123")
             .build();
+
+    Stellenanzeige s1 = Stellenanzeige.builder()
+            .bezeichnung("Java Praktikum")
+            .beschreibung("Hier lernst du professionell Java.")
+            .bezahlung("12,5€")
+            .beschaeftigungsverhaeltnis("Praktikum")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .beschaeftigungsumfang("Praktikum")
+            .build();
+
+    Stellenanzeige s2 = Stellenanzeige.builder()
+            .bezeichnung("Tätigkeit RE")
+            .beschreibung("Hier lernst du professionell RE.")
+            .bezahlung("20,5€")
+            .beschaeftigungsverhaeltnis("Vollzeit")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .build();
+
+    Stellenanzeige s3 = Stellenanzeige.builder()
+            .bezeichnung("C++ Praktikum")
+            .beschreibung("Hier lernst du professionell C++.")
+            .bezahlung("18,5€")
+            .beschaeftigungsverhaeltnis("Teilzeit")
+            .start(LocalDate.of(2023,05,02))
+            .ende(LocalDate.of(2023,07,02))
+            .unternehmen_stellenanzeigen(unternehmen1)
+            .build();
+
+
+
+
     @Test
     public void roundTrip() {
+        unternehmenRepository.save(unternehmen1);
         //Create
         stellenanzeigeRepository.save(s1);
-        int idS1 = s1.getStellenanzeigeId();
+        int idS1 = s1.getId();
         Stellenanzeige s1Test = stellenanzeigeRepository.findById(idS1).get();
 
-        assertEquals(s1.getStellenanzeigeId(), s1Test.getStellenanzeigeId());
+        assertEquals(s1.getId(), s1Test.getId());
 
         //Update
         s1.setBezeichnung("Java Job");
@@ -101,153 +124,175 @@ public class StellenanzeigeTest {
         stellenanzeigeRepository.deleteById(idS1);
         assertEquals(false, stellenanzeigeRepository.existsById(idS1));
 
+        //Check ob Unternehmen nicht mitgelöscht ist
+        assertEquals(true, unternehmenRepository.existsById(unternehmen1.getId()));
+
+        //Löschen Unternehmen
+        int idUser1 = u1.getId();
+        unternehmenRepository.deleteById(unternehmen1.getId());
+
+        assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
+
+        //Prüfen ob User mit gelöscht ist
+
+        assertEquals(false, userRepository.existsById(idUser1));
+
     }
 
     @Test
     public void testErstellen() {
-
-       // stellenanzeigeRepository.save(s2);
-        //stellenanzeigeRepository.save(s3);
-
-
+        unternehmen1.addStellenanzeige(s1);
         unternehmen1.addStellenanzeige(s2);
-        unternehmen1.addStellenanzeige(s3);
-
 
         unternehmenRepository.save(unternehmen1);
-        //unternehmen1.setStellenanzeigen(list);
-        //unternehmenRepository.save(unternehmen1);
-        int idU1 = unternehmen1.getUnternehmenId();
-        int idS2 = s2.getStellenanzeigeId();
-        int idS3 = s3.getStellenanzeigeId();
+        //Prüfen ob Unternehmen und Stellenazeigen gespeichert wurden
 
-        assertEquals(true, stellenanzeigeRepository.existsById(idS2));
-        assertEquals(true, stellenanzeigeRepository.existsById(idS3));
-        assertEquals(true, unternehmenRepository.existsById(idU1));
+        assertEquals(unternehmenRepository.existsById(unternehmen1.getId()),true);
+        assertEquals(stellenanzeigeRepository.existsById(s1.getId()),true);
+        assertEquals(stellenanzeigeRepository.existsById(s2.getId()),true);
 
-        Unternehmen awaitUnternehmen = unternehmenRepository.findById(idU1).get();
-        List<Stellenanzeige> awaitStellenanzeigen = awaitUnternehmen.getStellenanzeigen();
-        assertEquals(awaitStellenanzeigen.get(0).getStellenanzeigeId(), s2.getStellenanzeigeId());
-        assertEquals(awaitStellenanzeigen.get(1).getStellenanzeigeId(), s3.getStellenanzeigeId());
+        //Check ob ausgewählte Werte stimmen
+        Unternehmen awaitUnternehmen = unternehmenRepository.findById(unternehmen1.getId()).get();
+        assertEquals(awaitUnternehmen.getBeschreibung(),unternehmen1.getBeschreibung());
 
+        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(s1.getId()).get();
+        Stellenanzeige awaitS2 = stellenanzeigeRepository.findById(s2.getId()).get();
+        assertEquals(awaitS1.getBezahlung(),s1.getBezahlung());
+        assertEquals(awaitS2.getBezahlung(),s2.getBezahlung());
 
-        Stellenanzeige awaitS2 = stellenanzeigeRepository.findById(s2.getStellenanzeigeId()).get();
-        Stellenanzeige awaitS3 = stellenanzeigeRepository.findById(s3.getStellenanzeigeId()).get();
+        //Prüfen, ob Referenzen gesetzt
+        List<Stellenanzeige> awaitList = awaitUnternehmen.getStellenanzeigen();
+        assertEquals(awaitList.get(0),awaitS1);
+        assertEquals(awaitList.get(1),awaitS2);
 
-        assertEquals(awaitS2.getErsteller().getUnternehmenId(),idU1);
-        assertEquals(awaitS3.getErsteller().getUnternehmenId(),idU1);
-
-        unternehmen1.removeStellenanzeige(s3);
-        assertEquals(false, stellenanzeigeRepository.existsById(idS3));
-        assertEquals(stellenanzeigeRepository.findById(idS3).get().getErsteller(),null);
-
+        Unternehmen awaitS1Ersteller = awaitS1.getUnternehmen_stellenanzeigen();
+        Unternehmen awaitS2Ersteller = awaitS2.getUnternehmen_stellenanzeigen();
+        assertEquals(awaitUnternehmen, awaitS1Ersteller);
+        assertEquals(awaitUnternehmen, awaitS2Ersteller);
 
 
-        unternehmen1.addStellenanzeige(s3);
-        unternehmenRepository.deleteById(idU1);
-        assertEquals(false, userRepository.existsById(u1.getId()));
+        //Prüfen ob Stellenanzeigen beim Löschen des Unternhemens mit gelöscht werden
 
-        // Stellenanzeigen müssen anscheinden trotz cascade.ALL bei Unternhemen händisch gelöscht werden!
-        //stellenanzeigeRepository.deleteById(idS2);
-        //stellenanzeigeRepository.deleteById(idS3);
-        assertEquals(false, stellenanzeigeRepository.existsById(idS2));
-        assertEquals(false, stellenanzeigeRepository.existsById(idS3));
-        assertEquals(false, unternehmenRepository.existsById(idU1));
-
+        unternehmenRepository.deleteById(unternehmen1.getId());
+        assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
+        assertEquals(false, stellenanzeigeRepository.existsById(s1.getId()));
+        assertEquals(false, stellenanzeigeRepository.existsById(s2.getId()));
     }
-    @Test
-    public void testStellenanzeigeVariante1() {
-        s1.addUnternehmen(unternehmen1);
-        s2.addUnternehmen(unternehmen1);
-
-        stellenanzeigeRepository.save(s1);
-        stellenanzeigeRepository.save(s2);
-        int idS1 = s1.getStellenanzeigeId();
-        int idS2 = s2.getStellenanzeigeId();
-        int idU1 = unternehmen1.getUnternehmenId();
-        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(idS1).get();
-        Stellenanzeige awaitS2 = stellenanzeigeRepository.findById(idS2).get();
-
-
-        assertEquals(awaitS1.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
-        assertEquals(awaitS2.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
-        assertEquals(true, unternehmenRepository.existsById(idU1));
-
-        idU1 = awaitS2.getErsteller().getUnternehmenId();
-
-        Unternehmen awaitUnternehmen = unternehmenRepository.findById(idU1).get();
-        List<Stellenanzeige> listStellen = awaitUnternehmen.getStellenanzeigen();
-
-        assertEquals(listStellen.get(0).getStellenanzeigeId(), s1.getStellenanzeigeId());
-        assertEquals(listStellen.get(1).getStellenanzeigeId(), s2.getStellenanzeigeId());
-
-        //Löschen
-        stellenanzeigeRepository.deleteById(idS1);
-        stellenanzeigeRepository.deleteById(idS2);
-
-
-        assertEquals(true, unternehmenRepository.existsById(idU1));
-        assertEquals(false, stellenanzeigeRepository.existsById(idS1));
-        assertEquals(false, stellenanzeigeRepository.existsById(idS2));
-
-        unternehmenRepository.deleteById(idU1);
-        assertEquals(false, unternehmenRepository.existsById(idU1));
-
-
-    }
-
 
     @Test
-    public void testStellenanzeigeVariante2() {
-        s1.addUnternehmen(unternehmen1);
-        s2.addUnternehmen(unternehmen1);
+    public void testTaetigkeitsfelder() {
 
+        //Manuelle speicherung von Taetigkeitsfledern und Unternehmen BEVOR! die stellenanzeige gespeichert wird
+        //Grund: kein CascadeType.all
+        taetigkeitsfeldRepository.save(t1);
+        taetigkeitsfeldRepository.save(t2);
+        unternehmenRepository.save(unternehmen1);
+
+
+        Taetigkeitsfeld awaitT1 = taetigkeitsfeldRepository.findById(t1.getBezeichnung()).get();
+        Taetigkeitsfeld awaitT2 = taetigkeitsfeldRepository.findById(t2.getBezeichnung()).get();
+        assertEquals(awaitT1.getBezeichnung(),t1.getBezeichnung());
+        assertEquals(awaitT2.getBezeichnung(),t2.getBezeichnung());
+
+        s1.addTaetigkeitsfeld(awaitT1);
+        s1.addTaetigkeitsfeld(awaitT2);
+
+        //Prüfen ob Taetigkeitsfelder mit gespeichert werden
         stellenanzeigeRepository.save(s1);
-        stellenanzeigeRepository.save(s2);
-        int idS1 = s1.getStellenanzeigeId();
-        int idS2 = s2.getStellenanzeigeId();
-        int idU1 = unternehmen1.getUnternehmenId();
-        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(idS1).get();
-        Stellenanzeige awaitS2 = stellenanzeigeRepository.findById(idS2).get();
+        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(s1.getId()).get();
 
 
-        assertEquals(awaitS1.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
-        assertEquals(awaitS2.getErsteller().getUnternehmenId(), unternehmen1.getUnternehmenId());
-        assertTrue(unternehmenRepository.existsById(idU1));
 
-        int idU12 = awaitS2.getErsteller().getUnternehmenId();
+        //Referenzen Prüfen
+        List<Taetigkeitsfeld> awaitTaetigkeitsfelder = s1.getTaetigkeitsfelder();
+        assertEquals(awaitTaetigkeitsfelder.get(0), awaitT1);
+        assertEquals(awaitTaetigkeitsfelder.get(1), awaitT2);
+
+        List<Stellenanzeige> awaitStellenanzeigenT1 = awaitT1.getStellenanzeigen();
+        List<Stellenanzeige> awaitStellenanzeigenT2 = awaitT2.getStellenanzeigen();
+
+        assertEquals(awaitStellenanzeigenT1.get(0),s1);
+        assertEquals(awaitStellenanzeigenT2.get(0),s1);
 
         //Löschen
-        stellenanzeigeRepository.deleteById(idS1);
-
-
-
-        assertEquals(false, stellenanzeigeRepository.existsById(idS1));
-        assertEquals(false, stellenanzeigeRepository.existsById(idS2));
-        assertEquals(false, unternehmenRepository.existsById(idU12));
-
-
+        stellenanzeigeRepository.deleteById(s1.getId());
+        //Taetigkeitsfelder dürfen nicht mit gelöscht sein
+        assertEquals(true,taetigkeitsfeldRepository.existsById(t1.getBezeichnung()));
+        assertEquals(true,taetigkeitsfeldRepository.existsById(t2.getBezeichnung()));
+        taetigkeitsfeldRepository.deleteById(t1.getBezeichnung());
+        taetigkeitsfeldRepository.deleteById(t2.getBezeichnung());
+        assertEquals(false, stellenanzeigeRepository.existsById(s1.getId()));
+        assertEquals(false, taetigkeitsfeldRepository.existsById(t1.getBezeichnung()));
+        assertEquals(false, taetigkeitsfeldRepository.existsById(t2.getBezeichnung()));
 
 
     }
-  /*  @Test
-    public void testFavourisiert() {
-        student1.setStellenanzeigenFavourisiert(List.of(s2,s3));
-        int idStud1 = student1.getStudentId();
 
+    @Test
+    public void testBewerbungen(){
+        unternehmenRepository.save(unternehmen1);
         studentRepository.save(student1);
-        Student student1Test = studentRepository.findById(idStud1).get();
-        assertEquals(student1.getStudentId(), student1Test.getStudentId());
+        stellenanzeigeRepository.save(s1);
+        Bewerbung b1 = Bewerbung.builder()
+                .student(student1)
+                .stellenanzeige(s1)
+                .datum(LocalDate.now())
+                .build();
 
-        assertEquals(true, stellenanzeigeRepository.existsById(s2.getStellenanzeigeId()));
-        assertEquals(true, stellenanzeigeRepository.existsById(s2.getStellenanzeigeId()));
+        Bewerbung b2 = Bewerbung.builder()
+                .student(student1)
+                .stellenanzeige(s1)
+                .datum(LocalDate.now())
+                .build();
+
+        assertEquals(true,stellenanzeigeRepository.existsById(s1.getId()));
+
+        bewerbungRepository.save(b1);
+        bewerbungRepository.save(b2);
+
+
+        Bewerbung awaitB1 = bewerbungRepository.findById(b1.getId()).get();
+        Bewerbung awaitB2 = bewerbungRepository.findById(b2.getId()).get();
+
+        //Zuweisen von den Bewerbungen zu s1
+        s1.addBewerbung(b1);
+        s1.addBewerbung(b2);
+
+        List<Bewerbung> awaitBewerbungen = s1.getBewerbungen();
+        assertEquals(awaitB1.getId(),awaitBewerbungen.get(0).getId());
+        assertEquals(awaitB2.getId(),awaitBewerbungen.get(1).getId());
+
+        Stellenanzeige awaitStelleB1 = awaitB1.getStellenanzeige();
+        Stellenanzeige awaitStelleB2 = awaitB2.getStellenanzeige();
+
+        assertEquals(awaitStelleB1.getId(),s1.getId());
+        assertEquals(awaitStelleB2.getId(),s1.getId());
+
+        //Löschen: Bewerbungen werden mitgelöscht, wegen cascadeTypeAll
+        stellenanzeigeRepository.deleteById(s1.getId());
+        assertEquals(false, stellenanzeigeRepository.existsById(s1.getId()));
+        assertEquals(false, bewerbungRepository.existsById(b1.getId()));
+        assertEquals(false, bewerbungRepository.existsById(b2.getId()));
+
+
+        assertEquals(true,studentRepository.existsById(student1.getId()));
+        studentRepository.deleteById(student1.getId());
+        assertEquals(false, studentRepository.existsById(student1.getId()));
+
+        assertEquals(true,unternehmenRepository.existsById(unternehmen1.getId()));
+        unternehmenRepository.deleteById(unternehmen1.getId());
+        assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
+
+
+
+
+
 
 
     }
-    @Test
-    public void testTaetigkeiten() {
 
-    }
 
-   */
+
+
+
 }

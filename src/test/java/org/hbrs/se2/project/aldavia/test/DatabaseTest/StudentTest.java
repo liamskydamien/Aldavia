@@ -39,7 +39,7 @@ public class StudentTest {
         @Autowired
         private BewerbungRepository bewerbungRepository;
         @Autowired
-        private StellenanzeigeRepsitory stellenanzeigeRepository;
+        private StellenanzeigeRepository stellenanzeigeRepository;
         @Autowired
         private UnternehmenRepository unternehmenRepository;
 

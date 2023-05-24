@@ -1,28 +1,29 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
+import lombok.*;
+
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public interface StudentProfileDTO extends ProfileDTO {
-    String getVorname();
-    String getNachname();
-    String getMatrikelNummer();
-    String getStudiengang();
-    LocalDate getStudienbeginn();
-    LocalDate getGeburtsdatum();
-    String getEmail();
-
-    String getTelefonnummer();
-    String getBeschreibung();
-
-    List<KenntnisDTO> getKenntnisse();
-
-    List<QualifikationsDTO> getQualifikationen();
-
-    List<SpracheDTO> getSprachen();
-
-    List<TaetigkeitsfeldDTO> getTaetigkeitsfelder();
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class StudentProfileDTO{
+    private String vorname;
+    private String nachname;
+    private String matrikelNummer;
+    private String studiengang;
+    private LocalDate studienbeginn;
+    private LocalDate geburtsdatum;
+    private List<KenntnisDTO> kenntnisse;
+    private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
+    private List<QualifikationsDTO> qualifikationen;
+    private String lebenslauf;
+    private String email;
+    private String telefonnummer;
+    private String profilbild;
+    private List<SpracheDTO> sprachen;
+    private String beschreibung;
 }

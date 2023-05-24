@@ -16,6 +16,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Stellenanzeige {
 
     @Id
@@ -39,7 +40,7 @@ public class Stellenanzeige {
     private LocalDate start;
 
     @Basic
-    @Column(name = "ende")
+    @Column(name = "ende", nullable = false)
     private LocalDate ende;
 
     @Basic
@@ -56,15 +57,14 @@ public class Stellenanzeige {
 
     // stellenanzeige_taeitgkeitsfeld
 
-    @ManyToMany
+    @ManyToMany()
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
     @JoinTable(
             name = "stellenanzeige_qualifikation",
-            schema = "aldavia_new",
             joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false)
-
+            inverseJoinColumns = @JoinColumn(name = "taetigkeitsfeld_id", referencedColumnName = "bezeichnung", nullable = false),
+            schema = "test_schema"
     )
     public List<Taetigkeitsfeld> getTaetigkeitsbereiche() {
         return taetigkeitsfelder;
@@ -89,14 +89,14 @@ public class Stellenanzeige {
     }
 
     // stellenanzeige_hat_bewerbungen
-    @OneToMany( cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "stellenanzeige", cascade = CascadeType.ALL)
     private List<Bewerbung> bewerbungen;
 
     @JoinTable(
             name = "stellenanzeige_bewerbung",
-            schema = "aldavia_new",
-            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false)
+            joinColumns = @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bewerbung_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
     )
     public List<Bewerbung> getBewerbungen() {
         return bewerbungen;
@@ -126,10 +126,7 @@ public class Stellenanzeige {
     private Unternehmen unternehmen_stellenanzeigen;
 
     public void setUnternehmen(Unternehmen unternehmen) {
-        if(this.unternehmen_stellenanzeigen == unternehmen) {
-            return;
-        }
-        else if (this.unternehmen_stellenanzeigen != null) {
+        if (this.unternehmen_stellenanzeigen != null && !(this.unternehmen_stellenanzeigen.equals(unternehmen))) {
             this.unternehmen_stellenanzeigen.removeStellenanzeige(this);
         }
         this.unternehmen_stellenanzeigen = unternehmen;

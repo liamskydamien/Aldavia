@@ -34,7 +34,7 @@ public class Sprache {
     @ManyToMany(mappedBy = "sprachen")
     private List<Student> students;
 
-    public void addStudent(Student student) {
+    public Sprache addStudent(Student student) {
         if (students == null) {
             students = new ArrayList<>();
         }
@@ -42,16 +42,18 @@ public class Sprache {
             this.students.add(student);
             student.addSprache(this);
         }
+        return this;
     }
 
-    public void removeStudent(Student student) {
+    public Sprache removeStudent(Student student) {
         if (students == null) {
-            return;
+            return this;
         }
         if (this.students.contains(student)) {
             this.students.remove(student);
             student.removeSprache(this);
         }
+        return this;
     }
 
     // Methoden
