@@ -74,7 +74,7 @@ public class Unternehmen {
 
     // unternehmen_hat_adresse
 
-    @ManyToMany(mappedBy = "unternehmen")
+    @ManyToMany()
     private List<Adresse> adressen;
 
     @JoinTable(

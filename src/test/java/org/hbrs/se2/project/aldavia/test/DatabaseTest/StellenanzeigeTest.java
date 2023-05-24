@@ -18,10 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Transactional
 public class StellenanzeigeTest {
-    //TODO: Fix this test
-    //TODO: Add round trip test for Stellenanzeige
-    //TODO: Test Constraints if unternehmen gets deleted (cascade) -> Stellenanzeige should get deleted too
-    //TODO: Test add... and remove... methods
 
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;
@@ -40,6 +36,7 @@ public class StellenanzeigeTest {
 
     @Autowired
     BewerbungRepository bewerbungRepository;
+
 
     Taetigkeitsfeld t1 = Taetigkeitsfeld.builder()
             .bezeichnung("Softare Entwicklung")
@@ -191,13 +188,14 @@ public class StellenanzeigeTest {
         taetigkeitsfeldRepository.save(t2);
         unternehmenRepository.save(unternehmen1);
 
-        Taetigkeitsfeld awaitT1 = taetigkeitsfeldRepository.findById(t1.getId()).get();
-        Taetigkeitsfeld awaitT2 = taetigkeitsfeldRepository.findById(t2.getId()).get();
+
+        Taetigkeitsfeld awaitT1 = taetigkeitsfeldRepository.findById(t1.getBezeichnung()).get();
+        Taetigkeitsfeld awaitT2 = taetigkeitsfeldRepository.findById(t2.getBezeichnung()).get();
         assertEquals(awaitT1.getBezeichnung(),t1.getBezeichnung());
         assertEquals(awaitT2.getBezeichnung(),t2.getBezeichnung());
 
-        s1.addTaetigkeitsfeld(t1);
-        s1.addTaetigkeitsfeld(t2);
+        s1.addTaetigkeitsfeld(awaitT1);
+        s1.addTaetigkeitsfeld(awaitT2);
 
         //Prüfen ob Taetigkeitsfelder mit gespeichert werden
         stellenanzeigeRepository.save(s1);
@@ -219,13 +217,13 @@ public class StellenanzeigeTest {
         //Löschen
         stellenanzeigeRepository.deleteById(s1.getId());
         //Taetigkeitsfelder dürfen nicht mit gelöscht sein
-        assertEquals(true,taetigkeitsfeldRepository.existsById(t1.getId()));
-        assertEquals(true,taetigkeitsfeldRepository.existsById(t2.getId()));
-        taetigkeitsfeldRepository.deleteById(t1.getId());
-        taetigkeitsfeldRepository.deleteById(t2.getId());
+        assertEquals(true,taetigkeitsfeldRepository.existsById(t1.getBezeichnung()));
+        assertEquals(true,taetigkeitsfeldRepository.existsById(t2.getBezeichnung()));
+        taetigkeitsfeldRepository.deleteById(t1.getBezeichnung());
+        taetigkeitsfeldRepository.deleteById(t2.getBezeichnung());
         assertEquals(false, stellenanzeigeRepository.existsById(s1.getId()));
-        assertEquals(false, taetigkeitsfeldRepository.existsById(t1.getId()));
-        assertEquals(false, taetigkeitsfeldRepository.existsById(t2.getId()));
+        assertEquals(false, taetigkeitsfeldRepository.existsById(t1.getBezeichnung()));
+        assertEquals(false, taetigkeitsfeldRepository.existsById(t2.getBezeichnung()));
 
 
     }

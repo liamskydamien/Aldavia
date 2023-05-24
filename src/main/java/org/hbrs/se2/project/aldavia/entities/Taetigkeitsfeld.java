@@ -17,11 +17,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Taetigkeitsfeld {
 
+
     @Id
-    @GeneratedValue
-    private int id;
-
-
     @Column(name = "bezeichnung", unique = true, nullable = false)
     private String bezeichnung;
 
