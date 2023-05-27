@@ -4,6 +4,8 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
+import org.hbrs.se2.project.aldavia.repository.AdresseRepository;
+import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +21,7 @@ public class UnternehmenControl {
         Optional<Unternehmen> unternehmen = unternehmenRepository.findByName(unternehmenName);
         if (unternehmen.isPresent()) {
             return unternehmen.get();
-        }
-        else {
+        } else {
             throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
         }
     }
@@ -30,45 +31,45 @@ public class UnternehmenControl {
 
             User user = unternehmen.getUser();
 
-            if(dto.getName() != null) {
+            if (dto.getName() != null) {
                 unternehmen.setName(dto.getName());
             }
 
-            if(dto.getAdressen() != null) {
+            if (dto.getAdressen() != null) {
                 if (!(dto.getAdressen().equals(unternehmen.getAdressen()))) {
-                    for(Adresse a: unternehmen.getAdressen()) {
+                    for (Adresse a : unternehmen.getAdressen()) {
                         unternehmen.removeAdresse(a);
                     }
-                    for(Adresse a: dto.getAdressen()) {
+                    for (Adresse a : dto.getAdressen()) {
                         unternehmen.addAdresse(a);
                     }
                 }
             }
 
-            if(dto.getStellenanzeigen() != null) {
-                if(!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
-                    for(Stellenanzeige s: unternehmen.getStellenanzeigen()) {
+            if (dto.getStellenanzeigen() != null) {
+                if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
+                    for (Stellenanzeige s : unternehmen.getStellenanzeigen()) {
                         unternehmen.removeStellenanzeige(s);
                     }
-                    for(Stellenanzeige s: dto.getStellenanzeigen()) {
+                    for (Stellenanzeige s : dto.getStellenanzeigen()) {
                         unternehmen.addStellenanzeige(s);
                     }
                 }
             }
 
-            if(dto.getAp_nachname() != null) {
+            if (dto.getAp_nachname() != null) {
                 if (!dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {
                     unternehmen.setAp_nachname(dto.getAp_nachname());
                 }
             }
 
-            if(dto.getAp_vorname() != null) {
+            if (dto.getAp_vorname() != null) {
                 if (!dto.getAp_vorname().equals(unternehmen.getAp_vorname())) {
                     unternehmen.setAp_vorname(dto.getAp_vorname());
                 }
             }
 
-            if(dto.getWebside() != null) {
+            if (dto.getWebside() != null) {
                 unternehmen.setWebseite(dto.getWebside());
             }
 
@@ -88,15 +89,30 @@ public class UnternehmenControl {
                 user.setProfilePicture(dto.getProfilbild());
             }
 
-            if(dto.getPassword() != null) {
+            if (dto.getPassword() != null) {
                 user.setPassword(dto.getPassword());
             }
 
 
             unternehmenRepository.save(unternehmen);
-        }
-        catch (Exception e) {
-            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+        } catch (Exception e) {
+            throw new ProfileException("Error while updating Unternehmen information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
         }
     }
+    public void deleteUnternehmen(Unternehmen unternehmen) throws ProfileException {
+        if (unternehmen.getStellenanzeigen() != null) {
+            for (Stellenanzeige s : unternehmen.getStellenanzeigen()) {
+                unternehmen.removeStellenanzeige(s);
+            }
+        }
+
+        if(unternehmen.getAdressen() != null) {
+            for (Adresse a : unternehmen.getAdressen()) {
+                unternehmen.removeAdresse(a);
+            }
+        }
+        unternehmenRepository.delete(unternehmen);
+    }
+
 }
+

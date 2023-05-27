@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 public class UnternehmenProfileDTO {
     private String name;
-
     private String password;
     private String beschreibung;
     private String ap_vorname;

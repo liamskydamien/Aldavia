@@ -74,7 +74,7 @@ public class Unternehmen {
 
     // unternehmen_hat_adresse
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Adresse> adressen;
 
     @JoinTable(
