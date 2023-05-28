@@ -21,8 +21,9 @@ public class UnternehmenProfileDTO {
     private String email;
     private String telefonnummer;
     private String profilbild;
-    private List<SpracheDTO> sprachen;
     private List<Stellenanzeige> stellenanzeigen;
     private List<Adresse> adressen;
+
+    private String profilePicture;
 
 }

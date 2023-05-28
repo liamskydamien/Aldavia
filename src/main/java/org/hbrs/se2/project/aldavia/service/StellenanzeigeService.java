@@ -1,7 +1,6 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class StellenanzeigeControl {
+public class StellenanzeigeService {
 
     @Autowired
     StellenanzeigeRepository stellenanzeigeRepository;

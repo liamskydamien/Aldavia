@@ -1,10 +1,8 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.AdresseDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.repository.AdresseRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class AdresseControl {
+public class AdresseService {
 
     @Autowired
     AdresseRepository adresseRepository;
