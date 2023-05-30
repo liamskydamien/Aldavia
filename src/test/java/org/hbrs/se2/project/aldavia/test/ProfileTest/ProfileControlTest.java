@@ -1,7 +1,7 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.StudentControl;
-import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
+import org.hbrs.se2.project.aldavia.control.*;
+import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -30,6 +30,15 @@ public class ProfileControlTest {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private KenntnisseControl kenntnisseControl;
+
+    @Autowired
+    private SprachenControl sprachenControl;
+
+    @Autowired
+    private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
     private Student student;
     private ChangeStudentInformationDTO changeStudentInformationDTO;
@@ -63,16 +72,16 @@ public class ProfileControlTest {
 
         student.setUser(user);
 
-        kenntnis = Kenntnis.builder()
-                .bezeichnung("Java")
+        KenntnisDTO kenntnisDTO = KenntnisDTO.builder()
+                .name("Java")
                 .build();
 
-        taetigkeitsfeld = Taetigkeitsfeld.builder()
-                .bezeichnung("Software Entwicklung")
+        TaetigkeitsfeldDTO taetigkeitsfeldDTO = TaetigkeitsfeldDTO.builder()
+                .name("Software Entwicklung")
                 .build();
 
-        sprache = Sprache.builder()
-                .bezeichnung("Englisch")
+        SpracheDTO spracheDTO = SpracheDTO.builder()
+                .name("Englisch")
                 .level("C1")
                 .build();
 
@@ -85,6 +94,10 @@ public class ProfileControlTest {
                 .bis(LocalDate.of(2020, 7, 1))
                 .beschaftigungsverhaltnis("Praktikum")
                 .build();
+
+        kenntnis = kenntnisseControl.getKenntnis(kenntnisDTO);
+        taetigkeitsfeld = taetigkeitsfeldControl.getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        sprache = sprachenControl.getSprache(spracheDTO);
 
         student.addKenntnis(kenntnis);
         student.addTaetigkeitsfeld(taetigkeitsfeld);
@@ -296,7 +309,7 @@ public class ProfileControlTest {
     }
 
     @Test
-    public void addStudentInformation() throws ProfileException {
+    public void addStudentInformation() throws ProfileException, PersistenceException {
 
         User user = User.builder()
                 .userid("SaschaAldaFan")
@@ -365,11 +378,11 @@ public class ProfileControlTest {
         addKenntnisse.add(kenntnisDTOAdd);
 
 
-        // Build DeletionStudentInformationDTO
+        /*// Build DeletionStudentInformationDTO
         deletionStudentInformationDTO.setKenntnisse(null);
         deletionStudentInformationDTO.setQualifikationen(null);
         deletionStudentInformationDTO.setSprachen(null);
-        deletionStudentInformationDTO.setTaetigkeitsfelder(null);
+        deletionStudentInformationDTO.setTaetigkeitsfelder(null);*/
 
         // Build AddStudentInformationDTO
         addStudentInformationDTO.setKenntnisse(addKenntnisse);
@@ -384,8 +397,25 @@ public class ProfileControlTest {
                 .deletionStudentInformationDTO(deletionStudentInformationDTO)
                 .build();
 
+        StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
+                .email("sina.schmidt@aldavia-mail.de")
+                .vorname("Sina")
+                .nachname("Schmidt")
+                .geburtsdatum(LocalDate.of(2001, 1, 1))
+                .studiengang("Wirtschaftsinformatik")
+                .studienbeginn(LocalDate.of(2020, 1, 1))
+                .matrikelNummer("9012305678")
+                .lebenslauf("Ich bin der größe Sascha Alda Fan")
+                .beschreibung("Ich bin ein toller Student.")
+                .telefonnummer("0124123456789")
+                .kenntnisse(addKenntnisse)
+                .sprachen(addSprachen)
+                .qualifikationen(addQulifikationen)
+                .taetigkeitsfelder(addTaetigkeitsfelder)
+                .build();
 
-        studentProfileControl.createAndUpdateStudentProfile(updateStudentProfileDTO, student1.getUser().getUserid());
+
+        studentProfileControl.updateStudentProfile(newstudentProfileDTO, student1.getUser().getUserid());
 
 
         StudentProfileDTO studentProfileDTO = studentProfileControl.getStudentProfile(student1.getUser().getUserid());
@@ -395,7 +425,7 @@ public class ProfileControlTest {
         assertEquals(studentProfileDTO.getNachname(), student1.getNachname());
         assertEquals(studentProfileDTO.getGeburtsdatum(), changeStudentInformationDTO.getGeburtsdatum());
         assertEquals(studentProfileDTO.getStudiengang(), changeStudentInformationDTO.getStudiengang());
-        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn());
+        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
         assertEquals(studentProfileDTO.getMatrikelNummer(), changeStudentInformationDTO.getMatrikelnummer());
         assertEquals(studentProfileDTO.getLebenslauf(), changeStudentInformationDTO.getLebenslauf());
 

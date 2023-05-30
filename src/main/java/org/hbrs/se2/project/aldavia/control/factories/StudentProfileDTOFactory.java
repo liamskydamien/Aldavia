@@ -28,18 +28,29 @@ public class StudentProfileDTOFactory{
             List<QualifikationsDTO> qualifikationsDTOList = new ArrayList<>();
             List<SpracheDTO> spracheDTOList = new ArrayList<>();
             List<KenntnisDTO> kenntnisDTOList = new ArrayList<>();
-            if (!student.getKenntnisse().isEmpty()) {
-                kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
+            if (student.getSprachen() != null){
+                if (!student.getSprachen().isEmpty()) {
+                    spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+                }
             }
-            if (!student.getSprachen().isEmpty()) {
-                spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+            if (student.getKenntnisse() != null){
+                if (!student.getKenntnisse().isEmpty()) {
+                    kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
+                }
             }
-            if (!student.getTaetigkeitsfelder().isEmpty()) {
-                taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
+
+            if(student.getTaetigkeitsfelder() != null) {
+                if (!student.getTaetigkeitsfelder().isEmpty()) {
+                    taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
+                }
             }
-            if (!student.getQualifikationen().isEmpty()) {
-                qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
+
+            if(student.getQualifikationen() != null){
+                if (!student.getQualifikationen().isEmpty()) {
+                    qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
+                }
             }
+
             return StudentProfileDTO.builder()
                     .email(user.getEmail())
                     .vorname(student.getVorname())

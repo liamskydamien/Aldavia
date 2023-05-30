@@ -17,6 +17,13 @@ public class TaetigkeitsfeldControl {
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
 
+    public Taetigkeitsfeld getTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO){
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
+        return awaitTaetigkeitsfeld.orElse(taetigkeitsfeldRepository.save(Taetigkeitsfeld.builder()
+                .bezeichnung(taetigkeitsfeldDTO.getName())
+                .build()));
+    }
+
     /**
      * Add a Taetigkeitsfeld to a student
      * @param taetigkeitsfeldDTO The TaetigkeitsfeldDTO
