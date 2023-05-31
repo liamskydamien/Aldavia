@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-@Route(value = Globals.Pages.PROFILE_VIEW, layout = NeutralLayout.class)
+@Route(value = Globals.Pages.PROFILE_VIEW, layout = LoggedInStateLayout.class)
 @PageTitle("Profil")
 public class StudentProfileView extends Div implements HasUrlParameter<String> {
-    @Autowired
-    private StudentProfileControl studentProfileControl;
+
+    private final StudentProfileControl studentProfileControl;
 
     private final UI ui = UI.getCurrent();
 
@@ -47,7 +47,9 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
             throw new RuntimeException(e);
         }
     }
+    @Autowired
     public StudentProfileView(StudentProfileControl studentProfileControl){
+        this.studentProfileControl = studentProfileControl;
         addClassName("profile-view");
     }
 

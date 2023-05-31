@@ -30,7 +30,6 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @CssImport("./styles/views/main/main-view.css")
-@Route("main")
 //@PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
 public class AppView extends AppLayout implements BeforeEnterObserver {
