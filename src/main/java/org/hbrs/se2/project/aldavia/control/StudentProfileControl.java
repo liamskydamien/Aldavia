@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @Transactional
@@ -33,6 +34,7 @@ public class StudentProfileControl {
     private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+
 
     /**
      * Get the student profile of a student
