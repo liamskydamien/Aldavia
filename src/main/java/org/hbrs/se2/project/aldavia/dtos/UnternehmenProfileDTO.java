@@ -6,6 +6,8 @@ import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +24,7 @@ public class UnternehmenProfileDTO {
     private String telefonnummer;
     private String profilbild;
     private List<Stellenanzeige> stellenanzeigen;
-    private List<Adresse> adressen;
+    private Set<Adresse> adressen;
 
     private String profilePicture;
 

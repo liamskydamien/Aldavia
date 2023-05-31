@@ -23,4 +23,6 @@ public class UserDTOImpl implements UserDTO {
     private String phone;
     private String profilePicture;
     private List<RolleDTO> roles;
+
+
 }

@@ -14,4 +14,5 @@ public interface UnternehmenRepository extends JpaRepository<Unternehmen, Intege
 
 
 
+
 }

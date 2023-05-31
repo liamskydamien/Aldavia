@@ -4,6 +4,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
+import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +15,22 @@ public class UnternehmenService {
     @Autowired
     UnternehmenRepository unternehmenRepository;
 
-    public Unternehmen getUnternehmen(String unternehmenName) throws ProfileException {
-        Optional<Unternehmen> unternehmen = unternehmenRepository.findByName(unternehmenName);
-        if (unternehmen.isPresent()) {
-            return unternehmen.get();
+    @Autowired
+    UserRepository userRepository;
+
+    public Unternehmen getUnternehmen(String userName) throws ProfileException {
+        Optional<User> user = userRepository.findByUserid(userName);
+        if (user.isPresent()) {
+            Optional<Unternehmen> unternehmen = unternehmenRepository.findByUser(user.get());
+            if (unternehmen.isPresent()) {
+                return unternehmen.get();
+            } else {
+                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            }
         } else {
-            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Unternehmen nicht durch User gefunden", ProfileException.ProfileExceptionType.ProfileNotFound);
         }
+
     }
 
     public void updateUnternehmenInformation(Unternehmen unternehmen, UnternehmenProfileDTO dto) throws ProfileException {
@@ -71,7 +81,7 @@ public class UnternehmenService {
             }
 
             if (dto.getBeschreibung() != null) {
-                user.setBeschreibung(dto.getBeschreibung());
+                unternehmen.setBeschreibung(dto.getBeschreibung());
             }
 
             if (dto.getEmail() != null) {
@@ -93,7 +103,7 @@ public class UnternehmenService {
 
             unternehmenRepository.save(unternehmen);
         } catch (Exception e) {
-            throw new ProfileException("Error while updating Unternehmen information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw e;
         }
     }
     public void deleteUnternehmen(Unternehmen unternehmen) throws ProfileException {

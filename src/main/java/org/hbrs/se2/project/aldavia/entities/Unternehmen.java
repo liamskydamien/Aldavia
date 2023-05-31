@@ -3,9 +3,7 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "unternehmen", schema = "aldavia_new")
@@ -74,8 +72,8 @@ public class Unternehmen {
 
     // unternehmen_hat_adresse
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Adresse> adressen;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Adresse> adressen;
 
     @JoinTable(
             name = "unternehmen_hat_adresse",
@@ -83,13 +81,13 @@ public class Unternehmen {
             inverseJoinColumns = @JoinColumn(name = "adresse_id", referencedColumnName = "id", nullable = false),
             schema = "test_schema"
     )
-    public List<Adresse> getAdressen() {
+    public Set<Adresse> getAdressen() {
         return adressen;
     }
 
     public void addAdresse(Adresse adresse) {
         if (adressen == null){
-            adressen = new ArrayList<>();
+            adressen = new HashSet<Adresse>();
         }
         if(!adressen.contains(adresse)) {
             adressen.add(adresse);

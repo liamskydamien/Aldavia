@@ -22,6 +22,7 @@ public class UnternehmenProfileDTOFactory {
         User user = unternehmen.getUser();
 
         UnternehmenProfileDTO dto = UnternehmenProfileDTO.builder()
+                .name(unternehmen.getName())
                 .email(user.getEmail())
                 .beschreibung(user.getBeschreibung())
                 .telefonnummer(user.getPhone())
