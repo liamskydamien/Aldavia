@@ -4,6 +4,7 @@ import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,21 +53,21 @@ public class StudentProfileDTOFactory{
             }
 
             return StudentProfileDTO.builder()
-                    .email(user.getEmail())
-                    .vorname(student.getVorname())
-                    .nachname(student.getNachname())
-                    .matrikelNummer(student.getMatrikelNummer())
-                    .studiengang(student.getStudiengang())
-                    .studienbeginn(student.getStudienbeginn())
-                    .geburtsdatum(student.getGeburtsdatum())
+                    .email(user.getEmail() != null ? user.getEmail() : "")
+                    .vorname(student.getVorname() != null ? student.getVorname() : "")
+                    .nachname(student.getNachname() != null ? student.getNachname() : "")
+                    .matrikelNummer(student.getMatrikelNummer() != null ? student.getMatrikelNummer() : "")
+                    .studiengang(student.getStudiengang() != null ? student.getStudiengang() : "")
+                    .studienbeginn(student.getStudienbeginn() != null ? student.getStudienbeginn() : LocalDate.now())
+                    .geburtsdatum(student.getGeburtsdatum() != null ? student.getGeburtsdatum() : LocalDate.now())
                     .kenntnisse(kenntnisDTOList)
                     .taetigkeitsfelder(taetigkeitsfeldDTOList)
-                    .lebenslauf(student.getLebenslauf())
-                    .telefonnummer(user.getPhone())
-                    .profilbild(user.getProfilePicture())
+                    .lebenslauf(student.getLebenslauf() != null ? student.getLebenslauf() : "")
+                    .telefonnummer(user.getPhone() != null ? user.getPhone() : "")
+                    .profilbild(user.getProfilePicture() != null ? user.getProfilePicture() : "")
                     .sprachen(spracheDTOList)
                     .qualifikationen(qualifikationsDTOList)
-                    .beschreibung(user.getBeschreibung())
+                    .beschreibung(user.getBeschreibung() != null ? user.getBeschreibung() : "")
                     .build();
         }
         catch (Exception e){

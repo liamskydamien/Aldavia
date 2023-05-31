@@ -106,7 +106,7 @@ public class LoggedInStateLayout extends AppLayout {
         Button button = new Button("Erstellen");
         Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", StudentProfileView.class, iconUser),
+                createTabWithIcon("Profile", CompanyMainView.class, iconUser),
                 createButtonInTab(button, CreateStellenanzeigeView.class)
         };
         tabs[0].setId("unternehmen-srofil-tab");
