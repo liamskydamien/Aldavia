@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = LoggedInStateLayout.class)
 @PageTitle("Profil")
-public class ProfileView extends Div implements HasUrlParameter<String> {
+public class StudentProfileView extends Div implements HasUrlParameter<String> {
 
     @Autowired
     private StudentProfileControl studentProfileControl;
@@ -34,7 +34,7 @@ public class ProfileView extends Div implements HasUrlParameter<String> {
             add(new Text("Fehler beim Laden des Profils"));
         }
     }
-    public ProfileView(StudentProfileControl studentProfileControl) {
+    public StudentProfileView(StudentProfileControl studentProfileControl) {
         addClassName("profile-view");
         add(title);
     }
