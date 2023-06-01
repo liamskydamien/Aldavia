@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -19,8 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-@Route(value = Globals.Pages.PROFILE_VIEW, layout = LoggedInStateLayout.class)
+@Route(value = Globals.Pages.PROFILE_VIEW, layout = NeutralLayout.class)
 @PageTitle("Profil")
+@CssImport("./styles/views/profile/studentProfile.css")
 public class StudentProfileView extends Div implements HasUrlParameter<String> {
 
     private final StudentProfileControl studentProfileControl;
@@ -28,9 +30,6 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private final UI ui = UI.getCurrent();
 
     private StudentProfileDTO studentProfileDTO;
-    private H1 name = new H1();
-    private H2 title = new H2();
-    private Text description = new Text("");
     private Div profilePicture = new Div();
 
 
@@ -40,8 +39,11 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
         try {
             studentProfileDTO = studentProfileControl.getStudentProfile(parameter);
             ui.access(() -> {
-                add(createIntroductionLayout());
-                add(createBottomLayout());
+                Div profileWrapper = new Div();
+                profileWrapper.addClassName("profile-wrapper");
+                profileWrapper.add(createIntroductionLayout());
+                profileWrapper.add(createBottomLayout());
+                add(profileWrapper);
             });
         } catch (ProfileException e) {
             throw new RuntimeException(e);
@@ -79,6 +81,7 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private HorizontalLayout createIntroductionLayout(){
         HorizontalLayout introductionLayout = new HorizontalLayout();
         introductionLayout.addClassName("introduction");
+        introductionLayout.addClassName("card");
         introductionLayout.add(profilePicture);
         introductionLayout.add(createDescriptionLayout());
         return introductionLayout;
@@ -87,23 +90,24 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private VerticalLayout createDescriptionLayout(){
         VerticalLayout descriptionLayout = new VerticalLayout();
         descriptionLayout.addClassName("description");
-        name = new H1(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
-        title = new H2(studentProfileDTO.getStudiengang());
-        description = new Text(studentProfileDTO.getBeschreibung());
+        H1 name = new H1(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
+        H2 title = new H2(studentProfileDTO.getStudiengang());
+        Text description = new Text(studentProfileDTO.getBeschreibung());
         descriptionLayout.add(name);
         descriptionLayout.add(title);
         descriptionLayout.add(description);
+        descriptionLayout.add(createInteressenLayout());
         return descriptionLayout;
     }
 
     private VerticalLayout createAboutLayout(){
         VerticalLayout aboutLayout = new VerticalLayout();
         aboutLayout.addClassName("about");
+        aboutLayout.addClassName("card");
         aboutLayout.add(new H2("Über mich"));
         aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.CALENDAR_O), studentProfileDTO.getGeburtsdatum().toString()));
         aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.PHONE), studentProfileDTO.getTelefonnummer()));
         aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.ENVELOPE_O), studentProfileDTO.getEmail()));
-        aboutLayout.add(createInteressenLayout());
         return aboutLayout;
     }
 
@@ -127,6 +131,7 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private VerticalLayout createQualifikationsLayout(){
         VerticalLayout qualifikationsLayout = new VerticalLayout();
         qualifikationsLayout.addClassName("qualifikationen");
+        qualifikationsLayout.addClassName("card");
         qualifikationsLayout.add(new H2("Qualifikationen"));
         for (QualifikationsDTO qualifikationsDTO : studentProfileDTO.getQualifikationen()){
             qualifikationsLayout.add(createQualifikation(qualifikationsDTO));
@@ -155,14 +160,15 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private HorizontalLayout createVonBis(String von, String bis){
         HorizontalLayout vonBisLayout = new HorizontalLayout();
         vonBisLayout.addClassName("von-bis");
-        vonBisLayout.add(new Label(von));
-        vonBisLayout.add(new Label(bis));
+        vonBisLayout.add(new Label("Von: " + von));
+        vonBisLayout.add(new Label("Bis: " + bis));
         return vonBisLayout;
     }
 
     private VerticalLayout createKenntnisseLayout(){
         VerticalLayout kenntnisseLayout = new VerticalLayout();
         kenntnisseLayout.addClassName("kenntnisse");
+        kenntnisseLayout.addClassName("card");
         kenntnisseLayout.add(new H2("Kenntnisse"));
         for (KenntnisDTO kenntnis : studentProfileDTO.getKenntnisse()){
             kenntnisseLayout.add(createKenntnis(kenntnis.getName()));
@@ -180,6 +186,7 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private VerticalLayout createSprachenLayout(){
         VerticalLayout sprachenLayout = new VerticalLayout();
         sprachenLayout.addClassName("sprachen");
+        sprachenLayout.addClassName("card");
         sprachenLayout.add(new H2("Sprachen"));
         for (SpracheDTO sprache : studentProfileDTO.getSprachen()){
             sprachenLayout.add(createSprache(sprache));
