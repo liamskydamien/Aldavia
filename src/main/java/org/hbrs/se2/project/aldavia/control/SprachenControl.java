@@ -18,6 +18,14 @@ public class SprachenControl {
     @Autowired
     private SprachenRepository sprachenRepository;
 
+    public Sprache getSprache(SpracheDTO spracheDTO){
+        Optional<Sprache> awaitSprache = sprachenRepository.findByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel());
+        return awaitSprache.orElse(sprachenRepository.save(Sprache.builder()
+                .bezeichnung(spracheDTO.getName())
+                .level(spracheDTO.getLevel())
+                .build()));
+    }
+
     /**
      * Create a new Sprache or return an existing one
      * @param spracheDTO The SpracheDTO

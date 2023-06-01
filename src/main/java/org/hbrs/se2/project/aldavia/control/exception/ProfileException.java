@@ -5,7 +5,7 @@ public class ProfileException extends Exception {
         ProfileNotFound,
         DatabaseConnectionFailed,
         ProfileNotCreated,
-        ProfileNotUpdated
+        StudentDoesNotExist, ProfileNotUpdated
     }
 
     private final ProfileExceptionType profileExceptionType;

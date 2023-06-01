@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views;
 
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -16,26 +15,15 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.RouterLink;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
-import org.hbrs.se2.project.aldavia.control.StudentControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
-
-
 
 
 @CssImport("./styles/views/navbar/navbar.css")
-
 public class LoggedInStateLayout extends AppLayout {
 
     //@Autowired
@@ -107,7 +95,7 @@ public class LoggedInStateLayout extends AppLayout {
 
         Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", ProfileView.class, iconUser)
+                createTabWithIcon("Profile", StudentProfileView.class, iconUser)
         };
         tabs[0].setId("student-srofil-tab");
         return tabs;
@@ -118,7 +106,7 @@ public class LoggedInStateLayout extends AppLayout {
         Button button = new Button("Erstellen");
         Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", ProfileView.class, iconUser),
+                createTabWithIcon("Profile", CompanyMainView.class, iconUser),
                 createButtonInTab(button, CreateStellenanzeigeView.class)
         };
         tabs[0].setId("unternehmen-srofil-tab");

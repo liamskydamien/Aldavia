@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @Transactional
@@ -32,6 +34,7 @@ public class StudentProfileControl {
     private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+
 
     /**
      * Get the student profile of a student
@@ -147,4 +150,92 @@ public class StudentProfileControl {
             throw new RuntimeException(ex);
         }
     }
+
+    public void updateStudentProfile(StudentProfileDTO updatedVersion, String username) throws ProfileException, PersistenceException {
+        StudentProfileDTO oldVersion = getStudentProfile(username);
+        if (oldVersion == null) {
+            throw new ProfileException("Student does not exist", ProfileException.ProfileExceptionType.StudentDoesNotExist);
+        }
+        else {
+            System.out.println("Getting Student from Database with username: " + username);
+
+            Student student = studentControl.getStudent(username);
+
+            System.out.println("Found Student: " + student.getVorname() + " " + student.getNachname());
+
+            // Change Data in Student
+            student.setVorname(updatedVersion.getVorname());
+            student.setNachname(updatedVersion.getNachname());
+            student.setGeburtsdatum(updatedVersion.getGeburtsdatum());
+            student.getUser().setEmail(updatedVersion.getEmail());
+            student.setStudiengang(updatedVersion.getStudiengang());
+            student.setStudienbeginn(updatedVersion.getStudienbeginn());
+            student.setMatrikelNummer(updatedVersion.getMatrikelNummer());
+            student.setLebenslauf(updatedVersion.getLebenslauf());
+            student.getUser().setBeschreibung(updatedVersion.getBeschreibung());
+            student.getUser().setPhone(updatedVersion.getTelefonnummer());
+            student.getUser().setProfilePicture(updatedVersion.getProfilbild());
+
+            // Remove inputs from Lists
+
+            List<Kenntnis> kenntnisse = student.getKenntnisse() != null? student.getKenntnisse() : new ArrayList<>();
+            List<Sprache> sprachen = student.getSprachen() != null? student.getSprachen() : new ArrayList<>();
+            List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder() != null? student.getTaetigkeitsfelder() : new ArrayList<>();
+            List<Qualifikation> qualifikationen = student.getQualifikationen() != null? student.getQualifikationen() : new ArrayList<>();
+
+            // Remove Kenntnisse
+            for (Kenntnis kenntnis : kenntnisse) {
+                student.removeKenntnis(kenntnis);
+            }
+
+            // Remove Sprachen
+            for (Sprache sprache : sprachen) {
+                student.removeSprache(sprache);
+            }
+
+            // Remove Taetigkeitsfelder
+            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
+                student.removeTaetigkeitsfeld(taetigkeitsfeld);
+            }
+
+            // Remove Qualifikationen
+            for (Qualifikation qualifikation : qualifikationen) {
+                student.removeQualifikation(qualifikation);
+            }
+
+            // Add Kenntnisse
+            if (updatedVersion.getKenntnisse() != null) {
+                for (KenntnisDTO kenntnisDTO : updatedVersion.getKenntnisse()) {
+                    kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
+                }
+            }
+
+            // Add Sprachen
+            if (updatedVersion.getSprachen() != null) {
+                for (SpracheDTO spracheDTO : updatedVersion.getSprachen()) {
+                    sprachenControl.addStudentToSprache(spracheDTO, student);
+                }
+            }
+
+            // Add Taetigkeitsfelder
+            if(updatedVersion.getTaetigkeitsfelder() != null) {
+                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : updatedVersion.getTaetigkeitsfelder()) {
+                    taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+                }
+            }
+
+            // Add Qualifikationen
+            if (updatedVersion.getQualifikationen() != null) {
+                for (QualifikationsDTO qualifikationsDTO : updatedVersion.getQualifikationen()) {
+                    qualifikationenControl.addUpdateQualifikation(qualifikationsDTO, student);
+                }
+            }
+            System.out.println("Updated Student: " + student.getVorname() + " " + student.getNachname());
+
+            // Save student information
+            studentControl.createOrUpdateStudent(student);
+            System.out.println("Saved Student in Database: " + student.getVorname() + " " + student.getNachname());
+        }
+    }
+
 }
