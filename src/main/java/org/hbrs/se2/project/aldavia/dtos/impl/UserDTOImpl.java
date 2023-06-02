@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.aldavia.dtos.impl;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hbrs.se2.project.aldavia.dtos.RolleDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 
@@ -9,6 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTOImpl implements UserDTO {
 
     private int id;

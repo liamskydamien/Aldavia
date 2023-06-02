@@ -7,6 +7,7 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentProfileDTOFactory{
 
@@ -31,24 +32,24 @@ public class StudentProfileDTOFactory{
             List<KenntnisDTO> kenntnisDTOList = new ArrayList<>();
             if (student.getSprachen() != null){
                 if (!student.getSprachen().isEmpty()) {
-                    spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+                    spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
                 }
             }
             if (student.getKenntnisse() != null){
                 if (!student.getKenntnisse().isEmpty()) {
-                    kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
+                    kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
                 }
             }
 
             if(student.getTaetigkeitsfelder() != null) {
                 if (!student.getTaetigkeitsfelder().isEmpty()) {
-                    taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
+                    taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
                 }
             }
 
             if(student.getQualifikationen() != null){
                 if (!student.getQualifikationen().isEmpty()) {
-                    qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
+                    qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
                 }
             }
 

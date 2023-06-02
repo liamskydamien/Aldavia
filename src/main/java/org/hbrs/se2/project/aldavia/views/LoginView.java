@@ -56,7 +56,7 @@ public class LoginView extends VerticalLayout {
             ;
 
             try {
-                isAuthenticated = loginControl.authentificate( e.getUsername() , e.getPassword() );
+                isAuthenticated = loginControl.authenticate( e.getUsername() , e.getPassword() );
 
             } catch (DatabaseUserException databaseException) {
                 Dialog dialog = new Dialog();
