@@ -33,16 +33,20 @@ import static com.vaadin.flow.component.tabs.TabsVariant.LUMO_MINIMAL;
 @JsModule("./styles/shared-styles.js")
 public class RegistrationLayout extends VerticalLayout {
 
-    @Autowired
-    private RegistrationControl registrationControl;
-    private final Tabs tabs = new Tabs();;
+    private final Tabs tabs = new Tabs();
     private final Div pages = new Div();
-    private final Map<Tab, Component> tabsToPages = new HashMap<>();
+    private final Map<Tab, Div> tabsToPages = new HashMap<>();
 
-    public RegistrationLayout() {
+    private final RegistrationControl regControl;
+
+
+    @Autowired
+    public RegistrationLayout(RegistrationControl regControl) {
+        this.regControl = regControl;
         this.setId("reg-view");
         pages.setClassName("pages");
         tabs.setClassName("reg-tabs");
+
 
         setBackgroundImage();
         setUpUI();
@@ -50,12 +54,10 @@ public class RegistrationLayout extends VerticalLayout {
 
     private void setUpUI() {
 
+        createTab("Student", new RegistrationViewStudent(regControl));
+        createTab("Company", new RegViewCompany(regControl));
 
-
-        createTab("Student", new RegistrationViewStudent(registrationControl));
-        createTab("Company", new RegViewCompany(registrationControl));
-
-        //Defaukt tab
+        //Default tab
         tabsToPages.get(tabs.getComponentAt(0)).setVisible(true);
         tabsToPages.get(tabs.getComponentAt(1)).setVisible(false);
 
@@ -79,7 +81,7 @@ public class RegistrationLayout extends VerticalLayout {
         add(layout);
     }
 
-    private void createTab(String title, Component page){
+    private void createTab(String title, Div page){
         Tab tab = new Tab(title);
         tab.setClassName("reg-tab");
         tabs.add(tab);

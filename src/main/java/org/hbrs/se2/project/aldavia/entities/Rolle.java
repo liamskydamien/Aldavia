@@ -1,41 +1,64 @@
 package org.hbrs.se2.project.aldavia.entities;
 
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "rolle", schema = "aldavia_new")
+@Getter
 @Setter
-@Table( name ="rolle" , schema = "carlook" )
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rolle {
-    private String bezeichnung;
-    private List<User> users;
 
     @Id
+    @Basic
     @Column(name = "bezeichnung")
-    public String getBezeichnung() {
-        return bezeichnung;
+    private String bezeichnung;
+
+    @ManyToMany (mappedBy = "rollen")
+    private List<User> users;
+
+    /**
+     * Adds a user to the list of users
+     * @param user the user to add
+     */
+    public void addUser(User user) {
+        if(users == null) {
+            users = new ArrayList<>();
+        }
+        if(!this.users.contains(user)) {
+            this.users.add(user);
+            user.addRolle(this);
+        }
     }
 
+    public void removeUser(User user) {
+        if(users == null) {
+            return;
+        }
+        if(this.users.contains(user)) {
+            this.users.remove(user);
+            user.removeRolle(this);
+        }
+    }
 
+    // Equals and HashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rolle rolle = (Rolle) o;
-        return Objects.equals(bezeichnung, rolle.bezeichnung);
+        return Objects.equals(bezeichnung, rolle.bezeichnung) && Objects.equals(users, rolle.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bezeichnung);
+        return Objects.hash(bezeichnung, users);
     }
-
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER )
-    public List<User> getUsers() {
-        return users;
-    }
-
 }

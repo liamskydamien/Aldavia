@@ -3,56 +3,119 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "unternehmen", schema = "carlook")
+@Table(name = "unternehmen", schema = "aldavia_new")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-
+@EqualsAndHashCode
 public class Unternehmen {
     @Id
     @GeneratedValue
-    private int unternehmenId;
+    private int id;
 
     @Basic
-    @Column(name = "firmenname")
+    @Column(name = "firmenname", nullable = false, unique = true)
     private String name;
 
     @Basic
-    @Column(name = "firmenbeschreibung")
+    @Column(name ="beschreibung")
     private String beschreibung;
 
     @Basic
     @Column(name = "ap_vorname")
-    private String ansprechpartnerVorname;
+    private String ap_vorname;
 
     @Basic
     @Column(name = "ap_nachname")
-    private String ansprechpartnerNachname;
+    private String ap_nachname;
 
     @Basic
-    @Column(name = "website")
-    private String website;
+    @Column(name = "webseite")
+    private String webseite;
 
+    // unternehmen_hat_user
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private User user;
 
+    // unternehmen_erstellt_stellenanzeige
+
+    @OneToMany(mappedBy = "unternehmen_stellenanzeigen", cascade = CascadeType.ALL)
+    private List<Stellenanzeige> stellenanzeigen;
+
+
+    public List<Stellenanzeige> getStellenanzeigen() {
+        return stellenanzeigen;
+    }
+
+    public void addStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen == null){
+            stellenanzeigen = new ArrayList<>();
+        }
+        if(!stellenanzeigen.contains(stellenanzeige)) {
+            stellenanzeigen.add(stellenanzeige);
+            stellenanzeige.setUnternehmen(this);
+        }
+    }
+
+    public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
+        if (stellenanzeigen != null && stellenanzeigen.contains(stellenanzeige)) {
+            stellenanzeigen.remove(stellenanzeige);
+            stellenanzeige.setUnternehmen(null);
+        }
+    }
+
+    // unternehmen_hat_adresse
+
+    @ManyToMany()
+    private List<Adresse> adressen;
+
+    @JoinTable(
+            name = "unternehmen_hat_adresse",
+            joinColumns = @JoinColumn(name = "unternehmen_id", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "adresse_id", referencedColumnName = "id", nullable = false),
+            schema = "test_schema"
+    )
+    public List<Adresse> getAdressen() {
+        return adressen;
+    }
+
+    public void addAdresse(Adresse adresse) {
+        if (adressen == null){
+            adressen = new ArrayList<>();
+        }
+        if(!adressen.contains(adresse)) {
+            adressen.add(adresse);
+            adresse.addUnternehmen(this);
+        }
+    }
+
+    public void removeAdresse(Adresse adresse) {
+        if (adressen != null && adressen.contains(adresse)) {
+            adressen.remove(adresse);
+            adresse.removeUnternehmen(this);
+        }
+    }
+
+    // Methoden
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Unternehmen that = (Unternehmen) o;
-        return unternehmenId == that.unternehmenId && Objects.equals(name, that.name) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(ansprechpartnerVorname, that.ansprechpartnerVorname) && Objects.equals(ansprechpartnerNachname, that.ansprechpartnerNachname) && Objects.equals(website, that.website) && Objects.equals(user, that.user);
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(ap_vorname, that.ap_vorname) && Objects.equals(ap_nachname, that.ap_nachname) && Objects.equals(webseite, that.webseite) && Objects.equals(user, that.user) && Objects.equals(stellenanzeigen, that.stellenanzeigen) && Objects.equals(adressen, that.adressen);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unternehmenId, name, beschreibung, ansprechpartnerVorname, ansprechpartnerNachname, website, user);
+        return Objects.hash(id, name, beschreibung, ap_vorname, ap_nachname, webseite, user, stellenanzeigen, adressen);
     }
 }

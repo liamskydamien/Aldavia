@@ -26,6 +26,7 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route(value = "registrationStudent")
@@ -35,7 +36,6 @@ public class RegistrationViewStudent extends Div {
 
     private TextField userName = new TextField("Username");
     private TextField mail = new TextField("Email-Adresse");
-
     private TextField vorname = new TextField("Vorname");
     private TextField nachname = new TextField("Nachnaname");
     private PasswordField password = new PasswordField("Passwort");
@@ -75,7 +75,6 @@ public class RegistrationViewStudent extends Div {
         createDialog(regControl);
 
 
-
         //Aufsetzen der Progress-Bar
         password.addValueChangeListener(event -> {
             if (password.getValue().length() < 11 ) {
@@ -83,6 +82,21 @@ public class RegistrationViewStudent extends Div {
             }
         });
         password.setValueChangeMode(ValueChangeMode.EAGER);
+
+       mail.addKeyDownListener(event -> {
+           if (!(mail.getValue().contains("@"))) {
+               mail.setErrorMessage("Bitte geben Sie ein '@' Zeichen ein");
+               mail.setInvalid(true);
+           }
+       });
+       mail.setValueChangeMode(ValueChangeMode.EAGER);
+
+       passwordCheck.addKeyDownListener(event -> {
+           if(!password.getValue().equals(passwordCheck.getValue())){
+               passwordCheck.setErrorMessage("Passwörter stimmen nicht überein!");
+               passwordCheck.setInvalid(true);
+           }
+       });
 
 
         binder.bindInstanceFields(this);
@@ -173,18 +187,18 @@ public class RegistrationViewStudent extends Div {
         layout.add(text);
         Button confirmButton = new Button("Confirm", e -> {
             RegistrationResult result  = register(regControl);
-            if (result.getResult() == true) {
+            if (result.getResult()) {
                 Notification.show("Registrierung erfolgreich!");
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
                 dialog.close();
-            } else if (result.getReason().equals(RegistrationResult.EMAIL_ALREADY_EXISTS)) {
-                Notification.show("Die Email Adresse ist bereits vorhanden!");
-                dialog.close();
+            }  else if (RegistrationResult.EMAIL_ALREADY_EXISTS.equals(result.getReason())) {
+            Notification.show("Die Email Adresse ist bereits vorhanden!");
+            dialog.close();
             } else {
-                Notification.show("Der Username ist bereits belegt!");
-                dialog.close();
-            }
+            Notification.show("Der Username ist bereits belegt!");
+            dialog.close();
+        }
 
 
         } );

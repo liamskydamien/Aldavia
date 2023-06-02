@@ -30,7 +30,6 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @CssImport("./styles/views/main/main-view.css")
-@Route("main")
 //@PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
 public class AppView extends AppLayout implements BeforeEnterObserver {
@@ -64,6 +63,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
+
         if (userDTO == null) {
             UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
             return false;

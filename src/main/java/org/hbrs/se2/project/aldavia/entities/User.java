@@ -5,30 +5,34 @@ import lombok.*;
 import javax.persistence.*;
 // import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table( name ="user" , schema = "carlook" )
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "users", schema = "aldavia_new")
 @Getter
 @Setter
 @Builder
-@ToString
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private int id;
-    @Basic
-    @Column(name = "email")
-    private String email;
 
-    @Basic
-    @Column(name = "password")
-    private String password;
     @Basic
     @Column(name = "userid", nullable = false, unique = true)
     private String userid;
+
+    @Basic
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Basic
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
     @Basic
     @Column(name = "phone")
@@ -38,48 +42,54 @@ public class User {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    private List<Rolle> roles;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_to_rolle", catalog = "nmuese2s", schema = "carlook",
-            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichnung", nullable = false))
-    public List<Rolle> getRoles() {
-        return roles;
-    }
-
     @Basic
     @Column(name = "beschreibung")
     private String beschreibung;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-    @Basic
-    @Column(name = "userid", nullable = false, length = 45, unique = true)
-    public String getUserid() {
-        return userid;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Rolle> rollen;
+    @JoinTable(
+            name = "user_to_rolle",
+            schema = "aldavia_new",
+            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "rolle", referencedColumnName = "bezeichnung", nullable = false)
+    )
+    public List<Rolle> getRollen() {
+        return rollen;
     }
 
+    public void addRolle(Rolle rolle) {
+        if (rollen == null) {
+            rollen = new ArrayList<>();
+        }
+        if (!this.rollen.contains(rolle)) {
+            this.rollen.add(rolle);
+            rolle.addUser(this);
+        }
+    }
+
+    public void removeRolle(Rolle rolle) {
+        if (rollen == null) {
+            return;
+        }
+        if (this.rollen.contains(rolle)) {
+            this.rollen.remove(rolle);
+            rolle.removeUser(this);
+        }
+    }
+
+    // Methods
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id
-                && Objects.equals(email, user.email)
-                && Objects.equals(password, user.password)
-                && Objects.equals(userid, user.userid)
-                && Objects.equals(phone, user.phone)
-                && Objects.equals(roles, user.roles);
+        return id == user.id && Objects.equals(userid, user.userid) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(phone, user.phone) && Objects.equals(profilePicture, user.profilePicture) && Objects.equals(beschreibung, user.beschreibung) && Objects.equals(rollen, user.rollen);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, userid, phone, roles);
+        return Objects.hash(id, userid, password, email, phone, profilePicture, beschreibung, rollen);
     }
 }

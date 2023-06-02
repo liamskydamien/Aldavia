@@ -80,7 +80,7 @@ public class RoundTripTest {
         assertNotSame(student, studentAfterCreate);
 
         // Schritt 4: D = Deletion, also Löschen des Users, um Datenmüll zu vermeiden
-        int studentTmpId = studentAfterCreate.getStudentId();
+        int studentTmpId = studentAfterCreate.getId();
         studentRepository.deleteById(studentTmpId);
         userRepository.deleteById(idTmp);
 
@@ -131,7 +131,7 @@ public class RoundTripTest {
         assertNotSame(unternehmen, unternehmenAfterCreate);
 
         // Teste Delete
-        int unternehmenTmpId = unternehmenAfterCreate.getUnternehmenId();
+        int unternehmenTmpId = unternehmenAfterCreate.getId();
         unternehmenRepository.deleteById(unternehmenTmpId);
         userRepository.deleteById(user.getId());
     }
