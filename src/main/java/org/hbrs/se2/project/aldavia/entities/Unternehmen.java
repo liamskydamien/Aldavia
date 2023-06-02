@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.entities;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.*;
@@ -45,17 +46,17 @@ public class Unternehmen {
 
     // unternehmen_erstellt_stellenanzeige
 
-    @OneToMany(mappedBy = "unternehmen_stellenanzeigen", cascade = CascadeType.ALL)
-    private List<Stellenanzeige> stellenanzeigen;
+    @OneToMany(mappedBy = "unternehmen_stellenanzeigen", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Stellenanzeige> stellenanzeigen;
 
 
-    public List<Stellenanzeige> getStellenanzeigen() {
+    public Set<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigen;
     }
 
     public void addStellenanzeige(Stellenanzeige stellenanzeige) {
         if (stellenanzeigen == null){
-            stellenanzeigen = new ArrayList<>();
+            stellenanzeigen = new HashSet<>();
         }
         if(!stellenanzeigen.contains(stellenanzeige)) {
             stellenanzeigen.add(stellenanzeige);
@@ -112,8 +113,8 @@ public class Unternehmen {
         return id == that.id && Objects.equals(name, that.name) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(ap_vorname, that.ap_vorname) && Objects.equals(ap_nachname, that.ap_nachname) && Objects.equals(webseite, that.webseite) && Objects.equals(user, that.user) && Objects.equals(stellenanzeigen, that.stellenanzeigen) && Objects.equals(adressen, that.adressen);
     }
 
-    @Override
+   /* @Override
     public int hashCode() {
         return Objects.hash(id, name, beschreibung, ap_vorname, ap_nachname, webseite, user, stellenanzeigen, adressen);
-    }
+    } */
 }

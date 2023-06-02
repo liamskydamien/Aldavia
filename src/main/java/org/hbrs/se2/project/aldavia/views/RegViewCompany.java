@@ -12,6 +12,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -118,18 +119,22 @@ public class RegViewCompany extends Div {
             //carService.createCar(binder.getBean() ,  userDTO );
 
             RegistrationDTOCompany dto = binder.getBean();
+            Notification notification = new Notification();
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 
 
             if (dto.getMail().equals("") || dto.getUserName().equals("") || dto.getPassword().equals("")
                     || dto.getCompanyName().equals("") || dto.getStandort().equals("")) {
 
-                Notification.show("Bitte alle Felder ausfüllen!");
+                notification.show("Bitte alle Felder ausfüllen!");
             }else if(dto.getPassword().length() < 10) {
-                Notification.show("Ihr Passwort erfüllt nicht die vorgeschiebene Länge!");
+                notification.show("Ihr Passwort erfüllt nicht die vorgeschiebene Länge!");
             } else if (!(dto.getPassword().equals(passwordCheck.getValue()))) {
-                Notification.show("Passwörter stimmen nicht überein!");
+                notification.show("Passwörter stimmen nicht überein!");
                 password.clear();
                 passwordCheck.clear();
+            } else if(!(dto.getMail()).contains("@")) {
+                notification.show("Bitte geben Sie ein '@' Zeichen bei der Email-Adresse ein!");
 
             } else {
                 dialog.open();

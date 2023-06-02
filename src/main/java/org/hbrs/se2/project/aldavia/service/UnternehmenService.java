@@ -25,7 +25,7 @@ public class UnternehmenService {
             if (unternehmen.isPresent()) {
                 return unternehmen.get();
             } else {
-                throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+                throw new ProfileException("Unternehmen nicht auffindbar!", ProfileException.ProfileExceptionType.ProfileNotFound);
             }
         } else {
             throw new ProfileException("Unternehmen nicht durch User gefunden", ProfileException.ProfileExceptionType.ProfileNotFound);
@@ -100,8 +100,8 @@ public class UnternehmenService {
                 user.setPassword(dto.getPassword());
             }
 
-
             unternehmenRepository.save(unternehmen);
+
         } catch (Exception e) {
             throw e;
         }

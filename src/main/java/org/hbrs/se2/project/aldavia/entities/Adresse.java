@@ -75,4 +75,8 @@ public class Adresse {
     public int hashCode() {
         return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
     }
+
+    public String toString() {
+        return ""+ strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
+    }
 }
