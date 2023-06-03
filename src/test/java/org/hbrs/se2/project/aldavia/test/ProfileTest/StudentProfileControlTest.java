@@ -26,6 +26,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Transactional
 public class StudentProfileControlTest {
+    public static final String WIRTSCHAFTSINFORMATIK = "Wirtschaftsinformatik";
+    public static final String BESCHREIBUNG = "Ich bin ein Student.";
+    public static final String PHONE = "0123456789";
+    public static final String JAVA = "Java";
+    public static final String LEBENSLAUF = "Ich bin ein Student.";
+    public static final String SOFTWARE_ENTWICKLUNG = "Software Entwicklung";
+    public static final String WIRTSCHAFTSINFORMATIK1 = "Wirtschaftsinformatik";
+    public static final String PRAKTIKUM = "Praktikum";
+    public static final String SOFTWARE_ENTWICKLUNG1 = "Software Entwicklung";
+    public static final String BEZEICHNUNG = "SaaS Entwickler";
+    public static final String SCHMIDT = "Schmidt";
+    public static final String SINA = "Sina";
     @Autowired
     private StudentProfileControl studentProfileControl;
 
@@ -56,8 +68,8 @@ public class StudentProfileControlTest {
                 .userid("MaxMüller2001")
                 .password("TestPassword")
                 .email("MaxMüller2001@aldavia.de")
-                .beschreibung("Ich bin ein Student.")
-                .phone("0123456789")
+                .beschreibung(BESCHREIBUNG)
+                .phone(PHONE)
                 .build();
 
         student = Student.builder()
@@ -67,17 +79,17 @@ public class StudentProfileControlTest {
                 .studiengang("Informatik")
                 .studienbeginn(LocalDate.of(2020, 1, 1))
                 .matrikelNummer("12345678")
-                .lebenslauf("Ich bin ein Student.")
+                .lebenslauf(LEBENSLAUF)
                 .build();
 
         student.setUser(user);
 
         KenntnisDTO kenntnisDTO = KenntnisDTO.builder()
-                .name("Java")
+                .name(JAVA)
                 .build();
 
         TaetigkeitsfeldDTO taetigkeitsfeldDTO = TaetigkeitsfeldDTO.builder()
-                .name("Software Entwicklung")
+                .name(SOFTWARE_ENTWICKLUNG)
                 .build();
 
         SpracheDTO spracheDTO = SpracheDTO.builder()
@@ -87,12 +99,12 @@ public class StudentProfileControlTest {
 
         Qualifikation qualifikation = Qualifikation.builder()
                 .beschreibung("Ich habe ein Praktikum bei Aldavia absolviert.")
-                .bereich("Software Entwicklung")
-                .bezeichnung("SaaS Entwickler")
+                .bereich(SOFTWARE_ENTWICKLUNG1)
+                .bezeichnung(BEZEICHNUNG)
                 .institution("Aldavia GmbH")
                 .von(LocalDate.of(2020, 1, 1))
                 .bis(LocalDate.of(2020, 7, 1))
-                .beschaftigungsverhaltnis("Praktikum")
+                .beschaftigungsverhaltnis(PRAKTIKUM)
                 .build();
 
         Kenntnis kenntnis = kenntnisseService.getKenntnis(kenntnisDTO);
@@ -166,7 +178,7 @@ public class StudentProfileControlTest {
 
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang("Wirtschaftsinformatik")
+                .studiengang(WIRTSCHAFTSINFORMATIK1)
                 .studienbeginn(LocalDate.of(2020, 1, 1))
                 .matrikelnummer("9012305678")
                 .lebenslauf("Ich bin der größe Sascha Alda Fan")
@@ -186,12 +198,12 @@ public class StudentProfileControlTest {
 
         QualifikationsDTO qualifikationDTOAdd = QualifikationsDTO.builder()
                 .beschreibung("Ich habe ein Praktikum bei No Code absolviert. Es hat mir nicht gefallen Adalvia war defintiv besser. Spaß :)")
-                .bereich("Software Entwicklung")
-                .bezeichnung("SaaS Entwickler")
+                .bereich(SOFTWARE_ENTWICKLUNG)
+                .bezeichnung(BEZEICHNUNG)
                 .institution("No Code GmbH")
                 .von(LocalDate.of(2020, 8, 1))
                 .bis(LocalDate.of(2020, 8, 5))
-                .beschaeftigungsart("Praktikum")
+                .beschaeftigungsart(PRAKTIKUM)
                 .id(-1)
                 .build();
 
@@ -228,10 +240,10 @@ public class StudentProfileControlTest {
 
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email("sina.schmidt@aldavia-mail.de")
-                .vorname("Sina")
-                .nachname("Schmidt")
+                .vorname(SINA)
+                .nachname(SCHMIDT)
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang("Wirtschaftsinformatik")
+                .studiengang(WIRTSCHAFTSINFORMATIK)
                 .studienbeginn(LocalDate.of(2020, 1, 1))
                 .matrikelNummer("9012305678")
                 .lebenslauf("Ich bin der größe Sascha Alda Fan")
@@ -293,8 +305,8 @@ public class StudentProfileControlTest {
                 .build();
 
         Student student1 = Student.builder()
-                .vorname("Sina")
-                .nachname("Schmidt")
+                .vorname(SINA)
+                .nachname(SCHMIDT)
                 .build();
 
         student1.setUser(user);
@@ -306,7 +318,7 @@ public class StudentProfileControlTest {
 
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang("Wirtschaftsinformatik")
+                .studiengang(WIRTSCHAFTSINFORMATIK1)
                 .studienbeginn(LocalDate.of(2020, 1, 1))
                 .matrikelnummer("9012305678")
                 .lebenslauf("Ich bin der größe Sascha Alda Fan")
@@ -326,12 +338,12 @@ public class StudentProfileControlTest {
 
         QualifikationsDTO qualifikationDTOAdd = QualifikationsDTO.builder()
                 .beschreibung("Ich habe ein Praktikum bei No Code absolviert. Es hat mir nicht gefallen Adalvia war defintiv besser. Spaß :)")
-                .bereich("Software Entwicklung")
-                .bezeichnung("SaaS Entwickler")
+                .bereich(SOFTWARE_ENTWICKLUNG1)
+                .bezeichnung(BEZEICHNUNG)
                 .institution("No Code GmbH")
                 .von(LocalDate.of(2020, 8, 1))
                 .bis(LocalDate.of(2020, 8, 5))
-                .beschaeftigungsart("Praktikum")
+                .beschaeftigungsart(PRAKTIKUM)
                 .id(-1)
                 .build();
 
@@ -368,10 +380,10 @@ public class StudentProfileControlTest {
 
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email("sina.schmidt@aldavia-mail.de")
-                .vorname("Sina")
-                .nachname("Schmidt")
+                .vorname(SINA)
+                .nachname(SCHMIDT)
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang("Wirtschaftsinformatik")
+                .studiengang(WIRTSCHAFTSINFORMATIK1)
                 .studienbeginn(LocalDate.of(2020, 1, 1))
                 .matrikelNummer("9012305678")
                 .lebenslauf("Ich bin der größe Sascha Alda Fan")
