@@ -14,7 +14,6 @@ import org.hbrs.se2.project.aldavia.control.LoginControl;
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
-import org.hbrs.se2.project.aldavia.util.UserLoginEventPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -53,7 +52,6 @@ public class LoginView extends VerticalLayout {
         component.addLoginListener(e -> {
 
             boolean isAuthenticated = false;
-            ;
 
             try {
                 isAuthenticated = loginControl.authenticate( e.getUsername() , e.getPassword() );

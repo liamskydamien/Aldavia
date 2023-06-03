@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Component
 @Transactional
@@ -40,7 +38,6 @@ public class StudentProfileControl {
      * Get the student profile of a student
      * @param username The username of the student
      * @return StudentProfileDTO
-     * @throws ProfileException
      */
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
@@ -58,8 +55,10 @@ public class StudentProfileControl {
     /**
      * Create and update a student profile
      * @param username The username of the student
-     * @return boolean
-     * @throws ProfileException
+     * @param updateStudentProfileDTO The DTO containing the information to update the student profile
+     *                                (DeletionStudentInformationDTO, ChangeStudentInformationDTO, AddStudentInformationDTO)
+     *                                The DTOs are used to update the student profile
+     * @throws ProfileException If an error occurs while updating the student profile
      */
     public void createAndUpdateStudentProfile(UpdateStudentProfileDTO updateStudentProfileDTO, String username) throws ProfileException {
         // Gets student from database
