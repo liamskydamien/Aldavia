@@ -2,10 +2,10 @@ package org.hbrs.se2.project.aldavia.control.exception;
 
 public class ProfileException extends Exception {
     public enum ProfileExceptionType {
-        ProfileNotFound,
-        DatabaseConnectionFailed,
-        ProfileNotCreated,
-        StudentDoesNotExist, ProfileNotUpdated
+        ProfileNotFound ,
+        DatabaseConnectionFailed ,
+        StudentDoesNotExist ,
+        ProfileNotUpdated
     }
 
     private final ProfileExceptionType profileExceptionType;

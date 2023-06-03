@@ -2,8 +2,8 @@ package org.hbrs.se2.project.aldavia.control.exception;
 
 public class DatabaseUserException extends Exception {
     public enum DatabaseUserExceptionType {
-        UserNotFound,
-        DatabaseConnectionFailed,
+        UserNotFound ,
+        DatabaseConnectionFailed ,
     }
 
     private final DatabaseUserExceptionType databaseUserExceptionType;

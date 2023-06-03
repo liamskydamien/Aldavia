@@ -79,64 +79,73 @@ public class StudentProfileControl {
             student.getUser().setProfilePicture(updatedVersion.getProfilbild());
 
             // Remove inputs from Lists
+            removeAttributes(student);
 
-            List<Kenntnis> kenntnisse = student.getKenntnisse() != null? new ArrayList<>(student.getKenntnisse()) : new ArrayList<>();
-            List<Sprache> sprachen = student.getSprachen() != null? new ArrayList<>(student.getSprachen()) : new ArrayList<>();
-            List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder() != null? new ArrayList<>(student.getTaetigkeitsfelder()) : new ArrayList<>();
-            List<Qualifikation> qualifikationen = student.getQualifikationen() != null? new ArrayList<>(student.getQualifikationen()) : new ArrayList<>();
+            // Add inputs to Lists
+            addAttributes(student, updatedVersion);
 
-            // Remove Kenntnisse
-            for (Kenntnis kenntnis : kenntnisse) {
-                student.removeKenntnis(kenntnis);
-            }
-
-            // Remove Sprachen
-            for (Sprache sprache : sprachen) {
-                student.removeSprache(sprache);
-            }
-
-            // Remove Taetigkeitsfelder
-            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
-                student.removeTaetigkeitsfeld(taetigkeitsfeld);
-            }
-
-            // Remove Qualifikationen
-            for (Qualifikation qualifikation : qualifikationen) {
-                qualifikationenService.removeQualifikation(qualifikation);
-            }
-
-            // Add Kenntnisse
-            if (updatedVersion.getKenntnisse() != null) {
-                for (KenntnisDTO kenntnisDTO : updatedVersion.getKenntnisse()) {
-                    kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
-                }
-            }
-
-            // Add Sprachen
-            if (updatedVersion.getSprachen() != null) {
-                for (SpracheDTO spracheDTO : updatedVersion.getSprachen()) {
-                    sprachenService.addStudentToSprache(spracheDTO, student);
-                }
-            }
-
-            // Add Taetigkeitsfelder
-            if(updatedVersion.getTaetigkeitsfelder() != null) {
-                for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : updatedVersion.getTaetigkeitsfelder()) {
-                    taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
-                }
-            }
-
-            // Add Qualifikationen
-            if (updatedVersion.getQualifikationen() != null) {
-                for (QualifikationsDTO qualifikationsDTO : updatedVersion.getQualifikationen()) {
-                    qualifikationenService.addUpdateQualifikation(qualifikationsDTO, student);
-                }
-            }
             System.out.println("Updated Student: " + student.getVorname() + " " + student.getNachname());
 
             // Save student information
             studentService.createOrUpdateStudent(student);
             System.out.println("Saved Student in Database: " + student.getVorname() + " " + student.getNachname());
+        }
+    }
+
+    private void removeAttributes(Student student){
+        List<Kenntnis> kenntnisse = student.getKenntnisse() != null? new ArrayList<>(student.getKenntnisse()) : new ArrayList<>();
+        List<Sprache> sprachen = student.getSprachen() != null? new ArrayList<>(student.getSprachen()) : new ArrayList<>();
+        List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder() != null? new ArrayList<>(student.getTaetigkeitsfelder()) : new ArrayList<>();
+        List<Qualifikation> qualifikationen = student.getQualifikationen() != null? new ArrayList<>(student.getQualifikationen()) : new ArrayList<>();
+
+        // Remove Kenntnisse
+        for (Kenntnis kenntnis : kenntnisse) {
+            student.removeKenntnis(kenntnis);
+        }
+
+        // Remove Sprachen
+        for (Sprache sprache : sprachen) {
+            student.removeSprache(sprache);
+        }
+
+        // Remove Taetigkeitsfelder
+        for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfelder) {
+            student.removeTaetigkeitsfeld(taetigkeitsfeld);
+        }
+
+        // Remove Qualifikationen
+        for (Qualifikation qualifikation : qualifikationen) {
+            qualifikationenService.removeQualifikation(qualifikation);
+        }
+    }
+
+    private void addAttributes(Student student, StudentProfileDTO updatedVersion) throws PersistenceException {
+        // Add Kenntnisse
+        if (updatedVersion.getKenntnisse() != null) {
+            for (KenntnisDTO kenntnisDTO : updatedVersion.getKenntnisse()) {
+                kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
+            }
+        }
+
+        // Add Sprachen
+        if (updatedVersion.getSprachen() != null) {
+            for (SpracheDTO spracheDTO : updatedVersion.getSprachen()) {
+                sprachenService.addStudentToSprache(spracheDTO, student);
+            }
+        }
+
+        // Add Taetigkeitsfelder
+        if(updatedVersion.getTaetigkeitsfelder() != null) {
+            for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : updatedVersion.getTaetigkeitsfelder()) {
+                taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+            }
+        }
+
+        // Add Qualifikationen
+        if (updatedVersion.getQualifikationen() != null) {
+            for (QualifikationsDTO qualifikationsDTO : updatedVersion.getQualifikationen()) {
+                qualifikationenService.addUpdateQualifikation(qualifikationsDTO, student);
+            }
         }
     }
 

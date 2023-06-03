@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-public class ProfileControlTest {
+public class StudentProfileControlTest {
     @Autowired
     private StudentProfileControl studentProfileControl;
 
@@ -161,7 +161,7 @@ public class ProfileControlTest {
 
     @Test
     public void testChangeStudentInformation() throws ProfileException, PersistenceException {
-        Student student = studentRepository.findByUserID("MaxMüller2001").get();
+        Student student = studentRepository.findByUserID("MaxMüller2001").orElseThrow();
         System.out.println("Student:" + student.getUser().getUserid());
 
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
@@ -225,12 +225,6 @@ public class ProfileControlTest {
         addStudentInformationDTO.setSprachen(addSprachen);
         addStudentInformationDTO.setTaetigkeitsfelder(addTaetigkeitsfelder);
 
-        // Build UpdateStudentInformationDTO
-        UpdateStudentProfileDTO updateStudentProfileDTO = UpdateStudentProfileDTO.builder()
-                .addStudentInformationDTO(addStudentInformationDTO)
-                .changeStudentInformationDTO(changeStudentInformationDTO)
-                .deletionStudentInformationDTO(deletionStudentInformationDTO)
-                .build();
 
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email("sina.schmidt@aldavia-mail.de")
@@ -307,7 +301,7 @@ public class ProfileControlTest {
 
         studentRepository.save(student1);
 
-        Student student = studentRepository.findByUserID("SaschaAldaFan").get();
+        Student student = studentRepository.findByUserID("SaschaAldaFan").orElseThrow();
         System.out.println("Student:" + student.getUser().getUserid());
 
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
@@ -371,12 +365,6 @@ public class ProfileControlTest {
         addStudentInformationDTO.setSprachen(addSprachen);
         addStudentInformationDTO.setTaetigkeitsfelder(addTaetigkeitsfelder);
 
-        // Build UpdateStudentInformationDTO
-        UpdateStudentProfileDTO updateStudentProfileDTO = UpdateStudentProfileDTO.builder()
-                .addStudentInformationDTO(addStudentInformationDTO)
-                .changeStudentInformationDTO(changeStudentInformationDTO)
-                .deletionStudentInformationDTO(deletionStudentInformationDTO)
-                .build();
 
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email("sina.schmidt@aldavia-mail.de")
