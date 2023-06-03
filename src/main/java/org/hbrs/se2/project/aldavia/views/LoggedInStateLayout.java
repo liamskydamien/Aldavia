@@ -15,7 +15,6 @@ import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.RouterLink;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
@@ -43,7 +42,7 @@ public class LoggedInStateLayout extends AppLayout {
     }
 
 
-    private Component createHeaderContent() throws ProfileException {
+    private Component createHeaderContent() {
 
 
 

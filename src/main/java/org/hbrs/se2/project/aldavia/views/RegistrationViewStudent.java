@@ -26,7 +26,6 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route(value = "registrationStudent")

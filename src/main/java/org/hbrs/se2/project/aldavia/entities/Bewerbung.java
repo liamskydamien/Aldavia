@@ -3,7 +3,6 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-//import java.util.List;
 import java.time.LocalDate;
 import java.util.Objects;
 

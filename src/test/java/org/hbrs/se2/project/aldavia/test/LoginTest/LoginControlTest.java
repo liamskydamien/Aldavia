@@ -2,7 +2,6 @@ package org.hbrs.se2.project.aldavia.test.LoginTest;
 
 import org.hbrs.se2.project.aldavia.control.LoginControl;
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.entities.User;

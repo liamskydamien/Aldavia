@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.aldavia.util;
 
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.springframework.context.ApplicationEvent;
 
 import java.util.ArrayList;
 import java.util.List;
