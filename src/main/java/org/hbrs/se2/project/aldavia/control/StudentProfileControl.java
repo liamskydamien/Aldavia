@@ -5,6 +5,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
+import org.hbrs.se2.project.aldavia.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +18,19 @@ import java.util.List;
 public class StudentProfileControl {
 
     @Autowired
-    private StudentControl studentControl;
+    private StudentService studentService;
 
     @Autowired
-    private KenntnisseControl kenntnisseControl;
+    private KenntnisseService kenntnisseService;
 
     @Autowired
-    private QualifikationenControl qualifikationenControl;
+    private QualifikationenService qualifikationenService;
 
     @Autowired
-    private SprachenControl sprachenControl;
+    private SprachenService sprachenService;
 
     @Autowired
-    private TaetigkeitsfeldControl taetigkeitsfeldControl;
+    private TaetigkeitsfeldService taetigkeitsfeldService;
 
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
@@ -42,7 +43,7 @@ public class StudentProfileControl {
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
             System.out.println("Finding student with username: " + username);
-            Student student = studentControl.getStudent(username);
+            Student student = studentService.getStudent(username);
             StudentProfileDTO studentProfileDTO = studentProfileDTOFactory.createStudentProfileDTO(student);
             System.out.println("Found student: " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
             return studentProfileDTO;
@@ -60,7 +61,7 @@ public class StudentProfileControl {
         else {
             System.out.println("Getting Student from Database with username: " + username);
 
-            Student student = studentControl.getStudent(username);
+            Student student = studentService.getStudent(username);
 
             System.out.println("Found Student: " + student.getVorname() + " " + student.getNachname());
 
@@ -101,40 +102,40 @@ public class StudentProfileControl {
 
             // Remove Qualifikationen
             for (Qualifikation qualifikation : qualifikationen) {
-                qualifikationenControl.removeQualifikation(qualifikation);
+                qualifikationenService.removeQualifikation(qualifikation);
             }
 
             // Add Kenntnisse
             if (updatedVersion.getKenntnisse() != null) {
                 for (KenntnisDTO kenntnisDTO : updatedVersion.getKenntnisse()) {
-                    kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
+                    kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
                 }
             }
 
             // Add Sprachen
             if (updatedVersion.getSprachen() != null) {
                 for (SpracheDTO spracheDTO : updatedVersion.getSprachen()) {
-                    sprachenControl.addStudentToSprache(spracheDTO, student);
+                    sprachenService.addStudentToSprache(spracheDTO, student);
                 }
             }
 
             // Add Taetigkeitsfelder
             if(updatedVersion.getTaetigkeitsfelder() != null) {
                 for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : updatedVersion.getTaetigkeitsfelder()) {
-                    taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+                    taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
                 }
             }
 
             // Add Qualifikationen
             if (updatedVersion.getQualifikationen() != null) {
                 for (QualifikationsDTO qualifikationsDTO : updatedVersion.getQualifikationen()) {
-                    qualifikationenControl.addUpdateQualifikation(qualifikationsDTO, student);
+                    qualifikationenService.addUpdateQualifikation(qualifikationsDTO, student);
                 }
             }
             System.out.println("Updated Student: " + student.getVorname() + " " + student.getNachname());
 
             // Save student information
-            studentControl.createOrUpdateStudent(student);
+            studentService.createOrUpdateStudent(student);
             System.out.println("Saved Student in Database: " + student.getVorname() + " " + student.getNachname());
         }
     }

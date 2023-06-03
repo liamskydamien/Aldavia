@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class QualifikationenControl {
+public class QualifikationenService {
 
     @Autowired
     private QualifikationRepository qualifikationRepository;

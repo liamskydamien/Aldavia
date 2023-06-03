@@ -6,6 +6,10 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.hbrs.se2.project.aldavia.service.KenntnisseService;
+import org.hbrs.se2.project.aldavia.service.SprachenService;
+import org.hbrs.se2.project.aldavia.service.StudentService;
+import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,19 +30,19 @@ public class ProfileControlTest {
     private StudentProfileControl studentProfileControl;
 
     @Autowired
-    private StudentControl studentControl;
+    private StudentService studentService;
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private KenntnisseControl kenntnisseControl;
+    private KenntnisseService kenntnisseService;
 
     @Autowired
-    private SprachenControl sprachenControl;
+    private SprachenService sprachenService;
 
     @Autowired
-    private TaetigkeitsfeldControl taetigkeitsfeldControl;
+    private TaetigkeitsfeldService taetigkeitsfeldService;
 
     private Student student;
     private ChangeStudentInformationDTO changeStudentInformationDTO;
@@ -95,9 +99,9 @@ public class ProfileControlTest {
                 .beschaftigungsverhaltnis("Praktikum")
                 .build();
 
-        kenntnis = kenntnisseControl.getKenntnis(kenntnisDTO);
-        taetigkeitsfeld = taetigkeitsfeldControl.getTaetigkeitsfeld(taetigkeitsfeldDTO);
-        sprache = sprachenControl.getSprache(spracheDTO);
+        kenntnis = kenntnisseService.getKenntnis(kenntnisDTO);
+        taetigkeitsfeld = taetigkeitsfeldService.getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        sprache = sprachenService.getSprache(spracheDTO);
 
         student.addKenntnis(kenntnis);
         student.addTaetigkeitsfeld(taetigkeitsfeld);
@@ -114,7 +118,7 @@ public class ProfileControlTest {
     @AfterEach
     void tearDown() {
         try {
-            studentControl.deleteStudent(student);
+            studentService.deleteStudent(student);
         } catch (Exception e) {
             e.printStackTrace();
         }

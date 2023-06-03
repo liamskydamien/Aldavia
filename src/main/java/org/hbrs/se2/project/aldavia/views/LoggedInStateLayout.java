@@ -26,7 +26,7 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 public class LoggedInStateLayout extends AppLayout {
 
     //@Autowired
-    //private StudentControl studentControl;
+    //private StudentService studentControl;
 
     private AuthorizationControl authorizationControl;
 

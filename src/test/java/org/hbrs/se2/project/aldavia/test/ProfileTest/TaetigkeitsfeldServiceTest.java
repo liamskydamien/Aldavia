@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.TaetigkeitsfeldControl;
+import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
@@ -19,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class TaetigkeitsfeldControlTest {
+public class TaetigkeitsfeldServiceTest {
 
 
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
 
     @Autowired
-    private TaetigkeitsfeldControl taetigkeitsfeldControl;
+    private TaetigkeitsfeldService taetigkeitsfeldService;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -63,7 +63,7 @@ public class TaetigkeitsfeldControlTest {
     @AfterEach
     public void tearDown() {
         try {
-            taetigkeitsfeldTest = taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+            taetigkeitsfeldTest = taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
             taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
             taetigkeitsfeldRepository.deleteById(taetigkeitsfeldTest.getBezeichnung());
         }
@@ -80,7 +80,7 @@ public class TaetigkeitsfeldControlTest {
         taetigkeitsfeldTest.setBezeichnung(taetigkeitsfeldDTO.getName());
         taetigkeitsfeldTest = taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
 
-        taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+        taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
 
         Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
         student = studentRepository.findById(student.getId()).get();
@@ -89,7 +89,7 @@ public class TaetigkeitsfeldControlTest {
 
     @Test
     public void testAddStudentToKenntnis_whenTaetigkeitsfeldIsNotPresent() {
-        taetigkeitsfeldControl.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+        taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
         taetigkeitsfeldTest = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
         student = studentRepository.findById(student.getId()).get();
         assertEquals(taetigkeitsfeldTest.getStudents().get(0).getId(), student.getId());
@@ -101,7 +101,7 @@ public class TaetigkeitsfeldControlTest {
         taetigkeitsfeldTest = existingTaetigkeitsfeld.addStudent(student);
         taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
 
-        taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+        taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
 
         Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).orElse(null);
         assertTrue(updatedTaetigkeitsfeld == null || !updatedTaetigkeitsfeld.getStudents().contains(student));
@@ -110,7 +110,7 @@ public class TaetigkeitsfeldControlTest {
     @Test
     public void testRemoveStudentFromKenntnis_whenKenntnisIsNotPresent() {
         assertThrows(PersistenceException.class, () -> {
-            taetigkeitsfeldControl.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
+            taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
         });
     }
 }

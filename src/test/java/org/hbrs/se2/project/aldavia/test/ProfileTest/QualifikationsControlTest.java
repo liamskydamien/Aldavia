@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.QualifikationenControl;
+import org.hbrs.se2.project.aldavia.service.QualifikationenService;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.entities.Qualifikation;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class QualifikationsControlTest {
 
     @Autowired
-    private QualifikationenControl qualifikationControl;
+    private QualifikationenService qualifikationControl;
 
     @Autowired
     private QualifikationRepository qualifikationsRepository;
