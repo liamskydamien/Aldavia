@@ -2,9 +2,7 @@ package org.hbrs.se2.project.aldavia.control;
 
 import org.hbrs.se2.project.aldavia.dtos.RolleDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.util.Globals;
 
-import java.util.Arrays;
 import java.util.List;
 
 // @Component

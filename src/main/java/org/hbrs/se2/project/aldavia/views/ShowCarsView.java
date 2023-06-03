@@ -14,7 +14,6 @@ import com.vaadin.flow.router.Route;
 import org.apache.commons.lang3.StringUtils;
 import org.hbrs.se2.project.aldavia.control.ManageCarControl;
 import org.hbrs.se2.project.aldavia.dtos.CarDTO;
-import org.hbrs.se2.project.aldavia.util.Globals;
 
 import java.util.List;
 
@@ -98,4 +97,4 @@ public class ShowCarsView extends Div  {
     }
 
 
-};
+}
