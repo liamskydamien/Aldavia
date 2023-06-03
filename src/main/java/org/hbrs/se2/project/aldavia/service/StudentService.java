@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class StudentControl {
+public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private QualifikationenControl qualifikationenControl;
+    private QualifikationenService qualifikationenService;
 
 
 
@@ -121,7 +121,7 @@ public class StudentControl {
                 List<Qualifikation> qualifikationen = new ArrayList<>(student.getQualifikationen());
                 for (Qualifikation qualifikation : qualifikationen) {
                     student.setQualifikationen(null);
-                    qualifikationenControl.removeQualifikation(qualifikation);
+                    qualifikationenService.removeQualifikation(qualifikation);
                 }
             }
 

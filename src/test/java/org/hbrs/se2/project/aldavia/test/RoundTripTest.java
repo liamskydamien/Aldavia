@@ -31,13 +31,12 @@ public class RoundTripTest {
     private UnternehmenRepository unternehmenRepository;
 
 
-    @Test
     /**
      * Round Triping Test mit einer einfachen Strecke (C-R-Ass-D).
      * Dieses Muster für Unit-Tests wird in der Vorlesung SE-2 eingeführt (Kapitel 6).
      *
      */
-
+    @Test
     void createReadAndDeleteAStudent() {
 
         // Schritt 1: C = Create (hier: Erzeugung und Abspeicherung mit der Method save()
@@ -77,6 +76,7 @@ public class RoundTripTest {
         System.out.println("Student: " + studentAfterCreate);
 
         // Schritt 3: Ass = Assertion: Vergleich der vorhandenen Objekte auch Gleichheit...
+        assert studentAfterCreate != null;
         assertEquals( studentAfterCreate.getNachname() , "Michel" );
         assertEquals( studentAfterCreate.getVorname() , "Torben" );
         // ... sowie auf Identität
@@ -132,6 +132,7 @@ public class RoundTripTest {
         }
 
         // Teste Assertion
+        assert unternehmenAfterCreate != null;
         assertEquals(unternehmenAfterCreate.getName(), "TestFirma");
         assertSame(user, userAfterCreate);
         assertSame(unternehmen, unternehmenAfterCreate);

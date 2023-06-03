@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.StudentControl;
+import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class StudentControlTest {
+class StudentServiceTest {
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private StudentControl studentControl;
+    private StudentService studentService;
 
     private Student student;
     private ChangeStudentInformationDTO changeStudentInformationDTO;
@@ -107,7 +107,7 @@ class StudentControlTest {
 
     @Test
     void testGetStudent_StudentExists_ReturnsStudent() throws ProfileException {
-        Student newStudent = studentControl.getStudent(student.getUser().getUserid());
+        Student newStudent = studentService.getStudent(student.getUser().getUserid());
         assertEquals(student.getVorname(), newStudent.getVorname());
         assertEquals(student.getNachname(), newStudent.getNachname());
         assertEquals(student.getMatrikelNummer(), newStudent.getMatrikelNummer());
@@ -116,7 +116,7 @@ class StudentControlTest {
 
     @Test
     void testGetStudent_StudentDoesNotExist_ThrowsProfileException() {
-        assertThrows(ProfileException.class, () -> studentControl.getStudent("TestUserDoesNotExist_xyz"));
+        assertThrows(ProfileException.class, () -> studentService.getStudent("TestUserDoesNotExist_xyz"));
     }
 
     @Test
@@ -130,9 +130,9 @@ class StudentControlTest {
                .vorname("TestVorname2")
                .build();
 
-       studentControl.updateStudentInformation(student, changeStudentInformationDTO);
+       studentService.updateStudentInformation(student, changeStudentInformationDTO);
 
-       Student newStudent = studentControl.getStudent(student.getUser().getUserid());
+       Student newStudent = studentService.getStudent(student.getUser().getUserid());
        assertEquals(student.getVorname(), newStudent.getVorname());
        assertEquals(student.getNachname(), newStudent.getNachname());
        assertEquals(student.getMatrikelNummer(), newStudent.getMatrikelNummer());
@@ -146,7 +146,7 @@ class StudentControlTest {
 
     @Test
     void testDeleteStudent_ValidStudent_StudentDeletedSuccessfully() throws ProfileException {
-        studentControl.deleteStudent(student);
+        studentService.deleteStudent(student);
         assertFalse(studentRepository.existsById(student.getId()));
     }
 }

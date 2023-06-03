@@ -49,7 +49,7 @@ public class Qualifikation {
     // qualifikation_hat_student
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
     public void setStudent(Student student) {
@@ -57,7 +57,7 @@ public class Qualifikation {
             return;
         }
         this.student = student;
-        student.addQualifikation(this);
+        this.student.addQualifikation(this);
     }
 
     public void removeStudent(Student student) {

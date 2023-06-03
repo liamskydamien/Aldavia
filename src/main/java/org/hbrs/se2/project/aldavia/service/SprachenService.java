@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Component
 @Transactional
-public class SprachenControl {
+public class SprachenService {
     @Autowired
     private SprachenRepository sprachenRepository;
 
