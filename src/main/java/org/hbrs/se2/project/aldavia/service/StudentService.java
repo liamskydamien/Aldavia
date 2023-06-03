@@ -150,7 +150,6 @@ public class StudentService {
             studentRepository.delete(student);
         }
         catch (Exception e) {
-            e.printStackTrace();
             throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }

@@ -54,8 +54,7 @@ public class StudentProfileDTOFactory{
                     .build();
         }
         catch (Exception e){
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Error while creating StudentProfileDTO", e);
         }
     }
 

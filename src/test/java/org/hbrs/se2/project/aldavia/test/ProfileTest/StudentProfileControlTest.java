@@ -127,8 +127,8 @@ public class StudentProfileControlTest {
     void tearDown() {
         try {
             studentService.deleteStudent(student);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         }
     }
 
