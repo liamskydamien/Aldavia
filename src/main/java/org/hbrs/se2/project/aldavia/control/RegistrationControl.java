@@ -114,6 +114,7 @@ public class RegistrationControl {
             Unternehmen unternehmenNeu =
                     Unternehmen.builder()
                             .name(dto.getCompanyName())
+                            .webseite(dto.getWebseite())
                             .user(userNeu)
                             .build();
 

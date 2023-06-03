@@ -15,7 +15,7 @@ public class RegistrationDTOCompany {
     private String mail;
     private String password;
     private int registrationDate;
-    private String standort;
+    private String webseite;
 
 
     @Override

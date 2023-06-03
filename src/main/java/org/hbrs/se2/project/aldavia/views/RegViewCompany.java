@@ -39,7 +39,7 @@ public class RegViewCompany extends Div {
     private TextField mail = new TextField("Email-Adresse");
 
     private TextField companyName= new TextField("Name Ihres Unternehmens");
-    private TextField standort = new TextField("Hauptstandort");
+    private TextField webseite = new TextField("Webseite");
     private PasswordField password = new PasswordField("Passwort");
     private ProgressBar pbar = new ProgressBar(0.0,10.0);
     private PasswordField passwordCheck = new PasswordField("Passwort check");
@@ -60,7 +60,7 @@ public class RegViewCompany extends Div {
         username.setRequiredIndicatorVisible(true);
         mail.setRequiredIndicatorVisible(true);
         companyName.setRequiredIndicatorVisible(true);
-        standort.setRequiredIndicatorVisible(true);
+        webseite.setRequiredIndicatorVisible(true);
         password.setRequiredIndicatorVisible(true);
         passwordCheck.setRequiredIndicatorVisible(true);
 
@@ -124,7 +124,7 @@ public class RegViewCompany extends Div {
 
 
             if (dto.getMail().equals("") || dto.getUserName().equals("") || dto.getPassword().equals("")
-                    || dto.getCompanyName().equals("") || dto.getStandort().equals("")) {
+                    || dto.getCompanyName().equals("") || dto.getWebseite().equals("")) {
 
                 notification.show("Bitte alle Felder ausfüllen!");
             }else if(dto.getPassword().length() < 10) {
@@ -152,7 +152,7 @@ public class RegViewCompany extends Div {
 
     private Component createFormLayout() {
         FormLayout formLayout = new FormLayout();
-        formLayout.add(username, mail, companyName, standort, password, passwordCheck);
+        formLayout.add(username, mail, companyName, webseite, password, passwordCheck);
         return formLayout;
     }
 
@@ -226,6 +226,9 @@ public class RegViewCompany extends Div {
 
     private RegistrationResult register(RegistrationControl regControl) {
         RegistrationDTOCompany dto = binder.getBean();
+        //Converting Mail to lower case
+        String email = dto.getMail().toLowerCase();
+        dto.setMail(email);
         return regControl.createUnternehmen(dto);
     }
 

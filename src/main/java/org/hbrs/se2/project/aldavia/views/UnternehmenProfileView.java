@@ -3,6 +3,8 @@ package org.hbrs.se2.project.aldavia.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -17,13 +19,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.customElements.AdressePicker;
-import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOCompany;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
-import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,11 +57,13 @@ public class UnternehmenProfileView extends Div {
     private Binder<UnternehmenProfileDTO> binder = new Binder<>(UnternehmenProfileDTO.class);
 
     //Varibles for Custom Field
-    private TextField strasse = new TextField("strasse");
+    private TextField strasse = new TextField("Strasse");
     private TextField hausnr = new TextField("HausNr");
-    private TextField plz = new TextField ("Plz");
+    private TextField plz = new TextField ("PLZ");
     private TextField ort = new TextField("Ort");
     private TextField land = new TextField("Land");
+
+    CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
 
     HorizontalLayout layout = new HorizontalLayout();
 
@@ -95,12 +95,13 @@ public class UnternehmenProfileView extends Div {
             layout.add(plusAdresse, save, hlAdresse);
 
 
-
             UserDTO userDTO = getCurrentUser();
             UnternehmenProfileDTO unternehmenDto = control.getUnternehmenProfileDTO(userDTO.getUserid());
 
+
             add(createFormLayout(control, unternehmenDto));
             add(layout);
+            add(createCheckboxes());
 
 
             save.setVisible(false);
@@ -137,9 +138,11 @@ public class UnternehmenProfileView extends Div {
                             .build();
 
 
+
                     //Adresse zu vorhandenen Adressen hinzufügen
                     Set<Adresse> vorhandeneAdressen = unternehmenDto.getAdressen();
                     vorhandeneAdressen.add(adresseNeu);
+                    unternehmenDto.setAdressen(vorhandeneAdressen);
                     try {
                         control.createAndUpdateUnternehmenProfile(unternehmenDto, userDTO.getUserid());
                     } catch (ProfileException ex) {
@@ -158,18 +161,15 @@ public class UnternehmenProfileView extends Div {
                     land.clear();
 
                     adressePicker.setVisible(false);
+                    //Seite Refreshen
+                    UI.getCurrent().getPage().reload();
                 }
             });
 
 
             save.addClickListener(e -> {
                 UnternehmenProfileDTO dto = binder.getBean();
-                Set<Adresse> adressenSet;
-                if (adressen.getValue() != null || !adressen.getValue().equals("")){
-                    String [] strng = adressen.getValue().split(",");
-                    for (String s : strng) {
-                    }
-                }
+
                 if(dto == null) {
                     throw new RuntimeException("DTO IS NULL!");
                 }
@@ -199,14 +199,6 @@ public class UnternehmenProfileView extends Div {
         }
         if(dto.getEmail() != null) {
             email.setValue(dto.getEmail());
-        }
-       if(dto.getAdressen() != null) {
-           String result = "";
-           for (Adresse a: dto.getAdressen()) {
-               result += a;
-            };
-           adressen.setValue(result);
-
        }
         if(dto.getAp_vorname() != null) {
             ap_vorname.setValue(dto.getAp_vorname());
@@ -214,19 +206,22 @@ public class UnternehmenProfileView extends Div {
         if(dto.getAp_nachname() != null) {
             ap_nachname.setValue(dto.getAp_nachname());
         }
+        if(dto.getWebside() != null) {
+            webside.setValue(dto.getWebside());
+        }
         if(dto.getAdressen() != null) {
             Set<Adresse> adresses = dto.getAdressen();
             String result = "";
             int counter = 1;
             for(Adresse a : adresses) {
-                result += "["+counter++ + "]" + " " + a.getStrasse() + " " + a.getHausnummer() + " " +
+                result += "["+counter++ + "]" + " " + a.getStrasse() + " " + a.getHausnummer() + ", " +
                         a.getPlz() + " " + a.getOrt() + " " +  a.getLand() + " ";
             }
             adressen.setValue(result);
 
         }
         //Adressen dürfen nur über den Add-Adressen Button hinzugefügt werden
-        adressen.isReadOnly();
+        adressen.setReadOnly(true);
 
 
 
@@ -254,5 +249,15 @@ public class UnternehmenProfileView extends Div {
         layout.add(strasse,hausnr,plz,ort,land);
         layout.setWidth("50px");
         return layout;
+    }
+    public Component createCheckboxes() {
+
+        checkboxGroup.setLabel("Adressen");
+        checkboxGroup.setItems("Order ID", "Product name", "Customer",
+                "Status");
+        checkboxGroup.select("Order ID", "Customer");
+        checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        add(checkboxGroup);
+        return checkboxGroup;
     }
 }
