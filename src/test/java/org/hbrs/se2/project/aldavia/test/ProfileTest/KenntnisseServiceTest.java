@@ -78,16 +78,16 @@ public class KenntnisseServiceTest {
 
         kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
 
-        Kenntnis updatedKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        Kenntnis updatedKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(updatedKenntnis.getStudents().get(0).getId(), student.getId());
     }
 
     @Test
     public void testAddStudentToKenntnis_whenKenntnisIsNotPresent() {
         kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
-        kenntnisTest = kenntnisseRepository.findById(kenntnisDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        kenntnisTest = kenntnisseRepository.findById(kenntnisDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(kenntnisTest.getStudents().get(0).getId(), student.getId());
     }
 

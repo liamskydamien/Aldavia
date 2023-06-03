@@ -49,10 +49,6 @@ public class ProfileControlTest {
     private DeletionStudentInformationDTO deletionStudentInformationDTO;
 
     private AddStudentInformationDTO addStudentInformationDTO;
-    private Kenntnis kenntnis;
-    private Taetigkeitsfeld taetigkeitsfeld;
-    private Sprache sprache;
-    private Qualifikation qualifikation;
 
     @BeforeEach
     void setUp() {
@@ -89,7 +85,7 @@ public class ProfileControlTest {
                 .level("C1")
                 .build();
 
-        qualifikation = Qualifikation.builder()
+        Qualifikation qualifikation = Qualifikation.builder()
                 .beschreibung("Ich habe ein Praktikum bei Aldavia absolviert.")
                 .bereich("Software Entwicklung")
                 .bezeichnung("SaaS Entwickler")
@@ -99,9 +95,9 @@ public class ProfileControlTest {
                 .beschaftigungsverhaltnis("Praktikum")
                 .build();
 
-        kenntnis = kenntnisseService.getKenntnis(kenntnisDTO);
-        taetigkeitsfeld = taetigkeitsfeldService.getTaetigkeitsfeld(taetigkeitsfeldDTO);
-        sprache = sprachenService.getSprache(spracheDTO);
+        Kenntnis kenntnis = kenntnisseService.getKenntnis(kenntnisDTO);
+        Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldService.getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        Sprache sprache = sprachenService.getSprache(spracheDTO);
 
         student.addKenntnis(kenntnis);
         student.addTaetigkeitsfeld(taetigkeitsfeld);
