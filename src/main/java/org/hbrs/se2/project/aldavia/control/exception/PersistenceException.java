@@ -2,10 +2,10 @@ package org.hbrs.se2.project.aldavia.control.exception;
 
 public class PersistenceException extends Exception{
     public enum PersistenceExceptionType {
-        SpracheNotFound ,
-        KenntnisNotFound ,
-        QualifikationNotFound ,
-        TaetigkeitsfeldNotFound ,
+        SPRACHE_NOT_FOUND,
+        KENNTNIS_NOT_FOUND,
+        QUALIFIKATION_NOT_FOUND,
+        TAETIGKEITSFELD_NOT_FOUND,
     }
 
     private final PersistenceExceptionType persistenceExceptionType;

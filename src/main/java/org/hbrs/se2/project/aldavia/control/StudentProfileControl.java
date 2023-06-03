@@ -49,14 +49,14 @@ public class StudentProfileControl {
             return studentProfileDTO;
         }
         catch (Exception e) {
-            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
     public void updateStudentProfile(StudentProfileDTO updatedVersion, String username) throws ProfileException, PersistenceException {
         StudentProfileDTO oldVersion = getStudentProfile(username);
         if (oldVersion == null) {
-            throw new ProfileException("Student does not exist", ProfileException.ProfileExceptionType.StudentDoesNotExist);
+            throw new ProfileException("Student does not exist", ProfileException.ProfileExceptionType.STUDENT_DOES_NOT_EXIST);
         }
         else {
             System.out.println("Getting Student from Database with username: " + username);

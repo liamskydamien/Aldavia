@@ -52,7 +52,7 @@ public class QualifikationenService {
                 qualifikation.setStudent(student);
                 return qualifikationRepository.save(qualifikation);
             } else {
-                throw new PersistenceException(PersistenceException.PersistenceExceptionType.QualifikationNotFound, "Qualifikation not found");
+                throw new PersistenceException(PersistenceException.PersistenceExceptionType.QUALIFIKATION_NOT_FOUND, "Qualifikation not found");
             }
         }
     }
@@ -66,7 +66,7 @@ public class QualifikationenService {
         if (qualifikationRepository.existsById(qualifikationsDTO.getId())) {
             qualifikationRepository.deleteById(qualifikationsDTO.getId());
         } else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.QualifikationNotFound, "Qualifikation not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.QUALIFIKATION_NOT_FOUND, "Qualifikation not found");
         }
     }
 

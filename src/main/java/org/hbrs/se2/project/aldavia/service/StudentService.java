@@ -35,7 +35,7 @@ public class StudentService {
             return student.get();
         }
         else {
-            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
 
@@ -104,7 +104,7 @@ public class StudentService {
             studentRepository.save(student);
         }
         catch (Exception e) {
-            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
@@ -151,7 +151,7 @@ public class StudentService {
         }
         catch (Exception e) {
             e.printStackTrace();
-            throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
@@ -164,7 +164,7 @@ public class StudentService {
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            throw new ProfileException("Error while creating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while creating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
