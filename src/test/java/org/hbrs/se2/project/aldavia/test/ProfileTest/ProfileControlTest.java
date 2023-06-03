@@ -160,17 +160,18 @@ public class ProfileControlTest {
     }
 
     @Test
-    public void testChangeStudentInformation() throws ProfileException {
+    public void testChangeStudentInformation() throws ProfileException, PersistenceException {
+        Student student = studentRepository.findByUserID("MaxMüller2001").get();
+        System.out.println("Student:" + student.getUser().getUserid());
+
         changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
-                .vorname("Maximilian")
-                .nachname("Müller")
                 .geburtsdatum(LocalDate.of(2001, 1, 1))
                 .studiengang("Wirtschaftsinformatik")
                 .studienbeginn(LocalDate.of(2020, 1, 1))
-                .matrikelnummer("9012345678")
-                .lebenslauf("Ich bin ein kluger Student.")
+                .matrikelnummer("9012305678")
+                .lebenslauf("Ich bin der größe Sascha Alda Fan")
                 .beschreibung("Ich bin ein toller Student.")
-                .telefonnummer("0123456789")
+                .telefonnummer("0124123456789")
                 .build();
 
         // To add
@@ -198,43 +199,12 @@ public class ProfileControlTest {
                 .name("Software Design")
                 .build();
 
-        // To remove
-        TaetigkeitsfeldDTO taetigkeitsfeldDTO = TaetigkeitsfeldDTO.builder()
-                .name("Software Entwicklung")
-                .build();
-
-        SpracheDTO spracheDTO = SpracheDTO.builder()
-                .name("Englisch")
-                .level("C1")
-                .id(sprache.getId())
-                .build();
-
-        QualifikationsDTO qualifikationDTO = QualifikationsDTO.builder()
-                .beschreibung("Ich habe ein Praktikum bei Aldavia absolviert.")
-                .bereich("Software Entwicklung")
-                .bezeichnung("SaaS Entwickler")
-                .institution("Aldavia GmbH")
-                .von(LocalDate.of(2020, 1, 1))
-                .bis(LocalDate.of(2020, 7, 1))
-                .beschaeftigungsart("Praktikum")
-                .id(qualifikation.getId())
-                .build();
-
-        KenntnisDTO kenntnisDTO = KenntnisDTO.builder()
-                .name("Java")
-                .build();
-
         // Create Lists
-
         List<TaetigkeitsfeldDTO> addTaetigkeitsfelder = new ArrayList<>();
         List<SpracheDTO> addSprachen = new ArrayList<>();
         List<QualifikationsDTO> addQulifikationen = new ArrayList<>();
         List<KenntnisDTO> addKenntnisse = new ArrayList<>();
 
-        List<TaetigkeitsfeldDTO> removeTaetigkeitsfelder = new ArrayList<>();
-        List<SpracheDTO> removeSprachen = new ArrayList<>();
-        List<QualifikationsDTO> removeQulifikationen = new ArrayList<>();
-        List<KenntnisDTO> removeKenntnisse = new ArrayList<>();
 
         // Add to Lists
         addTaetigkeitsfelder.add(taetigkeitsfeldDTOAdd);
@@ -242,17 +212,12 @@ public class ProfileControlTest {
         addQulifikationen.add(qualifikationDTOAdd);
         addKenntnisse.add(kenntnisDTOAdd);
 
-        // Remove from Lists
-        removeTaetigkeitsfelder.add(taetigkeitsfeldDTO);
-        removeSprachen.add(spracheDTO);
-        removeQulifikationen.add(qualifikationDTO);
-        removeKenntnisse.add(kenntnisDTO);
 
-        // Build DeletionStudentInformationDTO
-        deletionStudentInformationDTO.setKenntnisse(removeKenntnisse);
-        deletionStudentInformationDTO.setQualifikationen(removeQulifikationen);
-        deletionStudentInformationDTO.setSprachen(removeSprachen);
-        deletionStudentInformationDTO.setTaetigkeitsfelder(removeTaetigkeitsfelder);
+        /*// Build DeletionStudentInformationDTO
+        deletionStudentInformationDTO.setKenntnisse(null);
+        deletionStudentInformationDTO.setQualifikationen(null);
+        deletionStudentInformationDTO.setSprachen(null);
+        deletionStudentInformationDTO.setTaetigkeitsfelder(null);*/
 
         // Build AddStudentInformationDTO
         addStudentInformationDTO.setKenntnisse(addKenntnisse);
@@ -267,21 +232,37 @@ public class ProfileControlTest {
                 .deletionStudentInformationDTO(deletionStudentInformationDTO)
                 .build();
 
+        StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
+                .email("sina.schmidt@aldavia-mail.de")
+                .vorname("Sina")
+                .nachname("Schmidt")
+                .geburtsdatum(LocalDate.of(2001, 1, 1))
+                .studiengang("Wirtschaftsinformatik")
+                .studienbeginn(LocalDate.of(2020, 1, 1))
+                .matrikelNummer("9012305678")
+                .lebenslauf("Ich bin der größe Sascha Alda Fan")
+                .beschreibung("Ich bin ein toller Student.")
+                .telefonnummer("0124123456789")
+                .kenntnisse(addKenntnisse)
+                .sprachen(addSprachen)
+                .qualifikationen(addQulifikationen)
+                .taetigkeitsfelder(addTaetigkeitsfelder)
+                .build();
 
-        studentProfileControl.createAndUpdateStudentProfile(updateStudentProfileDTO, student.getUser().getUserid());
+
+        studentProfileControl.updateStudentProfile(newstudentProfileDTO, student.getUser().getUserid());
 
 
         StudentProfileDTO studentProfileDTO = studentProfileControl.getStudentProfile(student.getUser().getUserid());
 
         // Assert Student Information
-        assertEquals(studentProfileDTO.getVorname(), changeStudentInformationDTO.getVorname());
-        assertEquals(studentProfileDTO.getNachname(), changeStudentInformationDTO.getNachname());
+        assertEquals(studentProfileDTO.getVorname(), student.getVorname());
+        assertEquals(studentProfileDTO.getNachname(), student.getNachname());
         assertEquals(studentProfileDTO.getGeburtsdatum(), changeStudentInformationDTO.getGeburtsdatum());
         assertEquals(studentProfileDTO.getStudiengang(), changeStudentInformationDTO.getStudiengang());
-        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn());
+        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
         assertEquals(studentProfileDTO.getMatrikelNummer(), changeStudentInformationDTO.getMatrikelnummer());
         assertEquals(studentProfileDTO.getLebenslauf(), changeStudentInformationDTO.getLebenslauf());
-
 
         // Assert User Information
         assertEquals(studentProfileDTO.getBeschreibung(), changeStudentInformationDTO.getBeschreibung());

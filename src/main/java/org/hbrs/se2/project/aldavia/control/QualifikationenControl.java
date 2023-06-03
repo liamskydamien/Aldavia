@@ -5,6 +5,7 @@ import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.entities.Qualifikation;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
+import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class QualifikationenControl {
 
     @Autowired
     private QualifikationRepository qualifikationRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     /**
      * Add a Qualifikation for a student
@@ -68,6 +71,9 @@ public class QualifikationenControl {
     }
 
     public void removeQualifikation(Qualifikation qualifikation) {
+        Student student = qualifikation.getStudent();
+        student.removeQualifikation(qualifikation);
+        studentRepository.save(student);
         qualifikationRepository.delete(qualifikation);
     }
 }

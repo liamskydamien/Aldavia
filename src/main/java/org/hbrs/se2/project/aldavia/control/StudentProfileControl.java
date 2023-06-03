@@ -177,10 +177,10 @@ public class StudentProfileControl {
 
             // Remove inputs from Lists
 
-            List<Kenntnis> kenntnisse = student.getKenntnisse() != null? student.getKenntnisse() : new ArrayList<>();
-            List<Sprache> sprachen = student.getSprachen() != null? student.getSprachen() : new ArrayList<>();
-            List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder() != null? student.getTaetigkeitsfelder() : new ArrayList<>();
-            List<Qualifikation> qualifikationen = student.getQualifikationen() != null? student.getQualifikationen() : new ArrayList<>();
+            List<Kenntnis> kenntnisse = student.getKenntnisse() != null? new ArrayList<>(student.getKenntnisse()) : new ArrayList<>();
+            List<Sprache> sprachen = student.getSprachen() != null? new ArrayList<>(student.getSprachen()) : new ArrayList<>();
+            List<Taetigkeitsfeld> taetigkeitsfelder = student.getTaetigkeitsfelder() != null? new ArrayList<>(student.getTaetigkeitsfelder()) : new ArrayList<>();
+            List<Qualifikation> qualifikationen = student.getQualifikationen() != null? new ArrayList<>(student.getQualifikationen()) : new ArrayList<>();
 
             // Remove Kenntnisse
             for (Kenntnis kenntnis : kenntnisse) {
@@ -199,7 +199,7 @@ public class StudentProfileControl {
 
             // Remove Qualifikationen
             for (Qualifikation qualifikation : qualifikationen) {
-                student.removeQualifikation(qualifikation);
+                qualifikationenControl.removeQualifikation(qualifikation);
             }
 
             // Add Kenntnisse
