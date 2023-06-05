@@ -2,13 +2,10 @@ package org.hbrs.se2.project.aldavia.control.exception;
 
 public class PersistenceException extends Exception{
     public enum PersistenceExceptionType {
-        SpracheNotFound,
-        ErrorWhileCreatingSprache,
-        ErrorWhileUpdatingSprache,
-        ErrorWhileCreatingUser,
-        ErrorWhileCreatingBewerbung,
-        ErrorWhileCreatingStellenanzeige,
-        DatabaseConnectionFailed, ErrorWhileDeletingSprache, ErrorWhileFetchingKenntnis, ErrorWhileRemovingStudentFromKenntnis, ErrorWhileAddingStudentToKenntnis, ErrorWhileFetchingQualifikation, ErrorWhileDeletingQualifikation, ErrorWhileAddingStudentToQualifikation, ErrorWhileRemovingStudentFromQualifikation, ErrorWhileFetchingTaetigkeitsfeld, ErrorWhileRemovingTaetigkeitsfeld, ErrorWhileAddingStudentToTaetigkeitsfeld, ErrorWhileRemovingStudentFromTaetigkeitsfeld, ErrorWhileAddingQualifikation, ErrorWhileDeletingKenntnis, StudentAlreadyInSprache, ErrorWhileUpdatingQualifikation, ErrorWhileGettingStudent, KenntnisNotFound, QualifikationNotFound, TaetigkeitsfeldNotFound,
+        SPRACHE_NOT_FOUND,
+        KENNTNIS_NOT_FOUND,
+        QUALIFIKATION_NOT_FOUND,
+        TAETIGKEITSFELD_NOT_FOUND,
     }
 
     private final PersistenceExceptionType persistenceExceptionType;

@@ -2,6 +2,9 @@ package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Objects;
+
 @Getter
 @Setter
 
@@ -47,4 +50,8 @@ public class RegistrationDTOStudent {
 		return true;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(userName, vorname, nachname, mail, password, registrationDate);
+	}
 }

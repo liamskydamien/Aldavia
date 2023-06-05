@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.control.factories;
 
-import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
@@ -23,35 +22,18 @@ public class StudentProfileDTOFactory{
     private StudentProfileDTOFactory() {
     }
 
+    /**
+     * Creates a list of KenntnisDTOs from a student
+     * @param student The student
+     * @return List of KenntnisDTOs
+     */
     public StudentProfileDTO createStudentProfileDTO(Student student){
         try {
             User user = student.getUser();
-            List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = new ArrayList<>();
-            List<QualifikationsDTO> qualifikationsDTOList = new ArrayList<>();
-            List<SpracheDTO> spracheDTOList = new ArrayList<>();
-            List<KenntnisDTO> kenntnisDTOList = new ArrayList<>();
-            if (student.getSprachen() != null){
-                if (!student.getSprachen().isEmpty()) {
-                    spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
-                }
-            }
-            if (student.getKenntnisse() != null){
-                if (!student.getKenntnisse().isEmpty()) {
-                    kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
-                }
-            }
-
-            if(student.getTaetigkeitsfelder() != null) {
-                if (!student.getTaetigkeitsfelder().isEmpty()) {
-                    taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
-                }
-            }
-
-            if(student.getQualifikationen() != null){
-                if (!student.getQualifikationen().isEmpty()) {
-                    qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
-                }
-            }
+            List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = createTaetigkeitsfeldDTOList(student);
+            List<QualifikationsDTO> qualifikationsDTOList = createQualifikationsDTOList(student);
+            List<SpracheDTO> spracheDTOList = createSpracheDTOList(student);
+            List<KenntnisDTO> kenntnisDTOList = createKenntnisDTOList(student);
 
             return StudentProfileDTO.builder()
                     .email(user.getEmail() != null ? user.getEmail() : "")
@@ -72,8 +54,7 @@ public class StudentProfileDTOFactory{
                     .build();
         }
         catch (Exception e){
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Error while creating StudentProfileDTO", e);
         }
     }
 
@@ -88,6 +69,15 @@ public class StudentProfileDTOFactory{
                 .build();
     }
 
+    private List<SpracheDTO> createSpracheDTOList(Student student) {
+        if (student.getSprachen() != null) {
+            if (!student.getSprachen().isEmpty()) {
+                return student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
+            }
+        }
+        return new ArrayList<>();
+    }
+
     private KenntnisDTO createKenntnisDTO(Kenntnis kenntnis) {
         if (kenntnis == null){
             return null;
@@ -97,6 +87,15 @@ public class StudentProfileDTOFactory{
                 .build();
     }
 
+    private List<KenntnisDTO> createKenntnisDTOList(Student student) {
+        if (student.getKenntnisse() != null){
+            if (!student.getKenntnisse().isEmpty()) {
+               return student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
+            }
+        }
+        return new ArrayList<>();
+    }
+
     private TaetigkeitsfeldDTO createTaetigkeitsfeldDTO(Taetigkeitsfeld taetigkeitsfeld) {
         if (taetigkeitsfeld == null){
             return null;
@@ -104,6 +103,15 @@ public class StudentProfileDTOFactory{
         return TaetigkeitsfeldDTO.builder()
                 .name(taetigkeitsfeld.getBezeichnung())
                 .build();
+    }
+
+    private List<TaetigkeitsfeldDTO> createTaetigkeitsfeldDTOList(Student student) {
+        if(student.getTaetigkeitsfelder() != null) {
+            if (!student.getTaetigkeitsfelder().isEmpty()) {
+               return student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
+            }
+        }
+        return new ArrayList<>();
     }
 
     private QualifikationsDTO createQualifikationsDTO(Qualifikation qualifikation) {
@@ -120,6 +128,15 @@ public class StudentProfileDTOFactory{
                 .bis(qualifikation.getBis())
                 .id(qualifikation.getId())
                 .build();
+    }
+
+    private List<QualifikationsDTO> createQualifikationsDTOList(Student student) {
+        if(student.getQualifikationen() != null){
+            if (!student.getQualifikationen().isEmpty()) {
+                return student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

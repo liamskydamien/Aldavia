@@ -60,7 +60,7 @@ public class KenntnisseService {
             kenntnisseRepository.save(kenntnis);
         }
         else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.KenntnisNotFound, "Kenntnis not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.KENNTNIS_NOT_FOUND, "Kenntnis not found");
         }
     }
 }
