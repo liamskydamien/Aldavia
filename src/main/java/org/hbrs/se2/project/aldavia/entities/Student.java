@@ -121,7 +121,7 @@ public class Student {
         }
         if (this.qualifikationen.contains(qualifikation)) {
             this.qualifikationen.remove(qualifikation);
-            qualifikation.setStudent(null);
+            qualifikation.removeStudent(this);
         }
     }
 

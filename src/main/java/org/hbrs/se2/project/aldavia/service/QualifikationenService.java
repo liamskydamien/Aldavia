@@ -1,21 +1,23 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.entities.Qualifikation;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.QualifikationRepository;
+import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
-public class QualifikationenControl {
+public class QualifikationenService {
 
     @Autowired
     private QualifikationRepository qualifikationRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     /**
      * Add a Qualifikation for a student
@@ -69,6 +71,9 @@ public class QualifikationenControl {
     }
 
     public void removeQualifikation(Qualifikation qualifikation) {
+        Student student = qualifikation.getStudent();
+        student.removeQualifikation(qualifikation);
+        studentRepository.save(student);
         qualifikationRepository.delete(qualifikation);
     }
 }

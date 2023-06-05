@@ -16,18 +16,10 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
-import org.hbrs.se2.project.aldavia.dtos.RolleDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.util.Globals;
-
-import java.util.List;
 
 @CssImport("./styles/views/navbar/navbar.css")
 

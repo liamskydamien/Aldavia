@@ -23,11 +23,10 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 
 
 @CssImport("./styles/views/navbar/navbar.css")
-
 public class LoggedInStateLayout extends AppLayout {
 
     //@Autowired
-    //private StudentControl studentControl;
+    //private StudentService studentControl;
 
     private AuthorizationControl authorizationControl;
 
@@ -43,7 +42,7 @@ public class LoggedInStateLayout extends AppLayout {
     }
 
 
-    private Component createHeaderContent() throws ProfileException {
+    private Component createHeaderContent() {
 
 
 

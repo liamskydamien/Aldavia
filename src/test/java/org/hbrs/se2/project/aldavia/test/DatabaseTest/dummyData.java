@@ -9,39 +9,33 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class DummyData {
+public class dummyData {
         @Autowired
         private StudentRepository studentRepository;
 
-        private Student student;
-        private Kenntnis kenntnis;
-        private Taetigkeitsfeld taetigkeitsfeld;
-        private Sprache sprache;
-        private Qualifikation qualifikation;
-
-        @Test
+    @Test
         public void run(){
             User user = User.builder()
-                    .userid("SinaSchmidt2001")
+                    .userid("MaxMustermann2001")
                     .password("TestPassword")
-                    .email("Sina.Schmidt@aldavia.de")
-                    .beschreibung("Ich bin eine Studentin.")
+                    .email("Max.Mustermann@aldavia.de")
+                    .beschreibung("Ich studiere Wirtschaftsinformatik an der Hochschule Bonn-Rhein-Sieg. Ich bin auf der Suche nach einem Praktikum.")
                     .phone("0123456789")
                     .build();
 
-            student = Student.builder()
-                    .vorname("Sina")
-                    .nachname("Schmidt")
+            Student student = Student.builder()
+                    .vorname("Max")
+                    .nachname("Mustermann")
                     .geburtsdatum(LocalDate.of(2002, 3, 7))
                     .studiengang("Wirtschaftsinformatik")
                     .studienbeginn(LocalDate.of(2021, 10, 1))
                     .matrikelNummer("12345125678")
-                    .lebenslauf("Sina Schmidt ist eine Studentin.")
+                    .lebenslauf("MaxMustermann.pdf")
                     .build();
 
             student.setUser(user);
 
-            kenntnis = Kenntnis.builder()
+            Kenntnis kenntnis = Kenntnis.builder()
                     .bezeichnung("Java")
                     .build();
 
@@ -49,11 +43,11 @@ public class DummyData {
                     .bezeichnung("C++")
                     .build();
 
-            taetigkeitsfeld = Taetigkeitsfeld.builder()
+            Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
                     .bezeichnung("Software Entwicklung")
                     .build();
 
-            sprache = Sprache.builder()
+            Sprache sprache = Sprache.builder()
                     .bezeichnung("Englisch")
                     .level("C1")
                     .build();
@@ -63,7 +57,7 @@ public class DummyData {
                     .level("Muttersprache")
                     .build();
 
-            qualifikation = Qualifikation.builder()
+            Qualifikation qualifikation = Qualifikation.builder()
                     .beschreibung("Ich habe ein Praktikum bei Aldavia absolviert.")
                     .bereich("Software Entwicklung")
                     .bezeichnung("SaaS Entwickler")
@@ -73,10 +67,21 @@ public class DummyData {
                     .beschaftigungsverhaltnis("Praktikum")
                     .build();
 
+            Qualifikation qualifikation1 = Qualifikation.builder()
+                    .beschreibung("Ich habe ein Praktikum bei NoCode als Testentwickler absolviert.")
+                    .bereich("Software Entwicklung")
+                    .bezeichnung("Test Entwickler")
+                    .institution("NoCode GmbH")
+                    .von(LocalDate.of(2020, 1, 1))
+                    .bis(LocalDate.of(2020, 7, 1))
+                    .beschaftigungsverhaltnis("Praktikum")
+                    .build();
+
             student.addKenntnis(kenntnis);
             student.addKenntnis(kenntnis2);
             student.addTaetigkeitsfeld(taetigkeitsfeld);
             student.addQualifikation(qualifikation);
+            student.addQualifikation(qualifikation1);
             student.addSprache(sprache);
             student.addSprache(sprache2);
 

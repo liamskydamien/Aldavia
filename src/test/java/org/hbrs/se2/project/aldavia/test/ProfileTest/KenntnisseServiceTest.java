@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.KenntnisseControl;
+import org.hbrs.se2.project.aldavia.service.KenntnisseService;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.entities.Kenntnis;
 import org.hbrs.se2.project.aldavia.entities.Student;
@@ -19,14 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class KenntnisseControlTest {
+public class KenntnisseServiceTest {
 
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
 
     @Autowired
-    private KenntnisseControl kenntnisseControl;
+    private KenntnisseService kenntnisseService;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -61,7 +61,7 @@ public class KenntnisseControlTest {
    @AfterEach
     public void tearDown() {
         try {
-            kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
+            kenntnisseService.removeStudentFromKenntnis(kenntnisDTO, student);
             kenntnisseRepository.deleteById(kenntnisTest.getBezeichnung());
         }
         catch (Exception e) {
@@ -76,18 +76,18 @@ public class KenntnisseControlTest {
         kenntnisTest = Kenntnis.builder().bezeichnung(kenntnisDTO.getName()).build();
         kenntnisseRepository.save(kenntnisTest);
 
-        kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
+        kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
 
-        Kenntnis updatedKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        Kenntnis updatedKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(updatedKenntnis.getStudents().get(0).getId(), student.getId());
     }
 
     @Test
     public void testAddStudentToKenntnis_whenKenntnisIsNotPresent() {
-        kenntnisseControl.addStudentToKenntnis(kenntnisDTO, student);
-        kenntnisTest = kenntnisseRepository.findById(kenntnisDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        kenntnisseService.addStudentToKenntnis(kenntnisDTO, student);
+        kenntnisTest = kenntnisseRepository.findById(kenntnisDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(kenntnisTest.getStudents().get(0).getId(), student.getId());
     }
 
@@ -97,7 +97,7 @@ public class KenntnisseControlTest {
         kenntnisTest = existingKenntnis.addStudent(student);
         kenntnisseRepository.save(kenntnisTest);
 
-        kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
+        kenntnisseService.removeStudentFromKenntnis(kenntnisDTO, student);
 
         Kenntnis updatedKenntnis = kenntnisseRepository.findById(kenntnisDTO.getName()).orElse(null);
         assertTrue(updatedKenntnis == null || !updatedKenntnis.getStudents().contains(student));
@@ -106,7 +106,7 @@ public class KenntnisseControlTest {
     @Test
     public void testRemoveStudentFromKenntnis_whenKenntnisIsNotPresent() {
         assertThrows(PersistenceException.class, () -> {
-            kenntnisseControl.removeStudentFromKenntnis(kenntnisDTO, student);
+            kenntnisseService.removeStudentFromKenntnis(kenntnisDTO, student);
         });
     }
 }

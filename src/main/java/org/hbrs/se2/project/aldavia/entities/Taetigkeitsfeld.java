@@ -3,7 +3,6 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-// import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

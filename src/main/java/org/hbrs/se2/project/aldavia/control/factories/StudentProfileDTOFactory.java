@@ -4,8 +4,10 @@ import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentProfileDTOFactory{
 
@@ -28,34 +30,45 @@ public class StudentProfileDTOFactory{
             List<QualifikationsDTO> qualifikationsDTOList = new ArrayList<>();
             List<SpracheDTO> spracheDTOList = new ArrayList<>();
             List<KenntnisDTO> kenntnisDTOList = new ArrayList<>();
-            if (!student.getKenntnisse().isEmpty()) {
-                kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).toList();
+            if (student.getSprachen() != null){
+                if (!student.getSprachen().isEmpty()) {
+                    spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
+                }
             }
-            if (!student.getSprachen().isEmpty()) {
-                spracheDTOList = student.getSprachen().stream().map(this::createSpracheDTO).toList();
+            if (student.getKenntnisse() != null){
+                if (!student.getKenntnisse().isEmpty()) {
+                    kenntnisDTOList = student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
+                }
             }
-            if (!student.getTaetigkeitsfelder().isEmpty()) {
-                taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).toList();
+
+            if(student.getTaetigkeitsfelder() != null) {
+                if (!student.getTaetigkeitsfelder().isEmpty()) {
+                    taetigkeitsfeldDTOList = student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
+                }
             }
-            if (!student.getQualifikationen().isEmpty()) {
-                qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).toList();
+
+            if(student.getQualifikationen() != null){
+                if (!student.getQualifikationen().isEmpty()) {
+                    qualifikationsDTOList = student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
+                }
             }
+
             return StudentProfileDTO.builder()
-                    .email(user.getEmail())
-                    .vorname(student.getVorname())
-                    .nachname(student.getNachname())
-                    .matrikelNummer(student.getMatrikelNummer())
-                    .studiengang(student.getStudiengang())
-                    .studienbeginn(student.getStudienbeginn())
-                    .geburtsdatum(student.getGeburtsdatum())
+                    .email(user.getEmail() != null ? user.getEmail() : "")
+                    .vorname(student.getVorname() != null ? student.getVorname() : "")
+                    .nachname(student.getNachname() != null ? student.getNachname() : "")
+                    .matrikelNummer(student.getMatrikelNummer() != null ? student.getMatrikelNummer() : "")
+                    .studiengang(student.getStudiengang() != null ? student.getStudiengang() : "")
+                    .studienbeginn(student.getStudienbeginn() != null ? student.getStudienbeginn() : LocalDate.now())
+                    .geburtsdatum(student.getGeburtsdatum() != null ? student.getGeburtsdatum() : LocalDate.now())
                     .kenntnisse(kenntnisDTOList)
                     .taetigkeitsfelder(taetigkeitsfeldDTOList)
-                    .lebenslauf(student.getLebenslauf())
-                    .telefonnummer(user.getPhone())
-                    .profilbild(user.getProfilePicture())
+                    .lebenslauf(student.getLebenslauf() != null ? student.getLebenslauf() : "")
+                    .telefonnummer(user.getPhone() != null ? user.getPhone() : "")
+                    .profilbild(user.getProfilePicture() != null ? user.getProfilePicture() : "")
                     .sprachen(spracheDTOList)
                     .qualifikationen(qualifikationsDTOList)
-                    .beschreibung(user.getBeschreibung())
+                    .beschreibung(user.getBeschreibung() != null ? user.getBeschreibung() : "")
                     .build();
         }
         catch (Exception e){
