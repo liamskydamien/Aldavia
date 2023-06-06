@@ -34,6 +34,7 @@ public class Bewerbung {
 
 
     public void setStudent(Student student){
+
         if (this.student != null) {
             this.student.removeBewerbung(this);
         }

@@ -215,6 +215,7 @@ public class Student {
     }
 
     public void addBewerbung(Bewerbung bewerbung) {
+
         if (bewerbungen == null) {
             bewerbungen = new ArrayList<>();
         }
