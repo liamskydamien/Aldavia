@@ -61,7 +61,7 @@ public class SprachenService {
             return sprachenRepository.save(sprache);
         }
         else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, "Sprache not found");
         }
     }
 }

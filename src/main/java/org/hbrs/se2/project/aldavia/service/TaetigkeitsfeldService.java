@@ -57,7 +57,7 @@ public class TaetigkeitsfeldService {
             return taetigkeitsfeldRepository.save(taetigkeitsfeld);
         }
         else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.TaetigkeitsfeldNotFound, "Taetigkeitsfeld not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, "Taetigkeitsfeld not found");
         }
     }
 }

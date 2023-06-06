@@ -35,7 +35,7 @@ public class LoginControl {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "No User could be found! Please check your credentials!");
         }
         this.userDTO = buildUserDTO( tmpUser );
@@ -85,7 +85,7 @@ public class LoginControl {
            throw new DatabaseUserException(
                    DatabaseUserException.
                         DatabaseUserExceptionType.
-                        DatabaseConnectionFailed,
+                           DATABASE_CONNECTION_FAILED,
                    "A failure occured while trying to connect to database. Please try again later.");
         }
         return userTmp.orElse(null);
@@ -102,14 +102,14 @@ public class LoginControl {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "Credentials are empty! Please check your credentials!");
         }
         else if ( username.equals("") || password.equals("") ) {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "Credentials are empty! Please check your credentials!");
         }
     }
