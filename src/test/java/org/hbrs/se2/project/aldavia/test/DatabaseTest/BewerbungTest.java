@@ -1,223 +1,228 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
-//import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-//import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.repository.BewerbungRepository;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.entities.User;
-import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.entities.Bewerbung;
+import org.hbrs.se2.project.aldavia.entities.*;
+import org.hbrs.se2.project.aldavia.repository.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class BewerbungTest {
 
     //TODO: Fix this test
     //TODO: Add round trip test for Bewerbung
     //TODO: Test Constraints if student or stellenanzeige gets deleted (cascade) -> Bewerbung gets deleted too
     //TODO: Test add... and remove... methods
-    /*
 
     @Autowired
     private BewerbungRepository bewerbungRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StellenanzeigeRepository stellenanzeigeRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-//    @Autowired
-//    private StellenanzeigeRepository stellenanzeigeRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private UnternehmenRepository unternehmenRepository;
+
+    User user1 = User.builder()
+            .email("Student1@qtest.vn")
+            .userid("QStudent1")
+            .password("qwedfghbn")
+            .build();
+
+    User user2 = User.builder()
+            .email("Student2@qtest.vn")
+            .userid("QStudent2")
+            .password("qwsdfghjk")
+            .build();
+
+    User user3 = User.builder()
+            .email("QtestAG@qtest.vn")
+            .userid("QtestAG")
+            .password("asdfvgbhnj")
+            .build();
+
+    Student student1 = Student.builder()
+            .nachname("Nguyen")
+            .vorname("Qtest1")
+            .user(user1)
+            .matrikelNummer("963852")
+            .build();
+
+    Student student2 = Student.builder()
+            .nachname("Nguyen")
+            .vorname("Qtest2")
+            .user(user2)
+            .matrikelNummer("936258")
+            .build();
+
+    Unternehmen unternehmen = Unternehmen.builder()
+            .name("QTest AG")
+            .user(user3)
+            .build();
+
+    Stellenanzeige stellenanzeige1 = Stellenanzeige.builder()
+            .bezeichnung("QTEST_SA1")
+            .beschreibung("Nur heute reich werden!!")
+            .beschaeftigungsverhaeltnis("Vollzeit")
+            .start(LocalDate.now())
+            .ende(LocalDate.now())
+            .unternehmen_stellenanzeigen(unternehmen)
+            .beschaeftigungsumfang("Vollzeit")
+            .build();
+
+    Stellenanzeige stellenanzeige2 = Stellenanzeige.builder()
+            .bezeichnung("QTEST_SA2")
+            .beschreibung("This is a description for QTEST_SA2.")
+            .beschaeftigungsverhaeltnis("Vollzeit")
+            .start(LocalDate.now())
+            .ende(LocalDate.of(2024, 5, 23))
+            .beschaeftigungsumfang("Vollzeit")
+            .unternehmen_stellenanzeigen(unternehmen)
+            .build();
 
     @Test
-    public void testeRoundTrip() {
+    public void testRoundTrip() {
         try {
-            Bewerbung bewerbung = new Bewerbung();
-            bewerbung.setDatum(LocalDate.of(2023, 5, 17));
+            userRepository.saveAll(Arrays.asList(user1, user3));
+            studentRepository.save(student1);
+            unternehmenRepository.save(unternehmen);
+            stellenanzeigeRepository.save(stellenanzeige1);
+
+            Bewerbung bewerbung = Bewerbung.builder()
+                    .student(student1)
+                    .stellenanzeige(stellenanzeige1)
+                    .build();
+
             bewerbungRepository.save(bewerbung);
-            int id = bewerbung.getBewerbungId();
+
             //Saved in DB?
-//            assertEquals(bewerbung, bewerbungRepository.findByBewerbungID(id));
+            assertTrue(bewerbungRepository.existsById(bewerbung.getId()));
 
             //Read
-            Optional<Bewerbung> awaitBewerbung = bewerbungRepository.findById(id);
+            Optional<Bewerbung> awaitBewerbung = bewerbungRepository.findById(bewerbung.getId());
             assertTrue(awaitBewerbung.isPresent());
             Bewerbung bewerbungFromDB = awaitBewerbung.get();
-            assertEquals(id, bewerbungFromDB.getBewerbungId());
+            assertEquals(bewerbung.getId(), bewerbungFromDB.getId());
 
-            //Update
-            LocalDate newDate = LocalDate.of(2022, 5, 17);
-            bewerbungFromDB.setDatum(newDate);
-            bewerbungRepository.save(bewerbungFromDB);
-            assertEquals(newDate, bewerbungFromDB.getDatum());
+            //Update: zurzeit nichts zu updaten
 
             //Delete
-            bewerbungRepository.deleteById(id);
-            assertFalse(bewerbungRepository.existsById(id));
-        }
-        catch (Exception e) {
+            bewerbungRepository.deleteById(bewerbung.getId());
+            assertFalse(bewerbungRepository.existsById(bewerbung.getId()));
+
+            // Check that Student1 and Stellenanzeige were not deleted
+            assertTrue(studentRepository.existsById(student1.getId()));
+            assertTrue(stellenanzeigeRepository.existsById(stellenanzeige1.getId()));
+
+            // Delete Rest
+            stellenanzeigeRepository.deleteById(stellenanzeige1.getId());
+            studentRepository.deleteById(student1.getId());
+            unternehmenRepository.deleteById(unternehmen.getId());
+            userRepository.deleteAll(Arrays.asList(user1, user3));
+        } catch (Exception e) {
             System.out.println("Fehler bei RoundTrip: " + e.getMessage());
         }
     }
-
-
     @Test
-    public void testNullabilityOfRequiredFields() {
-        // Test null student
-        assertThrows(NullPointerException.class, () -> {
-            Bewerbung bewerbung = new Bewerbung();
-            bewerbung.setDatum(LocalDate.now());
-            bewerbung.setStudent(null);
-        });
-
-        // Test null stellenanzeige
-        assertThrows(NullPointerException.class, () -> {
-            Bewerbung bewerbung = new Bewerbung();
-            bewerbung.setDatum(LocalDate.now());
-            bewerbung.setStudent(new Student());
-            bewerbung.setStellenanzeige(null);
-        });
-    }
-
-    @Test
-    public void testUniquenessOfBewerbungId() {
-        Bewerbung bewerbung1 = new Bewerbung();
-        bewerbung1.setDatum(LocalDate.now());
-        bewerbungRepository.save(bewerbung1);
-
-        Bewerbung bewerbung2 = new Bewerbung();
-        bewerbung2.setDatum(LocalDate.now());
-        bewerbungRepository.save(bewerbung2);
-
-        assertNotEquals(bewerbung1.getBewerbungId(), bewerbung2.getBewerbungId());
-    }
-
-    @Test
-    public void testEqualityAndHashCode() {
-        Bewerbung bewerbung1 = new Bewerbung();
-        bewerbung1.setBewerbungId(1);
-        bewerbung1.setDatum(LocalDate.now());
-
-        Bewerbung bewerbung2 = new Bewerbung();
-        bewerbung2.setBewerbungId(1);
-        bewerbung2.setDatum(LocalDate.now());
-
-        assertEquals(bewerbung1, bewerbung2);
-        assertEquals(bewerbung1.hashCode(), bewerbung2.hashCode());
-
-        Bewerbung bewerbung3 = new Bewerbung();
-        bewerbung3.setBewerbungId(2);
-        bewerbung3.setDatum(LocalDate.now());
-
-        assertNotEquals(bewerbung1, bewerbung3);
-        assertNotEquals(bewerbung1.hashCode(), bewerbung3.hashCode());
-    }
-
-    @Test
-    public void testeStudentBewerbung(){
+    public void testStudentBewerbungStellenanzeige() {
         // Setup
+        studentRepository.saveAll(Arrays.asList(student1, student2));
+        unternehmenRepository.save(unternehmen);
+        stellenanzeigeRepository.saveAll(Arrays.asList(stellenanzeige1, stellenanzeige2));
 
-        // Create User
-        User user = new User();
-        user.setUserid("test_user12");
-        user.setPassword("test_user12");
-        user.setEmail("test12@test_user.de");
-        userRepository.save(user);
-        int userId = user.getId();
+        assertTrue(stellenanzeigeRepository.existsById(stellenanzeige1.getId()));
+        assertTrue(stellenanzeigeRepository.existsById(stellenanzeige2.getId()));
 
-        // Create Student
-        Student student = new Student();
-        student.setVorname("Guido");
-        student.setNachname("Müller");
-        student.setMatrikelNummer("123456789012");
-        Optional<User> userOptional = userRepository.findById(userId);
-        assertTrue(userOptional.isPresent());
-        student.setUser(userOptional.get());
-        studentRepository.save(student);
-        int studentId = student.getStudentId();
+        // student1 bewirbt sich auf stellenanzeige1
+        Bewerbung bewerbung11 = Bewerbung.builder()
+                .student(student1)
+                .stellenanzeige(stellenanzeige1)
+                .datum(LocalDate.now())
+                .build();
 
-        // Create Bewerbung
-        Bewerbung bewerbung = new Bewerbung();
-        bewerbung.setStudent(student);
-        bewerbungRepository.save(bewerbung);
-        int bewerbungId = bewerbung.getBewerbungId();
+        // student1 bewirbt sich auf stellenanzeige2
+        Bewerbung bewerbung12 = Bewerbung.builder()
+                .student(student1)
+                .stellenanzeige(stellenanzeige2)
+                .datum(LocalDate.now())
+                .build();
 
-        List<Bewerbung> bewerbungen = new ArrayList<>();
-        bewerbungen.add(bewerbung);
-        student.setBewerbungen(bewerbungen);
-        studentRepository.save(student);
+        // student2 bewirbt sich auf stellenanzeige1
+        Bewerbung bewerbung21 = Bewerbung.builder()
+                .student(student2)
+                .stellenanzeige(stellenanzeige1)
+                .datum(LocalDate.now())
+                .build();
+
+        bewerbungRepository.saveAll(Arrays.asList(bewerbung11, bewerbung12, bewerbung21));
+
+        // Add Bewerbungen to Stellenanzeigen
+        stellenanzeige1.addBewerbung(bewerbung11);
+        stellenanzeige1.addBewerbung(bewerbung21);
+        stellenanzeige2.addBewerbung(bewerbung12);
+
+
+        Optional<Bewerbung> awaitB11 = bewerbungRepository.findById(bewerbung11.getId());
+        assertTrue(awaitB11.isPresent());
+        Bewerbung b11FromDB = awaitB11.get();
+        assertEquals(bewerbung11.getId(), b11FromDB.getId());
+
+        Optional<Bewerbung> awaitB12 = bewerbungRepository.findById(bewerbung12.getId());
+        assertTrue(awaitB12.isPresent());
+        Bewerbung b12FromDB = awaitB12.get();
+        assertEquals(bewerbung12.getId(), b12FromDB.getId());
+
+        Optional<Bewerbung> awaitB21 = bewerbungRepository.findById(bewerbung21.getId());
+        assertTrue(awaitB21.isPresent());
+        Bewerbung b21FromDB = awaitB21.get();
+        assertEquals(bewerbung21.getId(), b21FromDB.getId());
+
+        List<Bewerbung> awaitBewerbungen1 = stellenanzeige1.getBewerbungen();
+        assertEquals(b11FromDB.getId(),awaitBewerbungen1.get(0).getId());
+        assertEquals(b21FromDB.getId(),awaitBewerbungen1.get(1).getId());
+
+        List<Bewerbung> awaitBewerbungen2 = stellenanzeige2.getBewerbungen();
+        assertEquals(b12FromDB.getId(),awaitBewerbungen2.get(0).getId());
+
+        Stellenanzeige awaitStellenanzeigeB11 = b11FromDB.getStellenanzeige();
+        Stellenanzeige awaitStellenanzeigeB12 = b12FromDB.getStellenanzeige();
+
+        assertEquals(awaitStellenanzeigeB11.getId(), stellenanzeige1.getId());
+        assertEquals(awaitStellenanzeigeB12.getId(), stellenanzeige2.getId());
 
         // Read
-        Optional<Bewerbung> awaitBewerbung = bewerbungRepository.findById(bewerbungId);
-        assertTrue(awaitBewerbung.isPresent());
-        Bewerbung bewerbungFromDB = awaitBewerbung.get();
-        assertEquals(bewerbungId, bewerbungFromDB.getBewerbungId());
-        assertEquals(studentId, bewerbungFromDB.getStudent().getStudentId());
 
         // Delete
-        student.setBewerbungen(null);
-        studentRepository.save(student);
 
-        bewerbungRepository.deleteById(bewerbungId);
-        assertFalse(bewerbungRepository.existsById(bewerbungId));
+        stellenanzeigeRepository.deleteById(stellenanzeige1.getId());
+        assertFalse(stellenanzeigeRepository.existsById(stellenanzeige1.getId()));
+        assertFalse(bewerbungRepository.existsById(bewerbung11.getId()));
+        assertFalse(bewerbungRepository.existsById(bewerbung21.getId()));
+        stellenanzeigeRepository.deleteById(stellenanzeige2.getId());
+        assertTrue(studentRepository.existsById(student1.getId()));
+        studentRepository.deleteById(student1.getId());
+        assertFalse(studentRepository.existsById(student1.getId()));
+        assertFalse(bewerbungRepository.existsById(bewerbung12.getId()));
 
-        studentRepository.deleteById(studentId);
-        assertFalse(studentRepository.existsById(studentId));
+        assertTrue(unternehmenRepository.existsById(unternehmen.getId()));
+        unternehmenRepository.deleteById(unternehmen.getId());
+        assertFalse(unternehmenRepository.existsById(unternehmen.getId()));
 
-        userRepository.deleteById(userId);
-        assertFalse(userRepository.existsById(userId));
+
     }
-
-//    @Test
-//    public void testeStellenanzeigeBewerbung(){
-//        // Setup
-//
-//        // Create Stellenanzeige
-//        Stellenanzeige stellenanzeige = new Stellenanzeige();
-//        stellenanzeige.setBezeichnung("TEST_SA");
-//        stellenanzeigeRepository.save(stellenanzeige);
-//        int stellenanzeigeId = stellenanzeige.getStellenanzeigeId();
-//
-//        // Create Bewerbung
-//        Bewerbung bewerbung = new Bewerbung();
-//        bewerbung.setStellenanzeige(stellenanzeige);
-//        bewerbungRepository.save(bewerbung);
-//        String bewerbungId = String.valueOf(bewerbung.getBewerbungId());
-//
-//        List<Bewerbung> bewerbungen = new ArrayList<>();
-//        bewerbungen.add(bewerbung);
-//        stellenanzeige.setBewerbungen(bewerbungen);
-//        stellenanzeigeRepository.save(bewerbung);
-//
-//        // Read
-//        Optional<Bewerbung> awaitBewerbung = bewerbungRepository.findById(bewerbungId);
-//        assertTrue(awaitBewerbung.isPresent());
-//        Bewerbung bewerbungFromDB = awaitBewerbung.get();
-//        assertEquals(bewerbungId, bewerbungFromDB.getBewerbungId());
-//        assertEquals(stellenanzeigeId, bewerbungFromDB.getStellenanzeige().getStellenanzeigeId());
-//
-//        // Delete
-//        stellenanzeige.setBewerbungen(null);
-//        stellenanzeigeRepository.save(stellenanzeige);
-//
-//        bewerbungRepository.deleteById(bewerbungId);
-//        assertFalse(bewerbungRepository.existsById(bewerbungId));
-//
-//        stellenanzeigeRepository.deleteById(stellenanzeigeId);
-//        assertFalse(stellenanzeigeRepository.existsById(stellenanzeigeId));
-//    }
-
-     */
-
 }
