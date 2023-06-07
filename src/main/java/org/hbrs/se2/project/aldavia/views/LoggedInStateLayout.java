@@ -25,16 +25,11 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 @CssImport("./styles/views/navbar/navbar.css")
 public class LoggedInStateLayout extends AppLayout {
 
-    //@Autowired
-    //private StudentService studentControl;
-
-    private AuthorizationControl authorizationControl;
+    private static AuthorizationControl authorizationControl;
 
 
     public LoggedInStateLayout() throws ProfileException {
-
         setUpUI();
-
     }
 
     public void setUpUI() throws ProfileException {
@@ -68,19 +63,16 @@ public class LoggedInStateLayout extends AppLayout {
 
         if(checkIfUserIsLoggedIn()){
 
+            topRightLayout.add(new Label("Hallo, " + getCurrentUserName()));
 
             if(checkIfUserIsStudent()){
-                topRightLayout.add(new Label("Hallo, " + getCurrentUserName()));
-                topRightLayout.add(createMenuItemsStudent());
-                // Logout-Button am rechts-oberen Rand.
-                topRightLayout.add(createLogOutButton());
 
+                topRightLayout.add(createMenuItemsStudent());
             } else if (checkIfUserIsUnternehmen()){
-                topRightLayout.add(new Label("Hallo, " + getCurrentUserName()));
                 topRightLayout.add(createMenuItemsUnternehmen());
-                // Logout-Button am rechts-oberen Rand.
-                topRightLayout.add(createLogOutButton());
             }
+            // Logout-Button am rechts-oberen Rand.
+            topRightLayout.add(createLogOutButton());
         }
 
         layout.add(topRightLayout);
@@ -92,9 +84,8 @@ public class LoggedInStateLayout extends AppLayout {
 
     private Component[] createMenuItemsStudent() {
 
-        Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", StudentProfileView.class, iconUser)
+                createTabProfileTab(),
         };
         tabs[0].setId("student-srofil-tab");
         return tabs;
@@ -102,45 +93,52 @@ public class LoggedInStateLayout extends AppLayout {
 
     private Component[] createMenuItemsUnternehmen() {
 
-        Button button = new Button("Erstellen");
-        Icon iconUser = VaadinIcon.USER.create();
         Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", CompanyMainView.class, iconUser),
-                createButtonInTab(button, CreateStellenanzeigeView.class)
+                createTabProfileTab(),
+                createButtonCreateStellenanzeige()
         };
         tabs[0].setId("unternehmen-srofil-tab");
         return tabs;
     }
 
 
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
-        final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
-        return tab;
-    }
-
-    private static Tab createTabWithIcon(String text, Class<? extends Component> navigationTarget, Icon icon) {
+    private static Tab createTabProfileTab() {
         final Tab tab = new Tab();
 
         // Erstelle das Icon
-        icon.setSize("24px");
-        icon.setColor("blue");
+        Icon iconUser = VaadinIcon.USER.create();
+        iconUser.setSize("24px");
+        iconUser.setColor("blue");
 
         // Erstelle das Text-Label
-        Label label = new Label(text);
+        Label label = new Label("Profile");
 
         // Erstelle den RouterLink mit dem Icon und dem Label als Inhalt
-        RouterLink routerLink = new RouterLink(null, navigationTarget);
-        routerLink.add(icon, label);
+
+        RouterLink routerLink = null;
+
+        if(checkIfUserIsStudent()) {
+            routerLink = new RouterLink(null, StudentProfileView.class, getCurrentUserName());
+            routerLink.add(iconUser, label);
+        }
+
+        //TODO Routerlink für Unternehmen
+        /*else {
+            routerLink = new RouterLink(null,CompanyProfileView.class, getCurrentUserName());
+            routerLink.add(iconUser, label);
+        }*/
+
 
         // Füge den RouterLink zum Tab hinzu
         tab.add(routerLink);
         return tab;
     }
 
-    private static Tab createButtonInTab(Button button, Class<? extends Component> navigationTarget) {
+
+    private static Tab createButtonCreateStellenanzeige() {
         final Tab tab = new Tab();
-        button.addClickListener(event -> button.getUI().ifPresent(ui -> ui.navigate(navigationTarget)));
+        Button button = new Button("Erstellen");
+        button.addClickListener(event -> button.getUI().ifPresent(ui -> ui.navigate(CreateStellenanzeigeView.class)));
         tab.add(button);
         return tab;
     }
@@ -164,13 +162,13 @@ public class LoggedInStateLayout extends AppLayout {
     }
 
 
-    private UserDTO getCurrentUser() {
+    private static UserDTO getCurrentUser() {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
-    private boolean checkIfUserIsLoggedIn() {
+    private static boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
-        UserDTO userDTO = this.getCurrentUser();
+        UserDTO userDTO = getCurrentUser();
         if (userDTO == null) {
             UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
             return false;
@@ -178,20 +176,20 @@ public class LoggedInStateLayout extends AppLayout {
         return true;
     }
 
-    private boolean checkIfUserIsStudent(){
+    private static boolean checkIfUserIsStudent(){
         if(!checkIfUserIsLoggedIn()){
             return false;
         }
         authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT);
+        return authorizationControl.isUserInRole(getCurrentUser(), Globals.Roles.STUDENT);
     }
 
-    private boolean checkIfUserIsUnternehmen(){
+    private static boolean checkIfUserIsUnternehmen(){
         if(!checkIfUserIsLoggedIn()){
             return false;
         }
         authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.UNTERNEHMEN);
+        return authorizationControl.isUserInRole(getCurrentUser(), Globals.Roles.UNTERNEHMEN);
     }
 
     private void logoutUser() {
@@ -202,7 +200,7 @@ public class LoggedInStateLayout extends AppLayout {
 
     //TODO:Methode spezifisch für Student und unternehmen
 
-    private String getCurrentUserName() {
+    private static String getCurrentUserName() {
         return getCurrentUser().getUserid();
     }
 
@@ -210,6 +208,10 @@ public class LoggedInStateLayout extends AppLayout {
         Student student = studentControl.getStudent(getCurrentUserName());
         return student.getVorname();
     }*/
+
+    private String createProfileURL(String username) {
+        return Globals.Pages.PROFILE_VIEW + "?username=" + username;
+    }
 
 
 

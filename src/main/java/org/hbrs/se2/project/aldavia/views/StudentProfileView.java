@@ -16,7 +16,7 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-@Route(value = Globals.Pages.PROFILE_VIEW, layout = NeutralLayout.class)
+@Route(value = Globals.Pages.PROFILE_VIEW, layout = LoggedInStateLayout.class)
 @PageTitle("Profil")
 @CssImport("./styles/views/profile/studentProfile.css")
 public class StudentProfileView extends Div implements HasUrlParameter<String> {
@@ -27,7 +27,7 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
 
     private StudentProfileDTO studentProfileDTO;
     private Div profilePicture = new Div();
-
+    private Div profileWrapper = null;
 
     @Override
     public void setParameter(BeforeEvent event,
@@ -35,11 +35,14 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
         try {
             studentProfileDTO = studentProfileControl.getStudentProfile(parameter);
             ui.access(() -> {
-                Div profileWrapper = new Div();
-                profileWrapper.addClassName("profile-wrapper");
-                profileWrapper.add(createIntroductionLayout());
-                profileWrapper.add(createBottomLayout());
-                add(profileWrapper);
+
+                if (profileWrapper == null) {
+                    profileWrapper = new Div();
+                    profileWrapper.addClassName("profile-wrapper");
+                    profileWrapper.add(createIntroductionLayout());
+                    profileWrapper.add(createBottomLayout());
+                    add(profileWrapper);
+                }
             });
         } catch (ProfileException e) {
             throw new RuntimeException(e);
