@@ -229,10 +229,7 @@ public class Student {
         if (bewerbungen == null) {
             return;
         }
-        if(bewerbungen.contains(bewerbung)){
-            bewerbungen.remove(bewerbung);
-            bewerbung.setStudent(null);
-        }
+        bewerbungen.remove(bewerbung);
     }
 
     // Methoden

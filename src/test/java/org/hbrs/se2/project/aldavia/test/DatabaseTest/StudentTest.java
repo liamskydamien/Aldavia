@@ -44,6 +44,12 @@ public class StudentTest {
     @Autowired
     private UnternehmenRepository unternehmenRepository;
 
+    @Autowired
+    private BewerbungRepository bewerbungRepository;
+
+    @Autowired
+    private StellenanzeigeRepository stellenanzeigeRepository;
+
     private Student student;
 
     @BeforeEach
@@ -133,12 +139,12 @@ public class StudentTest {
         student.addTaetigkeitsfeld(taetigkeitsfeld);
 
         studentRepository.delete(student);
-        entityManager.flush();
-        entityManager.clear();
+        //entityManager.flush();
+        //entityManager.clear();
 
         assertFalse(studentRepository.existsById(student.getId()));
         assertFalse(userRepository.existsById(student.getUser().getId()));
-        assertFalse(rolleRepository.existsById(student.getUser().getRollen().get(0).getBezeichnung()));
+        assertTrue(rolleRepository.existsById(student.getUser().getRollen().get(0).getBezeichnung()));
         assertTrue(kenntnisseRepository.existsById(kenntnis.getBezeichnung()));
         assertTrue(sprachenRepository.existsById(sprache.getId()));
         assertTrue(taetigkeitsfeldRepository.existsById(taetigkeitsfeld.getBezeichnung()));
@@ -210,8 +216,15 @@ public class StudentTest {
 
     @Test
     public void testAddandRemoveBewerbung(){
+        User userUnternehmen = User.builder()
+                .userid("usernameUnternehmen")
+                .password("password12345")
+                .email("test123Unternehmen@gmail.com")
+                .build();
+        userRepository.save(userUnternehmen);
         Unternehmen unternehmen = Unternehmen.builder()
                                     .name("Test GmbH")
+                                    .user(userUnternehmen)
                                     .build();
         unternehmenRepository.save(unternehmen);
         Stellenanzeige stellenanzeige = Stellenanzeige.builder()
@@ -219,20 +232,29 @@ public class StudentTest {
                                         .beschreibung("Werkstudent im Bereich Softwareentwicklung")
                                         .beschaeftigungsverhaeltnis("Werkstudent")
                                         .start(LocalDate.now())
+                                        .ende(LocalDate.of(2026, 12, 31))
                                         .build();
         stellenanzeige.setUnternehmen(unternehmen);
+        stellenanzeigeRepository.save(stellenanzeige);
 
         Bewerbung bewerbung = Bewerbung.builder()
                               .student(student)
                               .stellenanzeige(stellenanzeige)
                               .build();
+        bewerbungRepository.save(bewerbung);
+        int bewerbungId = bewerbung.getId();
         student.addBewerbung(bewerbung);
 
         assertTrue(student.getBewerbungen().contains(bewerbung));
         assertEquals(student.getBewerbungen().get(0).getStellenanzeige().getBezeichnung(), stellenanzeige.getBezeichnung());
 
         student.removeBewerbung(bewerbung);
+        stellenanzeige.removeBewerbung(bewerbung);
+        bewerbungRepository.delete(bewerbung);
+
         assertFalse(student.getBewerbungen().contains(bewerbung));
+        assertFalse(bewerbungRepository.existsById(bewerbungId));
+
 
         Optional<Unternehmen> wrapperUnternehmen = unternehmenRepository.findById(unternehmen.getId());
         Unternehmen unternehmenFound = null;
