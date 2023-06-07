@@ -34,11 +34,9 @@ public class Bewerbung {
 
 
     public void setStudent(Student student){
-        if (this.student != null) {
-            this.student.removeBewerbung(this);
-        }
-        this.student = student;
-        if (student != null) {
+
+        if (this.student == null && student != null) {
+            this.student = student;
             student.addBewerbung(this);
         }
     }
@@ -57,13 +55,6 @@ public class Bewerbung {
         if (stellenanzeige != null ) {
             stellenanzeige.addBewerbung(this);
         }
-    }
-
-    public void removeStudent(Student student) {
-        if (this.student != null) {
-            this.student.removeBewerbung(this);
-        }
-        this.student = null;
     }
 
     // Methoden

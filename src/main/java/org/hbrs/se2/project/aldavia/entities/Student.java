@@ -215,6 +215,7 @@ public class Student {
     }
 
     public void addBewerbung(Bewerbung bewerbung) {
+
         if (bewerbungen == null) {
             bewerbungen = new ArrayList<>();
         }
@@ -228,10 +229,7 @@ public class Student {
         if (bewerbungen == null) {
             return;
         }
-        if(bewerbungen.contains(bewerbung)){
-            bewerbungen.remove(bewerbung);
-            bewerbung.setStudent(null);
-        }
+        bewerbungen.remove(bewerbung);
     }
 
     // Methoden
