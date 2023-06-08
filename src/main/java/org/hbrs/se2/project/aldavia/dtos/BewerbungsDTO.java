@@ -2,6 +2,8 @@ package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -9,7 +11,7 @@ import lombok.*;
 @Builder
 public class BewerbungsDTO {
     private int id;
-    private String datum;
+    private LocalDate datum;
     private int studentId;
     private int stellenanzeigeId;
 }

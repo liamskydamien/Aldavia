@@ -8,11 +8,14 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.repository.BewerbungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Component
+@Transactional
 public class BewerbungsService {
+
     @Autowired
     private BewerbungRepository bewerbungRepository;
 
@@ -21,12 +24,12 @@ public class BewerbungsService {
      * @param student The student
      * @param stellenanzeige The stellenanzeige
      */
-    public void addBewerbung(Student student, Stellenanzeige stellenanzeige) {
+    public Bewerbung addBewerbung(Student student, Stellenanzeige stellenanzeige) {
         Bewerbung bewerbung = Bewerbung.builder()
                 .student(student)
                 .stellenanzeige(stellenanzeige)
                 .build();
-        bewerbungRepository.save(bewerbung);
+        return bewerbungRepository.save(bewerbung);
     }
 
     /**
@@ -35,12 +38,7 @@ public class BewerbungsService {
      * @throws BewerbungsException if bewerbung not found
      */
     public void removeBewerbung(Bewerbung bewerbung) throws BewerbungsException {
-        try {
-            bewerbungRepository.delete(bewerbung);
-        }
-        catch (Exception e) {
-            throw new BewerbungsException("Bewerbung not found", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND);
-        }
+        bewerbungRepository.delete(bewerbung);
     }
 
     /**
