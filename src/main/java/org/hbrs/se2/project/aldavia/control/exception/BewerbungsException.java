@@ -3,7 +3,8 @@ package org.hbrs.se2.project.aldavia.control.exception;
 public class BewerbungsException extends Exception{
     public enum BewerbungsExceptionType {
         BEWERBUNG_NOT_FOUND,
-        BEWERBUNG_ALREADY_EXISTS
+        BEWERBUNG_COULD_NOT_BE_ADDED,
+        BEWERBUNG_COULD_NOT_BE_DELETED, BEWERBUNG_ALREADY_EXISTS
     }
 
     private BewerbungsExceptionType exceptionType;

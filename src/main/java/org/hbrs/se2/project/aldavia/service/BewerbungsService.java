@@ -24,7 +24,10 @@ public class BewerbungsService {
      * @param student The student
      * @param stellenanzeige The stellenanzeige
      */
-    public Bewerbung addBewerbung(Student student, Stellenanzeige stellenanzeige) {
+    public Bewerbung addBewerbung(Student student, Stellenanzeige stellenanzeige) throws BewerbungsException {
+        if (bewerbungRepository.findByStudentAndStellenanzeige(student, stellenanzeige).isPresent()) {
+            throw new BewerbungsException("Bewerbung already exists", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_ALREADY_EXISTS);
+        }
         Bewerbung bewerbung = Bewerbung.builder()
                 .student(student)
                 .stellenanzeige(stellenanzeige)

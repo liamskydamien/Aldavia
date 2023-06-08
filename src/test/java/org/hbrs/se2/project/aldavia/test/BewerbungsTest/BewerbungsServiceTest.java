@@ -106,6 +106,7 @@ public class BewerbungsServiceTest {
             Bewerbung bewerbungFetched = bewerbungsService.getBewerbung(bewerbungsDTO);
             assertEquals(bewerbungFetched.getStudent().getId(), studentEntity.getId());
             assertEquals(bewerbungFetched.getStellenanzeige().getId(), stellenanzeigeEntity.getId());
+            assertThrows(BewerbungsException.class, () -> bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity));
         } catch (BewerbungsException e) {
             throw new RuntimeException(e);
         }
@@ -130,7 +131,7 @@ public class BewerbungsServiceTest {
     }
 
     @Test
-    public void testGetBewerbungen(){
+    public void testGetBewerbungen() throws BewerbungsException {
             Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity);
             BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
                     .studentId(studentEntity.getId())
