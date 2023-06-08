@@ -21,8 +21,17 @@ public class Bewerbung {
     @Column(name = "datum", nullable = false)
     private LocalDate datum = LocalDate.now();
 
+    @Basic
+    @Column(name = "status", nullable = false)
+    private String status = "wartend";
+
+    @Basic
+    @Column(name = "bewerbungs_schreiben")
+    private String bewerbungsSchreiben;
+
     @PrePersist
     public void prePersist() {
+        status = "wartend";
         datum = LocalDate.now();
     }
 

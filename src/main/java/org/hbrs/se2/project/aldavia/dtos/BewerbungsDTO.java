@@ -14,4 +14,6 @@ public class BewerbungsDTO {
     private LocalDate datum;
     private int studentId;
     private int stellenanzeigeId;
+    private String status;
+    private String bewerbungsSchreiben;
 }

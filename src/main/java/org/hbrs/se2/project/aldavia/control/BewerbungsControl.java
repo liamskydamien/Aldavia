@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Transactional
 public class BewerbungsControl {
+
     @Autowired
     private BewerbungsService bewerbungsService;
 
@@ -30,11 +31,11 @@ public class BewerbungsControl {
      * @param stellenanzeigeDTO The DTO of the Stellenanzeige
      * @throws BewerbungsException if Bewerbung could not be added
      */
-    public void addBewerbung(String studentUsername, StellenanzeigeDTO stellenanzeigeDTO) throws BewerbungsException {
+    public void addBewerbung(String studentUsername, StellenanzeigeDTO stellenanzeigeDTO, String bewerbungsSchreiben) throws BewerbungsException {
         try {
             Student student = studentService.getStudent(studentUsername);
             Stellenanzeige stellenanzeige = stellenanzeigenService.getStellenanzeige(stellenanzeigeDTO);
-            bewerbungsService.addBewerbung(student, stellenanzeige);
+            bewerbungsService.addBewerbung(student, stellenanzeige, bewerbungsSchreiben);
         }
         catch (BewerbungsException bewerbungsException){
             throw bewerbungsException;
