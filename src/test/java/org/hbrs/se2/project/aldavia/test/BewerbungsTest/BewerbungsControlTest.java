@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -124,7 +125,7 @@ public class BewerbungsControlTest {
             assertFalse(bewerbungRepository.existsById(bewerbung.getId()));
         }
         catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(BewerbungsControlTest.class.getName()).warning(e.getMessage());
         }
     }
 }
