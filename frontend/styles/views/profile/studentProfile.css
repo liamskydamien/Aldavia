@@ -3,6 +3,7 @@
     margin: auto;
     width: 50%;
     padding: 10px;
+    background-color: #e8f3ff;
 }
 
 .profile-wrapper
@@ -21,4 +22,69 @@
     padding: 20px;
     margin: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.student-personal-details-component{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+.introductionField{
+
+    width: 35%;
+    height: auto;
+    padding: 20px 30px 20px 200px;
+    margin-left: 15%;
+    align-items: flex-start;
+}
+
+.profile-picture{
+    background-color: #1a73e8;
+    position: absolute;
+    left: 25%;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    margin: 20px;
+}
+vaadin-text-field[readonly]::part(input-field) {
+    border: none !important;
+    outline: none !important;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #1a73e8;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+vaadin-text-field[readonly]::part(input-field)::after {
+    border: none !important;
+    outline: none !important;
+}
+
+vaadin-text-field[readonly]::part(input-field)::after {
+    border: none !important;
+    outline: none !important;
+}
+
+#vaadin-text-area-container{
+    border: none !important;
+    outline: none !important;
+}
+
+#first-name-and-last-name{
+    font-size: large !important;
+    color: yellow;
+    font-weight: 500;
+}
+vaadin-text-field[readonly].first-name-and-last-name::part(input-field){
+    font-size: 2rem;
+    font-weight:bold !important;
+    color: #1a73e8 !important;
 }

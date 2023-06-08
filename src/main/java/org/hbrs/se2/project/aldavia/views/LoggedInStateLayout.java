@@ -147,8 +147,17 @@ public class LoggedInStateLayout extends AppLayout {
         MenuBar bar = new MenuBar();
         Icon iconSignOut = VaadinIcon.SIGN_OUT.create();
         Text textLogOut = new Text("Log out");
-        MenuItem item = bar.addItem(new HorizontalLayout(iconSignOut,textLogOut ), e -> logoutUser());
+
+        // Erstellen Sie ein neues Layout und legen Sie den Abstand zwischen den Elementen fest
+        HorizontalLayout layout = new HorizontalLayout(iconSignOut, textLogOut);
+        layout.setSpacing(true);
+
+        MenuItem item = bar.addItem(layout, e -> logoutUser());
         item.setId("logout-button");
+
+        // Setzen Sie den Hintergrund der MenuBar auf transparent
+        bar.getStyle().set("background", "transparent");
+
         return bar;
     }
 
@@ -200,7 +209,7 @@ public class LoggedInStateLayout extends AppLayout {
 
     //TODO:Methode spezifisch für Student und unternehmen
 
-    private static String getCurrentUserName() {
+    public static String getCurrentUserName() {
         return getCurrentUser().getUserid();
     }
 

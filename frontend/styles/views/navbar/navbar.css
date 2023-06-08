@@ -14,6 +14,8 @@
 #header-neutral{
     background-color: transparent !important;
     border-bottom: 1px solid #e0e0e0;
+    height: 30% !important;;
+    width: 100% !important;
 
 }
 vaadin-app-layout::part(navbar) {
@@ -61,5 +63,16 @@ vaadin-app-layout::part(navbar) {
 
 #sign-up-button:hover{
     cursor: pointer;
+}
+
+vaadin-menu-bar-button {
+    background-color: transparent;
+    color: #1a73e8;
+    font-size: 1.15rem;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #1a73e8;
+    height: 45px;
 }
 

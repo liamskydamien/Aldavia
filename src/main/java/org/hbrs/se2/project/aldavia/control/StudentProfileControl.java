@@ -17,22 +17,30 @@ import java.util.List;
 @Transactional
 public class StudentProfileControl {
 
-    @Autowired
-    private StudentService studentService;
 
-    @Autowired
-    private KenntnisseService kenntnisseService;
-
-    @Autowired
-    private QualifikationenService qualifikationenService;
-
-    @Autowired
-    private SprachenService sprachenService;
-
-    @Autowired
-    private TaetigkeitsfeldService taetigkeitsfeldService;
 
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+
+    private final StudentService studentService;
+    private final KenntnisseService kenntnisseService;
+    private final QualifikationenService qualifikationenService;
+    private final SprachenService sprachenService;
+    private final TaetigkeitsfeldService taetigkeitsfeldService;
+
+    @Autowired
+    public StudentProfileControl(
+            StudentService studentService,
+            KenntnisseService kenntnisseService,
+            QualifikationenService qualifikationenService,
+            SprachenService sprachenService,
+            TaetigkeitsfeldService taetigkeitsfeldService
+    ) {
+        this.studentService = studentService;
+        this.kenntnisseService = kenntnisseService;
+        this.qualifikationenService = qualifikationenService;
+        this.sprachenService = sprachenService;
+        this.taetigkeitsfeldService = taetigkeitsfeldService;
+    }
 
 
     /**
@@ -43,14 +51,18 @@ public class StudentProfileControl {
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
             System.out.println("Finding student with username: " + username);
+            if(studentService == null) {
+                System.out.println("StudentService is null");
+            }
             Student student = studentService.getStudent(username);
             StudentProfileDTO studentProfileDTO = studentProfileDTOFactory.createStudentProfileDTO(student);
             System.out.println("Found student: " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
             return studentProfileDTO;
         }
         catch (Exception e) {
-            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
+            throw new ProfileException("Error while loading student profile" + e, ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
+
     }
 
     public void updateStudentProfile(StudentProfileDTO updatedVersion, String username) throws ProfileException, PersistenceException {

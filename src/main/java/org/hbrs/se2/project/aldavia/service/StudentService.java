@@ -35,6 +35,7 @@ public class StudentService {
             return student.get();
         }
         else {
+            System.out.println("Student not found");
             throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }

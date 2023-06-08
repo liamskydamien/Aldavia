@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
@@ -10,16 +11,20 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
+import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.hbrs.se2.project.aldavia.views.components.StudentPersonalDetailsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
 
 @Route(value = Globals.Pages.PROFILE_VIEW, layout = LoggedInStateLayout.class)
 @PageTitle("Profil")
 @CssImport("./styles/views/profile/studentProfile.css")
-public class StudentProfileView extends Div implements HasUrlParameter<String> {
+public class StudentProfileView extends VerticalLayout implements HasUrlParameter<String> {
 
     private final StudentProfileControl studentProfileControl;
 
@@ -29,6 +34,11 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     private Div profilePicture = new Div();
     private Div profileWrapper = null;
 
+    private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
+
+    private Button editButton;
+    private Button saveButton;
+
     @Override
     public void setParameter(BeforeEvent event,
                              String parameter) {
@@ -37,9 +47,11 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
             ui.access(() -> {
 
                 if (profileWrapper == null) {
+                    studentPersonalDetailsComponent = new StudentPersonalDetailsComponent(studentProfileDTO);
+
                     profileWrapper = new Div();
                     profileWrapper.addClassName("profile-wrapper");
-                    profileWrapper.add(createIntroductionLayout());
+                    profileWrapper.add(studentPersonalDetailsComponent);
                     profileWrapper.add(createBottomLayout());
                     add(profileWrapper);
                 }
@@ -50,11 +62,42 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
     }
     @Autowired
     public StudentProfileView(StudentProfileControl studentProfileControl){
+
+
         this.studentProfileControl = studentProfileControl;
         addClassName("profile-view");
+
+        HorizontalLayout topLayout = new HorizontalLayout();
+        topLayout.addClassName("topButtons");
+        editButton = new Button("Bearbeiten", event -> switchToEditMode());
+        saveButton = new Button("Speichern", event -> {
+            try {
+                switchToViewMode();
+            } catch (PersistenceException | ProfileException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        topLayout.add(editButton);
+        topLayout.add(saveButton);
+        add(topLayout);
+
     }
 
+    private void switchToEditMode(){
+        editButton.setVisible(false);
+        saveButton.setVisible(true);
+        studentPersonalDetailsComponent.switchEditMode();
 
+    }
+
+    private void switchToViewMode() throws PersistenceException, ProfileException {
+        editButton.setVisible(true);
+        saveButton.setVisible(false);
+
+        studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
+    }
+    
     private void updateProfilePicture(){
     }
 
@@ -77,14 +120,14 @@ public class StudentProfileView extends Div implements HasUrlParameter<String> {
 
 
 
-    private HorizontalLayout createIntroductionLayout(){
+    /*private HorizontalLayout createIntroductionLayout(){
         HorizontalLayout introductionLayout = new HorizontalLayout();
         introductionLayout.addClassName("introduction");
         introductionLayout.addClassName("card");
         introductionLayout.add(profilePicture);
         introductionLayout.add(createDescriptionLayout());
         return introductionLayout;
-    }
+    }*/
 
     private VerticalLayout createDescriptionLayout(){
         VerticalLayout descriptionLayout = new VerticalLayout();
