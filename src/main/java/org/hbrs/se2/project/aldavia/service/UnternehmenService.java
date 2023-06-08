@@ -8,6 +8,9 @@ import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -42,10 +45,14 @@ public class UnternehmenService {
                 unternehmen.setName(dto.getName());
             }
 
-            if (dto.getAdressen() != null) {
+            if (dto.getAdressen() != null && unternehmen.getAdressen() != null) {
+                List<Adresse> toRemove = new ArrayList<>();
+                Iterator<Adresse> iter = unternehmen.getAdressen().iterator();
                 if (!(dto.getAdressen().equals(unternehmen.getAdressen()))) {
-                    for (Adresse a : unternehmen.getAdressen()) {
-                        unternehmen.removeAdresse(a);
+                    while(iter.hasNext()) {
+                        if (iter.next() != null) {
+                            iter.remove();
+                        }
                     }
                     for (Adresse a : dto.getAdressen()) {
                         unternehmen.addAdresse(a);

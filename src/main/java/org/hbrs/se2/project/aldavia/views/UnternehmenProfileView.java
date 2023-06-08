@@ -3,9 +3,9 @@ package org.hbrs.se2.project.aldavia.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
@@ -25,7 +25,7 @@ import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Set;
+import java.util.*;
 
 
 @Route(value = "profileUnternehmen")
@@ -62,6 +62,7 @@ public class UnternehmenProfileView extends Div {
     private TextField plz = new TextField ("PLZ");
     private TextField ort = new TextField("Ort");
     private TextField land = new TextField("Land");
+    private Button checkBoxDeleteButton = new Button("Delete");
 
     CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
 
@@ -101,7 +102,11 @@ public class UnternehmenProfileView extends Div {
 
             add(createFormLayout(control, unternehmenDto));
             add(layout);
-            add(createCheckboxes());
+            add(updateCheckBox(unternehmenDto.getAdressen()));
+            add(checkBoxDeleteButton);
+            checkBoxDeleteButton.setVisible(true);
+            checkBoxDeleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+
 
 
             save.setVisible(false);
@@ -125,9 +130,9 @@ public class UnternehmenProfileView extends Div {
 
             saveAdress.addClickListener(e -> {
                 Adresse adresseNeu;
-                if (strasse.getValue() == null || hausnr.getValue() == null || plz.getValue() == null || ort.getValue() == null
-                        || land.getValue() == null) {
-                    Notification.show("Bitte Alle Adress-Felder ausfüllen!");
+                if (strasse.getValue() == "" || hausnr.getValue() == "" || plz.getValue() == "" || ort.getValue() == ""
+                        || land.getValue() == "") {
+                    Notification.show("Bitte alle Adress-Felder ausfüllen!");
                 } else {
                     adresseNeu = Adresse.builder()
                             .strasse(strasse.getValue())
@@ -160,9 +165,14 @@ public class UnternehmenProfileView extends Div {
                     ort.clear();
                     land.clear();
 
-                    adressePicker.setVisible(false);
-                    //Seite Refreshen
+                    //reloading Page
                     UI.getCurrent().getPage().reload();
+
+
+                    updateCheckBox(unternehmenDto.getAdressen());
+
+                    checkboxGroup.setVisible(true);
+                    checkBoxDeleteButton.setVisible(true);
                 }
             });
 
@@ -181,9 +191,48 @@ public class UnternehmenProfileView extends Div {
                 save.setVisible(false);
 
             });
+
+
+            /*checkboxGroup.addSelectionListener(e -> {
+                if(checkboxGroup.getSelectedItems() == null) {
+                    checkBoxDeleteButton.setVisible(false);
+                }
+                checkBoxDeleteButton.setVisible(true);
+            });*/
+
+            checkBoxDeleteButton.addClickListener(e -> {
+                Set<String> toDelete = checkboxGroup.getSelectedItems();
+                List<Adresse> deleteAdressen = new ArrayList<>();
+                Set<Adresse> adressenResult = new HashSet<>();
+                for (String item : toDelete) {
+                    deleteAdressen.add(reverseInput(item));
+                }
+                for (Adresse a : unternehmenDto.getAdressen()) {
+                    for (Adresse b : deleteAdressen) {
+                        if (!a.equals(b)) {
+                            adressenResult.add(a);
+                        }
+                    }
+
+                    unternehmenDto.setAdressen(adressenResult);
+                    try {
+                        control.createAndUpdateUnternehmenProfile(unternehmenDto, userDTO.getUserid());
+                    } catch (ProfileException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+                //reloading Page
+                UI.getCurrent().getPage().reload();
+                updateCheckBox(unternehmenDto.getAdressen());
+                checkboxGroup.setVisible(true);
+                checkBoxDeleteButton.setVisible(false);
+                checkboxGroup.deselectAll();
+            });
+
         }
 
     }
+
 
     private Component createFormLayout(UnternehmenProfileControl control, UnternehmenProfileDTO dto) {
         FlexLayout layout = new FlexLayout();
@@ -250,14 +299,38 @@ public class UnternehmenProfileView extends Div {
         layout.setWidth("50px");
         return layout;
     }
-    public Component createCheckboxes() {
 
+    public Component updateCheckBox(Set<Adresse> adressen) {
         checkboxGroup.setLabel("Adressen");
-        checkboxGroup.setItems("Order ID", "Product name", "Customer",
-                "Status");
-        checkboxGroup.select("Order ID", "Customer");
         checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-        add(checkboxGroup);
+        if (adressen != null) {
+            Collection<String> result = new ArrayList<>();
+            for (Adresse adresse : adressen) {
+                String adresseString = "" + adresse.getStrasse() + " " + adresse.getHausnummer() + " " + adresse.getPlz()
+                        + " " + adresse.getOrt() + " " + adresse.getLand();
+                result.add(adresseString);
+            }
+            checkboxGroup.setItems(result);
+            checkboxGroup.deselectAll();
+            return checkboxGroup;
+
+        }
         return checkboxGroup;
     }
+
+    public Adresse reverseInput(String adresseString) {
+      String[] split = adresseString.split(" ");
+      Adresse adresseDelete = Adresse.builder()
+              .strasse(split[0])
+              .hausnummer(split[1])
+              .plz(split[2])
+              .ort(split[3])
+              .land(split[4])
+              .build();
+
+      return adresseDelete;
+
+    }
+
+
 }

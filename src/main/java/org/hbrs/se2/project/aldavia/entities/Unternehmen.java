@@ -88,7 +88,7 @@ public class Unternehmen {
 
     public void addAdresse(Adresse adresse) {
         if (adressen == null){
-            adressen = new HashSet<Adresse>();
+            adressen = new HashSet<>();
         }
         if(!adressen.contains(adresse)) {
             adressen.add(adresse);
