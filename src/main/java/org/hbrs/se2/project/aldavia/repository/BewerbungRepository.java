@@ -15,6 +15,6 @@ public interface BewerbungRepository extends JpaRepository<Bewerbung, Integer> {
 
     List<Bewerbung> findByStellenanzeige(Stellenanzeige stellenanzeige);
 
-    Optional<Object> findByStudentAndStellenanzeige(Student student, Stellenanzeige stellenanzeige);
+    Optional<Bewerbung> findByStudentAndStellenanzeige(Student student, Stellenanzeige stellenanzeige);
 }
 
