@@ -17,23 +17,30 @@ import java.util.List;
 @Transactional
 public class StudentProfileControl {
 
-    @Autowired
     private StudentService studentService;
 
-    @Autowired
     private KenntnisseService kenntnisseService;
 
-    @Autowired
     private QualifikationenService qualifikationenService;
 
-    @Autowired
     private SprachenService sprachenService;
 
-    @Autowired
     private TaetigkeitsfeldService taetigkeitsfeldService;
 
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
+    @Autowired
+    public StudentProfileControl(StudentService studentService,
+                                 KenntnisseService kenntnisseService,
+                                 QualifikationenService qualifikationenService,
+                                 SprachenService sprachenService,
+                                 TaetigkeitsfeldService taetigkeitsfeldService) {
+        this.studentService = studentService;
+        this.kenntnisseService = kenntnisseService;
+        this.qualifikationenService = qualifikationenService;
+        this.sprachenService = sprachenService;
+        this.taetigkeitsfeldService = taetigkeitsfeldService;
+    }
 
     /**
      * Get the student profile of a student

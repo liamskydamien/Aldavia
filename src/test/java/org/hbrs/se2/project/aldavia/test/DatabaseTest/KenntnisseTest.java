@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class KenntnisseTest {
 
+    public static final String BEZEICHNUNG = "Java_Test";
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
 
@@ -26,23 +27,23 @@ public class KenntnisseTest {
     @Test
     public void roundTrip() {
         Kenntnis kenntnis = new Kenntnis();
-        kenntnis.setBezeichnung("Java_Test");
+        kenntnis.setBezeichnung(BEZEICHNUNG);
         kenntnisseRepository.save(kenntnis);
         //Saved in DB?
-        assertTrue(kenntnisseRepository.existsById("Java_Test"));
+        assertTrue(kenntnisseRepository.existsById(BEZEICHNUNG));
 
         //Read
-        Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById("Java_Test");
+        Optional<Kenntnis> awaitKenntnis = kenntnisseRepository.findById(BEZEICHNUNG);
         assertTrue(awaitKenntnis.isPresent());
         Kenntnis kenntnisFromDB = awaitKenntnis.get();
-        assertEquals("Java_Test", kenntnisFromDB.getBezeichnung());
+        assertEquals(BEZEICHNUNG, kenntnisFromDB.getBezeichnung());
 
         //Update
         // Da Kenntnisse nicht verändert werden können/sollen, wird hier nichts getestet
 
         //Delete
-        kenntnisseRepository.deleteById("Java_Test");
-        assertFalse(kenntnisseRepository.existsById("Java_Test"));
+        kenntnisseRepository.deleteById(BEZEICHNUNG);
+        assertFalse(kenntnisseRepository.existsById(BEZEICHNUNG));
     }
 
     @Test

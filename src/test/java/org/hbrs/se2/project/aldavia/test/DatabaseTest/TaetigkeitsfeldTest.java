@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class TaetigkeitsfeldTest {
 
+    public static final String BESCHAEFTIGUNGSVERHAELTNIS = "Vollzeit";
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
 
@@ -76,20 +77,20 @@ public class TaetigkeitsfeldTest {
     Stellenanzeige stellenanzeige1 = Stellenanzeige.builder()
             .bezeichnung("QTEST_SA")
             .beschreibung("Nur heute reich werden!!")
-            .beschaeftigungsverhaeltnis("Vollzeit")
+            .beschaeftigungsverhaeltnis(BESCHAEFTIGUNGSVERHAELTNIS)
             .start(LocalDate.now())
             .ende(LocalDate.now())
             .unternehmen_stellenanzeigen(unternehmen)
-            .beschaeftigungsumfang("Vollzeit")
+            .beschaeftigungsumfang(BESCHAEFTIGUNGSVERHAELTNIS)
             .build();
 
     Stellenanzeige stellenanzeige2 = Stellenanzeige.builder()
             .bezeichnung("QTEST_SA2")
             .beschreibung("This is a description for QTEST_SA2.")
-            .beschaeftigungsverhaeltnis("Vollzeit")
+            .beschaeftigungsverhaeltnis(BESCHAEFTIGUNGSVERHAELTNIS)
             .start(LocalDate.now())
             .ende(LocalDate.of(2024, 5, 23))
-            .beschaeftigungsumfang("Vollzeit")
+            .beschaeftigungsumfang(BESCHAEFTIGUNGSVERHAELTNIS)
             .unternehmen_stellenanzeigen(unternehmen)
             .build();
 
