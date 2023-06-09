@@ -12,10 +12,11 @@
 }
 
 #header-neutral{
-    background-color: transparent !important;
+    background-color: #ffffff;
     border-bottom: 1px solid #e0e0e0;
     height: 30% !important;;
     width: 100% !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
 }
 vaadin-app-layout::part(navbar) {

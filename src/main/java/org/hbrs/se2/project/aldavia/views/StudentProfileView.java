@@ -15,6 +15,7 @@ import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.hbrs.se2.project.aldavia.views.components.AboutStudentComponent;
 import org.hbrs.se2.project.aldavia.views.components.StudentPersonalDetailsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +36,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private Div profileWrapper = null;
 
     private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
+    private AboutStudentComponent aboutStudentComponent;
 
     private Button editButton;
     private Button saveButton;
@@ -62,13 +64,13 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     }
     @Autowired
     public StudentProfileView(StudentProfileControl studentProfileControl){
-
-
         this.studentProfileControl = studentProfileControl;
         addClassName("profile-view");
 
         HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.addClassName("topButtons");
+        topLayout.setWidthFull();
+        topLayout.setJustifyContentMode(JustifyContentMode.END);
         editButton = new Button("Bearbeiten", event -> switchToEditMode());
         saveButton = new Button("Speichern", event -> {
             try {
@@ -77,7 +79,10 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
                 throw new RuntimeException(e);
             }
         });
-
+        editButton.setVisible(true);
+        saveButton.setVisible(false);
+        editButton.addClassName("editSaveButton");
+        saveButton.addClassName("editSaveButton");
         topLayout.add(editButton);
         topLayout.add(saveButton);
         add(topLayout);
@@ -88,6 +93,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         editButton.setVisible(false);
         saveButton.setVisible(true);
         studentPersonalDetailsComponent.switchEditMode();
+        aboutStudentComponent.switchEditMode();
 
     }
 
@@ -96,6 +102,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         saveButton.setVisible(false);
 
         studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
+        aboutStudentComponent.switchViewMode(getCurrentUserName());
     }
     
     private void updateProfilePicture(){
@@ -110,24 +117,15 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     }
 
     private VerticalLayout createLeftLayout(){
+        aboutStudentComponent = new AboutStudentComponent(studentProfileDTO);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
-        leftLayout.add(createAboutLayout());
+        leftLayout.add(aboutStudentComponent);
         leftLayout.add(createKenntnisseLayout());
         leftLayout.add(createSprachenLayout());
         return leftLayout;
     }
 
-
-
-    /*private HorizontalLayout createIntroductionLayout(){
-        HorizontalLayout introductionLayout = new HorizontalLayout();
-        introductionLayout.addClassName("introduction");
-        introductionLayout.addClassName("card");
-        introductionLayout.add(profilePicture);
-        introductionLayout.add(createDescriptionLayout());
-        return introductionLayout;
-    }*/
 
     private VerticalLayout createDescriptionLayout(){
         VerticalLayout descriptionLayout = new VerticalLayout();

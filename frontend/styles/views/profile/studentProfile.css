@@ -1,9 +1,12 @@
+h2{
+    margin: 15px 0 0 0;
+}
 
 .profile-view{
     margin: auto;
     width: 50%;
     padding: 10px;
-    background-color: #e8f3ff;
+    background-color: #edf2fd;
 }
 
 .profile-wrapper
@@ -12,14 +15,14 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    background-color: rgba(255, 255, 255, 0.25);
+    align-items: center;
+    background-color: transparent;
 }
 
 .card{
     border-radius: 25px;
     background-color: rgb(255, 255, 255);
-    padding: 20px;
+    padding: 20px 20px 20px 50px;
     margin: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
@@ -34,31 +37,48 @@
     align-content: center;
     justify-content: center;
 }
+.bottom{
+    width: 100%;
+    padding: 0 14% 0 15%;
+}
+
 .introductionField{
 
-    width: 35%;
+    width: 600px;
     height: auto;
-    padding: 20px 30px 20px 200px;
-    margin-left: 15%;
+    padding: 20px 100px 20px 150px;
+    margin-left: 13%;
     align-items: flex-start;
 }
 
 .profile-picture{
-    background-color: #1a73e8;
+    background-color: white;
     position: absolute;
-    left: 25%;
+    left: 15%;
     width: 250px;
     height: 250px;
     border-radius: 50%;
     margin: 20px;
 }
+
+.profile-picture img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+.introductionLayout vaadin-text-field::part(input-field){
+    width: 600px;
+}
+
 vaadin-text-field[readonly]::part(input-field) {
     border: none !important;
     outline: none !important;
     font-size: 1.25rem;
     font-weight: 500;
-    color: #1a73e8;
-    width: 100%;
+    width: 500px;
     padding: 0px;
     margin: 0px;
 }
@@ -73,18 +93,79 @@ vaadin-text-field[readonly]::part(input-field)::after {
     outline: none !important;
 }
 
-#vaadin-text-area-container{
-    border: none !important;
-    outline: none !important;
+vaadin-text-field[readonly].first-name-and-last-name::part(input-field){
+    font-size: 2.5rem;
+    font-weight:bold !important;
+
 }
 
-#first-name-and-last-name{
-    font-size: large !important;
-    color: yellow;
-    font-weight: 500;
+.introductionLayout vaadin-text-area::part(input-field) {
+     width: 600px;
+     border-radius: 20px;
+     border: 1px solid #1a73e8;
+     background-color: transparent;
+
+ }
+
+.introductionLayout vaadin-text-area[readonly]::part(input-field) {
+    border: none !important;
+    outline: none !important;}
+
+.tobButtons{
+    background-color: transparent !important;
+    position: relative;
 }
-vaadin-text-field[readonly].first-name-and-last-name::part(input-field){
-    font-size: 2rem;
-    font-weight:bold !important;
-    color: #1a73e8 !important;
+
+.email-layout vaadin-email-field::part(input-field) {
+    width: 300px;
+    background-color: transparent !important;
+    border: 1px solid #1a73e8;
+    border-radius: 10px;
 }
+
+vaadin-email-field[readonly]::part(input-field) {
+    border: none !important;
+    outline: none !important;
+    background-color: transparent !important;
+}
+
+.phone-number-layout vaadin-text-field::part(input-field) {
+    width: 300px;
+    background-color: transparent !important;
+    border: 1px solid #1a73e8;
+    border-radius: 10px;
+    height: 40px;
+}
+
+vaadin-email-field[readonly]::part(input-field) {
+    width: 300px;
+    border: none !important;
+    outline: none !important;
+    background-color: transparent !important;
+
+}
+vaadin-email-field[invalid]::part(input-field)::after {
+    border: none !important;
+    outline: none !important;
+    background-color: transparent !important;
+}
+.about-Icon{
+    margin-top: 10px;
+}
+
+.edit-profile-pic-button{
+    position: absolute;
+    top: 80%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: transparent;
+    color: blue;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    transition: all 0.5s;
+}
+

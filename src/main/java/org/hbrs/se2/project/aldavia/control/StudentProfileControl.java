@@ -17,30 +17,18 @@ import java.util.List;
 @Transactional
 public class StudentProfileControl {
 
-
-
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
-    private final StudentService studentService;
-    private final KenntnisseService kenntnisseService;
-    private final QualifikationenService qualifikationenService;
-    private final SprachenService sprachenService;
-    private final TaetigkeitsfeldService taetigkeitsfeldService;
-
     @Autowired
-    public StudentProfileControl(
-            StudentService studentService,
-            KenntnisseService kenntnisseService,
-            QualifikationenService qualifikationenService,
-            SprachenService sprachenService,
-            TaetigkeitsfeldService taetigkeitsfeldService
-    ) {
-        this.studentService = studentService;
-        this.kenntnisseService = kenntnisseService;
-        this.qualifikationenService = qualifikationenService;
-        this.sprachenService = sprachenService;
-        this.taetigkeitsfeldService = taetigkeitsfeldService;
-    }
+    private StudentService studentService;
+    @Autowired
+    private KenntnisseService kenntnisseService;
+    @Autowired
+    private  QualifikationenService qualifikationenService;
+    @Autowired
+    private SprachenService sprachenService;
+    @Autowired
+    private TaetigkeitsfeldService taetigkeitsfeldService;
 
 
     /**

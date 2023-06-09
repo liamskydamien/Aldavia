@@ -39,8 +39,6 @@ public class LoggedInStateLayout extends AppLayout {
 
     private Component createHeaderContent() {
 
-
-
         HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
         layout.setId("header-neutral");
