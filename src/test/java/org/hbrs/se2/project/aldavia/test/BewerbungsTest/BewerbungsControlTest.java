@@ -40,8 +40,6 @@ public class BewerbungsControlTest {
 
     // Service for testing
     @Autowired
-    private BewerbungsService bewerbungsService;
-    @Autowired
     private BewerbungRepository bewerbungRepository;
 
     // Test data

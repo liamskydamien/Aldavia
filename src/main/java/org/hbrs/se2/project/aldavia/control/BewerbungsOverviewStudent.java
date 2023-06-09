@@ -13,8 +13,12 @@ import java.util.List;
 @Component
 @Transactional
 public class BewerbungsOverviewStudent {
-    @Autowired
     private StudentService studentService;
+
+    @Autowired
+    public BewerbungsOverviewStudent(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     /**
      * Get the Bewerbungen of a student

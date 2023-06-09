@@ -16,14 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BewerbungsControl {
 
-    @Autowired
-    private BewerbungsService bewerbungsService;
+    private final BewerbungsService bewerbungsService;
+    private final StudentService studentService;
+    private final StellenanzeigenService stellenanzeigenService;
 
     @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private StellenanzeigenService stellenanzeigenService;
+    public BewerbungsControl(BewerbungsService bewerbungsService, StudentService studentService, StellenanzeigenService stellenanzeigenService) {
+        this.bewerbungsService = bewerbungsService;
+        this.studentService = studentService;
+        this.stellenanzeigenService = stellenanzeigenService;
+    }
 
     /**
      * Adds a Bewerbung to the database
