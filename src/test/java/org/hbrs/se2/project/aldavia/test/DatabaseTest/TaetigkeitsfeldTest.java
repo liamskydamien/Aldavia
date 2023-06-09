@@ -28,9 +28,6 @@ public class TaetigkeitsfeldTest {
     @Autowired
     private StudentRepository studentRepository;
 
-//    @Autowired
-//    private UserRepository userRepository;
-
     @Autowired
     private StellenanzeigeRepository stellenanzeigeRepository;
 

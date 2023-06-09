@@ -86,7 +86,6 @@ public class RoundTripTest {
         // Schritt 4: D = Deletion, also Löschen des Users, um Datenmüll zu vermeiden
         int studentTmpId = studentAfterCreate.getId();
         studentRepository.deleteById(studentTmpId);
-        //userRepository.deleteById(idTmp);
 
         // Schritt 4.1: Wir sind vorsichtig und gucken, ob der User wirklich gelöscht wurde ;-)
         Optional<User> wrapperAfterDelete = userRepository.findById(idTmp);
@@ -140,7 +139,6 @@ public class RoundTripTest {
         // Teste Delete
         int unternehmenTmpId = unternehmenAfterCreate.getId();
         unternehmenRepository.deleteById(unternehmenTmpId);
-        //userRepository.deleteById(user.getId());
     }
 
 

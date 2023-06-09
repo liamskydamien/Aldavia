@@ -40,7 +40,7 @@ public class StudentProfileControlTest {
     public static final String SINA = "Sina";
     public static final String USERID = "MaxMüller2001";
     public static final String PASSWORD = "TestPassword";
-    public static final String MAX_MÜLLER_2001_ALDAVIA_DE = "MaxMüller2001@aldavia.de";
+    public static final String MAX_MUELLER_2001_ALDAVIA_DE = "MaxMüller2001@aldavia.de";
     public static final String MATRIKEL_NUMMER = "12345678";
     public static final String TELEFONNUMMER = "0124123456789";
     public static final String TOLLER_STUDENT = "Ich bin ein toller Student.";
@@ -78,7 +78,7 @@ public class StudentProfileControlTest {
         User user = User.builder()
                 .userid(USERID)
                 .password(PASSWORD)
-                .email(MAX_MÜLLER_2001_ALDAVIA_DE)
+                .email(MAX_MUELLER_2001_ALDAVIA_DE)
                 .beschreibung(BESCHREIBUNG)
                 .phone(PHONE)
                 .build();
@@ -134,12 +134,8 @@ public class StudentProfileControlTest {
     }
 
     @AfterEach
-    void tearDown() {
-        try {
-            studentService.deleteStudent(student);
-        } catch (Exception ignored) {
-
-        }
+    void tearDown() throws ProfileException {
+       studentService.deleteStudent(student);
     }
 
     @Test

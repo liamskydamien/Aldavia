@@ -64,15 +64,10 @@ public class LoginControlTest {
 
     @AfterAll
     public void tearDown() {
-        try {
-            Optional<User> user = userRepository.findUserByUseridAndPassword(USERID, PASSWORD);
-            userRepository.deleteById(user.get().getId());
-            Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung(ROLLE);
-            rolleRepository.deleteById(rolle.get().getBezeichnung());
-        }
-        catch (Exception e) {
-            System.out.println("User not found");
-        }
+        Optional<User> user = userRepository.findUserByUseridAndPassword(USERID, PASSWORD);
+        userRepository.deleteById(user.orElseThrow().getId());
+        Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung(ROLLE);
+        rolleRepository.deleteById(rolle.orElseThrow().getBezeichnung());
     }
 
     @Test
