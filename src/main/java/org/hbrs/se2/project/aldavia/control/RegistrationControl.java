@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
@@ -20,18 +21,15 @@ import java.util.Optional;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class RegistrationControl {
-    @Autowired
-    private StudentRepository repositoryS;
 
-    @Autowired
-    private UnternehmenRepository repositoryC;
+    private final StudentRepository repositoryS;
+    private final UnternehmenRepository repositoryC;
 
-    @Autowired
-    private UserRepository repositoryU;
+    private final UserRepository repositoryU;
 
-    @Autowired
-    private RolleRepository repositoryR;
+    private final RolleRepository repositoryR;
 
 
 

@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -14,12 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class UnternehmenService {
-    @Autowired
-    UnternehmenRepository unternehmenRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UnternehmenRepository unternehmenRepository;
+
+
+    private final UserRepository userRepository;
 
     public Unternehmen getUnternehmen(String userName) throws ProfileException {
         Optional<User> user = userRepository.findByUserid(userName);
