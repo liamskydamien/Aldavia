@@ -59,22 +59,4 @@ public class BewerbungsService {
             throw new BewerbungsException("Bewerbung not found", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND);
         }
     }
-
-    /**
-     * Get all Bewerbungen of a student
-     * @param student The student
-     * @return List of Bewerbungen
-     */
-    public List<Bewerbung> getBewerbungen(Student student) {
-        return bewerbungRepository.findByStudent(student);
-    }
-
-    /**
-     * Get all Bewerbungen of a Stellenanzeige
-     * @param stellenanzeige The stellenanzeige
-     * @return List of Bewerbungen
-     */
-    public List<Bewerbung> getBewerbungen(Stellenanzeige stellenanzeige) {
-        return bewerbungRepository.findByStellenanzeige(stellenanzeige);
-    }
 }
