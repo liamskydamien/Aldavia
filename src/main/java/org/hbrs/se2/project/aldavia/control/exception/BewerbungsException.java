@@ -7,7 +7,7 @@ public class BewerbungsException extends Exception{
         BEWERBUNG_COULD_NOT_BE_DELETED, BEWERBUNG_ALREADY_EXISTS
     }
 
-    private BewerbungsExceptionType exceptionType;
+    private final BewerbungsExceptionType exceptionType;
 
     public BewerbungsException(String message, BewerbungsExceptionType exceptionType) {
         super(message);

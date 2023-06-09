@@ -4,7 +4,7 @@ public class ProfileException extends Exception {
     public enum ProfileExceptionType {
         PROFILE_NOT_FOUND,
         DATABASE_CONNECTION_FAILED,
-        STUDENT_DOES_NOT_EXIST,
+        STUDENT_DOES_NOT_EXIST, ERROR_CREATING_PROFILE_DTO,
     }
 
     private final ProfileExceptionType profileExceptionType;

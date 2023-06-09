@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
 
+    public static final String BESCHREIBUNG = "Werkstudent im Bereich Softwareentwicklung";
     @Autowired
     private StudentRepository studentRepository;
 
@@ -125,7 +126,7 @@ public class StudentTest {
 
         //Qualifikationen hinzufügen
         Qualifikation qualifikation = Qualifikation.builder()
-                .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                .beschreibung(BESCHREIBUNG)
                 .build();
         qualifikation.setStudent(student);
         student.addQualifikation(qualifikation);
@@ -170,7 +171,7 @@ public class StudentTest {
     @Test
     public void testAddAndRemoveQualifikationen() {
         Qualifikation qualifikation = Qualifikation.builder()
-                                      .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                                      .beschreibung(BESCHREIBUNG)
                                       .build();
         qualifikation.setStudent(student);
 
@@ -229,7 +230,7 @@ public class StudentTest {
         unternehmenRepository.save(unternehmen);
         Stellenanzeige stellenanzeige = Stellenanzeige.builder()
                                         .bezeichnung("Werkstudent")
-                                        .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                                        .beschreibung(BESCHREIBUNG)
                                         .beschaeftigungsverhaeltnis("Werkstudent")
                                         .start(LocalDate.now())
                                         .ende(LocalDate.of(2026, 12, 31))

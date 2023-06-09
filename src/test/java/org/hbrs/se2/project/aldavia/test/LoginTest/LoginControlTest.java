@@ -25,6 +25,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoginControlTest {
+    public static final String USERID = "sascha";
+    public static final String PASSWORD = "abc";
+    public static final String EMAIL = "test@aldavia.de";
+    public static final String ROLLE = "Tester";
+    public static final String MESSAGE = "Wrong Exception thrown";
     @Autowired
     private LoginControl loginControl;
 
@@ -40,44 +45,39 @@ public class LoginControlTest {
     public void setUp() {
 
         Rolle rolle = new Rolle();
-        rolle.setBezeichnung("Tester");
+        rolle.setBezeichnung(ROLLE);
         List<Rolle> rollen = new ArrayList<>();
         rolleRepository.save(rolle);
         rollen.add(rolle);
 
         User user = new User();
-        user.setUserid("sascha");
-        user.setPassword("abc");
-        user.setEmail("test@aldavia.de");
+        user.setUserid(USERID);
+        user.setPassword(PASSWORD);
+        user.setEmail(EMAIL);
         user.setRollen(rollen);
         userRepository.save(user);
 
-        testUser.setUserid("sascha");
-        testUser.setPassword("abc");
-        testUser.setEmail("test@aldavia.de");
+        testUser.setUserid(USERID);
+        testUser.setPassword(PASSWORD);
+        testUser.setEmail(EMAIL);
     }
 
     @AfterAll
     public void tearDown() {
-        try {
-            Optional<User> user = userRepository.findUserByUseridAndPassword("sascha", "abc");
-            userRepository.deleteById(user.get().getId());
-            Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung("Tester");
-            rolleRepository.deleteById(rolle.get().getBezeichnung());
-        }
-        catch (Exception e) {
-            System.out.println("User not found");
-        }
+        Optional<User> user = userRepository.findUserByUseridAndPassword(USERID, PASSWORD);
+        userRepository.deleteById(user.orElseThrow().getId());
+        Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung(ROLLE);
+        rolleRepository.deleteById(rolle.orElseThrow().getBezeichnung());
     }
 
     @Test
     @Transactional
     public void testLoginPositiv() {
         try {
-            boolean userIsThere = loginControl.authenticate("sascha", "abc");
+            boolean userIsThere = loginControl.authenticate(USERID, PASSWORD);
             assertTrue(userIsThere);
 
-            boolean userIsThere2 = loginControl.authenticate("test@aldavia.de", "abc");
+            boolean userIsThere2 = loginControl.authenticate(EMAIL, PASSWORD);
             assertTrue(userIsThere2);
             assertEquals(loginControl.getCurrentUser().getUserid(), testUser.getUserid(), "Userid not equal");
         }
@@ -90,38 +90,22 @@ public class LoginControlTest {
     public void testLoginNegativ() {
         DatabaseUserException exceptionWrongPassword = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authenticate("sascha", "abcd");
+                    loginControl.authenticate(USERID, "abcd");
         });
 
         DatabaseUserException exceptionWrongUsername = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authenticate("saschaa", "abc");
+                    loginControl.authenticate("saschaa", PASSWORD);
         });
 
         DatabaseUserException exceptionWrongEmail = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authenticate("test2@aldavia.de", "abc");
+                    loginControl.authenticate("test2@aldavia.de", PASSWORD);
         });
 
-        assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
-        assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
-        assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
+        assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
+        assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
+        assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
     }
-
-    /**
-    @Test
-    public void testGetUserDTO() {
-        try {
-            UserDTO userDTO = loginControl.TestGetUserWithJPA("sascha", "abc");
-            assertEquals(userDTO.getFirstName(), testUser.getFirstName(), "Firstname not equal");
-            assertEquals(userDTO.getLastName(), testUser.getLastName(), "Lastname not equal");
-        }
-        catch (DatabaseUserException e) {
-            assertEquals(e.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "User not found");
-        }
-    }
-    */
-
-
 
 }
