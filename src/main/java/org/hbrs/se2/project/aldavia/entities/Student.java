@@ -121,7 +121,7 @@ public class Student {
         }
         if (this.qualifikationen.contains(qualifikation)) {
             this.qualifikationen.remove(qualifikation);
-            qualifikation.setStudent(null);
+            qualifikation.removeStudent(this);
         }
     }
 
@@ -215,6 +215,7 @@ public class Student {
     }
 
     public void addBewerbung(Bewerbung bewerbung) {
+
         if (bewerbungen == null) {
             bewerbungen = new ArrayList<>();
         }
@@ -228,10 +229,7 @@ public class Student {
         if (bewerbungen == null) {
             return;
         }
-        if(bewerbungen.contains(bewerbung)){
-            bewerbungen.remove(bewerbung);
-            bewerbung.setStudent(null);
-        }
+        bewerbungen.remove(bewerbung);
     }
 
     // Methoden
@@ -246,6 +244,6 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nachname, vorname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user, kenntnisse, qualifikationen, sprachen, taetigkeitsfelder, bewerbungen);
+        return Objects.hash(id, nachname, vorname, matrikelNummer, studiengang, studienbeginn, geburtsdatum, lebenslauf, user);
     }
 }

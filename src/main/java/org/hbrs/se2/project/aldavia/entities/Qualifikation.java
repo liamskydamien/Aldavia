@@ -3,9 +3,7 @@ package org.hbrs.se2.project.aldavia.entities;
 import lombok.*;
 
 import javax.persistence.*;
-// import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -51,20 +49,15 @@ public class Qualifikation {
     // qualifikation_hat_student
 
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
     private Student student;
 
     public void setStudent(Student student) {
-        if (this.student != null) {
-            this.student.removeQualifikation(this);
+        if (this.student == student) {
+            return;
         }
         this.student = student;
-        if (student != null) {
-            if(student == this.student){
-                return;
-            }
-            student.addQualifikation(this);
-        }
+        this.student.addQualifikation(this);
     }
 
     public void removeStudent(Student student) {

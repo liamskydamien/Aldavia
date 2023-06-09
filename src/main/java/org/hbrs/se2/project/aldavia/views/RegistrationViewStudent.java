@@ -27,7 +27,6 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route(value = "registrationStudent")
@@ -193,7 +192,7 @@ public class RegistrationViewStudent extends Div {
         layout.add(text);
         Button confirmButton = new Button("Confirm", e -> {
             RegistrationResult result  = register(regControl);
-            if (result.getResult() == true) {
+            if (result.getResult()) {
                 Notification.show("Registrierung erfolgreich!");
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();

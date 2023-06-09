@@ -2,7 +2,6 @@ package org.hbrs.se2.project.aldavia.test.LoginTest;
 
 import org.hbrs.se2.project.aldavia.control.LoginControl;
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.entities.User;
@@ -63,7 +62,7 @@ public class LoginControlTest {
         try {
             Optional<User> user = userRepository.findUserByUseridAndPassword("sascha", "abc");
             userRepository.deleteById(user.get().getId());
-            Optional<Rolle> rolle = rolleRepository.findByBezeichnung("Tester");
+            Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung("Tester");
             rolleRepository.deleteById(rolle.get().getBezeichnung());
         }
         catch (Exception e) {
@@ -83,7 +82,7 @@ public class LoginControlTest {
             assertEquals(loginControl.getCurrentUser().getUserid(), testUser.getUserid(), "Userid not equal");
         }
         catch (DatabaseUserException e) {
-            assertEquals(e.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "User not found");
+            assertEquals(e.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "User not found");
         }
     }
 
@@ -104,9 +103,9 @@ public class LoginControlTest {
                     loginControl.authenticate("test2@aldavia.de", "abc");
         });
 
-        assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "Wrong Exception thrown");
-        assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "Wrong Exception thrown");
-        assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.UserNotFound, "Wrong Exception thrown");
+        assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
+        assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
+        assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, "Wrong Exception thrown");
     }
 
     /**

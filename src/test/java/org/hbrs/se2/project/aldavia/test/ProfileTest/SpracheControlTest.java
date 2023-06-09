@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.control.SprachenControl;
+import org.hbrs.se2.project.aldavia.service.SprachenService;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
 import org.hbrs.se2.project.aldavia.entities.Sprache;
@@ -26,7 +26,7 @@ public class SpracheControlTest {
     private SprachenRepository sprachenRepository;
 
     @Autowired
-    private SprachenControl sprachenControl;
+    private SprachenService sprachenService;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -65,7 +65,7 @@ public class SpracheControlTest {
     public void tearDown() {
         try {
             spracheDTO.setId(spracheTest.getId());
-            spracheTest = sprachenControl.removeStudentFromSprache(spracheDTO, student);
+            spracheTest = sprachenService.removeStudentFromSprache(spracheDTO, student);
             sprachenRepository.save(spracheTest);
             sprachenRepository.deleteById(spracheTest.getId());
         }
@@ -83,7 +83,7 @@ public class SpracheControlTest {
 
         spracheDTO.setId(spracheTest.getId());
 
-        sprachenControl.addStudentToSprache(spracheDTO, student);
+        sprachenService.addStudentToSprache(spracheDTO, student);
 
         Sprache updatedSprache = sprachenRepository.findById(spracheTest.getId()).get();
         student = studentRepository.findById(student.getId()).get();
@@ -92,7 +92,7 @@ public class SpracheControlTest {
 
     @Test
     public void testAddStudentToSprache_whenSpracheIsNotPresent() throws PersistenceException {
-        spracheTest = sprachenControl.addStudentToSprache(spracheDTO, student);
+        spracheTest = sprachenService.addStudentToSprache(spracheDTO, student);
         spracheTest = sprachenRepository.findById(spracheTest.getId()).get();
         student = studentRepository.findById(student.getId()).get();
         assertEquals(spracheTest.getStudents().get(0).getId(), student.getId());
@@ -107,7 +107,7 @@ public class SpracheControlTest {
 
         spracheDTO.setId(spracheTest.getId());
 
-        sprachenControl.removeStudentFromSprache(spracheDTO, student);
+        sprachenService.removeStudentFromSprache(spracheDTO, student);
 
         Sprache updatedSprache = sprachenRepository.findById(spracheTest.getId()).get();
         assertTrue(!updatedSprache.getStudents().contains(student));
@@ -116,7 +116,7 @@ public class SpracheControlTest {
     @Test
     public void testRemoveStudentFromKenntnis_whenSpracheIsNotPresent() {
         assertThrows(PersistenceException.class, () -> {
-            sprachenControl.removeStudentFromSprache(spracheDTO, student);
+            sprachenService.removeStudentFromSprache(spracheDTO, student);
         });
     }
 }

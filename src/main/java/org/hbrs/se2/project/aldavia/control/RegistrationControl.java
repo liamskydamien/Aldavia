@@ -49,6 +49,8 @@ public class RegistrationControl {
             result.setResult(false);
 
         } else {
+            result.setReason(RegistrationResult.REGISTRATION_SUCCESSFULL);
+            result.setResult(true);
             Rolle rolle = Rolle.builder().bezeichnung(Globals.Roles.STUDENT).build();
             repositoryR.save(rolle); // Save the role in the repository
             User userNeu = User.builder()

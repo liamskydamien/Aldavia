@@ -18,7 +18,6 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.server.PWA;
 import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
@@ -30,7 +29,6 @@ import java.util.Optional;
  * The main view is a top-level placeholder for other views.
  */
 @CssImport("./styles/views/main/main-view.css")
-@Route("main")
 //@PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
 public class AppView extends AppLayout implements BeforeEnterObserver {

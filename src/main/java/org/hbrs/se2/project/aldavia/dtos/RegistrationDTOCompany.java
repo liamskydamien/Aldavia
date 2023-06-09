@@ -3,6 +3,9 @@ package org.hbrs.se2.project.aldavia.dtos;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
 @Getter
 @Setter
 @Component
@@ -45,5 +48,8 @@ public class RegistrationDTOCompany {
 
         return true;
     }
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName, companyName, mail, password, registrationDate, standort);
+    }
 }

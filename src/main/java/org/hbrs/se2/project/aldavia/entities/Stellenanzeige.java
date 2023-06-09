@@ -40,7 +40,7 @@ public class Stellenanzeige {
     private LocalDate start;
 
     @Basic
-    @Column(name = "ende", nullable = false)
+    @Column(name = "ende")
     private LocalDate ende;
 
     @Basic

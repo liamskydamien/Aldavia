@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.SpracheDTO;
@@ -14,9 +14,17 @@ import java.util.Optional;
 
 @Component
 @Transactional
-public class SprachenControl {
+public class SprachenService {
     @Autowired
     private SprachenRepository sprachenRepository;
+
+    public Sprache getSprache(SpracheDTO spracheDTO){
+        Optional<Sprache> awaitSprache = sprachenRepository.findByBezeichnungAndLevel(spracheDTO.getName(), spracheDTO.getLevel());
+        return awaitSprache.orElse(sprachenRepository.save(Sprache.builder()
+                .bezeichnung(spracheDTO.getName())
+                .level(spracheDTO.getLevel())
+                .build()));
+    }
 
     /**
      * Create a new Sprache or return an existing one
@@ -53,7 +61,7 @@ public class SprachenControl {
             return sprachenRepository.save(sprache);
         }
         else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.SpracheNotFound, "Sprache not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, "Sprache not found");
         }
     }
 }

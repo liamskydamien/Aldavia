@@ -3,13 +3,14 @@ package org.hbrs.se2.project.aldavia.control;
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.dtos.impl.RolleDTOImpl;
+import org.hbrs.se2.project.aldavia.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.util.Builder.UserDTOBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class LoginControl {
@@ -34,7 +35,7 @@ public class LoginControl {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "No User could be found! Please check your credentials!");
         }
         this.userDTO = buildUserDTO( tmpUser );
@@ -84,7 +85,7 @@ public class LoginControl {
            throw new DatabaseUserException(
                    DatabaseUserException.
                         DatabaseUserExceptionType.
-                        DatabaseConnectionFailed,
+                           DATABASE_CONNECTION_FAILED,
                    "A failure occured while trying to connect to database. Please try again later.");
         }
         return userTmp.orElse(null);
@@ -101,14 +102,14 @@ public class LoginControl {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "Credentials are empty! Please check your credentials!");
         }
         else if ( username.equals("") || password.equals("") ) {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.
-                            UserNotFound,
+                            USER_NOT_FOUND,
                     "Credentials are empty! Please check your credentials!");
         }
     }
@@ -128,18 +129,18 @@ public class LoginControl {
      * @return UserDTO
      */
     private UserDTO buildUserDTO(User user){
-        UserDTOBuilder builder = new UserDTOBuilder();
-        builder.setUserName(user.getUserid());
-        builder.setMail(user.getEmail());
-        builder.setPassword(user.getPassword());
-        builder.setPhone(user.getPhone());
-        builder.setProfilePicture(user.getProfilePicture());
-        builder.setRoles(user.getRollen()
-                             .stream()
-                             .map(role -> {RolleDTOImpl r = new RolleDTOImpl();
-                                           r.setBezeichnung(role.getBezeichnung());
-                                           return r;}).toList());
-        return builder.createUserDTO();
+        return UserDTOImpl.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .userid(user.getUserid())
+                .phone(user.getPhone())
+                .profilePicture(user.getProfilePicture())
+                .beschreibung(user.getBeschreibung())
+                .roles(user.getRollen().stream().map(role -> RolleDTOImpl.builder()
+                        .bezeichnung(role.getBezeichnung())
+                        .build()).collect(Collectors.toList()))
+                .build();
     }
 
 }

@@ -43,6 +43,16 @@ public class SpracheTest {
     int studentId, userId, sprachenId;
 
     @Test
+    public void testAddSprache(){
+        Sprache sprache = new Sprache();
+        sprache.setName("Testionisch");
+        sprache.setLevel("B2");
+        sprachenRepository.save(sprache);
+        assertTrue(sprachenRepository.findById(sprache.getSpracheId()).isPresent());
+        sprachenRepository.deleteById(sprache.getSpracheId());
+    }
+
+    @Test
     public void roundTripTest(){
 
         // Create

@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
@@ -13,9 +13,16 @@ import java.util.Optional;
 
 @Component
 @Transactional
-public class TaetigkeitsfeldControl {
+public class TaetigkeitsfeldService {
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
+
+    public Taetigkeitsfeld getTaetigkeitsfeld(TaetigkeitsfeldDTO taetigkeitsfeldDTO){
+        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
+        return awaitTaetigkeitsfeld.orElse(taetigkeitsfeldRepository.save(Taetigkeitsfeld.builder()
+                .bezeichnung(taetigkeitsfeldDTO.getName())
+                .build()));
+    }
 
     /**
      * Add a Taetigkeitsfeld to a student
@@ -50,7 +57,7 @@ public class TaetigkeitsfeldControl {
             return taetigkeitsfeldRepository.save(taetigkeitsfeld);
         }
         else {
-            throw new PersistenceException(PersistenceException.PersistenceExceptionType.TaetigkeitsfeldNotFound, "Taetigkeitsfeld not found");
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, "Taetigkeitsfeld not found");
         }
     }
 }

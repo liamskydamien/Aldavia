@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.control;
+package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
@@ -13,22 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class StudentControl {
+public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
-    private KenntnisseControl kenntnisseControl;
+    private QualifikationenService qualifikationenService;
 
-    @Autowired
-    private SprachenControl sprachenControl;
-
-    @Autowired
-    private QualifikationenControl qualifikationenControl;
-
-    @Autowired
-    private TaetigkeitsfeldControl taetigkeitsfeldControl;
 
 
     /**
@@ -43,7 +35,7 @@ public class StudentControl {
             return student.get();
         }
         else {
-            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
 
@@ -112,7 +104,7 @@ public class StudentControl {
             studentRepository.save(student);
         }
         catch (Exception e) {
-            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
@@ -129,7 +121,7 @@ public class StudentControl {
                 List<Qualifikation> qualifikationen = new ArrayList<>(student.getQualifikationen());
                 for (Qualifikation qualifikation : qualifikationen) {
                     student.setQualifikationen(null);
-                    qualifikationenControl.removeQualifikation(qualifikation);
+                    qualifikationenService.removeQualifikation(qualifikation);
                 }
             }
 
@@ -158,8 +150,7 @@ public class StudentControl {
             studentRepository.delete(student);
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
@@ -172,7 +163,7 @@ public class StudentControl {
         try {
             studentRepository.save(student);
         } catch (Exception e) {
-            throw new ProfileException("Error while creating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while creating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 
