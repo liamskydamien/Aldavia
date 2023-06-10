@@ -72,5 +72,8 @@ public class StellenanzeigeDTOFactoryTest {
         assertEquals(BEZEICHNUNG, stellenanzeigeDTO.getTaetigkeitsfelder().get(0).getName());
         assertEquals(NAME, stellenanzeigeDTO.getUnternehmen().getName());
 
+        // Test UntenehmenDataDTO
+        assertEquals(NAME, stellenanzeigeDTO.getUnternehmen().getName());
+        assertEquals("/unternehmen/" + NAME, stellenanzeigeDTO.getUnternehmen().getProfileLink());
     }
 }
