@@ -107,7 +107,6 @@ public class SpracheTest {
         assertEquals(awaitSprache.get().getStudents().get(0).getId(), sprache.getStudents().get(0).getId());
 
         // Delete
-        student.removeSprache(sprache);
         studentRepository.delete(student);
         assertFalse(studentRepository.existsById(student.getId()));
         //Sprachen dürfen nicht mit gelöscht sein
