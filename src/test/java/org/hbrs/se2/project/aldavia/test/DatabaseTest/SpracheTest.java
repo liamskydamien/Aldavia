@@ -1,136 +1,118 @@
 package org.hbrs.se2.project.aldavia.test.DatabaseTest;
 
-import com.vaadin.flow.component.html.Span;
-import org.hbrs.se2.project.aldavia.entities.Sprache;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.entities.User;
-import org.hbrs.se2.project.aldavia.repository.SprachenRepository;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.hbrs.se2.project.aldavia.entities.*;
+import org.hbrs.se2.project.aldavia.repository.*;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class SpracheTest {
     //TODO: Fix this test
     //TODO: Add round trip test for Sprache
     //TODO: Test Constraints if student gets deleted (cascade) -> Sprache should not get deleted too
     //TODO: Test add... and remove... methods
-    /*
+
     @Autowired
     private SprachenRepository sprachenRepository;
 
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    User user = User.builder()
+            .email("Student1@qtest.vn")
+            .userid("QStudent1")
+            .password("qwedfghbn")
+            .build();
 
-    @Autowired
-    private TestStudentFactory testStudentFactory;
+    Student student = Student.builder()
+            .nachname("Nguyen")
+            .vorname("Qtest")
+            .user(user)
+            .matrikelNummer("963852")
+            .build();
 
-    int studentId, userId, sprachenId;
-
-    @Test
-    public void testAddSprache(){
-        Sprache sprache = new Sprache();
-        sprache.setName("Testionisch");
-        sprache.setLevel("B2");
-        sprachenRepository.save(sprache);
-        assertTrue(sprachenRepository.findById(sprache.getSpracheId()).isPresent());
-        sprachenRepository.deleteById(sprache.getSpracheId());
-    }
+    Sprache sprache = Sprache.builder()
+            .bezeichnung("Testionisch")
+            .level("B2")
+            .build();
 
     @Test
     public void roundTripTest(){
 
-        // Create
-        Sprache sprache = new Sprache();
-        sprache.setName("Testionisch");
-        sprache.setLevel("B2");
+        // Create / Setup
         sprachenRepository.save(sprache);
-        sprachenId = sprache.getSpracheId();
+        //Saved in DB?
+        assertTrue(sprachenRepository.existsById(sprache.getId()));
 
         // Read
-        Optional<Sprache> awaitSprache = sprachenRepository.findById(sprachenId);
+        Optional<Sprache> awaitSprache = sprachenRepository.findById(sprache.getId());
         assertTrue(awaitSprache.isPresent());
-        assertEquals(awaitSprache.get().getName(), sprache.getName(), awaitSprache.get().getName() + " != " + sprache.getName());
-        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel(), awaitSprache.get().getLevel() + " != " + sprache.getLevel());
-        assertEquals(awaitSprache.get().getSpracheId(), sprache.getSpracheId(), awaitSprache.get().getSpracheId() + " != " + sprache.getSpracheId());
+        assertEquals(awaitSprache.get().getId(), sprache.getId());
+        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel());
+        assertEquals(awaitSprache.get().getBezeichnung(), sprache.getBezeichnung());
 
         // Update
         sprache.setLevel("C1");
         sprachenRepository.save(sprache);
-        awaitSprache = sprachenRepository.findById(sprachenId);
+        awaitSprache = sprachenRepository.findById(sprache.getId());
         assertTrue(awaitSprache.isPresent());
-        assertEquals(awaitSprache.get().getName(), sprache.getName(), awaitSprache.get().getName() + " != " + sprache.getName());
-        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel(), awaitSprache.get().getLevel() + " != " + sprache.getLevel());
-        assertEquals(awaitSprache.get().getSpracheId(), sprache.getSpracheId(), awaitSprache.get().getSpracheId() + " != " + sprache.getSpracheId());
+        assertEquals(awaitSprache.get().getId(), sprache.getId());
+        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel());
+        assertEquals(awaitSprache.get().getBezeichnung(), sprache.getBezeichnung());
 
         // Delete
-        sprachenRepository.deleteById(sprachenId);
-        assertFalse(sprachenRepository.existsById(sprachenId));
+        sprachenRepository.deleteById(sprache.getId());
+        assertFalse(sprachenRepository.existsById(sprache.getId()));
     }
 
     @Test
     public void negativeTests(){
-        assertThrows(Exception.class, () -> {
-            sprachenRepository.save(null);
-        });
-        assertThrows(Exception.class, () -> {
-            sprachenRepository.deleteById(-1);
-        });
+        assertThrows(Exception.class, () -> sprachenRepository.save(null));
+        assertThrows(Exception.class, () -> sprachenRepository.deleteById(-1));
     }
 
     @Test
     public void studentTest() {
-        Student student = testStudentFactory.createStudent();
-        studentId = student.getStudentId();
-
+        // Setup
+        studentRepository.save(student);
         List<Student> students = new ArrayList<>();
         students.add(student);
 
-        // Create Sprache
-        Sprache sprache = new Sprache();
-        sprache.setName("Testionisch");
-        sprache.setLevel("B2");
-        sprache.setStudenten(students);
+        sprache.setStudents(students);
         sprachenRepository.save(sprache);
-        sprachenId = sprache.getSpracheId();
-
         List<Sprache> sprachen = new ArrayList<>();
         sprachen.add(sprache);
+
 
         // Update Student
         student.setSprachen(sprachen);
         studentRepository.save(student);
 
         // Read
-        Optional<Sprache> awaitSprache = sprachenRepository.findById(sprachenId);
+        Optional<Sprache> awaitSprache = sprachenRepository.findById(sprache.getId());
         assertTrue(awaitSprache.isPresent());
-        assertEquals(awaitSprache.get().getName(), sprache.getName(), awaitSprache.get().getName() + " != " + sprache.getName());
-        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel(), awaitSprache.get().getLevel() + " != " + sprache.getLevel());
-        assertEquals(awaitSprache.get().getSpracheId(), sprache.getSpracheId(), awaitSprache.get().getSpracheId() + " != " + sprache.getSpracheId());
-        assertEquals(awaitSprache.get().getStudenten().get(0).getVorname(), sprache.getStudenten().get(0).getVorname(), awaitSprache.get().getStudenten().get(0).getVorname() + " != " + sprache.getStudenten().get(0).getVorname());
+        assertEquals(awaitSprache.get().getId(), sprache.getId());
+        assertEquals(awaitSprache.get().getLevel(), sprache.getLevel());
+        assertEquals(awaitSprache.get().getBezeichnung(), sprache.getBezeichnung());
+        assertEquals(awaitSprache.get().getStudents().get(0).getId(), sprache.getStudents().get(0).getId());
 
-        // Teardown
-        student.setSprachen(null);
-        studentRepository.save(student);
-
-        sprachenRepository.deleteById(sprachenId);
-        testStudentFactory.deleteStudent();
+        // Delete
+        studentRepository.delete(student);
+        assertFalse(studentRepository.existsById(student.getId()));
+        //Sprachen dürfen nicht mit gelöscht sein
+        assertTrue(sprachenRepository.existsById(sprache.getId()));
+        sprachenRepository.deleteById(sprache.getId());
     }
 
-     */
+
 }
