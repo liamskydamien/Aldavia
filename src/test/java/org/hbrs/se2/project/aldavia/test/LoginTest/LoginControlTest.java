@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LoginControlTest {
     public static final String USERID = "sascha";
-    public static final String PASSWORD = "abc";
+    public static final String ABC = "abc";
     public static final String EMAIL = "test@aldavia.de";
     public static final String ROLLE = "Tester";
     public static final String MESSAGE = "Wrong Exception thrown";
@@ -52,19 +52,19 @@ public class LoginControlTest {
 
         User user = new User();
         user.setUserid(USERID);
-        user.setPassword(PASSWORD);
+        user.setPassword(ABC);
         user.setEmail(EMAIL);
         user.setRollen(rollen);
         userRepository.save(user);
 
         testUser.setUserid(USERID);
-        testUser.setPassword(PASSWORD);
+        testUser.setPassword(ABC);
         testUser.setEmail(EMAIL);
     }
 
     @AfterAll
     public void tearDown() {
-        Optional<User> user = userRepository.findUserByUseridAndPassword(USERID, PASSWORD);
+        Optional<User> user = userRepository.findUserByUseridAndPassword(USERID, ABC);
         userRepository.deleteById(user.orElseThrow().getId());
         Optional<Rolle> rolle = rolleRepository.findRolleByBezeichnung(ROLLE);
         rolleRepository.deleteById(rolle.orElseThrow().getBezeichnung());
@@ -74,10 +74,10 @@ public class LoginControlTest {
     @Transactional
     public void testLoginPositiv() {
         try {
-            boolean userIsThere = loginControl.authenticate(USERID, PASSWORD);
+            boolean userIsThere = loginControl.authenticate(USERID, ABC);
             assertTrue(userIsThere);
 
-            boolean userIsThere2 = loginControl.authenticate(EMAIL, PASSWORD);
+            boolean userIsThere2 = loginControl.authenticate(EMAIL, ABC);
             assertTrue(userIsThere2);
             assertEquals(loginControl.getCurrentUser().getUserid(), testUser.getUserid(), "Userid not equal");
         }
@@ -95,12 +95,12 @@ public class LoginControlTest {
 
         DatabaseUserException exceptionWrongUsername = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authenticate("saschaa", PASSWORD);
+                    loginControl.authenticate("saschaa", ABC);
         });
 
         DatabaseUserException exceptionWrongEmail = assertThrows(
                 DatabaseUserException.class, () -> {
-                    loginControl.authenticate("test2@aldavia.de", PASSWORD);
+                    loginControl.authenticate("test2@aldavia.de", ABC);
         });
 
         assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);

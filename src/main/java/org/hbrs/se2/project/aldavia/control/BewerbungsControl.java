@@ -21,7 +21,7 @@ public class BewerbungsControl {
     private final StellenanzeigenService stellenanzeigenService;
 
     @Autowired
-    public BewerbungsControl(BewerbungsService bewerbungsService, StudentService studentService, StellenanzeigenService stellenanzeigenService) {
+    public BewerbungsControl(BewerbungsService bewerbungsService,StudentService studentService, StellenanzeigenService stellenanzeigenService) {
         this.bewerbungsService = bewerbungsService;
         this.studentService = studentService;
         this.stellenanzeigenService = stellenanzeigenService;

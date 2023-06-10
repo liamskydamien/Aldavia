@@ -1,7 +1,7 @@
 package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
+import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class StudentService {
     @Autowired
     private QualifikationenService qualifikationenService;
 
-    private Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
     /**
@@ -49,7 +49,7 @@ public class StudentService {
      * @param changeStudentInformationDTO The DTO with the new information
      * @throws ProfileException if student not found
      */
-    public void updateStudentInformation(Student student, ChangeStudentInformationDTO changeStudentInformationDTO) throws ProfileException {
+    public void updateStudentInformation(Student student, StudentProfileDTO changeStudentInformationDTO) throws ProfileException {
         logger.info("Updating student " + student.getUser().getUserid() + " from DB" );
         try {
 
@@ -98,8 +98,8 @@ public class StudentService {
                 student.setStudiengang(changeStudentInformationDTO.getStudiengang());
             }
 
-            if (changeStudentInformationDTO.getMatrikelnummer() != null) {
-                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelnummer());
+            if (changeStudentInformationDTO.getMatrikelNummer() != null) {
+                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
             }
 
             if (changeStudentInformationDTO.getLebenslauf() != null) {

@@ -69,9 +69,6 @@ public class StudentProfileControlTest {
     private TaetigkeitsfeldService taetigkeitsfeldService;
 
     private Student student;
-    private ChangeStudentInformationDTO changeStudentInformationDTO;
-
-    private AddStudentInformationDTO addStudentInformationDTO;
 
     @BeforeEach
     void setUp() {
@@ -128,9 +125,6 @@ public class StudentProfileControlTest {
         student.addSprache(sprache);
 
         student = studentRepository.save(student);
-
-        changeStudentInformationDTO = new ChangeStudentInformationDTO();
-        addStudentInformationDTO = new AddStudentInformationDTO();
     }
 
     @AfterEach
@@ -182,16 +176,6 @@ public class StudentProfileControlTest {
         Student student = studentRepository.findByUserID(USERID).orElseThrow();
         System.out.println("Student:" + student.getUser().getUserid());
 
-        changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
-                .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang(WIRTSCHAFTSINFORMATIK1)
-                .studienbeginn(LocalDate.of(2020, 1, 1))
-                .matrikelnummer(MATRIKELNUMMER)
-                .lebenslauf(LEBENSLAUF1)
-                .beschreibung(TOLLER_STUDENT)
-                .telefonnummer(TELEFONNUMMER)
-                .build();
-
         // To add
         KenntnisDTO kenntnisDTOAdd = KenntnisDTO.builder()
                 .name("C++")
@@ -231,13 +215,6 @@ public class StudentProfileControlTest {
         addKenntnisse.add(kenntnisDTOAdd);
 
 
-        // Build AddStudentInformationDTO
-        addStudentInformationDTO.setKenntnisse(addKenntnisse);
-        addStudentInformationDTO.setQualifikationen(addQulifikationen);
-        addStudentInformationDTO.setSprachen(addSprachen);
-        addStudentInformationDTO.setTaetigkeitsfelder(addTaetigkeitsfelder);
-
-
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email(SINA_SCHMIDT_ALDAVIA_MAIL_DE)
                 .vorname(SINA)
@@ -264,34 +241,34 @@ public class StudentProfileControlTest {
         // Assert Student Information
         assertEquals(studentProfileDTO.getVorname(), student.getVorname());
         assertEquals(studentProfileDTO.getNachname(), student.getNachname());
-        assertEquals(studentProfileDTO.getGeburtsdatum(), changeStudentInformationDTO.getGeburtsdatum());
-        assertEquals(studentProfileDTO.getStudiengang(), changeStudentInformationDTO.getStudiengang());
-        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
-        assertEquals(studentProfileDTO.getMatrikelNummer(), changeStudentInformationDTO.getMatrikelnummer());
-        assertEquals(studentProfileDTO.getLebenslauf(), changeStudentInformationDTO.getLebenslauf());
+        assertEquals(studentProfileDTO.getGeburtsdatum(), newstudentProfileDTO.getGeburtsdatum());
+        assertEquals(studentProfileDTO.getStudiengang(), newstudentProfileDTO.getStudiengang());
+        assertEquals(studentProfileDTO.getStudienbeginn(), newstudentProfileDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
+        assertEquals(studentProfileDTO.getMatrikelNummer(), newstudentProfileDTO.getMatrikelNummer());
+        assertEquals(studentProfileDTO.getLebenslauf(), newstudentProfileDTO.getLebenslauf());
 
         // Assert User Information
-        assertEquals(studentProfileDTO.getBeschreibung(), changeStudentInformationDTO.getBeschreibung());
-        assertEquals(studentProfileDTO.getTelefonnummer(), changeStudentInformationDTO.getTelefonnummer());
+        assertEquals(studentProfileDTO.getBeschreibung(), newstudentProfileDTO.getBeschreibung());
+        assertEquals(studentProfileDTO.getTelefonnummer(), newstudentProfileDTO.getTelefonnummer());
 
         // Assert Qualifikation Information
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), addStudentInformationDTO.getQualifikationen().get(0).getBeschreibung());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBereich(), addStudentInformationDTO.getQualifikationen().get(0).getBereich());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), addStudentInformationDTO.getQualifikationen().get(0).getBezeichnung());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getInstitution(), addStudentInformationDTO.getQualifikationen().get(0).getInstitution());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getVon(), addStudentInformationDTO.getQualifikationen().get(0).getVon());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis(), addStudentInformationDTO.getQualifikationen().get(0).getBis());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart(), addStudentInformationDTO.getQualifikationen().get(0).getBeschaeftigungsart());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), newstudentProfileDTO.getQualifikationen().get(0).getBeschreibung());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBereich(), newstudentProfileDTO.getQualifikationen().get(0).getBereich());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), newstudentProfileDTO.getQualifikationen().get(0).getBezeichnung());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getInstitution(), newstudentProfileDTO.getQualifikationen().get(0).getInstitution());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getVon(), newstudentProfileDTO.getQualifikationen().get(0).getVon());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis(), newstudentProfileDTO.getQualifikationen().get(0).getBis());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart(), newstudentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart());
 
         // Assert Sprache Information
-        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), addStudentInformationDTO.getSprachen().get(0).getName());
-        assertEquals(studentProfileDTO.getSprachen().get(0).getLevel(), addStudentInformationDTO.getSprachen().get(0).getLevel());
+        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), newstudentProfileDTO.getSprachen().get(0).getName());
+        assertEquals(studentProfileDTO.getSprachen().get(0).getLevel(), newstudentProfileDTO.getSprachen().get(0).getLevel());
 
         // Assert Taetigkeitsfeld Information
-        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), addStudentInformationDTO.getTaetigkeitsfelder().get(0).getName());
+        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), newstudentProfileDTO.getTaetigkeitsfelder().get(0).getName());
 
         // Assert Kenntnis Information
-        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), addStudentInformationDTO.getKenntnisse().get(0).getName());
+        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), newstudentProfileDTO.getKenntnisse().get(0).getName());
 
     }
 
@@ -315,16 +292,6 @@ public class StudentProfileControlTest {
 
         Student student = studentRepository.findByUserID(SASCHA_ALDA_FAN).orElseThrow();
         System.out.println("Student:" + student.getUser().getUserid());
-
-        changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
-                .geburtsdatum(LocalDate.of(2001, 1, 1))
-                .studiengang(WIRTSCHAFTSINFORMATIK1)
-                .studienbeginn(LocalDate.of(2020, 1, 1))
-                .matrikelnummer(MATRIKELNUMMER)
-                .lebenslauf(LEBENSLAUF1)
-                .beschreibung(TOLLER_STUDENT)
-                .telefonnummer(TELEFONNUMMER)
-                .build();
 
         // To add
         KenntnisDTO kenntnisDTOAdd = KenntnisDTO.builder()
@@ -364,12 +331,6 @@ public class StudentProfileControlTest {
         addQulifikationen.add(qualifikationDTOAdd);
         addKenntnisse.add(kenntnisDTOAdd);
 
-        // Build AddStudentInformationDTO
-        addStudentInformationDTO.setKenntnisse(addKenntnisse);
-        addStudentInformationDTO.setQualifikationen(addQulifikationen);
-        addStudentInformationDTO.setSprachen(addSprachen);
-        addStudentInformationDTO.setTaetigkeitsfelder(addTaetigkeitsfelder);
-
 
         StudentProfileDTO newstudentProfileDTO = StudentProfileDTO.builder()
                 .email(SINA_SCHMIDT_ALDAVIA_MAIL_DE)
@@ -397,34 +358,34 @@ public class StudentProfileControlTest {
         // Assert Student Information
         assertEquals(studentProfileDTO.getVorname(), student1.getVorname());
         assertEquals(studentProfileDTO.getNachname(), student1.getNachname());
-        assertEquals(studentProfileDTO.getGeburtsdatum(), changeStudentInformationDTO.getGeburtsdatum());
-        assertEquals(studentProfileDTO.getStudiengang(), changeStudentInformationDTO.getStudiengang());
-        assertEquals(studentProfileDTO.getStudienbeginn(), changeStudentInformationDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
-        assertEquals(studentProfileDTO.getMatrikelNummer(), changeStudentInformationDTO.getMatrikelnummer());
-        assertEquals(studentProfileDTO.getLebenslauf(), changeStudentInformationDTO.getLebenslauf());
+        assertEquals(studentProfileDTO.getGeburtsdatum(), newstudentProfileDTO.getGeburtsdatum());
+        assertEquals(studentProfileDTO.getStudiengang(), newstudentProfileDTO.getStudiengang());
+        assertEquals(studentProfileDTO.getStudienbeginn(), newstudentProfileDTO.getStudienbeginn(), "Studienbeginn ist nicht gleich");
+        assertEquals(studentProfileDTO.getMatrikelNummer(), newstudentProfileDTO.getMatrikelNummer());
+        assertEquals(studentProfileDTO.getLebenslauf(), newstudentProfileDTO.getLebenslauf());
 
         // Assert User Information
-        assertEquals(studentProfileDTO.getBeschreibung(), changeStudentInformationDTO.getBeschreibung());
-        assertEquals(studentProfileDTO.getTelefonnummer(), changeStudentInformationDTO.getTelefonnummer());
+        assertEquals(studentProfileDTO.getBeschreibung(), newstudentProfileDTO.getBeschreibung());
+        assertEquals(studentProfileDTO.getTelefonnummer(), newstudentProfileDTO.getTelefonnummer());
 
         // Assert Qualifikation Information
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), addStudentInformationDTO.getQualifikationen().get(0).getBeschreibung());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBereich(), addStudentInformationDTO.getQualifikationen().get(0).getBereich());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), addStudentInformationDTO.getQualifikationen().get(0).getBezeichnung());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getInstitution(), addStudentInformationDTO.getQualifikationen().get(0).getInstitution());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getVon(), addStudentInformationDTO.getQualifikationen().get(0).getVon());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis(), addStudentInformationDTO.getQualifikationen().get(0).getBis());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart(), addStudentInformationDTO.getQualifikationen().get(0).getBeschaeftigungsart());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), newstudentProfileDTO.getQualifikationen().get(0).getBeschreibung());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBereich(), newstudentProfileDTO.getQualifikationen().get(0).getBereich());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), newstudentProfileDTO.getQualifikationen().get(0).getBezeichnung());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getInstitution(), newstudentProfileDTO.getQualifikationen().get(0).getInstitution());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getVon(), newstudentProfileDTO.getQualifikationen().get(0).getVon());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis(), newstudentProfileDTO.getQualifikationen().get(0).getBis());
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart(), newstudentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart());
 
         // Assert Sprache Information
-        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), addStudentInformationDTO.getSprachen().get(0).getName());
-        assertEquals(studentProfileDTO.getSprachen().get(0).getLevel(), addStudentInformationDTO.getSprachen().get(0).getLevel());
+        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), newstudentProfileDTO.getSprachen().get(0).getName());
+        assertEquals(studentProfileDTO.getSprachen().get(0).getLevel(), newstudentProfileDTO.getSprachen().get(0).getLevel());
 
         // Assert Taetigkeitsfeld Information
-        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), addStudentInformationDTO.getTaetigkeitsfelder().get(0).getName());
+        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), newstudentProfileDTO.getTaetigkeitsfelder().get(0).getName());
 
         // Assert Kenntnis Information
-        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), addStudentInformationDTO.getKenntnisse().get(0).getName());
+        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), newstudentProfileDTO.getKenntnisse().get(0).getName());
 
 
     }
