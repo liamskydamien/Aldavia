@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @Transactional
 public class StellenanzeigenService {
@@ -22,5 +25,10 @@ public class StellenanzeigenService {
             //TODO Add customexception
             throw new RuntimeException("Stellenanzeige not found");
         }
+    }
+
+    //TODO Add method to return all Stellenanzeigen
+    public List<Stellenanzeige> getStellenanzeigen() {
+        return new ArrayList<>();
     }
 }
