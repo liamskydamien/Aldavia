@@ -17,6 +17,8 @@ import java.util.Optional;
 @Component
 public class StudentService {
 
+    public static final String FROM_DB = " from DB";
+
     @Autowired
     private StudentRepository studentRepository;
 
@@ -33,7 +35,7 @@ public class StudentService {
      * @throws ProfileException if student not found
      */
     public Student getStudent(String username) throws ProfileException {
-        logger.info("Getting student " + username + " from DB" );
+        logger.info("Getting student " + username + FROM_DB);
         Optional<Student> student = studentRepository.findByUserID(username);
         if (student.isPresent()) {
             return student.get();
@@ -50,7 +52,7 @@ public class StudentService {
      * @throws ProfileException if student not found
      */
     public void updateStudentInformation(Student student, StudentProfileDTO changeStudentInformationDTO) throws ProfileException {
-        logger.info("Updating student " + student.getUser().getUserid() + " from DB" );
+        logger.info("Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
 
             User user = student.getUser();
@@ -120,7 +122,7 @@ public class StudentService {
      */
     @Transactional
     public void deleteStudent(Student student) throws ProfileException {
-        logger.info("Deleting student " + student.getUser().getUserid() + " from DB" );
+        logger.info("Deleting student " + student.getUser().getUserid() + FROM_DB);
         try {
 
             if (student.getQualifikationen() != null) {
@@ -166,7 +168,7 @@ public class StudentService {
      * @throws ProfileException if student not found
      */
     public void createOrUpdateStudent(Student student) throws ProfileException {
-        logger.info("Creating or Updating student " + student.getUser().getUserid() + " from DB" );
+        logger.info("Creating or Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
             studentRepository.save(student);
         } catch (Exception e) {
