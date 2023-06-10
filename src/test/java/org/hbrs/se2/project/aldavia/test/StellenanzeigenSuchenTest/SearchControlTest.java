@@ -1,11 +1,9 @@
 package org.hbrs.se2.project.aldavia.test.StellenanzeigenSuchenTest;
 
 import org.hbrs.se2.project.aldavia.control.SearchControl;
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
-import org.hbrs.se2.project.aldavia.entities.User;
+import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +38,10 @@ public class SearchControlTest {
     private StellenanzeigenService stellenanzeigenService;
 
     private SearchControl searchControl;
+
+    private Stellenanzeige stellenanzeige1;
+    private Stellenanzeige stellenanzeige2;
+    private Stellenanzeige stellenanzeige3;
     @BeforeEach
     public void setup() {
         searchControl = new SearchControl(studentService, stellenanzeigenService);
@@ -82,7 +84,7 @@ public class SearchControlTest {
         taetigkeitsfeldListStellenanzeige3.add(taetigkeitsfeld4);
         taetigkeitsfeldListStellenanzeige3.add(taetigkeitsfeld);
 
-        Stellenanzeige stellenanzeige = Stellenanzeige.builder()
+        stellenanzeige1 = Stellenanzeige.builder()
                 .id(1)
                 .beschreibung(TEST)
                 .unternehmen_stellenanzeigen(unternehmen)
@@ -96,7 +98,7 @@ public class SearchControlTest {
                 .taetigkeitsfelder(taetigkeitsfeldListStellenanzeige1)
                 .build();
 
-        Stellenanzeige stellenanzeige2 = Stellenanzeige.builder()
+        stellenanzeige2 = Stellenanzeige.builder()
                 .id(2)
                 .beschreibung(TEST2)
                 .unternehmen_stellenanzeigen(unternehmen)
@@ -110,7 +112,7 @@ public class SearchControlTest {
                 .erstellungsdatum(TEST_DATE)
                 .build();
 
-        Stellenanzeige stellenanzeige3 = Stellenanzeige.builder()
+        stellenanzeige3 = Stellenanzeige.builder()
                 .id(3)
                 .beschreibung(TEST3)
                 .unternehmen_stellenanzeigen(unternehmen)
@@ -125,11 +127,47 @@ public class SearchControlTest {
                 .build();
 
         List<Stellenanzeige> stellenanzeigen = new ArrayList<>();
-        stellenanzeigen.add(stellenanzeige);
+        stellenanzeigen.add(stellenanzeige1);
         stellenanzeigen.add(stellenanzeige2);
         stellenanzeigen.add(stellenanzeige3);
 
         return stellenanzeigen;
+    }
+
+    private Student setupStudent(){
+
+        Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
+                .bezeichnung(SOFTWARE_ENTWICKLUNG)
+                .build();
+
+        Taetigkeitsfeld taetigkeitsfeld2 = Taetigkeitsfeld.builder()
+                .bezeichnung(PROJEKTMANAGEMENT)
+                .build();
+
+        Taetigkeitsfeld taetigkeitsfeld3 = Taetigkeitsfeld.builder()
+                .bezeichnung(IT_CONSULTING)
+                .build();
+
+        Taetigkeitsfeld taetigkeitsfeld4 = Taetigkeitsfeld.builder()
+                .bezeichnung(IT_ADMINISTRATION)
+                .build();
+
+        Kenntnis kenntnis = Kenntnis.builder()
+                .bezeichnung("Java")
+                .build();
+
+        Kenntnis kenntnis2 = Kenntnis.builder()
+                .bezeichnung(PROJEKTMANAGEMENT)
+                .build();
+
+        Kenntnis kenntnis3 = Kenntnis.builder()
+                .bezeichnung(IT_ADMINISTRATION)
+                .build();
+
+        return Student.builder()
+                .kenntnisse(List.of(kenntnis, kenntnis2, kenntnis3))
+                .taetigkeitsfelder(List.of(taetigkeitsfeld3))
+                .build();
     }
 
     @Test
@@ -199,6 +237,23 @@ public class SearchControlTest {
         assertEquals(IT_CONSULTING, stellenanzeigen.get(1).getTaetigkeitsfelder().get(1).getName());
         assertEquals(IT_ADMINISTRATION, stellenanzeigen.get(2).getTaetigkeitsfelder().get(0).getName());
         assertEquals(SOFTWARE_ENTWICKLUNG, stellenanzeigen.get(2).getTaetigkeitsfelder().get(1).getName());
+    }
 
+    @Test
+    public void testRecommandationSort() throws ProfileException {
+        given(stellenanzeigenService.getStellenanzeigen()).willReturn(setupStellenanzeigen());
+        given(studentService.getStudent(TEST)).willReturn(setupStudent());
+
+        List<StellenanzeigeDTO> stellenanzeigeDTOS = searchControl.getRecommendedStellenanzeigen(TEST);
+        assertEquals(3, stellenanzeigeDTOS.size());
+        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOS.get(0).getId());
+        assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOS.get(1).getId());
+        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOS.get(2).getId());
+
+        List<StellenanzeigeDTO> stellenanzeigeDTOSNotSorted = searchControl.getRecommendedStellenanzeigen("GibtsNicht");
+        assertEquals(3, stellenanzeigeDTOS.size());
+        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOS.get(0).getId());
+        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOS.get(1).getId());
+        assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOS.get(2).getId());
     }
 }
