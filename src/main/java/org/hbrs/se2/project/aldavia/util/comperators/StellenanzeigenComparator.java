@@ -19,7 +19,7 @@ public class StellenanzeigenComparator implements Comparator<StellenanzeigeDTO> 
 
     @Override
     public int compare(StellenanzeigeDTO o1, StellenanzeigeDTO o2) {
-        return calculateScore(o1.getTaetigkeitsfelder()) - calculateScore(o2.getTaetigkeitsfelder());
+        return calculateScore(o2.getTaetigkeitsfelder()) - calculateScore(o1.getTaetigkeitsfelder());
     }
 
     /**

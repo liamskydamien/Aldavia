@@ -246,14 +246,14 @@ public class SearchControlTest {
 
         List<StellenanzeigeDTO> stellenanzeigeDTOS = searchControl.getRecommendedStellenanzeigen(TEST);
         assertEquals(3, stellenanzeigeDTOS.size());
-        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOS.get(0).getId());
+        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOS.get(0).getId());
         assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOS.get(1).getId());
-        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOS.get(2).getId());
+        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOS.get(2).getId());
 
         List<StellenanzeigeDTO> stellenanzeigeDTOSNotSorted = searchControl.getRecommendedStellenanzeigen("GibtsNicht");
-        assertEquals(3, stellenanzeigeDTOS.size());
-        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOS.get(0).getId());
-        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOS.get(1).getId());
-        assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOS.get(2).getId());
+        assertEquals(3, stellenanzeigeDTOSNotSorted.size());
+        assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOSNotSorted.get(0).getId());
+        assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOSNotSorted.get(1).getId());
+        assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOSNotSorted.get(2).getId());
     }
 }
