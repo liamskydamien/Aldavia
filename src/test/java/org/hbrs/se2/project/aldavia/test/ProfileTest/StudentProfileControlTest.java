@@ -13,6 +13,7 @@ import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -174,7 +175,6 @@ public class StudentProfileControlTest {
     @Test
     public void testChangeStudentInformation() throws ProfileException, PersistenceException {
         Student student = studentRepository.findByUserID(USERID).orElseThrow();
-        System.out.println("Student:" + student.getUser().getUserid());
 
         // To add
         KenntnisDTO kenntnisDTOAdd = KenntnisDTO.builder()
@@ -291,7 +291,6 @@ public class StudentProfileControlTest {
         studentRepository.save(student1);
 
         Student student = studentRepository.findByUserID(SASCHA_ALDA_FAN).orElseThrow();
-        System.out.println("Student:" + student.getUser().getUserid());
 
         // To add
         KenntnisDTO kenntnisDTOAdd = KenntnisDTO.builder()
