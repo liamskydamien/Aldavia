@@ -17,10 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class SpracheTest {
-    //TODO: Fix this test
-    //TODO: Add round trip test for Sprache
-    //TODO: Test Constraints if student gets deleted (cascade) -> Sprache should not get deleted too
-    //TODO: Test add... and remove... methods
 
     @Autowired
     private SprachenRepository sprachenRepository;
