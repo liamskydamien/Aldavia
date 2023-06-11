@@ -8,6 +8,7 @@ import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewStudent;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
+import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
@@ -20,19 +21,19 @@ public class BewerbungsOverviewStudentView extends Div {
     private UserDTO currentUser;
 
     public BewerbungsOverviewStudentView() {
-        this.bewerbungsOverviewStudent = new BewerbungsOverviewStudent(new StudentService());
+        this.bewerbungsOverviewStudent = new BewerbungsOverviewStudent(new StudentService(), new BewerbungsService());
         currentUser = getCurrentUser();
         setUpUI();
     }
 
     private void setUpUI() {
         add(new H1("Deine Bewerbungen"));
-        List<BewerbungsDTO>
+        //List<BewerbungsDTO>
     }
 
     private VerticalLayout createBewerbungenLayout(){
         try {
-            List<BewerbungsDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungen(currentUser.getUserid());
+            //List<BewerbungsDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungen(currentUser.getUserid());
             VerticalLayout layout = new VerticalLayout();
             layout.setSizeFull();
             layout.setId("header-neutral");
@@ -45,7 +46,7 @@ public class BewerbungsOverviewStudentView extends Div {
 
     private Div createBewerbung(BewerbungsDTO bewerbung){
         Div div = new Div();
-        div.setText(bewerbung.getStellenanzeige().getTitel());
+        //div.setText(bewerbung.getStellenanzeige().getTitel());
         return div;
     }
 
