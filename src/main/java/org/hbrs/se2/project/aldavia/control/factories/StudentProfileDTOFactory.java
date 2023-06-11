@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control.factories;
 
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
@@ -27,7 +28,7 @@ public class StudentProfileDTOFactory{
      * @param student The student
      * @return List of KenntnisDTOs
      */
-    public StudentProfileDTO createStudentProfileDTO(Student student){
+    public StudentProfileDTO createStudentProfileDTO(Student student) throws ProfileException {
         try {
             User user = student.getUser();
             List<TaetigkeitsfeldDTO> taetigkeitsfeldDTOList = createTaetigkeitsfeldDTOList(student);
@@ -54,7 +55,7 @@ public class StudentProfileDTOFactory{
                     .build();
         }
         catch (Exception e){
-            throw new RuntimeException("Error while creating StudentProfileDTO", e);
+            throw new ProfileException("Fehler beim Erstellen des Studenten Profils", ProfileException.ProfileExceptionType.ERROR_CREATING_PROFILE_DTO);
         }
     }
 
@@ -70,10 +71,8 @@ public class StudentProfileDTOFactory{
     }
 
     private List<SpracheDTO> createSpracheDTOList(Student student) {
-        if (student.getSprachen() != null) {
-            if (!student.getSprachen().isEmpty()) {
-                return student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
-            }
+        if (student.getSprachen() != null && !student.getSprachen().isEmpty()) {
+            return student.getSprachen().stream().map(this::createSpracheDTO).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -88,10 +87,8 @@ public class StudentProfileDTOFactory{
     }
 
     private List<KenntnisDTO> createKenntnisDTOList(Student student) {
-        if (student.getKenntnisse() != null){
-            if (!student.getKenntnisse().isEmpty()) {
-               return student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
-            }
+        if (student.getKenntnisse() != null && !student.getKenntnisse().isEmpty()){
+            return student.getKenntnisse().stream().map(this::createKenntnisDTO).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -106,10 +103,8 @@ public class StudentProfileDTOFactory{
     }
 
     private List<TaetigkeitsfeldDTO> createTaetigkeitsfeldDTOList(Student student) {
-        if(student.getTaetigkeitsfelder() != null) {
-            if (!student.getTaetigkeitsfelder().isEmpty()) {
-               return student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
-            }
+        if(student.getTaetigkeitsfelder() != null && !student.getTaetigkeitsfelder().isEmpty()) {
+            return student.getTaetigkeitsfelder().stream().map(this::createTaetigkeitsfeldDTO).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
@@ -131,10 +126,8 @@ public class StudentProfileDTOFactory{
     }
 
     private List<QualifikationsDTO> createQualifikationsDTOList(Student student) {
-        if(student.getQualifikationen() != null){
-            if (!student.getQualifikationen().isEmpty()) {
-                return student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
-            }
+        if(student.getQualifikationen() != null && !student.getQualifikationen().isEmpty()){
+            return student.getQualifikationen().stream().map(this::createQualifikationsDTO).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }

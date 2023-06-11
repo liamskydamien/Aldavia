@@ -6,6 +6,8 @@ import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +19,32 @@ import java.util.List;
 @Transactional
 public class StudentProfileControl {
 
+    private final StudentService studentService;
+
+    private final KenntnisseService kenntnisseService;
+
+    private final QualifikationenService qualifikationenService;
+
+    private final SprachenService sprachenService;
+
+    private final TaetigkeitsfeldService taetigkeitsfeldService;
+
     private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
 
-    @Autowired
-    private StudentService studentService;
-    @Autowired
-    private KenntnisseService kenntnisseService;
-    @Autowired
-    private  QualifikationenService qualifikationenService;
-    @Autowired
-    private SprachenService sprachenService;
-    @Autowired
-    private TaetigkeitsfeldService taetigkeitsfeldService;
+    private final Logger logger = LoggerFactory.getLogger(StudentProfileControl.class);
 
+    @Autowired
+    public StudentProfileControl(StudentService studentService,
+                                 KenntnisseService kenntnisseService,
+                                 QualifikationenService qualifikationenService,
+                                 SprachenService sprachenService,
+                                 TaetigkeitsfeldService taetigkeitsfeldService) {
+        this.studentService = studentService;
+        this.kenntnisseService = kenntnisseService;
+        this.qualifikationenService = qualifikationenService;
+        this.sprachenService = sprachenService;
+        this.taetigkeitsfeldService = taetigkeitsfeldService;
+    }
 
     /**
      * Get the student profile of a student
@@ -38,19 +53,15 @@ public class StudentProfileControl {
      */
     public StudentProfileDTO getStudentProfile(String username) throws ProfileException{
         try {
-            System.out.println("Finding student with username: " + username);
-            if(studentService == null) {
-                System.out.println("StudentService is null");
-            }
+            logger.info("Getting Student from Database with username: " + username);
             Student student = studentService.getStudent(username);
             StudentProfileDTO studentProfileDTO = studentProfileDTOFactory.createStudentProfileDTO(student);
-            System.out.println("Found student: " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
+            logger.info("Found Student: " + student.getVorname() + " " + student.getNachname());
             return studentProfileDTO;
         }
         catch (Exception e) {
-            throw new ProfileException("Error while loading student profile" + e, ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
+            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
-
     }
 
     public void updateStudentProfile(StudentProfileDTO updatedVersion, String username) throws ProfileException, PersistenceException {
@@ -59,11 +70,11 @@ public class StudentProfileControl {
             throw new ProfileException("Student does not exist", ProfileException.ProfileExceptionType.STUDENT_DOES_NOT_EXIST);
         }
         else {
-            System.out.println("Getting Student from Database with username: " + username);
+            logger.info("Getting Student from Database with username: " + username);
 
             Student student = studentService.getStudent(username);
 
-            System.out.println("Found Student: " + student.getVorname() + " " + student.getNachname());
+            logger.info("Found Student: " + student.getVorname() + " " + student.getNachname());
 
             // Change Data in Student
             student.setVorname(updatedVersion.getVorname());
@@ -84,11 +95,10 @@ public class StudentProfileControl {
             // Add inputs to Lists
             addAttributes(student, updatedVersion);
 
-            System.out.println("Updated Student: " + student.getVorname() + " " + student.getNachname());
-
             // Save student information
+            logger.info("Updating Student in Database: " + student.getVorname() + " " + student.getNachname());
             studentService.createOrUpdateStudent(student);
-            System.out.println("Saved Student in Database: " + student.getVorname() + " " + student.getNachname());
+            logger.info("Updated Student in Database: " + student.getVorname() + " " + student.getNachname());
         }
     }
 

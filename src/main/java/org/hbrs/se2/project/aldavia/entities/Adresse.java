@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.aldavia.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import lombok.*;
 
@@ -42,11 +40,11 @@ public class Adresse {
 
     // adresse_hat_unternehmen
     @ManyToMany(mappedBy = "adressen")
-    private List<Unternehmen> unternehmen;
+    private Set<Unternehmen> unternehmen;
 
     public void addUnternehmen(Unternehmen unternehmen) {
         if (this.unternehmen == null) {
-            this.unternehmen = new ArrayList<>();
+            this.unternehmen = new HashSet<>();
         }
         if (!this.unternehmen.contains(unternehmen)) {
             this.unternehmen.add(unternehmen);
@@ -74,5 +72,9 @@ public class Adresse {
     @Override
     public int hashCode() {
         return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
+    }
+
+    public String toString() {
+        return ""+ strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
     }
 }

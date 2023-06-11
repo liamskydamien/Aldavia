@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class RoundTripTest {
 
     @Autowired
     private UnternehmenRepository unternehmenRepository;
+
+    private Logger logger = org.slf4j.LoggerFactory.getLogger(RoundTripTest.class);
 
 
     /**
@@ -65,7 +68,7 @@ public class RoundTripTest {
         if ( wrapper.isPresent() ) {
             userAfterCreate = wrapper.get();
         }
-        System.out.println("User: " + userAfterCreate);
+       logger.info("User: " + userAfterCreate);
 
         // Auslesen des Studenten
         Optional<Student> wrapper2 = studentRepository.findByUser(userAfterCreate);
@@ -73,7 +76,7 @@ public class RoundTripTest {
         if ( wrapper2.isPresent() ) {
             studentAfterCreate = wrapper2.get();
         }
-        System.out.println("Student: " + studentAfterCreate);
+        logger.info("Student: " +studentAfterCreate);
 
         // Schritt 3: Ass = Assertion: Vergleich der vorhandenen Objekte auch Gleichheit...
         assert studentAfterCreate != null;
@@ -86,14 +89,13 @@ public class RoundTripTest {
         // Schritt 4: D = Deletion, also Löschen des Users, um Datenmüll zu vermeiden
         int studentTmpId = studentAfterCreate.getId();
         studentRepository.deleteById(studentTmpId);
-        //userRepository.deleteById(idTmp);
 
         // Schritt 4.1: Wir sind vorsichtig und gucken, ob der User wirklich gelöscht wurde ;-)
         Optional<User> wrapperAfterDelete = userRepository.findById(idTmp);
         Optional<Student> wrapperStudentAfterDelete = studentRepository.findById(studentTmpId);
 
-        System.out.println("Wrapper: " + wrapperAfterDelete);
-        System.out.println("Student-Wrapper: " + wrapperStudentAfterDelete);
+        logger.info("Wrapper: " + wrapperAfterDelete);
+        logger.info("Student-Wrapper: " + wrapperStudentAfterDelete);
 
         assertFalse( wrapperAfterDelete.isPresent() );
         assertFalse( wrapperStudentAfterDelete.isPresent() );
@@ -140,7 +142,6 @@ public class RoundTripTest {
         // Teste Delete
         int unternehmenTmpId = unternehmenAfterCreate.getId();
         unternehmenRepository.deleteById(unternehmenTmpId);
-        //userRepository.deleteById(user.getId());
     }
 
 

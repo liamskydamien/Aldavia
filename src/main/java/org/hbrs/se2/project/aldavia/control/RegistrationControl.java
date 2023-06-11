@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
@@ -12,6 +13,8 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,25 +23,20 @@ import java.util.Optional;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class RegistrationControl {
-    @Autowired
-    private StudentRepository repositoryS;
 
-    @Autowired
-    private UnternehmenRepository repositoryC;
-
-    @Autowired
-    private UserRepository repositoryU;
-
-    @Autowired
-    private RolleRepository repositoryR;
+    private final StudentRepository repositoryS;
+    private final UnternehmenRepository repositoryC;
+    private final UserRepository repositoryU;
+    private final RolleRepository repositoryR;
+    private final Logger logger = LoggerFactory.getLogger(RegistrationControl.class);
 
 
 
     public RegistrationResult createStudent(RegistrationDTOStudent dto ) {
+        logger.info("Trying to create a new Student Acount.");
         RegistrationResult result = new RegistrationResult();
-
-
         String mailAddress = dto.getMail();
         String userName = dto.getUserName();
         Optional<User> oMail= repositoryU.findUserByEmail(mailAddress);
@@ -80,6 +78,7 @@ public class RegistrationControl {
             } else {
                 System.out.println(userNeu.getRollen().get(0).getBezeichnung());
             }*/
+            logger.info("Successfully created a student acount with the following userName: " + userNeu.getUserid());
 
 
         }
@@ -88,6 +87,7 @@ public class RegistrationControl {
     }
 
     public RegistrationResult createUnternehmen(RegistrationDTOCompany dto) {
+        logger.info("Trying to create a new Company Acount.");
         RegistrationResult result = new RegistrationResult();
 
         String mailAddress = dto.getMail();
@@ -116,12 +116,14 @@ public class RegistrationControl {
             Unternehmen unternehmenNeu =
                     Unternehmen.builder()
                             .name(dto.getCompanyName())
+                            .webseite(dto.getWebseite())
                             .user(userNeu)
                             .build();
 
 
 
             repositoryC.save(unternehmenNeu);
+            logger.info("Successfully created a company acount with the following userName: " + userNeu.getUserid());
 
 
         }

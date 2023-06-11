@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class BewerbungTest {
+    public static final String VOLLZEIT = "Vollzeit";
 
     //TODO: Fix this test
     //TODO: Add round trip test for Bewerbung
@@ -78,20 +79,20 @@ public class BewerbungTest {
     Stellenanzeige stellenanzeige1 = Stellenanzeige.builder()
             .bezeichnung("QTEST_SA1")
             .beschreibung("Nur heute reich werden!!")
-            .beschaeftigungsverhaeltnis("Vollzeit")
+            .beschaeftigungsverhaeltnis(VOLLZEIT)
             .start(LocalDate.now())
             .ende(LocalDate.now())
             .unternehmen_stellenanzeigen(unternehmen)
-            .beschaeftigungsumfang("Vollzeit")
+            .beschaeftigungsumfang(VOLLZEIT)
             .build();
 
     Stellenanzeige stellenanzeige2 = Stellenanzeige.builder()
             .bezeichnung("QTEST_SA2")
             .beschreibung("This is a description for QTEST_SA2.")
-            .beschaeftigungsverhaeltnis("Vollzeit")
+            .beschaeftigungsverhaeltnis(VOLLZEIT)
             .start(LocalDate.now())
             .ende(LocalDate.of(2024, 5, 23))
-            .beschaeftigungsumfang("Vollzeit")
+            .beschaeftigungsumfang(VOLLZEIT)
             .unternehmen_stellenanzeigen(unternehmen)
             .build();
 
