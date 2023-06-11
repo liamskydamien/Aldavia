@@ -25,7 +25,7 @@ public class AdresseService {
         if (adresse.isPresent()) {
             return adresse.get();
         } else {
-            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
 
@@ -62,7 +62,7 @@ public class AdresseService {
 
 
         } catch (Exception e) {
-            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 

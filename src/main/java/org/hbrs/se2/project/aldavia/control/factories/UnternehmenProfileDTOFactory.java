@@ -3,7 +3,9 @@ package org.hbrs.se2.project.aldavia.control.factories;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UnternehmenProfileDTOFactory {
 
     private UnternehmenProfileDTOFactory() {

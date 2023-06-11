@@ -28,7 +28,7 @@ public class StellenanzeigeService {
         if (stellenanzeige.isPresent()) {
             return stellenanzeige.get();
         } else {
-            throw new ProfileException("Stellenanzeige not found", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Stellenanzeige not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
 
@@ -97,7 +97,7 @@ public class StellenanzeigeService {
             }
 
         } catch (Exception e) {
-            throw new ProfileException("Error while updating Stellenazeige information", ProfileException.ProfileExceptionType.DatabaseConnectionFailed);
+            throw new ProfileException("Error while updating Stellenazeige information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
 

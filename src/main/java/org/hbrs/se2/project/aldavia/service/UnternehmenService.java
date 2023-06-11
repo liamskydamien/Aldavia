@@ -30,10 +30,10 @@ public class UnternehmenService {
             if (unternehmen.isPresent()) {
                 return unternehmen.get();
             } else {
-                throw new ProfileException("Unternehmen nicht auffindbar!", ProfileException.ProfileExceptionType.ProfileNotFound);
+                throw new ProfileException("Unternehmen nicht auffindbar!", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
             }
         } else {
-            throw new ProfileException("Unternehmen nicht durch User gefunden", ProfileException.ProfileExceptionType.ProfileNotFound);
+            throw new ProfileException("Unternehmen nicht durch User gefunden", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
 
     }

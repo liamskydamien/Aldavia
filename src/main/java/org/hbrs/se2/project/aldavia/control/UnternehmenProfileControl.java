@@ -9,11 +9,14 @@ import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Component
 @RequiredArgsConstructor
 public class UnternehmenProfileControl {
     private final UnternehmenService unternehmenService;
     private final UnternehmenProfileDTOFactory unternehmenProfileDTOFactory;
+
 
     public UnternehmenProfileDTO getUnternehmenProfileDTO(String userName) throws ProfileException {
         try {
