@@ -90,10 +90,18 @@ public class BewerbungsListFactoryTest {
         List<BewerbungsDataDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDataStudentDTOs(bewerbungsList);
         for (BewerbungsDataDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
             assertEquals(1, bewerbungsDataDTO.getId());
-            assertEquals(student.getVorname(), bewerbungsDataDTO.getStudent().getVorname());
-            assertEquals(student.getNachname(), bewerbungsDataDTO.getStudent().getNachname());
-            assertEquals("student/test", bewerbungsDataDTO.getStudent().getProfileLink());
-            assertEquals(stellenanzeigeDTO, bewerbungsDataDTO.getStellenanzeige());
+            assertEquals(unternehmen.getName(), bewerbungsDataDTO.getUnternehmen().getName());
+            assertEquals("/unternehmen/test", bewerbungsDataDTO.getUnternehmen().getProfileLink());
+            assertEquals(stellenanzeigeDTO.getId(), bewerbungsDataDTO.getStellenanzeige().getId());
+            assertEquals(stellenanzeigeDTO.getBeschreibung(), bewerbungsDataDTO.getStellenanzeige().getBeschreibung());
+            assertEquals(stellenanzeigeDTO.getBezahlung(), bewerbungsDataDTO.getStellenanzeige().getBezahlung());
+            assertEquals(stellenanzeigeDTO.getBezeichnung(), bewerbungsDataDTO.getStellenanzeige().getBezeichnung());
+            assertEquals(stellenanzeigeDTO.getBeschaeftigungsverhaeltnis(), bewerbungsDataDTO.getStellenanzeige().getBeschaeftigungsverhaeltnis());
+            assertEquals(stellenanzeigeDTO.getBeschaeftigungsumfang(), bewerbungsDataDTO.getStellenanzeige().getBeschaeftigungsumfang());
+            assertEquals(stellenanzeigeDTO.getErstellungsdatum(), bewerbungsDataDTO.getStellenanzeige().getErstellungsdatum());
+            assertEquals(stellenanzeigeDTO.getStart(), bewerbungsDataDTO.getStellenanzeige().getStart());
+            assertEquals(stellenanzeigeDTO.getEnde(), bewerbungsDataDTO.getStellenanzeige().getEnde());
+            assertEquals(stellenanzeigeDTO.getTaetigkeitsfelder(), bewerbungsDataDTO.getStellenanzeige().getTaetigkeitsfelder());
             assertEquals(TEST, bewerbungsDataDTO.getBewerbungsSchreiben());
         }
     }
@@ -107,9 +115,19 @@ public class BewerbungsListFactoryTest {
         List<BewerbungsDataDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDataUnternehmenDTOs(bewerbungsList);
         for (BewerbungsDataDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
             assertEquals(1, bewerbungsDataDTO.getId());
-            assertEquals(unternehmen.getName(), bewerbungsDataDTO.getUnternehmen().getName());
-            assertEquals("unternehmen/test", bewerbungsDataDTO.getStudent().getProfileLink());
-            assertEquals(stellenanzeigeDTO, bewerbungsDataDTO.getStellenanzeige());
+            assertEquals(student.getVorname(), bewerbungsDataDTO.getStudent().getVorname());
+            assertEquals(student.getNachname(), bewerbungsDataDTO.getStudent().getNachname());
+            assertEquals("/student/test", bewerbungsDataDTO.getStudent().getProfileLink());
+            assertEquals(stellenanzeigeDTO.getId(), bewerbungsDataDTO.getStellenanzeige().getId());
+            assertEquals(stellenanzeigeDTO.getBeschreibung(), bewerbungsDataDTO.getStellenanzeige().getBeschreibung());
+            assertEquals(stellenanzeigeDTO.getBezahlung(), bewerbungsDataDTO.getStellenanzeige().getBezahlung());
+            assertEquals(stellenanzeigeDTO.getBezeichnung(), bewerbungsDataDTO.getStellenanzeige().getBezeichnung());
+            assertEquals(stellenanzeigeDTO.getBeschaeftigungsverhaeltnis(), bewerbungsDataDTO.getStellenanzeige().getBeschaeftigungsverhaeltnis());
+            assertEquals(stellenanzeigeDTO.getBeschaeftigungsumfang(), bewerbungsDataDTO.getStellenanzeige().getBeschaeftigungsumfang());
+            assertEquals(stellenanzeigeDTO.getErstellungsdatum(), bewerbungsDataDTO.getStellenanzeige().getErstellungsdatum());
+            assertEquals(stellenanzeigeDTO.getStart(), bewerbungsDataDTO.getStellenanzeige().getStart());
+            assertEquals(stellenanzeigeDTO.getEnde(), bewerbungsDataDTO.getStellenanzeige().getEnde());
+            assertEquals(stellenanzeigeDTO.getTaetigkeitsfelder(), bewerbungsDataDTO.getStellenanzeige().getTaetigkeitsfelder());
             assertEquals(TEST, bewerbungsDataDTO.getBewerbungsSchreiben());
         }
     }
