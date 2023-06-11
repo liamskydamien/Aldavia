@@ -16,6 +16,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.AboutStudentComponent;
+import org.hbrs.se2.project.aldavia.views.components.SkillsComponent;
 import org.hbrs.se2.project.aldavia.views.components.StudentPersonalDetailsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,6 +38,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
 
     private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
     private AboutStudentComponent aboutStudentComponent;
+    private SkillsComponent skillsComponent;
 
     private Button editButton;
     private Button saveButton;
@@ -94,6 +96,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         saveButton.setVisible(true);
         studentPersonalDetailsComponent.switchEditMode();
         aboutStudentComponent.switchEditMode();
+        skillsComponent.switchEditMode();
 
     }
 
@@ -103,6 +106,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
 
         studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
         aboutStudentComponent.switchViewMode(getCurrentUserName());
+        skillsComponent.switchViewMode(getCurrentUserName());
     }
     
     private void updateProfilePicture(){
@@ -118,38 +122,16 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
 
     private VerticalLayout createLeftLayout(){
         aboutStudentComponent = new AboutStudentComponent(studentProfileDTO);
+        skillsComponent = new SkillsComponent(studentProfileDTO);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
         leftLayout.add(aboutStudentComponent);
-        leftLayout.add(createKenntnisseLayout());
+        leftLayout.add(skillsComponent);
         leftLayout.add(createSprachenLayout());
         return leftLayout;
     }
 
 
-    private VerticalLayout createDescriptionLayout(){
-        VerticalLayout descriptionLayout = new VerticalLayout();
-        descriptionLayout.addClassName("description");
-        H1 name = new H1(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
-        H2 title = new H2(studentProfileDTO.getStudiengang());
-        Text description = new Text(studentProfileDTO.getBeschreibung());
-        descriptionLayout.add(name);
-        descriptionLayout.add(title);
-        descriptionLayout.add(description);
-        descriptionLayout.add(createInteressenLayout());
-        return descriptionLayout;
-    }
-
-    private VerticalLayout createAboutLayout(){
-        VerticalLayout aboutLayout = new VerticalLayout();
-        aboutLayout.addClassName("about");
-        aboutLayout.addClassName("card");
-        aboutLayout.add(new H2("Über mich"));
-        aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.CALENDAR_O), studentProfileDTO.getGeburtsdatum().toString()));
-        aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.PHONE), studentProfileDTO.getTelefonnummer()));
-        aboutLayout.add(createIconTextLayout(new Icon(VaadinIcon.ENVELOPE_O), studentProfileDTO.getEmail()));
-        return aboutLayout;
-    }
 
     private HorizontalLayout createInteressenLayout(){
         HorizontalLayout interessenLayout = new HorizontalLayout();
@@ -160,13 +142,6 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         return interessenLayout;
     }
 
-    private HorizontalLayout createIconTextLayout(Icon icon, String text){
-        HorizontalLayout iconTextLayout = new HorizontalLayout();
-        iconTextLayout.addClassName("icon-text");
-        iconTextLayout.add(icon);
-        iconTextLayout.add(new Label(text));
-        return iconTextLayout;
-    }
 
     private VerticalLayout createQualifikationsLayout(){
         VerticalLayout qualifikationsLayout = new VerticalLayout();

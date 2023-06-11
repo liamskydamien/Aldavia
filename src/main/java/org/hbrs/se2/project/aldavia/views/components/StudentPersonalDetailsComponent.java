@@ -18,6 +18,7 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
+import org.apache.catalina.connector.ClientAbortException;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
@@ -34,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
@@ -179,6 +181,8 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
     }
 
     private VerticalLayout uploadProfilePicture(Dialog dialogUploadPic) {
+        Logger LOGGER = Logger.getLogger(StudentPersonalDetailsComponent.class.getName());
+
         VerticalLayout uploadLayout = new VerticalLayout();
         uploadLayout.setClassName("uploadLayout");
         uploadLayout.add(new H2("Profilbild hochladen"));
@@ -187,17 +191,26 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         Upload upload = new Upload(memoryBuffer);
         upload.setAcceptedFileTypes("image/jpeg", "image/png");
         upload.setDropAllowed(true);
+
+        upload.addFailedListener(event -> {
+            // handle the error here
+            Notification.show("Upload fehlgeschlagen: " + event.getReason());
+        });
+
         upload.addSucceededListener(event -> {
             // Generate a unique name for the image file
             String uniqueFileName = getCurrentUserName()+"-"+event.getFileName();
             Path imagePath = Paths.get("./src/main/webapp/profile-images", uniqueFileName);
             String path = imagePath.toAbsolutePath().toString();
 
+            LOGGER.info("Starting file upload: " + path);
+
             // Save the image on the disk
             try (InputStream inputStream = memoryBuffer.getInputStream()) {
                 Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
 
             // Save the path to the image in the database
@@ -212,11 +225,15 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
                     return InputStream.nullInputStream(); // In case of an error return an empty stream
                 }
             });
+
+            LOGGER.info("File upload successful");
+
             Image newProfileImg = new Image(resource, "Profilbild");
 
             profilePicture.removeAll();
             profilePicture.add(newProfileImg);
             dialogUploadPic.close();
+
         });
         uploadLayout.add(upload);
         return uploadLayout;
