@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.control.factories;
 
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 
@@ -9,7 +8,8 @@ import java.util.List;
 
 public class BewerbungsListFactory {
     private static BewerbungsListFactory instance;
-    private UserDataDTOFactory userDataDTOFactory = UserDataDTOFactory.getInstance();
+    private final UserDataDTOFactory userDataDTOFactory = UserDataDTOFactory.getInstance();
+    private final StellenanzeigeDTOFactory stellenanzeigeDataDTOFactory = StellenanzeigeDTOFactory.getInstance();
 
     private BewerbungsListFactory() {
     }
@@ -47,6 +47,9 @@ public class BewerbungsListFactory {
         return BewerbungsDataDTO.builder()
                 .id(bewerbung.getId())
                 .unternehmen(userDataDTOFactory.createUnternehmenDataDTO(bewerbung.getStellenanzeige().getUnternehmen_stellenanzeigen()))
+                .stellenanzeige(stellenanzeigeDataDTOFactory.createStellenanzeigeDTO(bewerbung.getStellenanzeige()))
+                .datum(bewerbung.getDatum())
+                .bewerbungsSchreiben(bewerbung.getBewerbungsSchreiben())
                 .status(bewerbung.getStatus())
                 .build();
     }
@@ -73,6 +76,9 @@ public class BewerbungsListFactory {
         return BewerbungsDataDTO.builder()
                 .id(bewerbung.getId())
                 .student(userDataDTOFactory.createStudentDataDTO(bewerbung.getStudent()))
+                .stellenanzeige(stellenanzeigeDataDTOFactory.createStellenanzeigeDTO(bewerbung.getStellenanzeige()))
+                .datum(bewerbung.getDatum())
+                .bewerbungsSchreiben(bewerbung.getBewerbungsSchreiben())
                 .status(bewerbung.getStatus())
                 .build();
     }
