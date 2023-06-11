@@ -3,9 +3,11 @@ package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewStudent;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
+import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +27,12 @@ public class BewerbungsOverviewTest {
     private BewerbungsOverviewStudent bewerbungsOverviewStudent;
     @Mock
     private StudentService studentServiceMock;
+    @Mock
+    private BewerbungsService bewerbungsServiceMock;
 
     @BeforeEach
     public void setup() {
-        bewerbungsOverviewStudent = new BewerbungsOverviewStudent(studentServiceMock);
+        bewerbungsOverviewStudent = new BewerbungsOverviewStudent(studentServiceMock, bewerbungsServiceMock);
     }
 
     @Test
@@ -79,7 +83,7 @@ public class BewerbungsOverviewTest {
         given(studentServiceMock.getStudent(userid)).willReturn(student);
 
        // Run the test
-        List<BewerbungsDTO> result = bewerbungsOverviewStudent.getBewerbungen(userid);
+        List<BewerbungsDataDTO> result = bewerbungsOverviewStudent.getBewerbungenStudent(userid);
         assertEquals(2, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(2, result.get(1).getId());
