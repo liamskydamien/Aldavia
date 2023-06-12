@@ -21,7 +21,7 @@ public class BewerbungsOverviewStudentView extends Div {
     private UserDTO currentUser;
 
     public BewerbungsOverviewStudentView() {
-        this.bewerbungsOverviewStudent = new BewerbungsOverviewStudent(new StudentService(), new BewerbungsService());
+        //this.bewerbungsOverviewStudent = new BewerbungsOverviewStudent();
         currentUser = getCurrentUser();
         setUpUI();
     }
