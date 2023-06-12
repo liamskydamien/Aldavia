@@ -1,24 +1,20 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class BewerbungsOverviewStudent {
     private StudentService studentService;
-
-    @Autowired
-    public BewerbungsOverviewStudent(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     /**
      * Get the Bewerbungen of a student
