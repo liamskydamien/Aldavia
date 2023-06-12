@@ -28,7 +28,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     private Div displayLanguage;
     private int languageID;
 
-    private Button deleteLanguageButton;
+    private Button deleteLanguage;
     private Button addLanguageButton;
 
     private Span noLanguages;
@@ -43,7 +43,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         setUpUI();
     }
     private void setUpUI() {
-        deleteLanguageButton.setClassName("deleteButton");
+        deleteLanguage.setClassName("deleteButton");
         addLanguageButton.setClassName("addLanguageButton");
 
 
@@ -136,15 +136,11 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
 
         for(SpracheDTO s: spracheList){
 
-            if (mode.equals(Globals.ProfileViewMode.EDIT)) {
-                putInlanguageCapsul(s,deleteLanguageButton(s));
-            } else if (mode.equals(Globals.ProfileViewMode.VIEW)) {
-                putInlanguageCapsul(s);
-            }
+            putInlanguageCapsul(s,mode);
         }
     }
 
-    private Div putInlanguageCapsul(SpracheDTO s){
+    private Div putInlanguageCapsul(SpracheDTO s, String mode){
         Div languageCapsul = new Div();
         languageCapsul.addClassName("language-Capsul");
 
@@ -163,6 +159,10 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         languageCapsulLayoutLeft.add(languageLevel);
         languageCapsulLayout.add(languageCapsulLayoutLeft);
 
+        if (mode.equals(Globals.ProfileViewMode.EDIT)) {
+            languageCapsulLayout.add(deleteLanguageButton(s));
+        }
+
         languageCapsul.add(languageCapsulLayout);
         displayLanguage.add(languageCapsul);
 
@@ -170,39 +170,14 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     }
 
 
-    private Div putInlanguageCapsul(SpracheDTO s, Button delete){
-        Div languageCapsulWithDelete = new Div();
-        languageCapsulWithDelete.addClassName("language-Capsul");
-
-        HorizontalLayout languageCapsulLayout = new HorizontalLayout();
-        languageCapsulLayout.addClassName("language-Capsul-Layout");
-
-        VerticalLayout languageCapsulLayoutLeft = new VerticalLayout();
-        languageCapsulLayoutLeft.addClassName("language-Capsul-Layout-Left");
-
-        Span language = new Span(s.getName());
-        language.addClassName("language-Capsul-Text");
-        Span languageLevel = new Span(s.getLevel());
-        languageLevel.addClassName("language-Capsul-Text");
-
-        languageCapsulLayoutLeft.add(language);
-        languageCapsulLayoutLeft.add(languageLevel);
-        languageCapsulLayout.add(languageCapsulLayoutLeft);
-        languageCapsulLayout.add(delete);
-
-        languageCapsulWithDelete.add(languageCapsulLayout);
-        displayLanguage.add(languageCapsulWithDelete);
-
-        return languageCapsulWithDelete;
-    }
 
     private Button deleteLanguageButton(SpracheDTO s){
-        deleteLanguageButton = new Button();
-        deleteLanguageButton.setIcon(new Icon("lumo", "cross"));
-        deleteLanguageButton.addClickListener(event -> {
+        deleteLanguage = new Button();
+        deleteLanguage.setIcon(new Icon("lumo", "cross"));
+        deleteLanguage.addClickListener(event -> {
             spracheList.remove(s);
             getLanguagesAndCreatefield(Globals.ProfileViewMode.EDIT);
         });
-        return deleteLanguageButton;
+        return deleteLanguage;
     }
 }
