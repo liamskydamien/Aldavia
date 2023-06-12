@@ -97,9 +97,9 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         addLanguageButton.addClickListener(event -> {
             if(spracheList.size()<11) {
                 if (!addLanguageField.getValue().isEmpty()) {
-                    SpracheDTO newSkill = new SpracheDTO(addLanguageField.getValue(),languageLevelDropDown.getValue(),);
-                    spracheList.add(newSkill);
-                    getSkillsAndCreatefield("edit");
+                    //SpracheDTO newSkill = new SpracheDTO(addLanguageField.getValue(),languageLevelDropDown.getValue(),);
+                    //spracheList.add(newSkill);
+                    //getSkillsAndCreatefield("edit");
                     languageLevelDropDown.clear();
                 }
             } else {
