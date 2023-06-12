@@ -15,8 +15,10 @@ import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.service.*;
 
 public class AboutStudentComponent extends VerticalLayout implements ProfileComponent {
+
     private final StudentProfileControl studentProfileControl;
     private StudentProfileDTO studentProfileDTO;
     private DatePicker dateOfBirth;
@@ -25,8 +27,8 @@ public class AboutStudentComponent extends VerticalLayout implements ProfileComp
 
 
 
-    public AboutStudentComponent(StudentProfileDTO studentProfileDTO) {
-        this.studentProfileControl = new StudentProfileControl();
+    public AboutStudentComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
+        this.studentProfileControl = studentProfileControl;
         this.studentProfileDTO = studentProfileDTO;
         this.addClassName("about-student-component");
         this.addClassName("card");

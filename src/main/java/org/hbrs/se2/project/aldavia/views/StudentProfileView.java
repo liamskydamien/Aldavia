@@ -51,7 +51,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
             ui.access(() -> {
 
                 if (profileWrapper == null) {
-                    studentPersonalDetailsComponent = new StudentPersonalDetailsComponent(studentProfileDTO);
+                    studentPersonalDetailsComponent = new StudentPersonalDetailsComponent(studentProfileDTO,studentProfileControl);
 
                     profileWrapper = new Div();
                     profileWrapper.addClassName("profile-wrapper");
@@ -108,9 +108,6 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         aboutStudentComponent.switchViewMode(getCurrentUserName());
         skillsComponent.switchViewMode(getCurrentUserName());
     }
-    
-    private void updateProfilePicture(){
-    }
 
     private HorizontalLayout createBottomLayout(){
         HorizontalLayout bottomLayout = new HorizontalLayout();
@@ -121,8 +118,8 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     }
 
     private VerticalLayout createLeftLayout(){
-        aboutStudentComponent = new AboutStudentComponent(studentProfileDTO);
-        skillsComponent = new SkillsComponent(studentProfileDTO);
+        aboutStudentComponent = new AboutStudentComponent(studentProfileDTO,studentProfileControl);
+        skillsComponent = new SkillsComponent(studentProfileDTO,studentProfileControl);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
         leftLayout.add(aboutStudentComponent);
@@ -180,23 +177,6 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         return vonBisLayout;
     }
 
-    private VerticalLayout createKenntnisseLayout(){
-        VerticalLayout kenntnisseLayout = new VerticalLayout();
-        kenntnisseLayout.addClassName("kenntnisse");
-        kenntnisseLayout.addClassName("card");
-        kenntnisseLayout.add(new H2("Kenntnisse"));
-        for (KenntnisDTO kenntnis : studentProfileDTO.getKenntnisse()){
-            kenntnisseLayout.add(createKenntnis(kenntnis.getName()));
-        }
-        return kenntnisseLayout;
-    }
-
-    private Div createKenntnis(String kenntnis){
-        Div kenntnisDiv = new Div();
-        kenntnisDiv.addClassName("kenntnis");
-        kenntnisDiv.add(new Label(kenntnis));
-        return kenntnisDiv;
-    }
 
     private VerticalLayout createSprachenLayout(){
         VerticalLayout sprachenLayout = new VerticalLayout();
@@ -218,6 +198,5 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     }
 
 
-    // TEST TEST
 
 }

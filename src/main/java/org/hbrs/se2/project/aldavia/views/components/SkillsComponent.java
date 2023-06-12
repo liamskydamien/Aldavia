@@ -1,6 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Text;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -11,18 +11,21 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.service.*;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @CssImport("./styles/views/profile/studentProfile.css")
 public class SkillsComponent extends VerticalLayout implements ProfileComponent{
+
 
     private final StudentProfileControl studentProfileControl;
 
@@ -33,16 +36,19 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     private final Div displaySkill = new Div();
     private final HorizontalLayout addSkillsArea = new HorizontalLayout();
     Span noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
+    private Map<KenntnisDTO, TextField> skillFields = new HashMap<>();
 
 
-    public SkillsComponent(StudentProfileDTO studentProfileDTO) {
+    public SkillsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
         this.studentProfileDTO = studentProfileDTO;
         kenntnisDTOS = studentProfileDTO.getKenntnisse();
-        studentProfileControl = new StudentProfileControl();
+        this.studentProfileControl = studentProfileControl;
         addClassName("skills-component");
         addClassName("card");
         setUpUI();
     }
+
+    //TODO: Refaktoring Header addskillarea in eine eigene Methode
     private void setUpUI(){
         displaySkill.setClassName("display-Skill");
 
@@ -52,10 +58,21 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         add(addSkillsArea);
         add(displaySkill);
 
+        //Header
+        TextField addSkillField = new TextField();
+        addSkillField.addClassName("add-Skill-Field");
+        addSkillField.setPlaceholder("Füge neue Kenntnisse hinzu.");
+        addSkillField.setClearButtonVisible(true);
+        addSkillsArea.add(addSkillField);
+
+        addSkillsArea.add(addSkillButton(addSkillField));
+
+
         updateViewMode();
     }
 
     private void updateViewMode(){
+        addSkillsArea.setVisible(false);
 
         if(kenntnisDTOS.isEmpty()){
             noSkill.getStyle().set("font-style", "italic");
@@ -73,16 +90,9 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
             displaySkill.add(noSkill);
         }
 
-            TextField addSkillField = new TextField();
-            addSkillField.addClassName("add-Skill-Field");
-            addSkillField.setPlaceholder("Füge neue Kenntnisse hinzu.");
-            addSkillField.setClearButtonVisible(true);
-            addSkillsArea.add(addSkillField);
+        addSkillsArea.setVisible(true);
 
-            addSkillsArea.add(addSkillButton(addSkillField));
-
-
-            getSkillsAndCreatefield("edit");
+        getSkillsAndCreatefield("edit");
 
 
     }
@@ -105,45 +115,40 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     }
 
     private void getSkillsAndCreatefield(String mode){
-        if(!studentProfileDTO.getKenntnisse().isEmpty()){
-            if(mode.equals("view")){
-                for(KenntnisDTO k: kenntnisDTOS){
-                    String bezeichnung = k.getName();
-                    TextField skill = new TextField();
-                    skill.setValue(bezeichnung);
-                    skill.addClassName("Skill");
-                    skill.setRequiredIndicatorVisible(true);
-                    displaySkill.add(skill);
-                }
-            } else if (mode.equals("edit")) {
-                for(KenntnisDTO k: kenntnisDTOS){
-                    String bezeichnung = k.getName();
-                    TextField skill = new TextField();
-                    skill.setValue(bezeichnung);
-                    skill.addClassName("Skill");
-                    skill.setSuffixComponent(deleteSkillButton(bezeichnung));
-                    displaySkill.add(skill);
-                }
+        // Clear any existing fields before re-creating them
+        displaySkill.removeAll();
+        skillFields.clear();
+
+        for(KenntnisDTO k: kenntnisDTOS){
+            TextField skill = new TextField();
+            skill.setValue(k.getName());
+            skill.addClassName("Skill");
+
+            // Store this TextField in the map
+            skillFields.put(k, skill);
+
+            if (mode.equals("edit")) {
+                skill.setSuffixComponent(deleteSkillButton(k));
+                skill.setReadOnly(false);
+            } else if (mode.equals("view")) {
+                skill.setReadOnly(true);
             }
 
+            displaySkill.add(skill);
         }
-
     }
 
-    private Button deleteSkillButton(String name){
+    private Button deleteSkillButton(KenntnisDTO kenntnis){
         Button deleteSkill = new Button(new Icon("lumo","cross"));
+        deleteSkill.addClassName("delete-Skill");
         deleteSkill.addClickListener(buttonClickEvent -> {
-            Iterator<KenntnisDTO> iterator = kenntnisDTOS.iterator();
-            while (iterator.hasNext()) {
-                KenntnisDTO k = iterator.next();
-                if(k.getName().equals(name)) {
-                    iterator.remove();
-                    break;  // stop iterating once we've removed the item
-                }
-            }
-            // Now you need to clear the display and regenerate it, because you've changed the underlying data.
-            displaySkill.removeAll();
-            getSkillsAndCreatefield("edit");
+            // Remove the KenntnisDTO from the list
+            kenntnisDTOS.remove(kenntnis);
+
+            // Also remove the associated TextField from the display and from the map
+            TextField skillField = skillFields.get(kenntnis);
+            displaySkill.remove(skillField);
+            skillFields.remove(kenntnis);
         });
         return deleteSkill;
     }

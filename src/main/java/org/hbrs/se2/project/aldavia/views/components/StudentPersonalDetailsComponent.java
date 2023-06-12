@@ -15,34 +15,28 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
-import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
-import org.apache.catalina.connector.ClientAbortException;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
-import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.service.*;
 import org.hbrs.se2.project.aldavia.util.UIUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
+
 @CssImport("./styles/views/profile/studentProfile.css")
 public class StudentPersonalDetailsComponent extends HorizontalLayout implements ProfileComponent {
 
-    //TODO: Control als Singleton
+
     private final StudentProfileControl studentProfileControl;
 
     private StudentProfileDTO studentProfileDTO;
@@ -54,10 +48,9 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
     private Image profileImg;
 
 
-
-    public StudentPersonalDetailsComponent(StudentProfileDTO studentProfileDTO) {
+    public StudentPersonalDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl) {
         this.studentProfileDTO = studentProfileDTO;
-        studentProfileControl = new StudentProfileControl();
+        this.studentProfileControl = studentProfileControl;
         addClassName("student-personal-details-component");
         firstNameAndLastName = new TextField();
         firstNameAndLastName.addClassName("first-name-and-last-name");
@@ -91,9 +84,26 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         studiengang.setReadOnly(true);
         description.setReadOnly(true);
 
-        if(studentProfileDTO.getProfilbild() != null){
+        profilePicture.removeAll();
+
+        if(studentProfileDTO.getProfilbild() == null){
             profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-            profilePicture.add(profileImg);}
+        } else {
+            // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
+            String fileName = studentProfileDTO.getProfilbild();
+            String path = "./src/main/webapp/profile-images/" + fileName;
+            StreamResource resource = new StreamResource(fileName, () -> {
+                try {
+                    return new FileInputStream(path);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    return InputStream.nullInputStream(); // In case of an error return an empty stream
+                }
+            });
+            profileImg = new Image(resource, "Profilbild");
+        }
+
+        profilePicture.add(profileImg);
 
 
     }
@@ -214,7 +224,7 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
             }
 
             // Save the path to the image in the database
-            studentProfileDTO.setProfilbild(path);
+            studentProfileDTO.setProfilbild(uniqueFileName);
 
             // Update the UI to display the new image
             StreamResource resource = new StreamResource(uniqueFileName, () -> {
@@ -228,10 +238,10 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
 
             LOGGER.info("File upload successful");
 
-            Image newProfileImg = new Image(resource, "Profilbild");
+            profileImg = new Image(resource, "Profilbild");
 
             profilePicture.removeAll();
-            profilePicture.add(newProfileImg);
+            profilePicture.add(profileImg);
             dialogUploadPic.close();
 
         });

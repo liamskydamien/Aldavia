@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class StudentProfileControl {
 
     private final StudentService studentService;
@@ -33,18 +35,7 @@ public class StudentProfileControl {
 
     private final Logger logger = LoggerFactory.getLogger(StudentProfileControl.class);
 
-    @Autowired
-    public StudentProfileControl(StudentService studentService,
-                                 KenntnisseService kenntnisseService,
-                                 QualifikationenService qualifikationenService,
-                                 SprachenService sprachenService,
-                                 TaetigkeitsfeldService taetigkeitsfeldService) {
-        this.studentService = studentService;
-        this.kenntnisseService = kenntnisseService;
-        this.qualifikationenService = qualifikationenService;
-        this.sprachenService = sprachenService;
-        this.taetigkeitsfeldService = taetigkeitsfeldService;
-    }
+
 
     /**
      * Get the student profile of a student
@@ -60,8 +51,9 @@ public class StudentProfileControl {
             return studentProfileDTO;
         }
         catch (Exception e) {
-            throw new ProfileException("Error while loading student profile", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
+            throw new ProfileException("Error while loading student profile" + e,ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
+        //
     }
 
     public void updateStudentProfile(StudentProfileDTO updatedVersion, String username) throws ProfileException, PersistenceException {
