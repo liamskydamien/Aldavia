@@ -7,7 +7,6 @@ import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -16,8 +15,8 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class BewerbungsOverviewStudent {
-    private StudentService studentService;
-    private BewerbungsService bewerbungsService;
+    private final StudentService studentService;
+    private final BewerbungsService bewerbungsService;
 
     /**
      * Get the Bewerbungen of a student
