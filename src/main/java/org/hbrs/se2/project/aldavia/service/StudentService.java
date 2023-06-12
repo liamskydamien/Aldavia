@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.service;
 
-import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -11,27 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-@RequiredArgsConstructor
 public class StudentService {
 
     public static final String FROM_DB = " from DB";
 
+    @Autowired
+    private StudentRepository studentRepository;
 
-
-    private final StudentRepository studentRepository;
-
-
-    private final QualifikationenService qualifikationenService;
+    private final QualifikationenService qualifikationenService = new QualifikationenService();
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
-
-
 
     /**
      * Get the student profile of a student

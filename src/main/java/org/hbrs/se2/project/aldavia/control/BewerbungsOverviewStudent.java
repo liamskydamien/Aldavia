@@ -5,7 +5,6 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
-import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BewerbungsOverviewStudent {
     private final StudentService studentService;
-    private final BewerbungsService bewerbungsService;
 
     /**
      * Get the Bewerbungen of a student

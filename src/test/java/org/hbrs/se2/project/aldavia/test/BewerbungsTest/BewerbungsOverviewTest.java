@@ -27,12 +27,9 @@ public class BewerbungsOverviewTest {
     private BewerbungsOverviewStudent bewerbungsOverviewStudent;
     @Mock
     private StudentService studentServiceMock;
-    @Mock
-    private BewerbungsService bewerbungsServiceMock;
-
     @BeforeEach
     public void setup() {
-        bewerbungsOverviewStudent = new BewerbungsOverviewStudent(studentServiceMock, bewerbungsServiceMock);
+        bewerbungsOverviewStudent = new BewerbungsOverviewStudent(studentServiceMock);
     }
 
     @Test
