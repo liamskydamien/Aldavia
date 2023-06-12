@@ -16,6 +16,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.AboutStudentComponent;
+import org.hbrs.se2.project.aldavia.views.components.LanguageComponent;
 import org.hbrs.se2.project.aldavia.views.components.SkillsComponent;
 import org.hbrs.se2.project.aldavia.views.components.StudentPersonalDetailsComponent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private final UI ui = UI.getCurrent();
 
     private StudentProfileDTO studentProfileDTO;
-    private Div profilePicture = new Div();
     private Div profileWrapper = null;
 
     private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
     private AboutStudentComponent aboutStudentComponent;
     private SkillsComponent skillsComponent;
+    private LanguageComponent languageComponent;
 
     private Button editButton;
     private Button saveButton;
@@ -97,6 +98,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         studentPersonalDetailsComponent.switchEditMode();
         aboutStudentComponent.switchEditMode();
         skillsComponent.switchEditMode();
+        languageComponent.switchEditMode();
 
     }
 
@@ -107,6 +109,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
         aboutStudentComponent.switchViewMode(getCurrentUserName());
         skillsComponent.switchViewMode(getCurrentUserName());
+        languageComponent.switchViewMode(getCurrentUserName());
     }
 
     private HorizontalLayout createBottomLayout(){
@@ -120,24 +123,25 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private VerticalLayout createLeftLayout(){
         aboutStudentComponent = new AboutStudentComponent(studentProfileDTO,studentProfileControl);
         skillsComponent = new SkillsComponent(studentProfileDTO,studentProfileControl);
+        languageComponent = new LanguageComponent(studentProfileDTO,studentProfileControl);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
         leftLayout.add(aboutStudentComponent);
         leftLayout.add(skillsComponent);
-        leftLayout.add(createSprachenLayout());
+        leftLayout.add(languageComponent);
         return leftLayout;
     }
 
 
 
-    private HorizontalLayout createInteressenLayout(){
+    /*private HorizontalLayout createInteressenLayout(){
         HorizontalLayout interessenLayout = new HorizontalLayout();
         interessenLayout.addClassName("interessen");
         for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : studentProfileDTO.getTaetigkeitsfelder()){
             interessenLayout.add(new Label(taetigkeitsfeldDTO.getName()));
         }
         return interessenLayout;
-    }
+    }*/
 
 
     private VerticalLayout createQualifikationsLayout(){
@@ -176,27 +180,4 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         vonBisLayout.add(new Label("Bis: " + bis));
         return vonBisLayout;
     }
-
-
-    private VerticalLayout createSprachenLayout(){
-        VerticalLayout sprachenLayout = new VerticalLayout();
-        sprachenLayout.addClassName("sprachen");
-        sprachenLayout.addClassName("card");
-        sprachenLayout.add(new H2("Sprachen"));
-        for (SpracheDTO sprache : studentProfileDTO.getSprachen()){
-            sprachenLayout.add(createSprache(sprache));
-        }
-        return sprachenLayout;
-    }
-
-    private Div createSprache(SpracheDTO sprache){
-        Div spracheDiv = new Div();
-        spracheDiv.addClassName("sprache");
-        spracheDiv.add(new H3(sprache.getName()));
-        spracheDiv.add(new Label(sprache.getLevel()));
-        return spracheDiv;
-    }
-
-
-
 }

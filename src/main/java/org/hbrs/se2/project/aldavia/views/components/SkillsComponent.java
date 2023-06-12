@@ -17,6 +17,7 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.service.*;
+import org.hbrs.se2.project.aldavia.util.Globals;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,9 +34,10 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
 
     private List<KenntnisDTO> kenntnisDTOS;
 
-    private final Div displaySkill = new Div();
-    private final HorizontalLayout addSkillsArea = new HorizontalLayout();
-    Span noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
+    private final Div displaySkill;
+    private final HorizontalLayout addSkillsArea;
+    private Span noSkill;
+    private Button deleteSkill;
     private Map<KenntnisDTO, TextField> skillFields = new HashMap<>();
 
 
@@ -43,6 +45,9 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         this.studentProfileDTO = studentProfileDTO;
         kenntnisDTOS = studentProfileDTO.getKenntnisse();
         this.studentProfileControl = studentProfileControl;
+        displaySkill = new Div();
+        addSkillsArea = new HorizontalLayout();
+        noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
         addClassName("skills-component");
         addClassName("card");
         setUpUI();
@@ -51,6 +56,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     //TODO: Refaktoring Header addskillarea in eine eigene Methode
     private void setUpUI(){
         displaySkill.setClassName("display-Skill");
+        deleteSkill.setClassName("deleteButton");
 
         add(new H2("Kenntnisse"));
 
@@ -78,7 +84,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
             noSkill.getStyle().set("font-style", "italic");
             displaySkill.add(noSkill);
         } else {
-            getSkillsAndCreatefield("view");
+            getSkillsAndCreatefield(Globals.ProfileViewMode.VIEW);
         }
 
     }
@@ -92,7 +98,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
 
         addSkillsArea.setVisible(true);
 
-        getSkillsAndCreatefield("edit");
+        getSkillsAndCreatefield(Globals.ProfileViewMode.EDIT);
 
 
     }
@@ -139,8 +145,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     }
 
     private Button deleteSkillButton(KenntnisDTO kenntnis){
-        Button deleteSkill = new Button(new Icon("lumo","cross"));
-        deleteSkill.addClassName("delete-Skill");
+        deleteSkill = new Button(new Icon("lumo","cross"));
         deleteSkill.addClickListener(buttonClickEvent -> {
             // Remove the KenntnisDTO from the list
             kenntnisDTOS.remove(kenntnis);
