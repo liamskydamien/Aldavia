@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class QualifikationsControlTest {
 
+    public static final String MESSAGE = "Wrong Exception thrown";
+
     @Autowired
     private QualifikationenService qualifikationControl;
 
@@ -140,6 +142,8 @@ public class QualifikationsControlTest {
 
     @Test
     public void test_RemoveQualificationWithNewQualifikation(){
-        assertThrows(PersistenceException.class, () -> qualifikationControl.removeQualifikation(qualifikationDTO));
+        PersistenceException qualificationNotFound = assertThrows(PersistenceException.class, () -> qualifikationControl.removeQualifikation(qualifikationDTO));
+
+        assertEquals(qualificationNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.QUALIFIKATION_NOT_FOUND, MESSAGE);
     }
 }

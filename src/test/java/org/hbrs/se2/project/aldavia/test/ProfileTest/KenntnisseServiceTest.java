@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class KenntnisseServiceTest {
 
+    public static final String MESSAGE = "Wrong Exception thrown";
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
@@ -105,8 +106,10 @@ public class KenntnisseServiceTest {
 
     @Test
     public void testRemoveStudentFromKenntnis_whenKenntnisIsNotPresent() {
-        assertThrows(PersistenceException.class, () -> {
+        PersistenceException kenntnisNotPresent = assertThrows(PersistenceException.class, () -> {
             kenntnisseService.removeStudentFromKenntnis(kenntnisDTO, student);
         });
+
+        assertEquals(kenntnisNotPresent.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.KENNTNIS_NOT_FOUND, MESSAGE);
     }
 }
