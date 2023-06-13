@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KenntnisseServiceTest {
 
     public static final String MESSAGE = "Wrong Exception thrown";
+    public static final String MESSAGE2 = "Wrong Exception-Message thrown";
 
     @Autowired
     private KenntnisseRepository kenntnisseRepository;
@@ -111,5 +112,6 @@ public class KenntnisseServiceTest {
         });
 
         assertEquals(kenntnisNotPresent.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.KENNTNIS_NOT_FOUND, MESSAGE);
+        assertEquals("Kenntnis not found", kenntnisNotPresent.getReason(), MESSAGE2);
     }
 }

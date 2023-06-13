@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaetigkeitsfeldServiceTest {
 
     public static final String MESSAGE = "Wrong Exception thrown";
+    public static final String MESSAGE2 = "Wrong Exception-Message thrown";
 
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
@@ -115,5 +116,6 @@ public class TaetigkeitsfeldServiceTest {
         });
 
         assertEquals(taetigkeitsfeldNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, MESSAGE);
+        assertEquals("Taetigkeitsfeld not found", taetigkeitsfeldNotFound.getReason(), MESSAGE2);
     }
 }

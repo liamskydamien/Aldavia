@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SpracheControlTest {
 
     public static final String MESSAGE = "Wrong Exception thrown";
+    public static final String MESSAGE2 = "Insufficient Exception Message";
 
     @Autowired
     private SprachenRepository sprachenRepository;
@@ -120,5 +121,6 @@ public class SpracheControlTest {
             sprachenService.removeStudentFromSprache(spracheDTO, student);
         });
         assertEquals(spracheNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, MESSAGE);
+        assertEquals("Sprache not found", spracheNotFound.getReason(), MESSAGE2);
     }
 }
