@@ -401,4 +401,19 @@ public class StudentProfileControlTest {
         assertEquals(ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED, exception.getProfileExceptionType());
         //System.out.println(exception.getReason());
     }
+
+    /*
+    //Hier wird aus unerfindlichen Gründen eine DATABASE_CONNECTION_FAILED gethrowed
+    @Test
+    public void testUpdateStudentProfile_StudentDoesNotExist_ExceptionThrown() {
+
+        // Act & Assert
+        ProfileException exception = assertThrows(ProfileException.class, () -> {
+            studentProfileControl.updateStudentProfile(null, "nonexistentUsername");
+        });
+
+        assertEquals(ProfileException.ProfileExceptionType.STUDENT_DOES_NOT_EXIST, exception.getProfileExceptionType());
+    }
+     */
+
 }

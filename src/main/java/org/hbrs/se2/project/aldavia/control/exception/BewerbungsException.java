@@ -7,6 +7,12 @@ public class BewerbungsException extends Exception{
         BEWERBUNG_COULD_NOT_BE_DELETED, BEWERBUNG_ALREADY_EXISTS
     }
 
+    /**
+     * Konstruktor
+     * @param persistenceExceptionType Typ der Exception
+     * @param message Nachricht
+     */
+
     private final BewerbungsExceptionType exceptionType;
 
     public BewerbungsException(String message, BewerbungsExceptionType exceptionType) {
