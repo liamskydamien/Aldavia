@@ -20,11 +20,11 @@ import java.util.List;
 @Route(value = "bewerbungsOverviewStudent", layout = LoggedInStateLayout.class)
 public class BewerbungsOverviewStudentView extends Div {
 
-    private BewerbungsOverviewStudent bewerbungsOverviewStudent;
+    private final BewerbungsOverviewStudent bewerbungsOverviewStudent;
     private UserDTO currentUser;
 
-    public BewerbungsOverviewStudentView() {
-        this.bewerbungsOverviewStudent = new BewerbungsOverviewStudent(new StudentService());
+    public BewerbungsOverviewStudentView(BewerbungsOverviewStudent bewerbungsOverviewStudent) {
+        this.bewerbungsOverviewStudent = bewerbungsOverviewStudent;
         currentUser = getCurrentUser();
         setUpUI();
     }
@@ -37,6 +37,9 @@ public class BewerbungsOverviewStudentView extends Div {
     private VerticalLayout createBewerbungenLayout(){
         try {
             List<BewerbungsDataDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungenStudent(currentUser.getUserid());
+            if(bewerbungen.isEmpty()){
+                return new VerticalLayout(new H3("Du hast dich noch auf keine Stellenanzeige beworben."));
+            }
             VerticalLayout layout = new VerticalLayout();
             layout.setSizeFull();
             layout.setId("header-neutral");
@@ -46,7 +49,7 @@ public class BewerbungsOverviewStudentView extends Div {
             return layout;
         }
         catch (Exception e){
-            Notification.show("Bewerbungen konnten nicht geladen werden");
+            Notification.show(e.toString());
         }
         return new VerticalLayout();
     }

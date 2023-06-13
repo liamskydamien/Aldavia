@@ -1,12 +1,12 @@
 package org.hbrs.se2.project.aldavia.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class StudentService {
 
     public static final String FROM_DB = " from DB";
 
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     private final QualifikationenService qualifikationenService = new QualifikationenService();
 
