@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class TaetigkeitsfeldServiceTest {
 
+    public static final String MESSAGE = "Wrong Exception thrown";
 
     @Autowired
     private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
@@ -108,9 +109,11 @@ public class TaetigkeitsfeldServiceTest {
     }
 
     @Test
-    public void testRemoveStudentFromKenntnis_whenKenntnisIsNotPresent() {
-        assertThrows(PersistenceException.class, () -> {
+    public void testRemoveStudentFromTaetigkeitsfeld_whenTaetigkeitsfeldIsNotPresent() {
+        PersistenceException taetigkeitsfeldNotFound = assertThrows(PersistenceException.class, () -> {
             taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
         });
+
+        assertEquals(taetigkeitsfeldNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, MESSAGE);
     }
 }
