@@ -28,8 +28,8 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     private Div displayLanguage;
     private int languageID;
 
-    private Button deleteLanguage;
-    private Button addLanguageButton;
+    private Button addLanguage;
+    private ComboBox<String> languageLevelDropDown;
 
     private Span noLanguages;
 
@@ -39,18 +39,22 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         spracheList = studentProfileDTO.getSprachen();
         displayLanguage = new Div();
         languageID = 0;
+        addLanguage = new Button("Hinzufügen");
+        languageLevelDropDown = new ComboBox<>();
         noLanguages = new Span("Keine Sprachen vorhanden.");
+        addClassName("card");
+        addClassName("languageComponent");
         setUpUI();
     }
     private void setUpUI() {
-        deleteLanguage.setClassName("deleteButton");
-        addLanguageButton.setClassName("addLanguageButton");
+        addLanguage.setClassName("addLanguageButton");
+        languageLevelDropDown.addClassName("add-Language-Level");
 
 
         H2 title = new H2("Sprachen");
         add(title);
         add(createAddLanguageArea());
-        createAddLanguageArea();
+        add(displayLanguage);
         updateViewMode();
 
     }
@@ -67,7 +71,9 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         updateEditMode();
     }
     private void updateViewMode() {
+        //Hide add Elements
         addLanguageArea.setVisible(false);
+
         if(spracheList.isEmpty()){
             noLanguages.getStyle().set("font-style", "italic");
             add(noLanguages);
@@ -76,6 +82,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         }
     }
     private void updateEditMode() {
+        remove(noLanguages);
         addLanguageArea.setVisible(true);
 
     }
@@ -93,10 +100,9 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         addLanguageField.setClearButtonVisible(true);
         addLanguageArea.add(addLanguageField);
 
+        //Sprachlevel
         HorizontalLayout addLanguageLevel = new HorizontalLayout();
-        ComboBox<String> languageLevelDropDown = new ComboBox<>();
-        languageLevelDropDown.addClassName("add-Language-Level");
-        languageLevelDropDown.setPlaceholder("Sprachniveau");
+        languageLevelDropDown.setPlaceholder("Sprach-Level");
         languageLevelDropDown.setItems(Globals.LanguageLevels.A1,
                                Globals.LanguageLevels.A2,
                                Globals.LanguageLevels.B1,
@@ -106,15 +112,16 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
                                Globals.LanguageLevels.MOTHER_TONGUE);
         addLanguageLevel.add(languageLevelDropDown);
         addLanguageLevel.add(addLanguageButton(addLanguageField,languageLevelDropDown));
+        addLanguageArea.add(addLanguageLevel);
 
 
         return addLanguageArea;
     }
 
+
     private Button addLanguageButton(TextField addLanguageField, ComboBox<String> languageLevelDropDown) {
-        addLanguageButton = new Button("Hinzufügen");
-        addLanguageButton.setIcon(new Icon("lumo", "plus"));
-        addLanguageButton.addClickListener(event -> {
+        addLanguage.setIcon(new Icon("lumo", "plus"));
+        addLanguage.addClickListener(event -> {
             if(spracheList.size()<11) {
                 if (!addLanguageField.getValue().isEmpty()) {
                     SpracheDTO newSkill = new SpracheDTO(addLanguageField.getValue(),languageLevelDropDown.getValue(),languageID);
@@ -128,7 +135,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
                 Notification.show("Du hast die maximale Kenntnis-Anzahl erreicht.", 20, Notification.Position.MIDDLE);
             }
         });
-        return addLanguageButton;
+        return addLanguage;
     }
 
     private void getLanguagesAndCreatefield(String mode){
@@ -136,7 +143,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
 
         for(SpracheDTO s: spracheList){
 
-            putInlanguageCapsul(s,mode);
+            displayLanguage.add(putInlanguageCapsul(s,mode));
         }
     }
 
@@ -165,14 +172,15 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
 
         languageCapsul.add(languageCapsulLayout);
         displayLanguage.add(languageCapsul);
-
         return languageCapsul;
     }
 
 
 
     private Button deleteLanguageButton(SpracheDTO s){
-        deleteLanguage = new Button();
+        Button deleteLanguage = new Button();
+        deleteLanguage.setClassName("deleteButton");
+
         deleteLanguage.setIcon(new Icon("lumo", "cross"));
         deleteLanguage.addClickListener(event -> {
             spracheList.remove(s);

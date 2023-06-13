@@ -47,6 +47,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         this.studentProfileControl = studentProfileControl;
         displaySkill = new Div();
         addSkillsArea = new HorizontalLayout();
+        deleteSkill = deleteSkill = new Button(new Icon("lumo","cross"));
         noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
         addClassName("skills-component");
         addClassName("card");
@@ -145,7 +146,6 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     }
 
     private Button deleteSkillButton(KenntnisDTO kenntnis){
-        deleteSkill = new Button(new Icon("lumo","cross"));
         deleteSkill.addClickListener(buttonClickEvent -> {
             // Remove the KenntnisDTO from the list
             kenntnisDTOS.remove(kenntnis);
