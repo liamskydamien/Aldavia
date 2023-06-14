@@ -104,9 +104,10 @@ public class LoggedInStateLayout extends AppLayout {
         final Tab tab = new Tab();
 
         // Erstelle das Icon
-        Icon iconUser = VaadinIcon.USER.create();
-        iconUser.setSize("24px");
-        iconUser.setColor("blue");
+        Image iconUser = new Image("icons/profile.png", "User Icon");
+        iconUser.setHeight("24px");
+        iconUser.setWidth("24px");
+        iconUser.addClassName("iconProfile");
 
         // Erstelle das Text-Label
         Label label = new Label("Profile");
@@ -141,22 +142,19 @@ public class LoggedInStateLayout extends AppLayout {
         return tab;
     }
 
-    private MenuBar createLogOutButton() {
-        MenuBar bar = new MenuBar();
-        Icon iconSignOut = VaadinIcon.SIGN_OUT.create();
-        Text textLogOut = new Text("Log out");
+    private Button createLogOutButton() {
+        Button button = new Button("Log out");
+        button.setClassName("logout-button");
+        Image iconSignOut = new Image("icons/logout.png", "Logout Icon");
+        iconSignOut.setHeight("24px");
+        iconSignOut.setWidth("24px");
+        iconSignOut.getStyle().set("margin-right", "10px");
+        iconSignOut.addClassName("iconLogout");
+        button.setIcon(iconSignOut);
 
-        // Erstellen Sie ein neues Layout und legen Sie den Abstand zwischen den Elementen fest
-        HorizontalLayout layout = new HorizontalLayout(iconSignOut, textLogOut);
-        layout.setSpacing(true);
+        button.addClickListener(event -> logoutUser());
+        return button;
 
-        MenuItem item = bar.addItem(layout, e -> logoutUser());
-        item.setId("logout-button");
-
-        // Setzen Sie den Hintergrund der MenuBar auf transparent
-        bar.getStyle().set("background", "transparent");
-
-        return bar;
     }
 
 

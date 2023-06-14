@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -19,7 +20,7 @@ import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import java.util.List;
 
-
+@CssImport("./styles/views/profile/studentProfile.css")
 public class LanguageComponent extends VerticalLayout implements ProfileComponent{
     private StudentProfileControl studentProfileControl;
     private StudentProfileDTO studentProfileDTO;
@@ -39,7 +40,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         spracheList = studentProfileDTO.getSprachen();
         displayLanguage = new Div();
         languageID = 0;
-        addLanguage = new Button("Hinzufügen");
+        addLanguage = new Button();
         languageLevelDropDown = new ComboBox<>();
         noLanguages = new Span("Keine Sprachen vorhanden.");
         addClassName("card");
@@ -70,6 +71,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     public void switchEditMode() {
         updateEditMode();
     }
+
     private void updateViewMode() {
         //Hide add Elements
         addLanguageArea.setVisible(false);

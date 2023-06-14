@@ -47,7 +47,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         this.studentProfileControl = studentProfileControl;
         displaySkill = new Div();
         addSkillsArea = new HorizontalLayout();
-        deleteSkill = deleteSkill = new Button(new Icon("lumo","cross"));
+        deleteSkill = new Button(new Icon("lumo","cross"));
         noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
         addClassName("skills-component");
         addClassName("card");
@@ -162,8 +162,9 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         if(kenntnisDTOS.isEmpty()){
             displaySkill.remove(noSkill);
         }
-        //TODO Icon anstatt "Hinzufuegen"
-        Button addSkillButton = new Button("Hinzufügen");
+
+        Button addSkillButton = new Button();
+        addSkillButton.setIcon(new Icon("lumo","plus"));
 
         addSkillButton.addClickListener(buttonClickEvent ->{
             if(kenntnisDTOS.size()<11) {
