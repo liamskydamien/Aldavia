@@ -8,7 +8,6 @@ import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

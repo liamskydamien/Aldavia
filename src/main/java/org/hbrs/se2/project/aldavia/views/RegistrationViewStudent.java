@@ -131,7 +131,7 @@ public class RegistrationViewStudent extends Div {
                 password.clear();
                 passwordCheck.clear();
             }else if(!dto.getMail().contains("@")) {
-                notification.show("Sie brauchen ein '@' Zeichen in der Email-Adresse!");
+                Notification.show("Sie brauchen ein '@' Zeichen in der Email-Adresse!");
 
 
             } else {
@@ -185,7 +185,6 @@ public class RegistrationViewStudent extends Div {
     }
 
     private VerticalLayout createDialogLayout(RegistrationControl regControl) {
-        RegistrationDTOStudent dto = binder.getBean();
         VerticalLayout layout = new VerticalLayout();
         Div text = new Div();
         text.add("Wollen Sie mit den angegebenen Daten fortfahren?");
