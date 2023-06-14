@@ -15,7 +15,6 @@ import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,11 +72,6 @@ public class RegistrationControl {
                     .build();
 
             repositoryS.save(studentNeu);
-            /*if (userNeu.getRollen().isEmpty()){
-                System.out.println("Rollen sind leer");
-            } else {
-                System.out.println(userNeu.getRollen().get(0).getBezeichnung());
-            }*/
             logger.info("Successfully created a student acount with the following userName: " + userNeu.getUserid());
 
 

@@ -16,10 +16,6 @@ import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * View zur Darstellung der Startseite. Diese zeigt dem Benutzer ein Login-Formular an.
- * ToDo: Integration einer Seite zur Registrierung von Benutzern
- */
 @CssImport("./styles/views/login/login-view.css")
 @Route(value = Globals.Pages.LOGIN_VIEW, layout = NeutralLayout.class )
 @RouteAlias(value = "login")
@@ -64,7 +60,6 @@ public class LoginView extends VerticalLayout {
                 dialog.open();
             }
             if (isAuthenticated) {
-                System.out.println("Login erfolgreich");
 
                 grabAndSetUserIntoSession();
 

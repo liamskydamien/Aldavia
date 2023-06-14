@@ -4,6 +4,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
 public class UIUtils {
+
     public static String[] splitOnSpaces(String input) {
         return input.split(" ");
     }

@@ -188,8 +188,6 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         studentProfileDTO.setNachname(lastname);
         studentProfileDTO.setStudiengang(studiengang.getValue());
         studentProfileDTO.setBeschreibung(description.getValue());
-        System.out.println("Übergebene studentProfileDTO: " + studentProfileDTO.getNachname() + " " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getStudiengang() + " " + studentProfileDTO.getBeschreibung());
-        System.out.println("Übergebene username: " + userName);
         studentProfileControl.updateStudentProfile(studentProfileDTO, userName);
     }
 
