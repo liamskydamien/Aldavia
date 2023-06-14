@@ -41,4 +41,10 @@ public class Globals {
         public static final String C2 = "C2";
     }
 
+
+    public static class ProfileViewMode {
+        public static final String VIEW = "view";
+        public static final String EDIT = "edit";
+    }
+
 }

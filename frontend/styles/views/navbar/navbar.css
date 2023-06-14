@@ -37,7 +37,7 @@ vaadin-app-layout::part(navbar) {
 
 #login-tab:hover{
     cursor: pointer;
-    color: var(--main-color);
+    color: #1a73e8;
 
 }
 
@@ -51,7 +51,6 @@ vaadin-app-layout::part(navbar) {
 
 #sign-up-button{
     background-color: #1a73e8;
-
     color: #ffffff;
     font-size: 1.15rem;
     font-weight: 500;
@@ -63,6 +62,15 @@ vaadin-app-layout::part(navbar) {
 }
 
 #sign-up-button:hover{
+
+    box-shadow: 0 4px 10px 0 rgba(65, 132, 234, 0.75);
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    color: white;
+    cursor: pointer;
     cursor: pointer;
 }
 
@@ -75,5 +83,48 @@ vaadin-menu-bar-button {
     padding: 10px 20px 10px 20px;
     border: 1px solid #1a73e8;
     height: 45px;
+}
+
+.iconProfile{
+    margin: 15px !important;
+}
+
+#student-srofil-tab a label{
+    cursor: pointer;
+    color: #1e1e1e;
+    font-weight: 400;
+}
+
+#student-srofil-tab a label:hover{
+    color: #1a73e8;
+}
+
+.logout-button{
+    width: 180px;
+    background-color: transparent;
+    color: #1e1e1e;
+    font-size: 1.05rem;
+    font-weight: 400;
+    border-radius: 20px;
+    padding: 0;
+    margin: 0;
+    height: 45px;
+}
+
+.logout-button:hover{
+    cursor: pointer;
+    background: transparent;
+    color: #1a73e8;
+}
+
+.logout-button::after{
+    background: transparent;
+}
+.logout-button::before{
+    background: transparent;
+}
+
+.iconLogout{
+    margin: 15px !important;
 }
 

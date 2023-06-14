@@ -15,9 +15,7 @@ import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
-import org.hbrs.se2.project.aldavia.views.components.AboutStudentComponent;
-import org.hbrs.se2.project.aldavia.views.components.SkillsComponent;
-import org.hbrs.se2.project.aldavia.views.components.StudentPersonalDetailsComponent;
+import org.hbrs.se2.project.aldavia.views.components.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
@@ -33,12 +31,13 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private final UI ui = UI.getCurrent();
 
     private StudentProfileDTO studentProfileDTO;
-    private Div profilePicture = new Div();
     private Div profileWrapper = null;
 
     private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
     private AboutStudentComponent aboutStudentComponent;
     private SkillsComponent skillsComponent;
+    private LanguageComponent languageComponent;
+    private QualificationComponent qualificationComponent;
 
     private Button editButton;
     private Button saveButton;
@@ -97,6 +96,8 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         studentPersonalDetailsComponent.switchEditMode();
         aboutStudentComponent.switchEditMode();
         skillsComponent.switchEditMode();
+        languageComponent.switchEditMode();
+        qualificationComponent.switchEditMode();
 
     }
 
@@ -107,6 +108,8 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
         aboutStudentComponent.switchViewMode(getCurrentUserName());
         skillsComponent.switchViewMode(getCurrentUserName());
+        languageComponent.switchViewMode(getCurrentUserName());
+        qualificationComponent.switchViewMode(getCurrentUserName());
     }
 
     private HorizontalLayout createBottomLayout(){
@@ -120,83 +123,34 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private VerticalLayout createLeftLayout(){
         aboutStudentComponent = new AboutStudentComponent(studentProfileDTO,studentProfileControl);
         skillsComponent = new SkillsComponent(studentProfileDTO,studentProfileControl);
+        languageComponent = new LanguageComponent(studentProfileDTO,studentProfileControl);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
         leftLayout.add(aboutStudentComponent);
         leftLayout.add(skillsComponent);
-        leftLayout.add(createSprachenLayout());
+        leftLayout.add(languageComponent);
         return leftLayout;
     }
 
 
 
-    private HorizontalLayout createInteressenLayout(){
+    /*private HorizontalLayout createInteressenLayout(){
         HorizontalLayout interessenLayout = new HorizontalLayout();
         interessenLayout.addClassName("interessen");
         for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : studentProfileDTO.getTaetigkeitsfelder()){
             interessenLayout.add(new Label(taetigkeitsfeldDTO.getName()));
         }
         return interessenLayout;
-    }
+    }*/
 
 
     private VerticalLayout createQualifikationsLayout(){
         VerticalLayout qualifikationsLayout = new VerticalLayout();
-        qualifikationsLayout.addClassName("qualifikationen");
-        qualifikationsLayout.addClassName("card");
-        qualifikationsLayout.add(new H2("Qualifikationen"));
-        for (QualifikationsDTO qualifikationsDTO : studentProfileDTO.getQualifikationen()){
-            qualifikationsLayout.add(createQualifikation(qualifikationsDTO));
-        }
+        qualifikationsLayout.addClassName("qualifikationenRight");
+        qualificationComponent = new QualificationComponent(studentProfileControl,studentProfileDTO);
+        qualifikationsLayout.add(qualificationComponent);
         return qualifikationsLayout;
     }
-
-    private VerticalLayout createQualifikation(QualifikationsDTO qualifikationsDTO){
-        VerticalLayout qualifikationLayout = new VerticalLayout();
-        qualifikationLayout.addClassName("qualifikation");
-        qualifikationLayout.add(new H3(qualifikationsDTO.getBezeichnung()));
-        qualifikationLayout.add(createInstitutionBeschaeftigungsArt(qualifikationsDTO.getInstitution(), qualifikationsDTO.getBeschaeftigungsart()));
-        qualifikationLayout.add(createVonBis(qualifikationsDTO.getVon().toString(), qualifikationsDTO.getBis().toString()));
-        qualifikationLayout.add(new Label(qualifikationsDTO.getBeschreibung()));
-        return qualifikationLayout;
-    }
-
-    private HorizontalLayout createInstitutionBeschaeftigungsArt(String institution, String beschaeftigungsart){
-        HorizontalLayout institutionBeschaeftigungsArtLayout = new HorizontalLayout();
-        institutionBeschaeftigungsArtLayout.addClassName("institution-beschaeftigungsart");
-        institutionBeschaeftigungsArtLayout.add(new Label(institution));
-        institutionBeschaeftigungsArtLayout.add(new Label(beschaeftigungsart));
-        return institutionBeschaeftigungsArtLayout;
-    }
-
-    private HorizontalLayout createVonBis(String von, String bis){
-        HorizontalLayout vonBisLayout = new HorizontalLayout();
-        vonBisLayout.addClassName("von-bis");
-        vonBisLayout.add(new Label("Von: " + von));
-        vonBisLayout.add(new Label("Bis: " + bis));
-        return vonBisLayout;
-    }
-
-
-    private VerticalLayout createSprachenLayout(){
-        VerticalLayout sprachenLayout = new VerticalLayout();
-        sprachenLayout.addClassName("sprachen");
-        sprachenLayout.addClassName("card");
-        sprachenLayout.add(new H2("Sprachen"));
-        for (SpracheDTO sprache : studentProfileDTO.getSprachen()){
-            sprachenLayout.add(createSprache(sprache));
-        }
-        return sprachenLayout;
-    }
-
-    private Div createSprache(SpracheDTO sprache){
-        Div spracheDiv = new Div();
-        spracheDiv.addClassName("sprache");
-        spracheDiv.add(new H3(sprache.getName()));
-        spracheDiv.add(new Label(sprache.getLevel()));
-        return spracheDiv;
-    }
-
 
 
 }

@@ -84,9 +84,12 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         studiengang.setReadOnly(true);
         description.setReadOnly(true);
 
+
         profilePicture.removeAll();
 
-        if(studentProfileDTO.getProfilbild() == null){
+        System.out.println("Profilbild: " + studentProfileDTO.getProfilbild());
+
+        if(studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")){
             profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
         } else {
             // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
