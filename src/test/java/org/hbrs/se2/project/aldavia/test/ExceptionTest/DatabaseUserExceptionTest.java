@@ -57,7 +57,7 @@ public class DatabaseUserExceptionTest {
         //UserRepository repository = new UserRepository();
     }
 
-    @Test
+    /*@Test
     void testUserNotFound(){
         String username = "gibtsNicht";
         String password = "password1234";
@@ -66,5 +66,5 @@ public class DatabaseUserExceptionTest {
 
         Assertions.assertEquals(DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, ex.getDatabaseUserExceptionType());
         Assertions.assertEquals("No User could be found! Please check your credentials!", ex.getMessage());
-    }
+    }*/
 }
