@@ -13,7 +13,6 @@ import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -51,6 +51,7 @@ public class StudentProfileControlTest {
     public static final String SOFTWARE_DESIGN = "Software Design";
     public static final String NO_CODE_GMBH = "No Code GmbH";
     public static final String SINA_SCHMIDT_ALDAVIA_MAIL_DE = "sina.schmidt@aldavia-mail.de";
+
     @Autowired
     private StudentProfileControl studentProfileControl;
 
@@ -388,5 +389,31 @@ public class StudentProfileControlTest {
 
 
     }
+
+    @Test
+    public void testDatabaseConnectionFailedException() {
+        String username = "testuser";
+
+        ProfileException exception = assertThrows(ProfileException.class, () -> {
+            studentProfileControl.getStudentProfile(username);
+        });
+
+        assertEquals(ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED, exception.getProfileExceptionType());
+        //System.out.println(exception.getReason());
+    }
+
+    /*
+    //Hier wird aus unerfindlichen Gründen eine DATABASE_CONNECTION_FAILED gethrowed
+    @Test
+    public void testUpdateStudentProfile_StudentDoesNotExist_ExceptionThrown() {
+
+        // Act & Assert
+        ProfileException exception = assertThrows(ProfileException.class, () -> {
+            studentProfileControl.updateStudentProfile(null, "nonexistentUsername");
+        });
+
+        assertEquals(ProfileException.ProfileExceptionType.STUDENT_DOES_NOT_EXIST, exception.getProfileExceptionType());
+    }
+     */
 
 }

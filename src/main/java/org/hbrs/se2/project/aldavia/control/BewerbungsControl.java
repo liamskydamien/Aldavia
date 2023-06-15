@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
@@ -8,24 +9,17 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class BewerbungsControl {
 
     private final BewerbungsService bewerbungsService;
     private final StudentService studentService;
     private final StellenanzeigenService stellenanzeigenService;
-
-    @Autowired
-    public BewerbungsControl(BewerbungsService bewerbungsService,StudentService studentService, StellenanzeigenService stellenanzeigenService) {
-        this.bewerbungsService = bewerbungsService;
-        this.studentService = studentService;
-        this.stellenanzeigenService = stellenanzeigenService;
-    }
 
     /**
      * Adds a Bewerbung to the database

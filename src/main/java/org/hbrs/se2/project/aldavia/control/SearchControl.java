@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.entities.Kenntnis;
@@ -11,7 +12,6 @@ import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.util.comperators.StellenanzeigenComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 @Transactional
 public class SearchControl {
 
@@ -29,12 +30,6 @@ public class SearchControl {
     // Utils
     private final Logger logger = LoggerFactory.getLogger(SearchControl.class);
     private final StellenanzeigeDTOFactory stellenanzeigeDTOFactory = StellenanzeigeDTOFactory.getInstance();
-
-    @Autowired
-    public SearchControl(StudentService studentService, StellenanzeigenService stellenanzeigenService) {
-        this.studentService = studentService;
-        this.stellenanzeigenService = stellenanzeigenService;
-    }
 
     /**
      * Returns all Stellenanzeigen
