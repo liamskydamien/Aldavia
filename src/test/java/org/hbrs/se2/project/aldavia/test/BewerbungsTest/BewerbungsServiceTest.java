@@ -136,18 +136,18 @@ public class BewerbungsServiceTest {
             BewerbungsException exception = assertThrows(BewerbungsException.class, () -> bewerbungsService.getBewerbung(bewerbungsDTO));
 
             assertEquals(exception.getExceptionType(), BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND, MESSAGE);
-        } catch (BewerbungsException e) {
+        } catch (BewerbungsException | ProfileException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testBewerbungAlreadyExists() throws BewerbungsException {
+    public void testBewerbungAlreadyExists() throws BewerbungsException, ProfileException {
         // Build
         Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
         BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
-                .studentId(studentEntity.getId())
-                .stellenanzeigeId(stellenanzeigeEntity.getId())
+                .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                 .datum(bewerbung.getDatum())
                 .id(bewerbung.getId())
                 .build();
@@ -157,8 +157,8 @@ public class BewerbungsServiceTest {
         BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> {
             Bewerbung bewerbung2 = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
             BewerbungsDTO bewerbungsDTO2 = BewerbungsDTO.builder()
-                    .studentId(studentEntity.getId())
-                    .stellenanzeigeId(stellenanzeigeEntity.getId())
+                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                    .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                     .datum(bewerbung2.getDatum())
                     .id(bewerbung2.getId())
                     .build();
