@@ -4,7 +4,6 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.junit.jupiter.api.BeforeEach;

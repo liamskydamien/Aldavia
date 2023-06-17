@@ -2,7 +2,6 @@ package org.hbrs.se2.project.aldavia.control.factories;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.List;
 
 public class BewerbungsListFactory {
     private static BewerbungsListFactory instance;
-    private final UserDataDTOFactory userDataDTOFactory = UserDataDTOFactory.getInstance();
     private final StellenanzeigeDTOFactory stellenanzeigeDataDTOFactory = StellenanzeigeDTOFactory.getInstance();
 
     private BewerbungsListFactory() {

@@ -10,10 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewStudent;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
 import java.util.List;
