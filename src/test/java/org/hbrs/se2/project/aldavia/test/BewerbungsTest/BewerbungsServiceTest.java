@@ -40,6 +40,8 @@ public class BewerbungsServiceTest {
     private Unternehmen unternehmenEntity;
     private Stellenanzeige stellenanzeigeEntity;
 
+    public static final String MESSAGE = "Wrong Exception thrown";
+
 
     @BeforeEach
     public void setup() {
@@ -126,23 +128,37 @@ public class BewerbungsServiceTest {
                     .build();
 
             bewerbungsService.removeBewerbung(bewerbung);
-            assertThrows(BewerbungsException.class, () -> bewerbungsService.getBewerbung(bewerbungsDTO));
+            BewerbungsException exception = assertThrows(BewerbungsException.class, () -> bewerbungsService.getBewerbung(bewerbungsDTO));
+
+            assertEquals(exception.getExceptionType(), BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND, MESSAGE);
         } catch (BewerbungsException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testGetBewerbungen() throws BewerbungsException {
-            Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
-            BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
+    public void testBewerbungAlreadyExists() throws BewerbungsException {
+        // Build
+        Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
+        BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
+                .studentId(studentEntity.getId())
+                .stellenanzeigeId(stellenanzeigeEntity.getId())
+                .datum(bewerbung.getDatum())
+                .id(bewerbung.getId())
+                .build();
+
+
+        // Assert
+        BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> {
+            Bewerbung bewerbung2 = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
+            BewerbungsDTO bewerbungsDTO2 = BewerbungsDTO.builder()
                     .studentId(studentEntity.getId())
                     .stellenanzeigeId(stellenanzeigeEntity.getId())
-                    .datum(bewerbung.getDatum())
-                    .id(bewerbung.getId())
+                    .datum(bewerbung2.getDatum())
+                    .id(bewerbung2.getId())
                     .build();
+        });
 
-            assertEquals(bewerbungsService.getBewerbungen(studentEntity).get(0).getId(), bewerbungsDTO.getId());
-            assertEquals(bewerbungsService.getBewerbungen(stellenanzeigeEntity).get(0).getId(), bewerbungsDTO.getId());
+        assertEquals(BewerbungsException.BewerbungsExceptionType.BEWERBUNG_ALREADY_EXISTS, ex2.getExceptionType(), MESSAGE);
     }
 }

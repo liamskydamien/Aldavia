@@ -1,25 +1,35 @@
 package org.hbrs.se2.project.aldavia.service;
 
+import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
+import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
+    public static final String FROM_DB = " from DB";
 
-    @Autowired
-    private QualifikationenService qualifikationenService;
+
+
+    private final StudentRepository studentRepository;
+
+
+    private final QualifikationenService qualifikationenService;
+
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
 
@@ -30,11 +40,13 @@ public class StudentService {
      * @throws ProfileException if student not found
      */
     public Student getStudent(String username) throws ProfileException {
+        logger.info("Getting student " + username + FROM_DB);
         Optional<Student> student = studentRepository.findByUserID(username);
         if (student.isPresent()) {
             return student.get();
         }
         else {
+            System.out.println("Student not found");
             throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
@@ -45,7 +57,8 @@ public class StudentService {
      * @param changeStudentInformationDTO The DTO with the new information
      * @throws ProfileException if student not found
      */
-    public void updateStudentInformation(Student student, ChangeStudentInformationDTO changeStudentInformationDTO) throws ProfileException {
+    public void updateStudentInformation(Student student, StudentProfileDTO changeStudentInformationDTO) throws ProfileException {
+        logger.info("Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
 
             User user = student.getUser();
@@ -93,14 +106,14 @@ public class StudentService {
                 student.setStudiengang(changeStudentInformationDTO.getStudiengang());
             }
 
-            if (changeStudentInformationDTO.getMatrikelnummer() != null) {
-                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelnummer());
+            if (changeStudentInformationDTO.getMatrikelNummer() != null) {
+                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
             }
 
             if (changeStudentInformationDTO.getLebenslauf() != null) {
                 student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
             }
-
+            logger.info("Saving updated student " + student.getUser().getUserid());
             studentRepository.save(student);
         }
         catch (Exception e) {
@@ -115,6 +128,7 @@ public class StudentService {
      */
     @Transactional
     public void deleteStudent(Student student) throws ProfileException {
+        logger.info("Deleting student " + student.getUser().getUserid() + FROM_DB);
         try {
 
             if (student.getQualifikationen() != null) {
@@ -145,9 +159,9 @@ public class StudentService {
                     student.removeKenntnis(kenntnis);
                 }
             }
-
             studentRepository.save(student);
             studentRepository.delete(student);
+            logger.info("Deletion successfully!");
         }
         catch (Exception e) {
             throw new ProfileException("Error while deleting student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
@@ -160,6 +174,7 @@ public class StudentService {
      * @throws ProfileException if student not found
      */
     public void createOrUpdateStudent(Student student) throws ProfileException {
+        logger.info("Creating or Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
             studentRepository.save(student);
         } catch (Exception e) {

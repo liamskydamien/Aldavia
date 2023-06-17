@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface UnternehmenRepository extends JpaRepository<Unternehmen, Integer> {
     Optional<Unternehmen> findByUser(User user);
+    Optional<Unternehmen> findByName(String name);
+
 
     @Query("SELECT u FROM Unternehmen u WHERE u.user.userid = ?1")
     Optional<Unternehmen> findByUserID(String userid);

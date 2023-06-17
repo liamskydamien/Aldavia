@@ -30,4 +30,21 @@ public class Globals {
         public static final String DATABASE = "database";
     }
 
+    public static class LanguageLevels {
+        public static final String MOTHER_TONGUE = "Muttersprache";
+        public static final String A1 = "A1";
+        public static final String A2 = "A2";
+        public static final String B1 = "B1";
+        public static final String B2 = "B2";
+        public static final String C1 = "C1";
+
+        public static final String C2 = "C2";
+    }
+
+
+    public static class ProfileViewMode {
+        public static final String VIEW = "view";
+        public static final String EDIT = "edit";
+    }
+
 }

@@ -1,8 +1,8 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
+import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.ChangeStudentInformationDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,7 @@ class StudentServiceTest {
     private StudentService studentService;
 
     private Student student;
-    private ChangeStudentInformationDTO changeStudentInformationDTO;
+    private StudentProfileDTO changeStudentInformationDTO;
 
     private Kenntnis kenntnis;
     private Taetigkeitsfeld taetigkeitsfeld;
@@ -121,7 +121,7 @@ class StudentServiceTest {
 
     @Test
     void testCreateOrUpdateStudent_ValidStudent_StudentSavedSuccessfully() throws ProfileException {
-       changeStudentInformationDTO = ChangeStudentInformationDTO.builder()
+       changeStudentInformationDTO = StudentProfileDTO.builder()
                .beschreibung("TestBeschreibung")
                .email("TestEmail")
                .lebenslauf("TestLebenslauf")

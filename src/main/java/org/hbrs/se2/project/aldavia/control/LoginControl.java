@@ -6,6 +6,8 @@ import org.hbrs.se2.project.aldavia.dtos.impl.RolleDTOImpl;
 import org.hbrs.se2.project.aldavia.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,15 +22,18 @@ public class LoginControl {
 
     private UserDTO userDTO = null;
 
+    private final Logger logger = LoggerFactory.getLogger(LoginControl.class.getName());
+
     /**
      * Methode zur Authentifizierung eines Benutzers
      * @param username Benutzername
      * @param password Passwort
      * @return true, wenn die Authentifizierung erfolgreich war, sonst false
-     * @throws DatabaseUserException
+     * @throws DatabaseUserException in case user is not found
      */
     public boolean authenticate(String username, String password ) throws DatabaseUserException {
 
+        logger.info("Authentifiziere user mit username: " + username);
         User tmpUser = this.getUserWithJPA( username , password );
 
         if ( tmpUser == null ) {
@@ -39,6 +44,7 @@ public class LoginControl {
                     "No User could be found! Please check your credentials!");
         }
         this.userDTO = buildUserDTO( tmpUser );
+        logger.info("User " + username + " erfolgreich authentifiziert");
         return true;
     }
 
@@ -52,27 +58,17 @@ public class LoginControl {
     }
 
     /**
-     * Backdoor für Testzwecke (JPA)
-     * @param username
-     * @param password
-     * @return
-     * @throws DatabaseUserException
-
-    public UserDTO TestGetUserWithJPA( String username , String password ) throws DatabaseUserException {
-        return this.getUserWithJPA( username , password );
-    }
-    */
-
-    /**
      * Methode zur Anfrage eines Benutzers mit JPA
      * @param username Benutzername
      * @param password Passwort
      * @return UserDTO
-     * @throws DatabaseUserException
+     * @throws DatabaseUserException in case user is not found
      */
     private User getUserWithJPA( String username , String password ) throws DatabaseUserException {
         Optional<User> userTmp;
         filterForCommonErrors(username, password);
+
+        logger.info("Suche in DB user mit username: " + username);
 
         try {
             if(checkForEMailAdress(username)){
@@ -88,6 +84,9 @@ public class LoginControl {
                            DATABASE_CONNECTION_FAILED,
                    "A failure occured while trying to connect to database. Please try again later.");
         }
+
+        logger.info("User mit username: " + username + " gefunden");
+
         return userTmp.orElse(null);
     }
 
@@ -98,14 +97,7 @@ public class LoginControl {
      * @throws DatabaseUserException wenn ein Fehler auftritt
      */
     public void filterForCommonErrors(String username, String password) throws DatabaseUserException {
-        if( username == null || password == null ) {
-            throw new DatabaseUserException(
-                    DatabaseUserException.
-                            DatabaseUserExceptionType.
-                            USER_NOT_FOUND,
-                    "Credentials are empty! Please check your credentials!");
-        }
-        else if ( username.equals("") || password.equals("") ) {
+        if(( username == null || password == null ) || ( username.equals("") || password.equals("") )) {
             throw new DatabaseUserException(
                     DatabaseUserException.
                             DatabaseUserExceptionType.

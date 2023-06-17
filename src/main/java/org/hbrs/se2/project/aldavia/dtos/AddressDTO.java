@@ -4,13 +4,11 @@ public interface AddressDTO {
 
     public int getId();
 
-    public String getCountry();
+    public String getLand();
 
-    public String getCity();
+    public String getOrt();
 
-    public String getStreet();
+    public String getStrasse();
 
-    public String ZipCode();
-
-    public String HouseNumber();
+    public String getHausnummer();
 }

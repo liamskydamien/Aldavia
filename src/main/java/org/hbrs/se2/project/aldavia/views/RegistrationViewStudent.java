@@ -12,6 +12,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -115,6 +116,8 @@ public class RegistrationViewStudent extends Div {
             //carService.createCar(binder.getBean() ,  userDTO );
 
             RegistrationDTOStudent dto = binder.getBean();
+            Notification notification = new Notification();
+            notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
 
 
             if (dto.getMail().equals("") || dto.getUserName().equals("") || dto.getPassword().equals("")
@@ -127,6 +130,9 @@ public class RegistrationViewStudent extends Div {
                 Notification.show("Passwörter stimmen nicht überein!");
                 password.clear();
                 passwordCheck.clear();
+            }else if(!dto.getMail().contains("@")) {
+                Notification.show("Sie brauchen ein '@' Zeichen in der Email-Adresse!");
+
 
             } else {
                dialog.open();
@@ -179,7 +185,6 @@ public class RegistrationViewStudent extends Div {
     }
 
     private VerticalLayout createDialogLayout(RegistrationControl regControl) {
-        RegistrationDTOStudent dto = binder.getBean();
         VerticalLayout layout = new VerticalLayout();
         Div text = new Div();
         text.add("Wollen Sie mit den angegebenen Daten fortfahren?");

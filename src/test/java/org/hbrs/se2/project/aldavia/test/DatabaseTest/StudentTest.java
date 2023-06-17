@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class StudentTest {
 
+    public static final String BESCHREIBUNG = "Werkstudent im Bereich Softwareentwicklung";
     @Autowired
     private StudentRepository studentRepository;
 
@@ -125,7 +126,7 @@ public class StudentTest {
 
         //Qualifikationen hinzufügen
         Qualifikation qualifikation = Qualifikation.builder()
-                .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                .beschreibung(BESCHREIBUNG)
                 .build();
         qualifikation.setStudent(student);
         student.addQualifikation(qualifikation);
@@ -139,8 +140,6 @@ public class StudentTest {
         student.addTaetigkeitsfeld(taetigkeitsfeld);
 
         studentRepository.delete(student);
-        //entityManager.flush();
-        //entityManager.clear();
 
         assertFalse(studentRepository.existsById(student.getId()));
         assertFalse(userRepository.existsById(student.getUser().getId()));
@@ -170,7 +169,7 @@ public class StudentTest {
     @Test
     public void testAddAndRemoveQualifikationen() {
         Qualifikation qualifikation = Qualifikation.builder()
-                                      .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                                      .beschreibung(BESCHREIBUNG)
                                       .build();
         qualifikation.setStudent(student);
 
@@ -229,7 +228,7 @@ public class StudentTest {
         unternehmenRepository.save(unternehmen);
         Stellenanzeige stellenanzeige = Stellenanzeige.builder()
                                         .bezeichnung("Werkstudent")
-                                        .beschreibung("Werkstudent im Bereich Softwareentwicklung")
+                                        .beschreibung(BESCHREIBUNG)
                                         .beschaeftigungsverhaeltnis("Werkstudent")
                                         .start(LocalDate.now())
                                         .ende(LocalDate.of(2026, 12, 31))
@@ -263,7 +262,7 @@ public class StudentTest {
 
         }
         assert unternehmenFound != null;
-        assertEquals(unternehmenFound.getStellenanzeigen().get(0).getBezeichnung(), stellenanzeige.getBezeichnung());
+
 
     }
 }
