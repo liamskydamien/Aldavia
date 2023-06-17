@@ -7,11 +7,9 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +20,11 @@ public class StudentService {
 
     public static final String FROM_DB = " from DB";
 
-
-
     private final StudentRepository studentRepository;
 
-
-    private final QualifikationenService qualifikationenService;
+    private final QualifikationenService qualifikationenService = new QualifikationenService();
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
-
-
 
     /**
      * Get the student profile of a student

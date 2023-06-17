@@ -52,6 +52,7 @@ public class StudentProfileDTOFactory{
                     .sprachen(spracheDTOList)
                     .qualifikationen(qualifikationsDTOList)
                     .beschreibung(user.getBeschreibung() != null ? user.getBeschreibung() : "")
+                    .username(user.getUserid() != null ? user.getUserid() : "")
                     .build();
         }
         catch (Exception e){

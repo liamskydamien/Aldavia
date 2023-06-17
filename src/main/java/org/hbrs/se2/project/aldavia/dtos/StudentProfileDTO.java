@@ -26,4 +26,5 @@ public class StudentProfileDTO{
     private String profilbild;
     private List<SpracheDTO> sprachen;
     private String beschreibung;
+    private String username;
 }
