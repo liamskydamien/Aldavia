@@ -2,8 +2,11 @@ package org.hbrs.se2.project.aldavia.control;
 
 import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigenDataDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigenDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @Transactional
@@ -25,18 +29,14 @@ public class BewerbungsOverviewUnternehmen {
     private final StellenanzeigenDataDTOFactory stellenanzeigenDataDTOFactory = StellenanzeigenDataDTOFactory.getInstance();
 
     /**
-     * Gibt alle Bewerbungen zu einer Stellenanzeige zurück
-     * @param username Der Username des Unternehmens
-     * @return Liste von Bewerbungen
-     * @throws ProfileException wenn Bewerbungen nicht gefunden werden konnten
+     * Get the Bewerbungen for a Stellenanzeige
+     * @param username The username of the Unternehmen
+     * @return List of StellenanzeigenDataDTOs containing the Bewerbungen and the Stellenanzeige
+     * @throws ProfileException if Unternehmen not found
      */
-    public List<StellenanzeigenDataDTO> getBewerbungen(String username) throws ProfileException {
-        Unternehmen unternehmen =  unternehmenService.getUnternehmen(username);
+    public List<StellenanzeigenDataDTO> getBewerbungenStellenanzeige(String username) throws ProfileException {
+        Unternehmen unternehmen = unternehmenService.getUnternehmen(username);
         Set<Stellenanzeige> stellenanzeigen = unternehmen.getStellenanzeigen();
-        List<StellenanzeigenDataDTO> stellenanzeigenDataDTOList = new ArrayList<>();
-        for (Stellenanzeige stellenanzeige : stellenanzeigen) {
-            stellenanzeigenDataDTOList.add(stellenanzeigenDataDTOFactory.createStellenanzeigenDataDTO(stellenanzeige));
-        }
-        return stellenanzeigenDataDTOList;
+        return stellenanzeigen.stream().map(stellenanzeigenDataDTOFactory::createStellenanzeigenDataDTO).collect(Collectors.toList());
     }
 }
