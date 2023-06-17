@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
+import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -114,8 +115,8 @@ public class BewerbungsControlTest {
             BewerbungsDTO bewerbungDTO = BewerbungsDTO.builder()
                     .id(bewerbung.getId())
                     .bewerbungsSchreiben("test")
-                    .studentId(studentEntity.getId())
-                    .stellenanzeigeId(stellenanzeigeEntity.getId())
+                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                    .stellenanzeige(stellenanzeigeDTO)
                     .build();
 
             // Test DELETE

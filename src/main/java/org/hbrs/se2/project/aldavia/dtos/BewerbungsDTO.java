@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class BewerbungsDTO {
     private int id;
     private LocalDate datum;
-    private StudentDataDTO student;
+    private StudentProfileDTO student;
     private StellenanzeigeDTO stellenanzeige;
     private String status;
     private String bewerbungsSchreiben;

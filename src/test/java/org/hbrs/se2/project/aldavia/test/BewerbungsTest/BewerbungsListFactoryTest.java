@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
@@ -82,16 +83,15 @@ public class BewerbungsListFactoryTest {
     }
 
     @Test
-    public void testCreateBewerbungsListStudent() {
+    public void testCreateBewerbungsListStudent() throws ProfileException {
         // Execute
         BewerbungsListFactory bewerbungsListFactory = BewerbungsListFactory.getInstance();
         assertEquals(bewerbungsListFactory, BewerbungsListFactory.getInstance());
 
-        List<BewerbungsDataDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDataStudentDTOs(bewerbungsList);
-        for (BewerbungsDataDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
+        List<BewerbungsDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDTOs(bewerbungsList);
+        for (BewerbungsDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
             assertEquals(1, bewerbungsDataDTO.getId());
-            assertEquals(unternehmen.getName(), bewerbungsDataDTO.getUnternehmen().getName());
-            assertEquals("/unternehmen/test", bewerbungsDataDTO.getUnternehmen().getProfileLink());
+            assertEquals(unternehmen.getName(), bewerbungsDataDTO.getStellenanzeige().getUnternehmen().getName());
             assertEquals(stellenanzeigeDTO.getId(), bewerbungsDataDTO.getStellenanzeige().getId());
             assertEquals(stellenanzeigeDTO.getBeschreibung(), bewerbungsDataDTO.getStellenanzeige().getBeschreibung());
             assertEquals(stellenanzeigeDTO.getBezahlung(), bewerbungsDataDTO.getStellenanzeige().getBezahlung());
@@ -107,17 +107,16 @@ public class BewerbungsListFactoryTest {
     }
 
     @Test
-    public void testCreateBewerbungsListUnternhemen() {
+    public void testCreateBewerbungsListUnternhemen() throws ProfileException {
         // Execute
         BewerbungsListFactory bewerbungsListFactory = BewerbungsListFactory.getInstance();
         assertEquals(bewerbungsListFactory, BewerbungsListFactory.getInstance());
 
-        List<BewerbungsDataDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDataUnternehmenDTOs(bewerbungsList);
-        for (BewerbungsDataDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
+        List<BewerbungsDTO> actualCreateBewerbungsListResult = bewerbungsListFactory.createBewerbungsDTOs(bewerbungsList);
+        for (BewerbungsDTO bewerbungsDataDTO : actualCreateBewerbungsListResult) {
             assertEquals(1, bewerbungsDataDTO.getId());
             assertEquals(student.getVorname(), bewerbungsDataDTO.getStudent().getVorname());
             assertEquals(student.getNachname(), bewerbungsDataDTO.getStudent().getNachname());
-            assertEquals("/student/test", bewerbungsDataDTO.getStudent().getProfileLink());
             assertEquals(stellenanzeigeDTO.getId(), bewerbungsDataDTO.getStellenanzeige().getId());
             assertEquals(stellenanzeigeDTO.getBeschreibung(), bewerbungsDataDTO.getStellenanzeige().getBeschreibung());
             assertEquals(stellenanzeigeDTO.getBezahlung(), bewerbungsDataDTO.getStellenanzeige().getBezahlung());

@@ -100,7 +100,7 @@ public class BewerbungsOverviewTest {
         given(studentServiceMock.getStudent(userid)).willReturn(student);
 
        // Run the test
-        List<BewerbungsDataDTO> result = bewerbungsOverviewStudent.getBewerbungenStudent(userid);
+        List<BewerbungsDTO> result = bewerbungsOverviewStudent.getBewerbungenStudent(userid);
         assertEquals(2, result.size());
         assertEquals(1, result.get(0).getId());
         assertEquals(2, result.get(1).getId());

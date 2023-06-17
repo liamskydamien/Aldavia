@@ -32,7 +32,7 @@ public class StellenanzeigeDTOFactory {
                 .bezahlung(stellenanzeige.getBezahlung())
                 .beschaeftigungsumfang(stellenanzeige.getBeschaeftigungsumfang())
                 .taetigkeitsfelder(createTaetigkeitsfeldDTOs(stellenanzeige.getTaetigkeitsfelder()))
-                .unternehmen(createUnternehmenDataDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
+                .unternehmen(UnternehmenProfileDTOFactory.getInstance().createUnternehmenProfileDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
                 .build();
     }
 

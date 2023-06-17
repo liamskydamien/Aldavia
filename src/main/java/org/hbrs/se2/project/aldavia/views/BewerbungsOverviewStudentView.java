@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewStudent;
+import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
@@ -36,14 +37,14 @@ public class BewerbungsOverviewStudentView extends Div {
 
     private VerticalLayout createBewerbungenLayout(){
         try {
-            List<BewerbungsDataDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungenStudent(currentUser.getUserid());
+            List<BewerbungsDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungenStudent(currentUser.getUserid());
             if(bewerbungen.isEmpty()){
                 return new VerticalLayout(new H3("Du hast dich noch auf keine Stellenanzeige beworben."));
             }
             VerticalLayout layout = new VerticalLayout();
             layout.setSizeFull();
             layout.setId("header-neutral");
-            for (BewerbungsDataDTO bewerbung : bewerbungen) {
+            for (BewerbungsDTO bewerbung : bewerbungen) {
                 layout.add(createBewerbung(bewerbung));
             }
             return layout;
@@ -54,13 +55,13 @@ public class BewerbungsOverviewStudentView extends Div {
         return new VerticalLayout();
     }
 
-    private Div createBewerbung(BewerbungsDataDTO bewerbung){
+    private Div createBewerbung(BewerbungsDTO bewerbung){
         Div div = new Div();
         div.add(StellenanzeigeBewerbungsLayout(bewerbung));
         return div;
     }
 
-    private HorizontalLayout StellenanzeigeBewerbungsLayout(BewerbungsDataDTO bewerbung){
+    private HorizontalLayout StellenanzeigeBewerbungsLayout(BewerbungsDTO bewerbung){
         HorizontalLayout layout = new HorizontalLayout();
         layout.addClassName("stellenanzeige-bewerbungs-layout");
         layout.add(createStellenanzeigenInfosLayout(bewerbung));
@@ -68,11 +69,11 @@ public class BewerbungsOverviewStudentView extends Div {
         return layout;
     }
 
-    private VerticalLayout createBewerbungsstatus(BewerbungsDataDTO bewerbungsDataDTO){
+    private VerticalLayout createBewerbungsstatus(BewerbungsDTO bewerbungsDTO){
         VerticalLayout layout = new VerticalLayout();
         layout.addClassName("bewerbungsstatus-layout");
-        layout.add(new Label("Beworben am: " + bewerbungsDataDTO.getDatum().toString()));
-        switch (bewerbungsDataDTO.getStatus()){
+        layout.add(new Label("Beworben am: " + bewerbungsDTO.getDatum().toString()));
+        switch (bewerbungsDTO.getStatus()){
            case "zusage":
                 layout.add(new Icon(VaadinIcon.CHECK));
                 break;
@@ -86,12 +87,12 @@ public class BewerbungsOverviewStudentView extends Div {
         return layout;
     }
 
-    private VerticalLayout createStellenanzeigenInfosLayout(BewerbungsDataDTO bewerbung){
+    private VerticalLayout createStellenanzeigenInfosLayout(BewerbungsDTO bewerbung){
         VerticalLayout layout = new VerticalLayout();
         layout.addClassName("stellenanzeigen-infos-layout");
         Anchor anchor = new Anchor();
-        anchor.setText(bewerbung.getUnternehmen().getName());
-        anchor.setHref(bewerbung.getUnternehmen().getProfileLink());
+        anchor.setText(bewerbung.getStellenanzeige().getUnternehmen().getName());
+        anchor.setHref("unternehmen/" + bewerbung.getStellenanzeige().getUnternehmen().getName());
         layout.add(anchor);
         layout.add(new H2(bewerbung.getStellenanzeige().getBezeichnung()));
         layout.add(new H3(bewerbung.getStellenanzeige().getBeschaeftigungsverhaeltnis()));
@@ -108,7 +109,7 @@ public class BewerbungsOverviewStudentView extends Div {
         return layout;
     }
 
-    private HorizontalLayout createTaetigkeitenLayout(BewerbungsDataDTO bewerbung){
+    private HorizontalLayout createTaetigkeitenLayout(BewerbungsDTO bewerbung){
         HorizontalLayout layout = new HorizontalLayout();
         layout.addClassName("taetigkeiten-layout");
         layout.add(new Label("Tätigkeiten: "));

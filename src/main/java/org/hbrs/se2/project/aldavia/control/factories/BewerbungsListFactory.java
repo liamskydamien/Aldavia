@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.control.factories;
 
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
@@ -31,7 +32,7 @@ public class BewerbungsListFactory {
      * @param bewerbungsList List of Bewerbung
      * @return List of BewerbungsDTOs
      */
-    public List<BewerbungsDTO> createBewerbungsDTOs(List<Bewerbung> bewerbungsList){
+    public List<BewerbungsDTO> createBewerbungsDTOs(List<Bewerbung> bewerbungsList) throws ProfileException {
         List<BewerbungsDTO> bewerbungsDataDTOList = new ArrayList<>();
         for (Bewerbung bewerbung : bewerbungsList) {
             bewerbungsDataDTOList.add(createBewerbungsDTO(bewerbung));
@@ -44,14 +45,14 @@ public class BewerbungsListFactory {
      * @param bewerbung Bewerbung
      * @return BewerbungsDTO
      */
-    private BewerbungsDTO createBewerbungsDTO(Bewerbung bewerbung){
+    private BewerbungsDTO createBewerbungsDTO(Bewerbung bewerbung) throws ProfileException {
         return BewerbungsDTO.builder()
                 .id(bewerbung.getId())
                 .stellenanzeige(stellenanzeigeDataDTOFactory.createStellenanzeigeDTO(bewerbung.getStellenanzeige()))
                 .datum(bewerbung.getDatum())
                 .bewerbungsSchreiben(bewerbung.getBewerbungsSchreiben())
                 .status(bewerbung.getStatus())
-                .student(userDataDTOFactory.createStudentDataDTO(bewerbung.getStudent()))
+                .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(bewerbung.getStudent()))
                 .build();
     }
 }
