@@ -59,11 +59,9 @@ public class Bewerbung {
     public void setStellenanzeige(Stellenanzeige stellenanzeige){
         if (this.stellenanzeige != null && !(this.stellenanzeige.equals(stellenanzeige))) {
             this.stellenanzeige.removeBewerbung(this);
+            return;
         }
         this.stellenanzeige = stellenanzeige;
-        if (stellenanzeige != null ) {
-            stellenanzeige.addBewerbung(this);
-        }
     }
 
     // Methoden

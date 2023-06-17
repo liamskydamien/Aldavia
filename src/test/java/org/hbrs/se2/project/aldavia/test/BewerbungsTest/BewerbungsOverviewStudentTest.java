@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @Transactional
-public class BewerbungsOverviewTest {
+public class BewerbungsOverviewStudentTest {
     public static final String TEST = "test";
     private BewerbungsOverviewStudent bewerbungsOverviewStudent;
     @Mock
