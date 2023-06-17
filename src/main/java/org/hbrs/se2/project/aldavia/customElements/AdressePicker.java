@@ -2,9 +2,7 @@ package org.hbrs.se2.project.aldavia.customElements;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.customfield.CustomField;
-import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.textfield.TextField;
-import org.hbrs.se2.project.aldavia.entities.Adresse;
 
 
 

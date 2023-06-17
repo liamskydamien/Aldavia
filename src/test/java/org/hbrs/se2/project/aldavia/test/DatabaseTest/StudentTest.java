@@ -140,8 +140,6 @@ public class StudentTest {
         student.addTaetigkeitsfeld(taetigkeitsfeld);
 
         studentRepository.delete(student);
-        //entityManager.flush();
-        //entityManager.clear();
 
         assertFalse(studentRepository.existsById(student.getId()));
         assertFalse(userRepository.existsById(student.getUser().getId()));
@@ -264,7 +262,7 @@ public class StudentTest {
 
         }
         assert unternehmenFound != null;
-        //assertEquals(unternehmenFound.getStellenanzeigen().get(0).getBezeichnung(), stellenanzeige.getBezeichnung());
+
 
     }
 }

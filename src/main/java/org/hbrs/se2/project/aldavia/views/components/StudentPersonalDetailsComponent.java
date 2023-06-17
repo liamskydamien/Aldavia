@@ -84,9 +84,12 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         studiengang.setReadOnly(true);
         description.setReadOnly(true);
 
+
         profilePicture.removeAll();
 
-        if(studentProfileDTO.getProfilbild() == null){
+        System.out.println("Profilbild: " + studentProfileDTO.getProfilbild());
+
+        if(studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")){
             profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
         } else {
             // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
@@ -185,8 +188,6 @@ public class StudentPersonalDetailsComponent extends HorizontalLayout implements
         studentProfileDTO.setNachname(lastname);
         studentProfileDTO.setStudiengang(studiengang.getValue());
         studentProfileDTO.setBeschreibung(description.getValue());
-        System.out.println("Übergebene studentProfileDTO: " + studentProfileDTO.getNachname() + " " + studentProfileDTO.getVorname() + " " + studentProfileDTO.getStudiengang() + " " + studentProfileDTO.getBeschreibung());
-        System.out.println("Übergebene username: " + userName);
         studentProfileControl.updateStudentProfile(studentProfileDTO, userName);
     }
 
