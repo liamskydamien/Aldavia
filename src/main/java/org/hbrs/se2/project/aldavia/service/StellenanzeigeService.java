@@ -9,6 +9,7 @@ import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -30,6 +31,10 @@ public class StellenanzeigeService {
         } else {
             throw new ProfileException("Stellenanzeige not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
+    }
+
+    public List<Stellenanzeige> getAllStellenanzeigen() {
+        return stellenanzeigeRepository.findAll();
     }
 
     public void updateStellenanzeigeInformationen(Stellenanzeige stellenanzeige, StellenanzeigeDTO dto) throws ProfileException {
@@ -118,11 +123,7 @@ public class StellenanzeigeService {
         stellenanzeigeRepository.delete(stellenanzeige);
     }
 
-    public void newStellenanzeige(StellenanzeigeDTO dto) throws ProfileException {
-        Stellenanzeige stellenanzeige = new Stellenanzeige();
-        updateStellenanzeigeInformationen(stellenanzeige,dto);
 
-    }
 
 }
 

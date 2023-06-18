@@ -34,6 +34,7 @@ public class StellenanzeigeDTOFactory {
                 .taetigkeitsfelder(createTaetigkeitsfeldDTOs(stellenanzeige.getTaetigkeitsfelder()))
                 .unternehmen(createUnternehmenDataDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
                 .build();
+
     }
 
     private List<TaetigkeitsfeldDTO> createTaetigkeitsfeldDTOs(List<Taetigkeitsfeld> taetigkeitsfelder) {
