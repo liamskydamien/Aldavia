@@ -13,14 +13,14 @@ import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 
-public class BewerbungErstellen extends Div {
+public class BewerbungErstellenComponent extends Div {
 
     private final BewerbungsControl bewerbungsControl;
     private final String studentUsername;
     private final StellenanzeigeDTO stellenanzeigeDTO;
 
     private TextField bewerbungsTextfield = new TextField("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
-    public BewerbungErstellen(StellenanzeigeDTO stellenanzeigeDTO, BewerbungsControl bewerbungsControl, String studentUsername) {
+    public BewerbungErstellenComponent(StellenanzeigeDTO stellenanzeigeDTO, BewerbungsControl bewerbungsControl, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
         this.studentUsername = studentUsername;
