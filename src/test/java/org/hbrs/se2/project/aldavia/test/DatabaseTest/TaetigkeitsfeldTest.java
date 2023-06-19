@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-//import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -111,22 +109,6 @@ public class TaetigkeitsfeldTest {
             Taetigkeitsfeld taetigkeitsfeldFromDB = taetigkeitsfeldOptional.get();
             assertEquals(originalBezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
 
-//            // Update the entity
-//            String newBezeichnung = "Informatik";
-//            taetigkeitsfeldFromDB.setBezeichnung(newBezeichnung);
-//            taetigkeitsfeldRepository.save(taetigkeitsfeldFromDB);
-//
-//            // Verify if the entity is updated
-//            Optional<Taetigkeitsfeld> updatedTaetigkeitsfeldOptional = taetigkeitsfeldRepository.findById(newBezeichnung);
-//            assertTrue(updatedTaetigkeitsfeldOptional.isPresent());
-//            Taetigkeitsfeld retrievedTaetigkeitsfeld = updatedTaetigkeitsfeldOptional.get();
-
-//            // Verify if the original entity is deleted
-//            assertFalse(taetigkeitsfeldRepository.existsById(originalBezeichnung));
-//
-//            // Verify the updated entity
-//            assertEquals(newBezeichnung, retrievedTaetigkeitsfeld.getBezeichnung());
-
             // Delete the entity
             taetigkeitsfeldRepository.deleteById(originalBezeichnung);
 
@@ -139,19 +121,8 @@ public class TaetigkeitsfeldTest {
 
     @Test
     public void negativTests(){
-//        Taetigkeitsfeld taetigkeitsfeld1 = new Taetigkeitsfeld();
-//        taetigkeitsfeld1.setBezeichnung("Java_Test");
-//        taetigkeitsfeldRepository.save(taetigkeitsfeld1);
-//        //Saved in DB?
-//        assertTrue(taetigkeitsfeldRepository.existsById("Java_Test"));
-//
-//        Taetigkeitsfeld taetigkeitsfeld2 = new Taetigkeitsfeld();
-//        taetigkeitsfeld2.setBezeichnung("Java_Test");
-        //assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(taetigkeitsfeld2));
         assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(null));
         assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(new Taetigkeitsfeld()));
-
-//        taetigkeitsfeldRepository.deleteById("Java_Test");
     }
 
     @Test
