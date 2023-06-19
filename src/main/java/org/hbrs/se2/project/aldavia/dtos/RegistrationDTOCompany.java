@@ -1,16 +1,16 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Getter
 @Setter
-@Component
 @EqualsAndHashCode
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationDTOCompany {
 
 
@@ -28,26 +28,4 @@ public class RegistrationDTOCompany {
         return "UserDTO [UserName=" + companyName + ", password=" + password + "]";
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RegistrationDTOCompany other = (RegistrationDTOCompany) obj;
-        if (companyName == null) {
-            if (other.companyName != null)
-                return false;
-        } else if (!companyName.equals(other.companyName))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
-            return false;
-
-        return true;
-    }
 }
