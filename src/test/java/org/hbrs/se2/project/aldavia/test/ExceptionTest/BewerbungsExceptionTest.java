@@ -6,10 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BewerbungsExceptionTest {
+
+    public static final String MESSAGE = "Wrong Exception thrown";
+    public static final String TEST = "test";
+
     @Test
     public void testBewerbungsException() {
-        BewerbungsException bewerbungsException = new BewerbungsException("test", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED);
-        assertEquals("test", bewerbungsException.getMessage(), "Wrong Exception thrown");
-        assertEquals(BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED, bewerbungsException.getExceptionType(), "Wrong Exception thrown");
+        BewerbungsException bewerbungsException = new BewerbungsException(TEST, BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED);
+        assertEquals(TEST, bewerbungsException.getMessage(), MESSAGE);
+        assertEquals(BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED, bewerbungsException.getExceptionType(), MESSAGE);
     }
 }
