@@ -263,3 +263,12 @@ vaadin-email-field[invalid]::part(input-field)::after {
     align-items: center;
     width: 100%;
 }
+
+/*Stellenanzeigen*/
+.stellenanzeige-taetigkeit{
+    color: #1e1e1e;
+    font-size: 1rem;
+    border: 1px solid #1e1e1e;
+    border-radius: 8px;
+
+}
