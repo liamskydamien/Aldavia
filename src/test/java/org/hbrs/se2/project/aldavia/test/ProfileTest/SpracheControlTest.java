@@ -11,6 +11,8 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,8 @@ public class SpracheControlTest {
     private SpracheDTO spracheDTO;
 
     private Sprache spracheTest;
+
+    private Logger logger = LoggerFactory.getLogger(SpracheControlTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -72,7 +76,7 @@ public class SpracheControlTest {
             sprachenRepository.deleteById(spracheTest.getId());
         }
         catch (Exception e) {
-            System.out.println("Kenntnis not found");
+            logger.error("Kenntnis not found");
         }
         studentRepository.deleteById(student.getId());
         spracheTest = null;
