@@ -53,64 +53,66 @@ public class StudentService {
     public void updateStudentInformation(Student student, StudentProfileDTO changeStudentInformationDTO) throws ProfileException {
         logger.info("Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
-
             User user = student.getUser();
-            if (changeStudentInformationDTO.getBeschreibung() != null) {
-                user.setBeschreibung(changeStudentInformationDTO.getBeschreibung());
-            }
-
-            if (changeStudentInformationDTO.getEmail() != null) {
-                user.setEmail(changeStudentInformationDTO.getEmail());
-            }
-
-            if (changeStudentInformationDTO.getTelefonnummer() != null) {
-                user.setPhone(changeStudentInformationDTO.getTelefonnummer());
-            }
-
-            if (changeStudentInformationDTO.getProfilbild() != null) {
-                user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
-            }
-
-            if (changeStudentInformationDTO.getProfilbild() != null) {
-                user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
-            }
-
-            if (changeStudentInformationDTO.getVorname() != null) {
-                student.setVorname(changeStudentInformationDTO.getVorname());
-            }
-
-            if (changeStudentInformationDTO.getNachname() != null) {
-                student.setNachname(changeStudentInformationDTO.getNachname());
-            }
-
-            if (changeStudentInformationDTO.getGeburtsdatum() != null) {
-                student.setGeburtsdatum(changeStudentInformationDTO.getGeburtsdatum());
-            }
-
-            if (changeStudentInformationDTO.getLebenslauf() != null) {
-                student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
-            }
-
-            if (changeStudentInformationDTO.getStudienbeginn() != null) {
-                student.setStudienbeginn(changeStudentInformationDTO.getStudienbeginn());
-            }
-
-            if (changeStudentInformationDTO.getStudiengang() != null) {
-                student.setStudiengang(changeStudentInformationDTO.getStudiengang());
-            }
-
-            if (changeStudentInformationDTO.getMatrikelNummer() != null) {
-                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
-            }
-
-            if (changeStudentInformationDTO.getLebenslauf() != null) {
-                student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
-            }
+            updateUserData(user, changeStudentInformationDTO);
+            updateStudentData(student, changeStudentInformationDTO);
             logger.info("Saving updated student " + student.getUser().getUserid());
             studentRepository.save(student);
         }
         catch (Exception e) {
             throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
+        }
+    }
+
+    private void updateUserData(User user, StudentProfileDTO changeStudentInformationDTO){
+        if (changeStudentInformationDTO.getBeschreibung() != null) {
+            user.setBeschreibung(changeStudentInformationDTO.getBeschreibung());
+        }
+
+        if (changeStudentInformationDTO.getEmail() != null) {
+            user.setEmail(changeStudentInformationDTO.getEmail());
+        }
+
+        if (changeStudentInformationDTO.getTelefonnummer() != null) {
+            user.setPhone(changeStudentInformationDTO.getTelefonnummer());
+        }
+
+        if (changeStudentInformationDTO.getProfilbild() != null) {
+            user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
+        }
+    }
+
+    private void updateStudentData(Student student, StudentProfileDTO changeStudentInformationDTO){
+        if (changeStudentInformationDTO.getVorname() != null) {
+            student.setVorname(changeStudentInformationDTO.getVorname());
+        }
+
+        if (changeStudentInformationDTO.getNachname() != null) {
+            student.setNachname(changeStudentInformationDTO.getNachname());
+        }
+
+        if (changeStudentInformationDTO.getGeburtsdatum() != null) {
+            student.setGeburtsdatum(changeStudentInformationDTO.getGeburtsdatum());
+        }
+
+        if (changeStudentInformationDTO.getLebenslauf() != null) {
+            student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
+        }
+
+        if (changeStudentInformationDTO.getStudienbeginn() != null) {
+            student.setStudienbeginn(changeStudentInformationDTO.getStudienbeginn());
+        }
+
+        if (changeStudentInformationDTO.getStudiengang() != null) {
+            student.setStudiengang(changeStudentInformationDTO.getStudiengang());
+        }
+
+        if (changeStudentInformationDTO.getMatrikelNummer() != null) {
+            student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
+        }
+
+        if (changeStudentInformationDTO.getLebenslauf() != null) {
+            student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
         }
     }
 
