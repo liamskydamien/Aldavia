@@ -21,9 +21,7 @@ public class RegistrationResult {
 
 	/**
 	 * Setzen eines Grunds für die fehlerhafte Registrierung.
-	 * Wie könnte man diese Methode sinnvoll erweitern? ToDo
-	 *
-	 * @param reason
+	 * @param reason Grund für die fehlerhafte Registrierung.
 	 */
 	public void setReason(Reason reason) {
 		this.reason = reason;

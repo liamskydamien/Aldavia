@@ -124,8 +124,8 @@ public class KenntnisseServiceTest {
         Kenntnis kenntnis = Kenntnis.builder().bezeichnung(kenntnisDTO.getName()).build();
         kenntnisseRepository.save(kenntnis);
 
-        Kenntnis kenntnisDTO = kenntnisseService.getKenntnis(this.kenntnisDTO);
+        Kenntnis kenntnisDTO1 = kenntnisseService.getKenntnis(this.kenntnisDTO);
 
-        assertEquals(kenntnisDTO.getBezeichnung(), kenntnis.getBezeichnung());
+        assertEquals(kenntnisDTO1.getBezeichnung(), kenntnis.getBezeichnung());
     }
 }

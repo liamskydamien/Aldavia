@@ -33,9 +33,6 @@ public class BewerbungsControl {
             Stellenanzeige stellenanzeige = stellenanzeigenService.getStellenanzeige(stellenanzeigeDTO);
             bewerbungsService.addBewerbung(student, stellenanzeige, bewerbungsSchreiben);
         }
-        catch (BewerbungsException bewerbungsException){
-            throw bewerbungsException;
-        }
         catch (Exception e) {
             throw new BewerbungsException("Bewerbung could not be added", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED);
         }

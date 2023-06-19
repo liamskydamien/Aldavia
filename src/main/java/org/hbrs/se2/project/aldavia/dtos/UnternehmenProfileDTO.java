@@ -4,8 +4,6 @@ import lombok.*;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,7 +23,6 @@ public class UnternehmenProfileDTO {
     private String profilbild;
     private Set<Stellenanzeige> stellenanzeigen;
     private Set<Adresse> adressen;
-
     private String profilePicture;
 
 }
