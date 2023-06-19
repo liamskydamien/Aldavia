@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.aldavia.entities;
 
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.*;
