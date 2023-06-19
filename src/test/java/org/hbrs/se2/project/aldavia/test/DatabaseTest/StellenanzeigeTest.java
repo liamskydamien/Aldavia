@@ -136,46 +136,6 @@ public class StellenanzeigeTest {
 
     }
 
-  /*  @Test
-    public void testErstellen() {
-        unternehmen1.addStellenanzeige(s1);
-        unternehmen1.addStellenanzeige(s2);
-
-        unternehmenRepository.save(unternehmen1);
-        //Prüfen ob Unternehmen und Stellenazeigen gespeichert wurden
-
-        assertEquals(unternehmenRepository.existsById(unternehmen1.getId()),true);
-        assertEquals(stellenanzeigeRepository.existsById(s1.getId()),true);
-        assertEquals(stellenanzeigeRepository.existsById(s2.getId()),true);
-
-        //Check ob ausgewählte Werte stimmen
-        Unternehmen awaitUnternehmen = unternehmenRepository.findById(unternehmen1.getId()).get();
-        assertEquals(awaitUnternehmen.getBeschreibung(),unternehmen1.getBeschreibung());
-
-        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(s1.getId()).get();
-        Stellenanzeige awaitS2 = stellenanzeigeRepository.findById(s2.getId()).get();
-        assertEquals(awaitS1.getBezahlung(),s1.getBezahlung());
-        assertEquals(awaitS2.getBezahlung(),s2.getBezahlung());
-
-        //Prüfen, ob Referenzen gesetzt
-        Set<Stellenanzeige> awaitList = awaitUnternehmen.getStellenanzeigen();
-        assertEquals(awaitList.get(0),awaitS1);
-        assertEquals(awaitList.get(1),awaitS2);
-
-        Unternehmen awaitS1Ersteller = awaitS1.getUnternehmen_stellenanzeigen();
-        Unternehmen awaitS2Ersteller = awaitS2.getUnternehmen_stellenanzeigen();
-        assertEquals(awaitUnternehmen, awaitS1Ersteller);
-        assertEquals(awaitUnternehmen, awaitS2Ersteller);
-
-
-        //Prüfen ob Stellenanzeigen beim Löschen des Unternhemens mit gelöscht werden
-
-        unternehmenRepository.deleteById(unternehmen1.getId());
-        assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
-        assertEquals(false, stellenanzeigeRepository.existsById(s1.getId()));
-        assertEquals(false, stellenanzeigeRepository.existsById(s2.getId()));
-    } */
-
     @Test
     public void testTaetigkeitsfelder() {
 
@@ -196,9 +156,6 @@ public class StellenanzeigeTest {
 
         //Prüfen ob Taetigkeitsfelder mit gespeichert werden
         stellenanzeigeRepository.save(s1);
-        Stellenanzeige awaitS1 = stellenanzeigeRepository.findById(s1.getId()).get();
-
-
 
         //Referenzen Prüfen
         List<Taetigkeitsfeld> awaitTaetigkeitsfelder = s1.getTaetigkeitsfelder();
@@ -279,12 +236,6 @@ public class StellenanzeigeTest {
         assertEquals(true,unternehmenRepository.existsById(unternehmen1.getId()));
         unternehmenRepository.deleteById(unternehmen1.getId());
         assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
-
-
-
-
-
-
 
     }
 

@@ -6,7 +6,7 @@ public class StellenanzeigenException extends Exception{
         STELLENANZEIGE_ALREADY_EXISTS
     }
 
-    private StellenanzeigenExceptionType type;
+    private final StellenanzeigenExceptionType type;
 
     public StellenanzeigenException(String message, StellenanzeigenExceptionType type) {
         super(message);

@@ -23,7 +23,7 @@ public class UnternehmenProfileDTOFactory {
     public UnternehmenProfileDTO createUnternehmenProfileDTO(Unternehmen unternehmen) {
         User user = unternehmen.getUser();
 
-        UnternehmenProfileDTO dto = UnternehmenProfileDTO.builder()
+        return UnternehmenProfileDTO.builder()
                 .name(unternehmen.getName())
                 .email(user.getEmail())
                 .beschreibung(unternehmen.getBeschreibung())
@@ -38,9 +38,6 @@ public class UnternehmenProfileDTOFactory {
                 .adressen(unternehmen.getAdressen())
                 .stellenanzeigen(unternehmen.getStellenanzeigen())
                 .build();
-
-        return dto;
-
     }
 
 

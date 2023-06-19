@@ -25,7 +25,6 @@ public class UnternehmenProfileDTO {
     private String profilbild;
     private Set<Stellenanzeige> stellenanzeigen;
     private Set<Adresse> adressen;
-
     private String profilePicture;
 
 }
