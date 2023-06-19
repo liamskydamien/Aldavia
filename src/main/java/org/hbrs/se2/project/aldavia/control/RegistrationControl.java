@@ -42,9 +42,11 @@ public class RegistrationControl {
         Optional<User> oMail= repositoryU.findUserByEmail(mailAddress);
         Optional<User> oName = repositoryU.findUserByUserid(userName);
         if (oMail.isPresent()) {
+            logger.info("The mail address is already in use.");
             result.setReason(Reason.EMAIL_ALREADY_EXISTS);
             result.setResult(false);
         } else if (oName.isPresent()) {
+            logger.info("The userName is already in use.");
             result.setReason(Reason.USERNAME_ALREADY_EXISTS);
             result.setResult(false);
 
