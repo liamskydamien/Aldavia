@@ -46,6 +46,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     HorizontalLayout addQualificationLayout;
 
 
+    //TODO: add delete button
     public QualificationComponent(StudentProfileControl studentProfileControl, StudentProfileDTO studentProfileDTO) {
         this.studentProfileControl = studentProfileControl;
         this.studentProfileDTO = studentProfileDTO;

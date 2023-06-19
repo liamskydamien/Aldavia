@@ -86,6 +86,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     private void updateEditMode() {
         remove(noLanguages);
         addLanguageArea.setVisible(true);
+        getLanguagesAndCreatefield(Globals.ProfileViewMode.EDIT);
 
     }
     private void updateProfileDTO(String userName) throws PersistenceException, ProfileException {

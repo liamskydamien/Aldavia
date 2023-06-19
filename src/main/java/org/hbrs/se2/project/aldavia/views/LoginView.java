@@ -99,9 +99,6 @@ public class LoginView extends VerticalLayout {
 
 
     private void navigateToStudentMainPage() {
-        // Navigation zur Startseite, hier auf die Teil-Komponente Show-Cars.
-        // Die anzuzeigende Teil-Komponente kann man noch individualisieren, je nach Rolle,
-        // die ein Benutzer besitzt
         UI.getCurrent().navigate(Globals.Pages.STUDENT_MAIN);
 
     }
