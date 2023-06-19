@@ -11,6 +11,8 @@ import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,8 @@ public class KenntnisseServiceTest {
     private KenntnisDTO kenntnisDTO;
 
     private Kenntnis kenntnisTest;
+
+    private Logger logger = LoggerFactory.getLogger(KenntnisseServiceTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -67,7 +71,7 @@ public class KenntnisseServiceTest {
             kenntnisseRepository.deleteById(kenntnisTest.getBezeichnung());
         }
         catch (Exception e) {
-            System.out.println("Kenntnis not found");
+            logger.error("Kenntnis not found");
         }
         studentRepository.deleteById(student.getId());
         kenntnisTest = null;

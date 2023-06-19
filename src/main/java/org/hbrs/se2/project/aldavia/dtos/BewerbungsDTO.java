@@ -15,8 +15,4 @@ public class BewerbungsDTO {
     private StellenanzeigeDTO stellenanzeige;
     private String status;
     private String bewerbungsSchreiben;
-
-    public void setBewerbungsSchreiben(String bewerbungsSchreiben) {
-        this.bewerbungsSchreiben = bewerbungsSchreiben;
-    }
 }

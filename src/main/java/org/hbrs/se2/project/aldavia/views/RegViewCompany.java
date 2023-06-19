@@ -27,6 +27,7 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOCompany;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
 
 
 @Route(value = "registrationCompany")
@@ -198,7 +199,7 @@ public class RegViewCompany extends Div {
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
                 dialog.close();
-            } else if (result.getReason().equals(RegistrationResult.EMAIL_ALREADY_EXISTS)) {
+            } else if (result.getReason().equals(Reason.EMAIL_ALREADY_EXISTS)) {
                 Notification.show("Die Email Adresse ist bereits vorhanden!");
                 dialog.close();
             } else {

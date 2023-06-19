@@ -27,6 +27,7 @@ import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOStudent;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationResult;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.Utils;
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
 
 
 @Route(value = "registrationStudent")
@@ -34,22 +35,22 @@ import org.hbrs.se2.project.aldavia.util.Utils;
 @CssImport("./styles/views/regView/reg-view.css")
 public class RegistrationViewStudent extends Div {
 
-    private TextField userName = new TextField("Username");
-    private TextField mail = new TextField("Email-Adresse");
-    private TextField vorname = new TextField("Vorname");
-    private TextField nachname = new TextField("Nachnaname");
-    private PasswordField password = new PasswordField("Passwort");
-    private ProgressBar pbar = new ProgressBar(0.0,10.0);
-    private PasswordField passwordCheck = new PasswordField("Passwort check");
+    private final TextField userName = new TextField("Username");
+    private final TextField mail = new TextField("Email-Adresse");
+    private final TextField vorname = new TextField("Vorname");
+    private final TextField nachname = new TextField("Nachname");
+    private final PasswordField password = new PasswordField("Passwort");
+    private final ProgressBar pbar = new ProgressBar(0.0,10.0);
+    private final PasswordField passwordCheck = new PasswordField("Passwort check");
 
-    private Button register = new Button("Sign Up");
-    private Button generatePassword = new Button("Generate Password");
+    private final Button register = new Button("Sign Up");
+    private final Button generatePassword = new Button("Generate Password");
 
-    private Dialog dialog = new Dialog();
+    private final Dialog dialog = new Dialog();
 
     private Details details;
 
-    private Binder<RegistrationDTOStudent> binder = new Binder<>(RegistrationDTOStudent.class);
+    private final Binder<RegistrationDTOStudent> binder = new Binder<>(RegistrationDTOStudent.class);
 
 
 
@@ -196,7 +197,7 @@ public class RegistrationViewStudent extends Div {
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
                 dialog.close();
-            }  else if (RegistrationResult.EMAIL_ALREADY_EXISTS.equals(result.getReason())) {
+            }  else if (Reason.EMAIL_ALREADY_EXISTS.equals(result.getReason())) {
             Notification.show("Die Email Adresse ist bereits vorhanden!");
             dialog.close();
             } else {
