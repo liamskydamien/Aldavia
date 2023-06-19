@@ -146,7 +146,7 @@ public class BewerbungsServiceTest {
     }
 
     @Test
-    public void testBewerbungAlreadyExists() throws BewerbungsException, ProfileException {
+    public void testBewerbungAlreadyExists() throws BewerbungsException {
         // Build
         bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
 
