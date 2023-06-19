@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.service;
 
+import org.hbrs.se2.project.aldavia.control.exception.StellenanzeigenException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
@@ -17,13 +18,12 @@ public class StellenanzeigenService {
     @Autowired
     private StellenanzeigeRepository stellenanzeigenRepository;
 
-    public Stellenanzeige getStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO){
+    public Stellenanzeige getStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigenException {
         try {
             return stellenanzeigenRepository.findById(stellenanzeigeDTO.getId()).orElseThrow();
         }
         catch (Exception e) {
-            //TODO Add customexception
-            throw new RuntimeException("Stellenanzeige not found");
+            throw new StellenanzeigenException("Stellenanzeige not found", StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_NOT_FOUND);
         }
     }
 
