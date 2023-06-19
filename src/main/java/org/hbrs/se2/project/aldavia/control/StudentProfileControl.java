@@ -30,7 +30,7 @@ public class StudentProfileControl {
 
     private final TaetigkeitsfeldService taetigkeitsfeldService;
 
-    private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+    private final StudentProfileDTOFactory studentProfileDTOFactory;
 
     private final Logger logger = LoggerFactory.getLogger(StudentProfileControl.class);
 
