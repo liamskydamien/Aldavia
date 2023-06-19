@@ -1,25 +1,11 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
+
 public class RegistrationResult {
-
-    // Zustände, die in diesem Prototypen verwendet werden
-	public final static String PASSWORD_MISSING = "passmissing"; 
-	public final static String REGISTRATION_SUCCESSFULL = "ok";
-
-    // Noch nicht verwendet, aber für zukünftige Zwecke
-    public final static String EMAIL_ALREADY_EXISTS = "mail";
-
-	public final static String USERNAME_ALREADY_EXISTS = "username";
-
-	public final static String EMAIL_INVALID = "email_invalid";
-
-	public final static String PASSWORD_INVALID = "password_invalid";
-
-	public final static String USERNAME_INVALID = "username_invalid";
-
 	private boolean result;
 	
-	private String reason;
+	private Reason reason;
 
 	public boolean getResult() {
 		return result;
@@ -29,7 +15,7 @@ public class RegistrationResult {
 		this.result = result;
 	}
 
-	public String getReason() {
+	public Reason getReason() {
 		return reason;
 	}
 
@@ -39,7 +25,7 @@ public class RegistrationResult {
 	 *
 	 * @param reason
 	 */
-	public void setReason(String reason) {
+	public void setReason(Reason reason) {
 		this.reason = reason;
 	}
 	

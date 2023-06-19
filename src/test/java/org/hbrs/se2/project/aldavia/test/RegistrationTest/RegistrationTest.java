@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,7 +55,7 @@ class RegistrationTest {
         RegistrationResult result = registrationControl.createStudent(studentDto);
 
         assertTrue(result.getResult());
-        assertEquals(RegistrationResult.REGISTRATION_SUCCESSFULL, result.getReason());
+        assertEquals(Reason.REGISTRATION_SUCCESSFULL, result.getReason());
         assertNotNull(userRepository.findUserByEmail(studentDto.getMail()));
         assertNotNull(studentRepository.findByUser(userRepository.findUserByEmail(studentDto.getMail()).get()));
     }
@@ -71,7 +72,7 @@ class RegistrationTest {
             RegistrationResult result = registrationControl.createStudent(studentDto);
 
             assertTrue(result.getResult());
-            assertEquals(result, RegistrationResult.REGISTRATION_SUCCESSFULL);
+            assertEquals(result, Reason.REGISTRATION_SUCCESSFULL);
         }
 
         for (int i=0; i < invalidEmails.length; i++) {
@@ -81,7 +82,7 @@ class RegistrationTest {
             RegistrationResult result = registrationControl.createStudent(studentDto);
 
             assertFalse(result.getResult());
-            assertEquals(result, RegistrationResult.EMAIL_INVALID);
+            assertEquals(result, Reason.EMAIL_INVALID);
         }
     }
 
@@ -93,7 +94,7 @@ class RegistrationTest {
         RegistrationResult result = registrationControl.createStudent(studentDto);
 
         assertFalse(result.getResult());
-        assertEquals(result, RegistrationResult.USERNAME_INVALID);
+        assertEquals(result, Reason.USERNAME_INVALID);
     }
 
     @Test
@@ -104,7 +105,7 @@ class RegistrationTest {
         RegistrationResult result = registrationControl.createStudent(studentDto);
 
         assertFalse(result.getResult());
-        assertEquals(result, RegistrationResult.EMAIL_INVALID);
+        assertEquals(result, Reason.EMAIL_INVALID);
     }
 
     @Test
@@ -113,7 +114,7 @@ class RegistrationTest {
         studentDto.setMail("testuser_1@example.com");
         studentsToClear.add(studentDto);
         RegistrationResult result = registrationControl.createStudent(studentDto);
-        assertEquals(result, RegistrationResult.PASSWORD_MISSING);
+        assertEquals(result, Reason.PASSWORD_MISSING);
         assertFalse(result.getResult());
     }
 
@@ -131,7 +132,7 @@ class RegistrationTest {
         RegistrationResult result = registrationControl.createStudent(studentDto2);
 
         assertFalse(result.getResult());
-        assertEquals(RegistrationResult.EMAIL_ALREADY_EXISTS, result.getReason());
+        assertEquals(Reason.EMAIL_ALREADY_EXISTS, result.getReason());
     }
 
     @Test
@@ -148,7 +149,7 @@ class RegistrationTest {
         RegistrationResult result = registrationControl.createStudent(studentDto2);
 
         assertFalse(result.getResult());
-        assertEquals(RegistrationResult.USERNAME_ALREADY_EXISTS, result.getReason());
+        assertEquals(Reason.USERNAME_ALREADY_EXISTS, result.getReason());
     }
 
     /*@Test
