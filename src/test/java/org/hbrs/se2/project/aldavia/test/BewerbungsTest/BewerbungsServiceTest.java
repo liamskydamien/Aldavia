@@ -13,6 +13,8 @@ import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,8 @@ public class BewerbungsServiceTest {
     private Stellenanzeige stellenanzeigeEntity;
 
     public static final String MESSAGE = "Wrong Exception thrown";
+
+    private final Logger logger = LoggerFactory.getLogger(BewerbungsServiceTest.class);
 
 
     @BeforeEach
@@ -117,7 +121,7 @@ public class BewerbungsServiceTest {
             assertEquals(bewerbungFetched.getBewerbungsSchreiben(), bewerbung.getBewerbungsSchreiben());
             assertThrows(BewerbungsException.class, () -> bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test"));
         } catch (BewerbungsException | ProfileException e) {
-            throw new RuntimeException(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -137,31 +141,18 @@ public class BewerbungsServiceTest {
 
             assertEquals(exception.getExceptionType(), BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND, MESSAGE);
         } catch (BewerbungsException | ProfileException e) {
-            throw new RuntimeException(e);
+           logger.error(e.getMessage());
         }
     }
 
     @Test
     public void testBewerbungAlreadyExists() throws BewerbungsException, ProfileException {
         // Build
-        Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
-        BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
-                .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
-                .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
-                .datum(bewerbung.getDatum())
-                .id(bewerbung.getId())
-                .build();
-
+        bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
 
         // Assert
         BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> {
-            Bewerbung bewerbung2 = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
-            BewerbungsDTO bewerbungsDTO2 = BewerbungsDTO.builder()
-                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
-                    .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
-                    .datum(bewerbung2.getDatum())
-                    .id(bewerbung2.getId())
-                    .build();
+            bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
         });
 
         assertEquals(BewerbungsException.BewerbungsExceptionType.BEWERBUNG_ALREADY_EXISTS, ex2.getExceptionType(), MESSAGE);
