@@ -3,12 +3,14 @@ package org.hbrs.se2.project.aldavia.control.factories;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class StudentProfileDTOFactory{
 
     private static StudentProfileDTOFactory instance;
