@@ -5,6 +5,8 @@ import org.hbrs.se2.project.aldavia.repository.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ public class TaetigkeitsfeldTest {
 
     @Autowired
     private UnternehmenRepository unternehmenRepository;
+
+    private Logger logger = LoggerFactory.getLogger(TaetigkeitsfeldTest.class);
 
     User user1 = User.builder()
             .email("Student1@qtest.vn")
@@ -115,7 +119,7 @@ public class TaetigkeitsfeldTest {
             // Verify if the entity is deleted
             assertFalse(taetigkeitsfeldRepository.existsById(originalBezeichnung));
         } catch (Exception e) {
-            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
+            logger.error("Fehler bei RoundTrip: " + e.getMessage());
         }
     }
 
