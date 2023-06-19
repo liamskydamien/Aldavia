@@ -122,4 +122,12 @@ public class TaetigkeitsfeldServiceTest {
         assertEquals(taetigkeitsfeldNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, MESSAGE);
         assertEquals("Taetigkeitsfeld not found", taetigkeitsfeldNotFound.getReason(), MESSAGE2);
     }
+
+    @Test
+    public void getTaetigekteitsfeldWithDTO(){
+        taetigkeitsfeldTest = Taetigkeitsfeld.builder().bezeichnung(taetigkeitsfeldDTO.getName()).build();
+        taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
+        Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldService.getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        assertEquals(taetigkeitsfeld.getBezeichnung(), taetigkeitsfeldDTO.getName());
+    }
 }

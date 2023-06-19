@@ -118,4 +118,14 @@ public class KenntnisseServiceTest {
         assertEquals(kenntnisNotPresent.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.KENNTNIS_NOT_FOUND, MESSAGE);
         assertEquals("Kenntnis not found", kenntnisNotPresent.getReason(), MESSAGE2);
     }
+
+    @Test
+    public void testGetKenntnisWithDTO(){
+        Kenntnis kenntnis = Kenntnis.builder().bezeichnung(kenntnisDTO.getName()).build();
+        kenntnisseRepository.save(kenntnis);
+
+        Kenntnis kenntnisDTO = kenntnisseService.getKenntnis(this.kenntnisDTO);
+
+        assertEquals(kenntnisDTO.getBezeichnung(), kenntnis.getBezeichnung());
+    }
 }
