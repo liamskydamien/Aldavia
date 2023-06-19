@@ -2,10 +2,8 @@ package org.hbrs.se2.project.aldavia.control.factories;
 
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenDataDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +30,7 @@ public class StellenanzeigeDTOFactory {
                 .bezahlung(stellenanzeige.getBezahlung())
                 .beschaeftigungsumfang(stellenanzeige.getBeschaeftigungsumfang())
                 .taetigkeitsfelder(createTaetigkeitsfeldDTOs(stellenanzeige.getTaetigkeitsfelder()))
-                .unternehmen(createUnternehmenDataDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
+                .unternehmen(UnternehmenProfileDTOFactory.getInstance().createUnternehmenProfileDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
                 .build();
 
     }
@@ -43,12 +41,5 @@ public class StellenanzeigeDTOFactory {
                         .name(taetigkeitsfeld.getBezeichnung())
                         .build())
                 .collect(Collectors.toList());
-    }
-
-    private UnternehmenDataDTO createUnternehmenDataDTO(Unternehmen unternehmen) {
-        return UnternehmenDataDTO.builder()
-                .name(unternehmen.getName())
-                .profileLink("/unternehmen/" + unternehmen.getUser().getUserid())
-                .build();
     }
 }

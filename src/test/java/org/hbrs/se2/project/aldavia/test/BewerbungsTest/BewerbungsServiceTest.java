@@ -1,6 +1,9 @@
 package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
+import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -80,6 +84,7 @@ public class BewerbungsServiceTest {
                 .beschaeftigungsverhaeltnis("test")
                 .bezeichnung("test")
                 .unternehmen_stellenanzeigen(unternehmenEntity)
+                .taetigkeitsfelder(new ArrayList<>())
                 .build();
 
         stellenanzeigeEntity = stellenanzeigeRepository.save(stellenanzeige);
@@ -96,8 +101,8 @@ public class BewerbungsServiceTest {
         try {
             Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
             BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
-                    .studentId(studentEntity.getId())
-                    .stellenanzeigeId(stellenanzeigeEntity.getId())
+                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                    .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                     .datum(bewerbung.getDatum())
                     .id(bewerbung.getId())
                     .build();
@@ -111,18 +116,18 @@ public class BewerbungsServiceTest {
             assertEquals(bewerbungFetched.getDatum(), bewerbung.getDatum());
             assertEquals(bewerbungFetched.getBewerbungsSchreiben(), bewerbung.getBewerbungsSchreiben());
             assertThrows(BewerbungsException.class, () -> bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test"));
-        } catch (BewerbungsException e) {
+        } catch (BewerbungsException | ProfileException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testRemove(){
+    public void testRemove() {
         try {
-            Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity,"Test");
+            Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
             BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
-                    .studentId(studentEntity.getId())
-                    .stellenanzeigeId(stellenanzeigeEntity.getId())
+                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                    .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                     .datum(bewerbung.getDatum())
                     .id(bewerbung.getId())
                     .build();
@@ -131,18 +136,18 @@ public class BewerbungsServiceTest {
             BewerbungsException exception = assertThrows(BewerbungsException.class, () -> bewerbungsService.getBewerbung(bewerbungsDTO));
 
             assertEquals(exception.getExceptionType(), BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND, MESSAGE);
-        } catch (BewerbungsException e) {
+        } catch (BewerbungsException | ProfileException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Test
-    public void testBewerbungAlreadyExists() throws BewerbungsException {
+    public void testBewerbungAlreadyExists() throws BewerbungsException, ProfileException {
         // Build
         Bewerbung bewerbung = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
         BewerbungsDTO bewerbungsDTO = BewerbungsDTO.builder()
-                .studentId(studentEntity.getId())
-                .stellenanzeigeId(stellenanzeigeEntity.getId())
+                .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                 .datum(bewerbung.getDatum())
                 .id(bewerbung.getId())
                 .build();
@@ -152,8 +157,8 @@ public class BewerbungsServiceTest {
         BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> {
             Bewerbung bewerbung2 = bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, "Test");
             BewerbungsDTO bewerbungsDTO2 = BewerbungsDTO.builder()
-                    .studentId(studentEntity.getId())
-                    .stellenanzeigeId(stellenanzeigeEntity.getId())
+                    .student(StudentProfileDTOFactory.getInstance().createStudentProfileDTO(studentEntity))
+                    .stellenanzeige(StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTO(stellenanzeigeEntity))
                     .datum(bewerbung2.getDatum())
                     .id(bewerbung2.getId())
                     .build();

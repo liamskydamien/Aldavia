@@ -5,15 +5,18 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BewerbungsDTO {
     private int id;
     private LocalDate datum;
-    private int studentId;
-    private int stellenanzeigeId;
+    private StudentProfileDTO student;
+    private StellenanzeigeDTO stellenanzeige;
     private String status;
     private String bewerbungsSchreiben;
+
+    public void setBewerbungsSchreiben(String bewerbungsSchreiben) {
+        this.bewerbungsSchreiben = bewerbungsSchreiben;
+    }
 }
