@@ -206,6 +206,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         newQualification.setBeschaeftigungsart(beschaeftigungsart.getValue());
         newQualification.setVon(von.getValue());
         newQualification.setBis(bis.getValue());
+        newQualification.setId(-1);
         qualificationList.add(newQualification);
     }
 
