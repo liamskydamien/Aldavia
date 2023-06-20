@@ -30,7 +30,7 @@ public class QualifikationenService {
      * @throws PersistenceException If the Qualifikation is not found
      */
     public Qualifikation addUpdateQualifikation(QualifikationsDTO qualifikationsDTO, Student student) throws PersistenceException {
-        logger.info("Adding Qualifikation to Student with id: " + student.getId());
+        logger.info("Adding Qualifikation to Student with student id: " + student.getId());
         if (qualifikationsDTO.getId() == -1) {
             logger.info("Creating new Qualifikation");
             Qualifikation qualifikation = Qualifikation.builder()
@@ -43,7 +43,7 @@ public class QualifikationenService {
                     .institution(qualifikationsDTO.getInstitution())
                     .build();
             qualifikation.setStudent(student);
-            logger.info("Saving Qualifikation");
+            logger.info("Saving Qualifikation with id: " + qualifikation.getId() + " to database");
             return qualifikationRepository.save(qualifikation);
         } else {
             logger.info("Fetching Qualifikation with id: " + qualifikationsDTO.getId());
