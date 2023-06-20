@@ -29,6 +29,7 @@ public class QualifikationenService {
      * @param student The student
      * @throws PersistenceException If the Qualifikation is not found
      */
+    // TODO bug since the qualification is not updated but a new one gets created
     public Qualifikation addUpdateQualifikation(QualifikationsDTO qualifikationsDTO, Student student) throws PersistenceException {
         logger.info("Adding Qualifikation to Student with student id: " + student.getId());
         if (qualifikationsDTO.getId() == -1) {
