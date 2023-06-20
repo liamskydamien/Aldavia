@@ -58,6 +58,7 @@ public class SearchView extends VerticalLayout {
         grid.setSizeFull();
         Component ui = setUpUI();
         grid.add(ui);
+        grid.setWidth("2600px");
 
 
 
@@ -65,7 +66,7 @@ public class SearchView extends VerticalLayout {
         if (stellenanzeigeList != null) {
             grid.add(searchComponent);
         }
-        grid.setJustifyContentMode(JustifyContentMode.EVENLY);
+        grid.setJustifyContentMode(JustifyContentMode.END);
         add(grid);
 
 
