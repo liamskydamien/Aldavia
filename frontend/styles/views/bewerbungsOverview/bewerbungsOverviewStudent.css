@@ -81,9 +81,10 @@ label{
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
 }
 
-.bewerbungs-overview-student-view{
+vaadin-app-layout{
     background-color: #edf2fd;
 }
 
