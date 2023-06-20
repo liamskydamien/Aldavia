@@ -19,7 +19,7 @@ import org.hbrs.se2.project.aldavia.util.Globals;
 import java.util.List;
 
 @CssImport("./styles/views/bewerbungsOverview/bewerbungsOverviewStudent.css")
-@Route(value = "bewerbungsOverviewStudent")
+@Route(value = "bewerbungsOverviewStudent", layout = LoggedInStateLayout.class)
 public class BewerbungsOverviewStudentView extends Div {
 
     private final BewerbungsOverviewStudent bewerbungsOverviewStudent;
@@ -50,7 +50,7 @@ public class BewerbungsOverviewStudentView extends Div {
     }
 
     private void setUpUI() {
-        add(new H1("Deine Bewerbungen"));
+        this.addClassName("bewerbungs-overview-student-view");
         add(createBewerbungenLayout());
     }
 
@@ -63,6 +63,7 @@ public class BewerbungsOverviewStudentView extends Div {
             VerticalLayout layout = new VerticalLayout();
             layout.setSizeFull();
             layout.setClassName("bewerbungen-layout");
+            layout.add(new H1("Deine Bewerbungen"));
             for (BewerbungsDTO bewerbung : bewerbungen) {
                 layout.add(createBewerbung(bewerbung));
             }
@@ -150,8 +151,9 @@ public class BewerbungsOverviewStudentView extends Div {
         layout.addClassName("taetigkeiten-layout");
         layout.add(new Label("Tätigkeiten: "));
         for (TaetigkeitsfeldDTO taetigkeit : bewerbung.getStellenanzeige().getTaetigkeitsfelder()) {
-            Div div = new Div();
+            Span div = new Span();
             div.addClassName("taetigkeit");
+            div.getElement().getThemeList().add("badge pill");
             div.setText(taetigkeit.getName());
             layout.add(div);
         }

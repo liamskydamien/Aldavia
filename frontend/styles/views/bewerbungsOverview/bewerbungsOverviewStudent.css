@@ -55,6 +55,18 @@ anchor{
     height: 40px;
 }
 
+.remove-bewerbung-button:hover{
+    background-color: #1a73e8;
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+    color: white;
+    cursor: pointer;
+}
+
 label{
     font-size: 1rem;
     font-weight: 500;
@@ -70,8 +82,8 @@ label{
     justify-content: space-between;
     align-items: center;
 }
-.taetigkeit{
-    margin: 0 0 0 0;
-    font-size: 1.5rem;
-    font-weight: 500;
+
+.bewerbungs-overview-student-view{
+    background-color: #edf2fd;
 }
+
