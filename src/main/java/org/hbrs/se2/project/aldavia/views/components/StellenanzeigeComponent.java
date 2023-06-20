@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
@@ -103,9 +104,13 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
     }
 
     private VerticalLayout renderStellenanzeige(Stellenanzeige stellenanzeige, String mode){
+        //Main Body
         VerticalLayout stellenanzeigenLayout = new VerticalLayout();
         stellenanzeigenLayout.addClassName("stellenanzeigenLayout");
         stellenanzeigenLayout.addClassName("card");
+        stellenanzeigenLayout.setWidthFull();
+
+        //Edit Header
         HorizontalLayout editAndDeleteStellenanzeigeArea = editAndDeleteStellenanzeigeArea(stellenanzeige);
         stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea);
 
@@ -115,20 +120,24 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
             editAndDeleteStellenanzeigeArea.setVisible(false);
         }
 
+        //Info Body
+        HorizontalLayout stellenanzeigeInfo = new HorizontalLayout();
+        stellenanzeigeInfo.addClassName("stellenanzeigeInfo");
+        stellenanzeigeInfo.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+
         VerticalLayout stellenanzeigeInfoLeft = new VerticalLayout();
         stellenanzeigeInfoLeft.addClassName("stellenanzeigeInfoLeft");
-
         Span stellenanzeigeTitel = new Span(stellenanzeige.getBezeichnung());
         stellenanzeigeTitel.addClassName("stellenanzeigeTitel");
-
         Span stellenanzeigeBeschaeftigungsverheltnis = new Span(stellenanzeige.getBeschaeftigungsverhaeltnis());
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
-
         stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis, renderTaetigkeit(stellenanzeige.getTaetigkeitsfelder()));
 
-        Details stellenanzeigeCapsul = new Details(stellenanzeigeInfoLeft,bewerbungenScroler(stellenanzeige.getBewerbungen()));
-        stellenanzeigeCapsul.addThemeVariants(DetailsVariant.REVERSE);
-        stellenanzeigenLayout.add(stellenanzeigeCapsul);
+        VerticalLayout stellenanzeigeInfoRight = new VerticalLayout();
+        stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
+        Span stellenanzeigeDatum = new Span(stellenanzeige.getErstellungsdatum().toString());
+        stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
+        stellenanzeigeInfoRight.add(stellenanzeigeDatum);
         return stellenanzeigenLayout;
     }
 
@@ -154,6 +163,10 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         }
 
         return taetigkeitLayout;
+    }
+
+    private void navigateToBewerbung(Stellenanzeige stellenanzeige){
+        UI.getCurrent().navigate(Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW+"/" + stellenanzeige.getId());
     }
 
     private Scroller bewerbungenScroler(List<Bewerbung> bewerbungList){

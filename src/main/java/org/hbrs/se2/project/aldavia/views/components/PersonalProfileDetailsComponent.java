@@ -124,7 +124,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             if(studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")){
                 profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
             } else {
-                // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
+                // lade das Profilbild aus studentProfileDTO.getProfilbild()
                 String fileName = studentProfileDTO.getProfilbild();
                 String path = "./src/main/webapp/profile-images/" + fileName;
                 StreamResource resource = new StreamResource(fileName, () -> {
