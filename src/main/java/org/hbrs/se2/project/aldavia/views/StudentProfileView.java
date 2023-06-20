@@ -1,12 +1,8 @@
 package org.hbrs.se2.project.aldavia.views;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -33,14 +29,12 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private StudentProfileDTO studentProfileDTO;
     private Div profileWrapper = null;
 
-    private StudentPersonalDetailsComponent studentPersonalDetailsComponent;
+    private PersonalProfileDetailsComponent studentPersonalDetailsComponent;
     private AboutStudentComponent aboutStudentComponent;
     private SkillsComponent skillsComponent;
     private LanguageComponent languageComponent;
     private QualificationComponent qualificationComponent;
-
-    private Button editButton;
-    private Button saveButton;
+    private EditAndSaveProfileButton editAndSaveProfileButton;
 
     @Override
     public void setParameter(BeforeEvent event,
@@ -50,8 +44,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
             ui.access(() -> {
 
                 if (profileWrapper == null) {
-                    studentPersonalDetailsComponent = new StudentPersonalDetailsComponent(studentProfileDTO,studentProfileControl);
-
+                    studentPersonalDetailsComponent = new PersonalProfileDetailsComponent(studentProfileDTO,studentProfileControl);
                     profileWrapper = new Div();
                     profileWrapper.addClassName("profile-wrapper");
                     profileWrapper.add(studentPersonalDetailsComponent);
@@ -66,33 +59,31 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     @Autowired
     public StudentProfileView(StudentProfileControl studentProfileControl){
         this.studentProfileControl = studentProfileControl;
+        editAndSaveProfileButton = new EditAndSaveProfileButton();
         addClassName("profile-view");
 
-        HorizontalLayout topLayout = new HorizontalLayout();
-        topLayout.addClassName("topButtons");
-        topLayout.setWidthFull();
-        topLayout.setJustifyContentMode(JustifyContentMode.END);
-        editButton = new Button("Bearbeiten", event -> switchToEditMode());
-        saveButton = new Button("Speichern", event -> {
+        editAndSaveProfileButton.addListenerToEditButton(e -> {
+            switchToEditMode();
+        });
+        editAndSaveProfileButton.addListenerToSaveButton(e -> {
             try {
                 switchToViewMode();
-            } catch (PersistenceException | ProfileException e) {
-                throw new RuntimeException(e);
+            } catch (PersistenceException | ProfileException persistenceException) {
+                persistenceException.printStackTrace();
             }
         });
-        editButton.setVisible(true);
-        saveButton.setVisible(false);
-        editButton.addClassName("editSaveButton");
-        saveButton.addClassName("editSaveButton");
-        topLayout.add(editButton);
-        topLayout.add(saveButton);
-        add(topLayout);
+
+        editAndSaveProfileButton.setEditButtonVisible(true);
+        editAndSaveProfileButton.setSaveButtonVisible(false);
+
+        add(editAndSaveProfileButton);
 
     }
 
     private void switchToEditMode(){
-        editButton.setVisible(false);
-        saveButton.setVisible(true);
+        editAndSaveProfileButton.setEditButtonVisible(false);
+        editAndSaveProfileButton.setSaveButtonVisible(true);
+
         studentPersonalDetailsComponent.switchEditMode();
         aboutStudentComponent.switchEditMode();
         skillsComponent.switchEditMode();
@@ -102,8 +93,8 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     }
 
     private void switchToViewMode() throws PersistenceException, ProfileException {
-        editButton.setVisible(true);
-        saveButton.setVisible(false);
+        editAndSaveProfileButton.setEditButtonVisible(true);
+        editAndSaveProfileButton.setSaveButtonVisible(false);
 
         studentPersonalDetailsComponent.switchViewMode(getCurrentUserName());
         aboutStudentComponent.switchViewMode(getCurrentUserName());

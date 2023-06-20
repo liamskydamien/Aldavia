@@ -57,7 +57,7 @@ public class Stellenanzeige {
 
     // stellenanzeige_taeitgkeitsfeld
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Taetigkeitsfeld> taetigkeitsfelder;
 
     @JoinTable(

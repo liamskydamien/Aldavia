@@ -5,7 +5,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
@@ -46,6 +45,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     HorizontalLayout addQualificationLayout;
 
 
+    //TODO: add delete button
     public QualificationComponent(StudentProfileControl studentProfileControl, StudentProfileDTO studentProfileDTO) {
         this.studentProfileControl = studentProfileControl;
         this.studentProfileDTO = studentProfileDTO;

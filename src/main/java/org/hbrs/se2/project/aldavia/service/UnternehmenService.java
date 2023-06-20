@@ -63,6 +63,17 @@ public class UnternehmenService {
 
             if (dto.getStellenanzeigen() != null) {
                 if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
+                    unternehmen.getStellenanzeigen().clear();
+                    List<Stellenanzeige> stellenanzeigeFromDTO = new ArrayList<>();
+                    for (Stellenanzeige s : stellenanzeigeFromDTO) {
+                        unternehmen.addStellenanzeige(s);
+                    }
+                }
+            }
+
+
+            /*if (dto.getStellenanzeigen() != null) {
+                if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
                     for (Stellenanzeige s : unternehmen.getStellenanzeigen()) {
                         unternehmen.removeStellenanzeige(s);
                     }
@@ -70,7 +81,7 @@ public class UnternehmenService {
                         unternehmen.addStellenanzeige(s);
                     }
                 }
-            }
+            }*/
 
             if (dto.getAp_nachname() != null) {
                 if (!dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {

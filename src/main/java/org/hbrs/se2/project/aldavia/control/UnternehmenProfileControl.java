@@ -9,9 +9,11 @@ import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UnternehmenProfileControl {
     private final UnternehmenService unternehmenService;
     private final UnternehmenProfileDTOFactory unternehmenProfileDTOFactory;

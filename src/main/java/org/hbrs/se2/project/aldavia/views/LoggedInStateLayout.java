@@ -45,9 +45,10 @@ public class LoggedInStateLayout extends AppLayout {
         Image logo = new Image("images/aldavia.png", "AldaVia logo");
 
         if(checkIfUserIsLoggedIn()){
+            if(checkIfUserIsStudent()){
             navigateStudentHomeLogo(logo);
-        } else {
-            navigateCompanyHomeLogo(logo);
+            } else if (checkIfUserIsUnternehmen()){
+                navigateCompanyHomeLogo(logo);}
         }
 
         layout.add(logo);
@@ -121,11 +122,11 @@ public class LoggedInStateLayout extends AppLayout {
             routerLink.add(iconUser, label);
         }
 
-        //TODO Routerlink für Unternehmen
-        /*else {
-            routerLink = new RouterLink(null,CompanyProfileView.class, getCurrentUserName());
+
+        if(checkIfUserIsUnternehmen()) {
+            routerLink = new RouterLink(null, UnternehmenProfileView.class, getCurrentUserName());
             routerLink.add(iconUser, label);
-        }*/
+        }
 
 
         // Füge den RouterLink zum Tab hinzu
@@ -167,7 +168,7 @@ public class LoggedInStateLayout extends AppLayout {
     }
 
 
-    private static UserDTO getCurrentUser() {
+    public static UserDTO getCurrentUser() {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
@@ -181,7 +182,7 @@ public class LoggedInStateLayout extends AppLayout {
         return true;
     }
 
-    private static boolean checkIfUserIsStudent(){
+    public static boolean checkIfUserIsStudent(){
         if(!checkIfUserIsLoggedIn()){
             return false;
         }
@@ -189,7 +190,7 @@ public class LoggedInStateLayout extends AppLayout {
         return authorizationControl.isUserInRole(getCurrentUser(), Globals.Roles.STUDENT);
     }
 
-    private static boolean checkIfUserIsUnternehmen(){
+    public static boolean checkIfUserIsUnternehmen(){
         if(!checkIfUserIsLoggedIn()){
             return false;
         }

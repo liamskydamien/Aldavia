@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -22,8 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CssImport("./styles/views/profile/studentProfile.css")
-public class SkillsComponent extends VerticalLayout implements ProfileComponent{
+public class InterestComponent extends VerticalLayout implements ProfileComponent {
 
 
     private final StudentProfileControl studentProfileControl;
@@ -37,7 +34,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
     private Span noSkill;
     private Map<KenntnisDTO, TextField> skillFields = new HashMap<>();
 
-    public SkillsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
+    public InterestComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
         this.studentProfileDTO = studentProfileDTO;
         kenntnisDTOS = studentProfileDTO.getKenntnisse();
         this.studentProfileControl = studentProfileControl;
@@ -180,4 +177,5 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         });
         return addSkillButton;
     }
+
 }
