@@ -66,4 +66,13 @@ public class BewerbungsService {
             throw new BewerbungsException("Bewerbung not found", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_NOT_FOUND);
         }
     }
+
+    /**
+     * Remove a Bewerbung
+     * @param bewerbung The bewerbung
+     */
+    public void removeBewerbung(BewerbungsDTO bewerbung) throws BewerbungsException {
+        Bewerbung bewerbungEntity = getBewerbung(bewerbung);
+        removeBewerbung(bewerbungEntity);
+    }
 }
