@@ -11,11 +11,4 @@ import org.springframework.stereotype.Component;
 @Component
 //TODO: Stellenanzeige DTO umwandeln
 public class StellenanzeigeBewerbungsView extends VerticalLayout {
-    private Stellenanzeige stellenanzeige;
-
-    @Autowired
-    public StellenanzeigeBewerbungsView(Stellenanzeige stellenanzeige) {
-        addClassName("stellenanzeigeBewerbungsView");
-        this.stellenanzeige = stellenanzeige;
-    }
 }

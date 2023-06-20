@@ -25,6 +25,7 @@ import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -34,6 +35,8 @@ import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentU
 @Route(value = Globals.Pages.COMPANY_PROFILE_VIEW, layout = LoggedInStateLayout.class)
 @PageTitle("ProfilUnternehmen")
 @CssImport("./styles/views/profile/studentProfile.css")
+@Transactional
+
 public class UnternehmenProfileView extends VerticalLayout implements HasUrlParameter<String> {
     private final UnternehmenProfileControl unternehmenProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
@@ -44,6 +47,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private AnsprechPartnerComponent ansprechPartnerComponent;
     private AdressenComponent adressenComponent;
     private EditAndSaveProfileButton editAndSaveProfileButton;
+    private StellenanzeigeComponent stellenanzeigeComponent;
 
 
     private Button save = new Button("Save");
@@ -133,6 +137,9 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
         VerticalLayout layout = new VerticalLayout();
         layout.addClassName("bottom-layout");
         layout.add(createAboutAnsprechpartnerAdressenLayout());
+
+        stellenanzeigeComponent = new StellenanzeigeComponent(unternehmenProfileDTO, unternehmenProfileControl);
+        layout.add(stellenanzeigeComponent);
         return layout;
     }
 

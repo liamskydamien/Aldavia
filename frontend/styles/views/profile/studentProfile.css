@@ -262,13 +262,39 @@ vaadin-email-field[invalid]::part(input-field)::after {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    justify-content: center;
+}
+.bottom-layout{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+.about-company{
+    position: relative;
+    width: 70% !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /*Stellenanzeigen*/
-.stellenanzeige-taetigkeit{
-    color: #1e1e1e;
-    font-size: 1rem;
-    border: 1px solid #1e1e1e;
-    border-radius: 8px;
+.noStellenanzeige{
+    margin-left: 0;
+    width: 600px !important;
+}
+
+.stellenanzeige{
+    width: 70% !important;
 
 }
+
+.add-Taetigkeit-Field{
+    width: 100%;
+}
+
+
+
+

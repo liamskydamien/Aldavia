@@ -16,7 +16,8 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
     private H2 title;
     private TextField vornameAnsprechPartner;
     private TextField nachnameAnsprechPartner;
-    Span noAnsprechPartner;
+    private Span noAnsprechPartner;
+    private Span ansprechPartner = new Span();
 
     public AnsprechPartnerComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
@@ -32,7 +33,6 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
     private void setUpUI(){
         add(title);
         add(noAnsprechPartner);
-        noAnsprechPartner.setVisible(false);
         vornameAnsprechPartner = new TextField();
         vornameAnsprechPartner.setPlaceholder("Vorname");
         vornameAnsprechPartner.setWidthFull();
@@ -45,19 +45,27 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
     }
 
     private void updateView(){
-        if(unternehmenProfileDTO.getAp_nachname()==null || unternehmenProfileDTO.getAp_vorname()==null) {
+        if(unternehmenProfileDTO.getAp_nachname()==null || unternehmenProfileDTO.getAp_vorname()==null || unternehmenProfileDTO.getAp_nachname().equals("") || unternehmenProfileDTO.getAp_vorname().equals("")) {
             noAnsprechPartner.setVisible(true);
             noAnsprechPartner.getStyle().set("font-style", "italic");
+            vornameAnsprechPartner.setVisible(false);
+            nachnameAnsprechPartner.setVisible(false);
+        } else {
+            noAnsprechPartner.setVisible(false);
+            ansprechPartner = new Span();
+            ansprechPartner.setText(unternehmenProfileDTO.getAp_vorname() + " " + unternehmenProfileDTO.getAp_nachname());
+            add(ansprechPartner);
+            vornameAnsprechPartner.setValue(unternehmenProfileDTO.getAp_vorname());
+            nachnameAnsprechPartner.setValue(unternehmenProfileDTO.getAp_nachname());
+            vornameAnsprechPartner.setVisible(false);
+            nachnameAnsprechPartner.setVisible(false);
         }
-        Span ansprechPartner = new Span();
-        ansprechPartner.setText(unternehmenProfileDTO.getAp_vorname() + " " + unternehmenProfileDTO.getAp_nachname());
-        add(ansprechPartner);
-        vornameAnsprechPartner.setVisible(false);
-        nachnameAnsprechPartner.setVisible(false);
+
     }
 
     private void updateEdit(){
         noAnsprechPartner.setVisible(false);
+        ansprechPartner.setVisible(false);
         vornameAnsprechPartner.setVisible(true);
         nachnameAnsprechPartner.setVisible(true);
         vornameAnsprechPartner.setReadOnly(false);
