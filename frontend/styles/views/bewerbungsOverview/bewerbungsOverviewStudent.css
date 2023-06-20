@@ -17,11 +17,6 @@ h2{
     align-items: center;
 }
 
-iron-icon{
-    width: 100px;
-    height: 100px;
-}
-
 anchor{
     text-decoration: none;
     color: black;
