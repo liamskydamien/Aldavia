@@ -45,9 +45,10 @@ public class LoggedInStateLayout extends AppLayout {
         Image logo = new Image("images/aldavia.png", "AldaVia logo");
 
         if(checkIfUserIsLoggedIn()){
+            if(checkIfUserIsStudent()){
             navigateStudentHomeLogo(logo);
-        } else {
-            navigateCompanyHomeLogo(logo);
+            } else if (checkIfUserIsUnternehmen()){
+                navigateCompanyHomeLogo(logo);}
         }
 
         layout.add(logo);
