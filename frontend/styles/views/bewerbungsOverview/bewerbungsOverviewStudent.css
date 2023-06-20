@@ -1,0 +1,77 @@
+h2{
+    margin: 15px 0 0 0;
+}
+
+.card{
+    border-radius: 25px;
+    background-color: rgb(255, 255, 255);
+    padding: 20px 20px 20px 30px;
+    margin: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.bewerbungsstatus-layout{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+iron-icon{
+    width: 100px;
+    height: 100px;
+}
+
+anchor{
+    text-decoration: none;
+    color: black;
+}
+
+.pending{
+    width: 100px;
+    height: 100px;
+    color: #FFA000;
+}
+
+.accepted{
+    width: 100px;
+    height: 100px;
+    color: #4CAF50;
+}
+
+.rejected{
+    width: 100px;
+    height: 100px;
+    color: #F44336;
+}
+
+.remove-bewerbung-button{
+    margin: 30px 30px 0 0;
+    background-color: transparent;
+    border: 1px solid #1a73e8;
+    color: #1a73e8;
+    border-radius: 20px;
+    width: 250px;
+    height: 40px;
+}
+
+label{
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.stellenanzeige-bewerbungs-layout{
+    width: 100%;
+}
+
+.bewerbungen-layout{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.taetigkeit{
+    margin: 0 0 0 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}

@@ -29,4 +29,7 @@ public class BewerbungsOverviewStudent {
         BewerbungsListFactory bewerbungsListFactory = BewerbungsListFactory.getInstance();
         return bewerbungsListFactory.createBewerbungsDTOs(student.getBewerbungen());
     }
+
+    public void removeBewerbung(BewerbungsDTO bewerbung) {
+    }
 }
