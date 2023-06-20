@@ -35,15 +35,13 @@ public class StellenanzeigeService {
     public void updateStellenanzeigeInformationen(Stellenanzeige stellenanzeige, StellenanzeigeDTO dto) throws ProfileException {
         try {
 
-            if (dto.getBewerbungen() != null) {
-                if (!(dto.getBewerbungen().equals(stellenanzeige.getBewerbungen()))) {
+            if (dto.getBewerbungen() != null && !(dto.getBewerbungen().equals(stellenanzeige.getBewerbungen()))) {
                     for (Bewerbung b : stellenanzeige.getBewerbungen()) {
                         stellenanzeige.removeBewerbung(b);
                     }
                     for (Bewerbung b : dto.getBewerbungen()) {
                         stellenanzeige.addBewerbung(b);
                     }
-                }
             }
 
             if(dto.getBeschreibung() != null) {
@@ -70,8 +68,7 @@ public class StellenanzeigeService {
                 stellenanzeige.setErstellungsdatum(dto.getErstellungsdatum());
             }
 
-            if(dto.getTaetigkeitsfelder() != null) {
-                if (!(dto.getTaetigkeitsfelder().equals(stellenanzeige.getTaetigkeitsfelder()))) {
+            if(dto.getTaetigkeitsfelder() != null && !(dto.getTaetigkeitsfelder().equals(stellenanzeige.getTaetigkeitsfelder()))) {
                     for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
                         stellenanzeige.removeTaetigkeitsfeld(t);
                         taetigkeitsfeldRepository.save(t);
@@ -80,15 +77,11 @@ public class StellenanzeigeService {
                         stellenanzeige.addTaetigkeitsfeld(t);
                         taetigkeitsfeldRepository.save(t);
                     }
-                }
-
             }
 
-            if(dto.getUnternehmen() != null) {
-               if (stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
+            if(dto.getUnternehmen() != null & stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
                    stellenanzeige.setUnternehmen(dto.getUnternehmen());
                    unternehmenRepository.save(dto.getUnternehmen());
-                    }
             }
 
 
@@ -121,7 +114,6 @@ public class StellenanzeigeService {
     public void newStellenanzeige(StellenanzeigeDTO dto) throws ProfileException {
         Stellenanzeige stellenanzeige = new Stellenanzeige();
         updateStellenanzeigeInformationen(stellenanzeige,dto);
-
     }
 
 }

@@ -7,11 +7,9 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,16 +20,11 @@ public class StudentService {
 
     public static final String FROM_DB = " from DB";
 
-
-
     private final StudentRepository studentRepository;
 
-
-    private final QualifikationenService qualifikationenService;
+    private final QualifikationenService qualifikationenService = new QualifikationenService();
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
-
-
 
     /**
      * Get the student profile of a student
@@ -46,7 +39,7 @@ public class StudentService {
             return student.get();
         }
         else {
-            System.out.println("Student not found");
+            logger.error("Student " + username + " not found");
             throw new ProfileException("Student not found", ProfileException.ProfileExceptionType.PROFILE_NOT_FOUND);
         }
     }
@@ -60,64 +53,66 @@ public class StudentService {
     public void updateStudentInformation(Student student, StudentProfileDTO changeStudentInformationDTO) throws ProfileException {
         logger.info("Updating student " + student.getUser().getUserid() + FROM_DB);
         try {
-
             User user = student.getUser();
-            if (changeStudentInformationDTO.getBeschreibung() != null) {
-                user.setBeschreibung(changeStudentInformationDTO.getBeschreibung());
-            }
-
-            if (changeStudentInformationDTO.getEmail() != null) {
-                user.setEmail(changeStudentInformationDTO.getEmail());
-            }
-
-            if (changeStudentInformationDTO.getTelefonnummer() != null) {
-                user.setPhone(changeStudentInformationDTO.getTelefonnummer());
-            }
-
-            if (changeStudentInformationDTO.getProfilbild() != null) {
-                user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
-            }
-
-            if (changeStudentInformationDTO.getProfilbild() != null) {
-                user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
-            }
-
-            if (changeStudentInformationDTO.getVorname() != null) {
-                student.setVorname(changeStudentInformationDTO.getVorname());
-            }
-
-            if (changeStudentInformationDTO.getNachname() != null) {
-                student.setNachname(changeStudentInformationDTO.getNachname());
-            }
-
-            if (changeStudentInformationDTO.getGeburtsdatum() != null) {
-                student.setGeburtsdatum(changeStudentInformationDTO.getGeburtsdatum());
-            }
-
-            if (changeStudentInformationDTO.getLebenslauf() != null) {
-                student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
-            }
-
-            if (changeStudentInformationDTO.getStudienbeginn() != null) {
-                student.setStudienbeginn(changeStudentInformationDTO.getStudienbeginn());
-            }
-
-            if (changeStudentInformationDTO.getStudiengang() != null) {
-                student.setStudiengang(changeStudentInformationDTO.getStudiengang());
-            }
-
-            if (changeStudentInformationDTO.getMatrikelNummer() != null) {
-                student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
-            }
-
-            if (changeStudentInformationDTO.getLebenslauf() != null) {
-                student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
-            }
+            updateUserData(user, changeStudentInformationDTO);
+            updateStudentData(student, changeStudentInformationDTO);
             logger.info("Saving updated student " + student.getUser().getUserid());
             studentRepository.save(student);
         }
         catch (Exception e) {
             throw new ProfileException("Error while updating student information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
+        }
+    }
+
+    private void updateUserData(User user, StudentProfileDTO changeStudentInformationDTO){
+        if (changeStudentInformationDTO.getBeschreibung() != null) {
+            user.setBeschreibung(changeStudentInformationDTO.getBeschreibung());
+        }
+
+        if (changeStudentInformationDTO.getEmail() != null) {
+            user.setEmail(changeStudentInformationDTO.getEmail());
+        }
+
+        if (changeStudentInformationDTO.getTelefonnummer() != null) {
+            user.setPhone(changeStudentInformationDTO.getTelefonnummer());
+        }
+
+        if (changeStudentInformationDTO.getProfilbild() != null) {
+            user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
+        }
+    }
+
+    private void updateStudentData(Student student, StudentProfileDTO changeStudentInformationDTO){
+        if (changeStudentInformationDTO.getVorname() != null) {
+            student.setVorname(changeStudentInformationDTO.getVorname());
+        }
+
+        if (changeStudentInformationDTO.getNachname() != null) {
+            student.setNachname(changeStudentInformationDTO.getNachname());
+        }
+
+        if (changeStudentInformationDTO.getGeburtsdatum() != null) {
+            student.setGeburtsdatum(changeStudentInformationDTO.getGeburtsdatum());
+        }
+
+        if (changeStudentInformationDTO.getLebenslauf() != null) {
+            student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
+        }
+
+        if (changeStudentInformationDTO.getStudienbeginn() != null) {
+            student.setStudienbeginn(changeStudentInformationDTO.getStudienbeginn());
+        }
+
+        if (changeStudentInformationDTO.getStudiengang() != null) {
+            student.setStudiengang(changeStudentInformationDTO.getStudiengang());
+        }
+
+        if (changeStudentInformationDTO.getMatrikelNummer() != null) {
+            student.setMatrikelNummer(changeStudentInformationDTO.getMatrikelNummer());
+        }
+
+        if (changeStudentInformationDTO.getLebenslauf() != null) {
+            student.setLebenslauf(changeStudentInformationDTO.getLebenslauf());
         }
     }
 

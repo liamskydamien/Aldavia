@@ -1,43 +1,37 @@
 package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 
-import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewStudent;
+import org.hbrs.se2.project.aldavia.control.BewerbungsOverviewUnternehmen;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDataDTO;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigenDataDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
-import org.hbrs.se2.project.aldavia.service.BewerbungsService;
-import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
-@Transactional
-public class BewerbungsOverviewTest {
-    public static final String TEST = "test";
-    private BewerbungsOverviewStudent bewerbungsOverviewStudent;
+public class BewerbungsOverviewUnternehmenTest {
+
+    private static final String TEST = "testvalue";
     @Mock
-    private StudentService studentServiceMock;
-    @Mock
-    private BewerbungsService bewerbungsServiceMock;
+    private UnternehmenService unternehmenServiceMock;
+
+    private BewerbungsOverviewUnternehmen bewerbungsOverviewUnternehmen;
 
     @BeforeEach
     public void setup() {
-        bewerbungsOverviewStudent = new BewerbungsOverviewStudent(studentServiceMock, bewerbungsServiceMock);
+        bewerbungsOverviewUnternehmen = new BewerbungsOverviewUnternehmen(unternehmenServiceMock);
     }
 
     @Test
-    public void testGetBewerbungen() throws ProfileException {
-
+    public void testGetBewerbungenStellenanzeige() throws ProfileException {
         // Setup
         String userid = "testBewerbung";
 
@@ -99,13 +93,18 @@ public class BewerbungsOverviewTest {
         bewerbungen.add(bewerbung);
         bewerbungen.add(bewerbung2);
         student.setBewerbungen(bewerbungen);
+        stellenanzeige.addBewerbung(bewerbung);
+        stellenanzeige.addBewerbung(bewerbung2);
+        unternehmen.addStellenanzeige(stellenanzeige);
 
-        given(studentServiceMock.getStudent(userid)).willReturn(student);
+        given(unternehmenServiceMock.getUnternehmen(userid)).willReturn(unternehmen);
 
-       // Run the test
-        List<BewerbungsDataDTO> result = bewerbungsOverviewStudent.getBewerbungenStudent(userid);
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getId());
-        assertEquals(2, result.get(1).getId());
+        // Run the test
+        final List<StellenanzeigenDataDTO> result = bewerbungsOverviewUnternehmen.getBewerbungenStellenanzeige(userid);
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getBewerbungen().size());
+        assertEquals(TEST, result.get(0).getBewerbungen().get(0).getBewerbungsSchreiben());
+        assertEquals(TEST, result.get(0).getBewerbungen().get(1).getBewerbungsSchreiben());
     }
+
 }

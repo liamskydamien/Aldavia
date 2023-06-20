@@ -9,6 +9,8 @@ import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,8 @@ public class BewerbungsControl {
     private final StudentService studentService;
     private final StellenanzeigenService stellenanzeigenService;
 
+    Logger logger = LoggerFactory.getLogger(BewerbungsControl.class);
+
     /**
      * Adds a Bewerbung to the database
      * @param studentUsername The username of the student
@@ -29,14 +33,14 @@ public class BewerbungsControl {
      */
     public void addBewerbung(String studentUsername, StellenanzeigeDTO stellenanzeigeDTO, String bewerbungsSchreiben) throws BewerbungsException {
         try {
+            logger.info("Retrieving Student and Stellenanzeige from Database");
             Student student = studentService.getStudent(studentUsername);
             Stellenanzeige stellenanzeige = stellenanzeigenService.getStellenanzeige(stellenanzeigeDTO);
+            logger.info("Adding Bewerbung to Database");
             bewerbungsService.addBewerbung(student, stellenanzeige, bewerbungsSchreiben);
         }
-        catch (BewerbungsException bewerbungsException){
-            throw bewerbungsException;
-        }
         catch (Exception e) {
+            logger.error("Bewerbung could not be added", e);
             throw new BewerbungsException("Bewerbung could not be added", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_ADDED);
         }
     }
@@ -48,8 +52,10 @@ public class BewerbungsControl {
      */
     public void deleteBewerbung(BewerbungsDTO bewerbungsDTO) throws BewerbungsException {
         try {
+            logger.info("Deleting Bewerbung from Database");
             bewerbungsService.removeBewerbung(bewerbungsService.getBewerbung(bewerbungsDTO));
         } catch (Exception e) {
+            logger.error("Bewerbung could not be deleted", e);
             throw new BewerbungsException("Bewerbung could not be deleted", BewerbungsException.BewerbungsExceptionType.BEWERBUNG_COULD_NOT_BE_DELETED);
         }
     }

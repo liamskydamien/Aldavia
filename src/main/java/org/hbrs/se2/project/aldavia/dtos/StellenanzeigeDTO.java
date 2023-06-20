@@ -21,5 +21,6 @@ public class StellenanzeigeDTO {
     private String bezahlung;
     private String beschaeftigungsumfang;
     private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
-    private UnternehmenDataDTO unternehmen;
+    private List<BewerbungsDTO> bewerbungen;
+    private UnternehmenProfileDTO unternehmen;
 }

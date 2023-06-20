@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+import java.util.List;
+
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class StudentDataDTO {
-    private String vorname;
-    private String nachname;
-    private String profileLink;
+@AllArgsConstructor
+@Getter
+public class StellenanzeigenDataDTO {
+    private List<BewerbungsDTO> bewerbungen;
+    private StellenanzeigeDTO stellenanzeige;
 }

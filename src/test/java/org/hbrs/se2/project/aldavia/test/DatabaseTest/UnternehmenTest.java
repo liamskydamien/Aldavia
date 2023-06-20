@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -94,52 +91,4 @@ public class UnternehmenTest {
     }
 
     //Unternehmen-Stellenanzeigen wurde schon ausgiebig im Test: StellenanzeigeTest getestet
-
-  /*  @Test
-    public void unternehmenAdressen() {
-        adresseRepository.save(adresse1);
-        adresseRepository.save(adresse2);
-        assertEquals(true, adresseRepository.existsById(adresse1.getId()));
-        assertEquals(true, adresseRepository.existsById(adresse2.getId()));
-
-        unternehmen1.addAdresse(adresse1);
-        unternehmen1.addAdresse(adresse2);
-        unternehmenRepository.save(unternehmen1);
-        assertEquals(true, unternehmenRepository.existsById(unternehmen1.getId()));
-
-        Unternehmen awaitUnternehmen = unternehmenRepository.findById(unternehmen1.getId()).get();
-        Adresse awaitAdresse1 = adresseRepository.findById(adresse1.getId()).get();
-        Adresse awaitAdresse2 = adresseRepository.findById(adresse2.getId()).get();
-
-        //Get Adressen von Unternehmen
-        Set<Adresse> awaitAdressen = awaitUnternehmen.getAdressen();
-        assertEquals(awaitAdressen.contains(adresse1), true);
-        assertEquals(awaitAdressen.contains(adresse2),true);
-
-        adresse1.addUnternehmen(unternehmen1);
-        adresse2.addUnternehmen(unternehmen2);
-
-        Set<Unternehmen> awaitUnternehmenA1 = awaitAdresse1.getUnternehmen();
-        Set<Unternehmen> awaitUnternehmenA2 = awaitAdresse2.getUnternehmen();
-        assertEquals(true, awaitUnternehmenA1.contains(unternehmen1));
-        assertEquals(true, awaitUnternehmenA2.contains(unternehmen2));
-
-
-        //Löschen des Unternehmens
-        unternehmenRepository.deleteById(unternehmen1.getId());
-        assertEquals(false, unternehmenRepository.existsById(unternehmen1.getId()));
-        //Adressen dürfen nicht gelöscht sein
-        assertEquals(true, adresseRepository.existsById(adresse1.getId()));
-        assertEquals(true, adresseRepository.existsById(adresse2.getId()));
-
-        //Löschen der Adressen
-        adresseRepository.deleteById(adresse1.getId());
-        adresseRepository.deleteById(adresse2.getId());
-        assertEquals(false, adresseRepository.existsById(adresse1.getId()));
-        assertEquals(false, adresseRepository.existsById(adresse2.getId()));
-
-
-
-
-    } */
 }

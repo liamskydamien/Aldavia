@@ -11,6 +11,8 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,8 @@ public class QualifikationsControlTest {
     private Student student;
     private QualifikationsDTO qualifikationDTO;
     private Qualifikation qualifikationTest;
+
+    private Logger logger = LoggerFactory.getLogger(QualifikationsControlTest.class);
 
     @BeforeEach
     public void setUp(){
@@ -78,7 +82,7 @@ public class QualifikationsControlTest {
             qualifikationControl.removeQualifikation(qualifikationDTO);
         }
         catch (Exception e){
-            System.out.println("Fehler beim Löschen der Testdaten");
+            logger.error("Fehler beim Löschen der Testdaten");
         }
         studentRepository.deleteById(student.getId());
         qualifikationTest = null;

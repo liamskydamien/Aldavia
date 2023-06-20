@@ -8,6 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.RolleRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,7 +64,7 @@ public class RegistrationControlTest {
 
 
         //then
-        assertEquals (awaitResult.getReason(),RegistrationResult.REGISTRATION_SUCCESSFULL);
+        assertEquals (awaitResult.getReason(), Reason.REGISTRATION_SUCCESSFULL);
 
     }
 
@@ -85,6 +86,6 @@ public class RegistrationControlTest {
         verify(unternehmenRepositoryMock,times(1)).save(any());
 
         //then
-        assertEquals (awaitResult.getReason(),RegistrationResult.REGISTRATION_SUCCESSFULL);
+        assertEquals (awaitResult.getReason(),Reason.REGISTRATION_SUCCESSFULL);
     }
 }
