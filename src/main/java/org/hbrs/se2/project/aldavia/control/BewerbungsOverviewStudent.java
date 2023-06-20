@@ -1,10 +1,12 @@
 package org.hbrs.se2.project.aldavia.control;
 
 import lombok.RequiredArgsConstructor;
+import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.BewerbungsListFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.entities.Student;
+import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BewerbungsOverviewStudent {
     private final StudentService studentService;
+    private final BewerbungsService bewerbungsService;
 
     /**
      * Get the Bewerbungen of a student
@@ -28,5 +31,13 @@ public class BewerbungsOverviewStudent {
         Student student = studentService.getStudent(username);
         BewerbungsListFactory bewerbungsListFactory = BewerbungsListFactory.getInstance();
         return bewerbungsListFactory.createBewerbungsDTOs(student.getBewerbungen());
+    }
+
+    /**
+     * Remove a Bewerbung
+     * @param bewerbung The bewerbung
+     */
+    public void removeBewerbung(BewerbungsDTO bewerbung) throws BewerbungsException {
+        bewerbungsService.removeBewerbung(bewerbung);
     }
 }
