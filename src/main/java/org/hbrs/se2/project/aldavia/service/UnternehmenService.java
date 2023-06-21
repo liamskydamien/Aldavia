@@ -8,10 +8,7 @@ import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -64,7 +61,7 @@ public class UnternehmenService {
             if (dto.getStellenanzeigen() != null) {
                 if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
                     unternehmen.getStellenanzeigen().clear();
-                    List<Stellenanzeige> stellenanzeigeFromDTO = new ArrayList<>();
+                    Set<Stellenanzeige> stellenanzeigeFromDTO = dto.getStellenanzeigen();
                     for (Stellenanzeige s : stellenanzeigeFromDTO) {
                         unternehmen.addStellenanzeige(s);
                     }

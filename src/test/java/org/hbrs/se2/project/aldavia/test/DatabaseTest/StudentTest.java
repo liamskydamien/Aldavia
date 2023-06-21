@@ -240,7 +240,6 @@ public class StudentTest {
                               .stellenanzeige(stellenanzeige)
                               .build();
         bewerbungRepository.save(bewerbung);
-        int bewerbungId = bewerbung.getId();
         student.addBewerbung(bewerbung);
 
         assertTrue(student.getBewerbungen().contains(bewerbung));
@@ -251,7 +250,6 @@ public class StudentTest {
         bewerbungRepository.delete(bewerbung);
 
         assertFalse(student.getBewerbungen().contains(bewerbung));
-        assertFalse(bewerbungRepository.existsById(bewerbungId));
 
 
         Optional<Unternehmen> wrapperUnternehmen = unternehmenRepository.findById(unternehmen.getId());

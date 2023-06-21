@@ -87,7 +87,7 @@ public class CreateStellenanzeigeView extends VerticalLayout {
             unternehmenProfileDTO.setStellenanzeigen(stellenanzeigeSet);
             unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO,getCurrentUserName());
             if(unternehmenProfileDTO.getStellenanzeigen().size() == stellenanzeigeSet.size()){
-                getUI().get().navigate(Globals.Pages.COMPANY_PROFILE_VIEW+"/"+unternehmenProfileDTO.getName());
+                getUI().get().navigate(Globals.Pages.COMPANY_PROFILE_VIEW+"/"+getCurrentUserName());
                 Notification note = Notification.show("Stellenanzeige wurde erfolgreich erstellt");
                 note.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 note.setPosition(Notification.Position.BOTTOM_START);
