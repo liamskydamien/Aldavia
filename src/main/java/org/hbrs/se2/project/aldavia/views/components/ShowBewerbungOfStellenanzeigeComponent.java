@@ -177,31 +177,31 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         return stellenanzeigeLayout;
     }
 
-    //TODO: In Utils auslagern
-    private HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldList){
-        HorizontalLayout taetigkeitLayout = new HorizontalLayout();
-        taetigkeitLayout.addClassName("kenntnisseLayout");
-        if(taetigkeitsfeldList.size()>3){
+    private HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldListe){
+        HorizontalLayout taetigkeitenLayout = new HorizontalLayout();
+        taetigkeitenLayout.addClassName("kenntnisseLayout");
+        if(taetigkeitsfeldListe.size()>3){
             for (int i = 0; i < 3; i++){
-                Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldList.get(i);
-                Span taetigkeit = new Span(taetigkeitsfeld.getBezeichnung());
-                taetigkeit.getElement().getThemeList().add("badge pill");
-                taetigkeit.addClassName("stellenanzeige-taetigkeit");
-                taetigkeitLayout.add(taetigkeit);
+                Taetigkeitsfeld pickedTaetigkeitsfeld = taetigkeitsfeldListe.get(i);
+                Span taetigkeitCapsul = new Span(pickedTaetigkeitsfeld.getBezeichnung());
+                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
+                taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
+                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
+                taetigkeitenLayout.add(taetigkeitCapsul);
             }
-            Span restlicheTaetigkeiten = new Span("+" + (taetigkeitsfeldList.size()-3) + " weitere");
+            Span restlicheTaetigkeiten = new Span("+" + (taetigkeitsfeldListe.size()-3) + " weitere");
             restlicheTaetigkeiten.addClassName("stellenanzeige-taetigkeit");
-            taetigkeitLayout.add(restlicheTaetigkeiten);
+            taetigkeitenLayout.add(restlicheTaetigkeiten);
         } else {
-            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfeldList){
-                Span taetigkeit = new Span(taetigkeitsfeld.getBezeichnung());
-                taetigkeit.addClassName("stellenanzeige-taetigkeit");
-                taetigkeit.getElement().getThemeList().add("badge pill");
-                taetigkeitLayout.add(taetigkeit);
+            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfeldListe){
+                Span taetigkeitCapsul = new Span(taetigkeitsfeld.getBezeichnung());
+                taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
+                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
+                taetigkeitenLayout.add(taetigkeitCapsul);
             }
         }
 
-        return taetigkeitLayout;
+        return taetigkeitenLayout;
     }
 
     private StudentProfileDTO getStudent(String id) throws ProfileException {
