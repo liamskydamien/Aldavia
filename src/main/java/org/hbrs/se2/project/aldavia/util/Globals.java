@@ -8,6 +8,8 @@ public class Globals {
         public static final String COMPANY_MAIN = "companyMain";
         public static final String ENTER_CAR = "enter";
 
+        public static final String COMPANY_PROFILE = "profileUnternehmen";
+
         public static final String PROFILE_VIEW = "profile";
         public static final String COMPANY_PROFILE_VIEW = "companyProfile";
         public static final String STELLENANZEIGE_BEWERBUNGEN_VIEW = "stellenanzeigeBewerbungen";
