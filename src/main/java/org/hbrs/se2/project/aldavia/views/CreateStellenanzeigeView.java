@@ -63,23 +63,23 @@ public class CreateStellenanzeigeView extends VerticalLayout {
     }
 
     private Button saveStellenanzeigeButton() {
-        Button addStellenanzeigeButton = new Button("Erstellen");
-        addStellenanzeigeButton.addClassName("addStellenanzeigeButton");
-        addStellenanzeigeButton.addClickListener(e -> {
-            Stellenanzeige stellenanzeige = new Stellenanzeige();
-            stellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
-            stellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
-            stellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());
-            stellenanzeige.setStart(addStellenanzeigeFormComponent.getStart().getValue());
-            stellenanzeige.setTaetigkeitsfelder(addStellenanzeigeFormComponent.getTaetigkeitsfelder());
-            stellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
-            stellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
-            stellenanzeige.setErstellungsdatum(LocalDate.now());
-            stellenanzeigeSet.add(stellenanzeige);
+        Button addStellenanzeige = new Button("Erstellen");
+        addStellenanzeige.addClassName("addStellenanzeigeButton");
+        addStellenanzeige.addClickListener(e -> {
+            Stellenanzeige neueStellenanzeige = new Stellenanzeige();
+            neueStellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
+            neueStellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
+            neueStellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());
+            neueStellenanzeige.setStart(addStellenanzeigeFormComponent.getStart().getValue());
+            neueStellenanzeige.setTaetigkeitsfelder(addStellenanzeigeFormComponent.getTaetigkeitsfelder());
+            neueStellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
+            neueStellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
+            neueStellenanzeige.setErstellungsdatum(LocalDate.now());
+            stellenanzeigeSet.add(neueStellenanzeige);
             saveStellenanzeige();
 
         });
-        return addStellenanzeigeButton;
+        return addStellenanzeige;
     }
 
     private void saveStellenanzeige() {
