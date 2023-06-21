@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class UnternehmenProfileDTO {
+    private String username;
     private String name;
     private String password;
     private String beschreibung;
