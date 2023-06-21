@@ -14,6 +14,8 @@ import org.hbrs.se2.project.aldavia.control.LoginControl;
 import org.hbrs.se2.project.aldavia.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @CssImport("./styles/views/login/login-view.css")
@@ -24,6 +26,8 @@ public class LoginView extends VerticalLayout {
 
     @Autowired
     private LoginControl loginControl;
+
+    private Logger logger = LoggerFactory.getLogger(LoginView.class);
 
     private AuthorizationControl authorizationControl;
 
@@ -68,8 +72,8 @@ public class LoginView extends VerticalLayout {
 
 
                 authorizationControl = new AuthorizationControl();
-                System.out.println("UserDTO: " + userDTO.getRoles());
-                System.out.println("UserDTO: " + userDTO.getUserid());
+                logger.info("UserDTO: " + userDTO.getRoles());
+                logger.info("UserDTO: " + userDTO.getUserid());
                 if(authorizationControl.isUserInRole(userDTO, Globals.Roles.STUDENT )) {
                     navigateToStudentMainPage();
                 } else if (authorizationControl.isUserInRole( userDTO, Globals.Roles.UNTERNEHMEN )) {
@@ -99,9 +103,6 @@ public class LoginView extends VerticalLayout {
 
 
     private void navigateToStudentMainPage() {
-        // Navigation zur Startseite, hier auf die Teil-Komponente Show-Cars.
-        // Die anzuzeigende Teil-Komponente kann man noch individualisieren, je nach Rolle,
-        // die ein Benutzer besitzt
         UI.getCurrent().navigate(Globals.Pages.STUDENT_MAIN);
 
     }

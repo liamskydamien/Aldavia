@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.impl.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
@@ -24,6 +26,15 @@ public class StellenanzeigeService {
     @Autowired
     UnternehmenRepository unternehmenRepository;
 
+    @Autowired
+    BewerbungsService bewerbungsService;
+
+    @Autowired
+    TaetigkeitsfeldService taetigkeitsfeldService;
+
+    @Autowired
+    UnternehmenService unternehmenService;
+
     public Stellenanzeige getStellenanzeigen(Integer id) throws ProfileException {
         Optional<Stellenanzeige> stellenanzeige = stellenanzeigeRepository.findById(id);
         if (stellenanzeige.isPresent()) {
@@ -40,15 +51,13 @@ public class StellenanzeigeService {
     public void updateStellenanzeigeInformationen(Stellenanzeige stellenanzeige, StellenanzeigeDTO dto) throws ProfileException {
         try {
 
-            if (dto.getBewerbungen() != null) {
-                if (!(dto.getBewerbungen().equals(stellenanzeige.getBewerbungen()))) {
+            if (dto.getBewerbungen() != null && !(dto.getBewerbungen().equals(stellenanzeige.getBewerbungen()))) {
                     for (Bewerbung b : stellenanzeige.getBewerbungen()) {
                         stellenanzeige.removeBewerbung(b);
                     }
-                    for (Bewerbung b : dto.getBewerbungen()) {
-                        stellenanzeige.addBewerbung(b);
+                    for (BewerbungsDTO b : dto.getBewerbungen()) {
+                        stellenanzeige.addBewerbung(bewerbungsService.getBewerbung(b));
                     }
-                }
             }
 
             if(dto.getBeschreibung() != null) {
@@ -75,25 +84,20 @@ public class StellenanzeigeService {
                 stellenanzeige.setErstellungsdatum(dto.getErstellungsdatum());
             }
 
-            if(dto.getTaetigkeitsfelder() != null) {
-                if (!(dto.getTaetigkeitsfelder().equals(stellenanzeige.getTaetigkeitsfelder()))) {
+            if(dto.getTaetigkeitsfelder() != null && !(dto.getTaetigkeitsfelder().equals(stellenanzeige.getTaetigkeitsfelder()))) {
                     for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
                         stellenanzeige.removeTaetigkeitsfeld(t);
                         taetigkeitsfeldRepository.save(t);
                     }
-                    for (Taetigkeitsfeld t : dto.getTaetigkeitsfelder()) {
-                        stellenanzeige.addTaetigkeitsfeld(t);
-                        taetigkeitsfeldRepository.save(t);
+                    for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
+                        stellenanzeige.addTaetigkeitsfeld(taetigkeitsfeldService.getTaetigkeitsfeld(t));
+//                        taetigkeitsfeldRepository.save(t);
                     }
-                }
-
             }
 
-            if(dto.getUnternehmen() != null) {
-               if (stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
-                   stellenanzeige.setUnternehmen(dto.getUnternehmen());
-                   unternehmenRepository.save(dto.getUnternehmen());
-                    }
+            if(dto.getUnternehmen() != null & stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
+                   stellenanzeige.setUnternehmen(unternehmenService.getUnternehmen(dto.getUnternehmen().getName()));
+//                   unternehmenRepository.save(dto.getUnternehmen());
             }
 
 
@@ -123,7 +127,10 @@ public class StellenanzeigeService {
         stellenanzeigeRepository.delete(stellenanzeige);
     }
 
-
+    public void newStellenanzeige(StellenanzeigeDTO dto) throws ProfileException {
+        Stellenanzeige stellenanzeige = new Stellenanzeige();
+        updateStellenanzeigeInformationen(stellenanzeige,dto);
+    }
 
 }
 

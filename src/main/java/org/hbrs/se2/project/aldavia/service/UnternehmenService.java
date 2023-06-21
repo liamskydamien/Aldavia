@@ -6,13 +6,9 @@ import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -64,6 +60,17 @@ public class UnternehmenService {
 
             if (dto.getStellenanzeigen() != null) {
                 if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
+                    unternehmen.getStellenanzeigen().clear();
+                    Set<Stellenanzeige> stellenanzeigeFromDTO = dto.getStellenanzeigen();
+                    for (Stellenanzeige s : stellenanzeigeFromDTO) {
+                        unternehmen.addStellenanzeige(s);
+                    }
+                }
+            }
+
+
+            /*if (dto.getStellenanzeigen() != null) {
+                if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
                     for (Stellenanzeige s : unternehmen.getStellenanzeigen()) {
                         unternehmen.removeStellenanzeige(s);
                     }
@@ -71,7 +78,7 @@ public class UnternehmenService {
                         unternehmen.addStellenanzeige(s);
                     }
                 }
-            }
+            }*/
 
             if (dto.getAp_nachname() != null) {
                 if (!dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {

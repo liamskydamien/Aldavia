@@ -136,20 +136,8 @@ public class SearchControlTest {
 
     private Student setupStudent(){
 
-        Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
-                .bezeichnung(SOFTWARE_ENTWICKLUNG)
-                .build();
-
-        Taetigkeitsfeld taetigkeitsfeld2 = Taetigkeitsfeld.builder()
-                .bezeichnung(PROJEKTMANAGEMENT)
-                .build();
-
         Taetigkeitsfeld taetigkeitsfeld3 = Taetigkeitsfeld.builder()
                 .bezeichnung(IT_CONSULTING)
-                .build();
-
-        Taetigkeitsfeld taetigkeitsfeld4 = Taetigkeitsfeld.builder()
-                .bezeichnung(IT_ADMINISTRATION)
                 .build();
 
         Kenntnis kenntnis = Kenntnis.builder()

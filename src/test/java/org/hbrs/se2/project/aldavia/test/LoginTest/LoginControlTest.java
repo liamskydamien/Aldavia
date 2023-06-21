@@ -103,9 +103,15 @@ public class LoginControlTest {
                     loginControl.authenticate("test2@aldavia.de", ABC);
         });
 
+        DatabaseUserException exceptionWrongEmail2 = assertThrows(
+                DatabaseUserException.class, () -> {
+                    loginControl.authenticate("", "");
+        });
+
         assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
+        assertEquals(exceptionWrongEmail2.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
     }
 
 }

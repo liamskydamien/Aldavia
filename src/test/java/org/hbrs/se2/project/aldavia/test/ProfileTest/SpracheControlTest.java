@@ -11,6 +11,8 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,8 @@ public class SpracheControlTest {
     private SpracheDTO spracheDTO;
 
     private Sprache spracheTest;
+
+    private Logger logger = LoggerFactory.getLogger(SpracheControlTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -72,14 +76,14 @@ public class SpracheControlTest {
             sprachenRepository.deleteById(spracheTest.getId());
         }
         catch (Exception e) {
-            System.out.println("Kenntnis not found");
+            logger.error("Kenntnis not found");
         }
         studentRepository.deleteById(student.getId());
         spracheTest = null;
     }
 
     @Test
-    public void testAddStudentToSprache_whenSpracheIsPresent() throws PersistenceException {
+    public void testAddStudentToSprache_whenSpracheIsPresent() {
         spracheTest = Sprache.builder().bezeichnung(spracheDTO.getName()).level(spracheDTO.getLevel()).build();
         spracheTest = sprachenRepository.save(spracheTest);
 
@@ -93,7 +97,7 @@ public class SpracheControlTest {
     }
 
     @Test
-    public void testAddStudentToSprache_whenSpracheIsNotPresent() throws PersistenceException {
+    public void testAddStudentToSprache_whenSpracheIsNotPresent() {
         spracheTest = sprachenService.addStudentToSprache(spracheDTO, student);
         spracheTest = sprachenRepository.findById(spracheTest.getId()).get();
         student = studentRepository.findById(student.getId()).get();
@@ -101,7 +105,7 @@ public class SpracheControlTest {
     }
 
     @Test
-    public void testRemoveStudentFromKenntnis_whenSpracheIsPresent() throws org.hbrs.se2.project.aldavia.control.exception.PersistenceException {
+    public void testRemoveStudentFromKenntnis_whenSpracheIsPresent() throws PersistenceException {
         Sprache existingSprache = Sprache.builder().bezeichnung(spracheDTO.getName()).level(spracheDTO.getLevel()).build();
         spracheTest = existingSprache.addStudent(student);
 
@@ -111,8 +115,8 @@ public class SpracheControlTest {
 
         sprachenService.removeStudentFromSprache(spracheDTO, student);
 
-        Sprache updatedSprache = sprachenRepository.findById(spracheTest.getId()).get();
-        assertTrue(!updatedSprache.getStudents().contains(student));
+        Sprache updatedSprache = sprachenRepository.findById(spracheTest.getId()).orElseThrow();
+        assertFalse(updatedSprache.getStudents().contains(student));
     }
 
     @Test
@@ -122,5 +126,17 @@ public class SpracheControlTest {
         });
         assertEquals(spracheNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, MESSAGE);
         assertEquals("Sprache not found", spracheNotFound.getReason(), MESSAGE2);
+    }
+
+    @Test
+    public void getSpracheWithDTO(){
+        Sprache sprache = Sprache.builder().bezeichnung(spracheDTO.getName()).level(spracheDTO.getLevel()).build();
+        spracheTest = sprachenRepository.save(sprache);
+        spracheDTO.setId(spracheTest.getId());
+        Sprache sprache1 = sprachenService.getSprache(spracheDTO);
+        assertEquals(sprache1.getId(), spracheTest.getId());
+
+        // Delete
+        sprachenRepository.deleteById(spracheTest.getId());
     }
 }

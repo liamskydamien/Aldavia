@@ -11,6 +11,10 @@ public class Globals {
         public static final String COMPANY_PROFILE = "profileUnternehmen";
 
         public static final String PROFILE_VIEW = "profile";
+        public static final String COMPANY_PROFILE_VIEW = "companyProfile";
+        public static final String STELLENANZEIGE_BEWERBUNGEN_VIEW = "stellenanzeigeBewerbungen";
+        public static final String STELLENANZEIGE_ERSTELLEN_VIEW = "stellenanzeigeErstellen";
+
 
         public static final String LOGIN_VIEW = "login";
         public static final String MAIN_VIEW = "";

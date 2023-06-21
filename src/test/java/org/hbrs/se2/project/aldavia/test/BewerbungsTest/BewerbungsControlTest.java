@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.test.BewerbungsTest;
 
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
+import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.control.factories.StudentProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
@@ -9,7 +10,6 @@ import org.hbrs.se2.project.aldavia.repository.BewerbungRepository;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
-import org.hbrs.se2.project.aldavia.service.BewerbungsService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -126,5 +125,12 @@ public class BewerbungsControlTest {
         catch (Exception e) {
             Logger.getLogger(BewerbungsControlTest.class.getName()).warning(e.getMessage());
         }
+    }
+
+    @Test
+    public void testNegative(){
+        assertThrows(BewerbungsException.class, () -> bewerbungsControl.addBewerbung("test", null, "test"));
+        assertThrows(BewerbungsException.class, () -> bewerbungsControl.addBewerbung("test", StellenanzeigeDTO.builder().build(), "test"));
+        assertThrows(BewerbungsException.class, () -> bewerbungsControl.deleteBewerbung(BewerbungsDTO.builder().id(999999999).build()));
     }
 }

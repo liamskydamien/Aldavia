@@ -5,11 +5,11 @@ import org.hbrs.se2.project.aldavia.repository.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-//import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +33,8 @@ public class TaetigkeitsfeldTest {
 
     @Autowired
     private UnternehmenRepository unternehmenRepository;
+
+    private Logger logger = LoggerFactory.getLogger(TaetigkeitsfeldTest.class);
 
     User user1 = User.builder()
             .email("Student1@qtest.vn")
@@ -111,47 +113,20 @@ public class TaetigkeitsfeldTest {
             Taetigkeitsfeld taetigkeitsfeldFromDB = taetigkeitsfeldOptional.get();
             assertEquals(originalBezeichnung, taetigkeitsfeldFromDB.getBezeichnung());
 
-//            // Update the entity
-//            String newBezeichnung = "Informatik";
-//            taetigkeitsfeldFromDB.setBezeichnung(newBezeichnung);
-//            taetigkeitsfeldRepository.save(taetigkeitsfeldFromDB);
-//
-//            // Verify if the entity is updated
-//            Optional<Taetigkeitsfeld> updatedTaetigkeitsfeldOptional = taetigkeitsfeldRepository.findById(newBezeichnung);
-//            assertTrue(updatedTaetigkeitsfeldOptional.isPresent());
-//            Taetigkeitsfeld retrievedTaetigkeitsfeld = updatedTaetigkeitsfeldOptional.get();
-
-//            // Verify if the original entity is deleted
-//            assertFalse(taetigkeitsfeldRepository.existsById(originalBezeichnung));
-//
-//            // Verify the updated entity
-//            assertEquals(newBezeichnung, retrievedTaetigkeitsfeld.getBezeichnung());
-
             // Delete the entity
             taetigkeitsfeldRepository.deleteById(originalBezeichnung);
 
             // Verify if the entity is deleted
             assertFalse(taetigkeitsfeldRepository.existsById(originalBezeichnung));
         } catch (Exception e) {
-            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
+            logger.error("Fehler bei RoundTrip: " + e.getMessage());
         }
     }
 
     @Test
     public void negativTests(){
-//        Taetigkeitsfeld taetigkeitsfeld1 = new Taetigkeitsfeld();
-//        taetigkeitsfeld1.setBezeichnung("Java_Test");
-//        taetigkeitsfeldRepository.save(taetigkeitsfeld1);
-//        //Saved in DB?
-//        assertTrue(taetigkeitsfeldRepository.existsById("Java_Test"));
-//
-//        Taetigkeitsfeld taetigkeitsfeld2 = new Taetigkeitsfeld();
-//        taetigkeitsfeld2.setBezeichnung("Java_Test");
-        //assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(taetigkeitsfeld2));
         assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(null));
         assertThrows(Exception.class, () -> taetigkeitsfeldRepository.save(new Taetigkeitsfeld()));
-
-//        taetigkeitsfeldRepository.deleteById("Java_Test");
     }
 
     @Test

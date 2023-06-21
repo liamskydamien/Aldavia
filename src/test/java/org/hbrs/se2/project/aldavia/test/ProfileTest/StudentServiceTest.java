@@ -1,152 +1,85 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
-
-import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
-import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.junit.jupiter.api.AfterEach;
+import org.hbrs.se2.project.aldavia.service.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
-class StudentServiceTest {
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
+@ExtendWith(SpringExtension.class)
+public class StudentServiceTest {
+    @Mock
     private StudentService studentService;
-
-    private Student student;
-    private StudentProfileDTO changeStudentInformationDTO;
-
-    private Kenntnis kenntnis;
-    private Taetigkeitsfeld taetigkeitsfeld;
-    private Sprache sprache;
-    private Qualifikation qualifikation;
-
+    @Mock
+    private StudentRepository studentRepository;
     @BeforeEach
-    void setUp() {
-        User user = User.builder()
-                .userid("TestUser")
-                .password("TestPassword")
-                .email("TestEmail")
-                .build();
+    public void setUp() {
+        studentService = new StudentService(studentRepository);
+    }
+    @Test
+    public void testGetStudent() throws ProfileException {
+        String userId = "testGet";
+        Student student = new Student();
+        Optional<Student> studentOpt = Optional.of(student);
 
-        student = Student.builder()
-                .vorname("TestVorname")
-                .nachname("TestNachname")
-                .build();
+        given(studentRepository.findByUserID(userId)).willReturn(studentOpt);
 
+        //when
+        Student await = studentService.getStudent(userId);
+
+        //then
+        assertEquals(student, await);
+        verify(studentRepository,times(1)).findByUserID(userId);
+        verifyNoMoreInteractions(studentRepository);
+    }
+
+    @Test
+    public void testUpdateStudentInformation() throws ProfileException {
+        //given
+        User user = new User();
+        Student student = new Student();
+        student.setUser(user);
+        StudentProfileDTO dto = new StudentProfileDTO();
+
+        //when
+        studentService.updateStudentInformation(student,dto);
+        verify(studentRepository,times(1)).save(student);
+        verifyNoMoreInteractions(studentRepository);
+
+        //then -> fällt weg, da void Methode
+    }
+    @Test
+    public void testDeleteStudent() throws ProfileException {
+        //given
+        User user = new User();
+        Student student = new Student();
+        student.setUser(user);
+        //when
+        studentService.deleteStudent(student);
+        verify(studentRepository,times(1)).save(student);
+        verify(studentRepository,times(1)).delete(student);
+        verifyNoMoreInteractions(studentRepository);
+    }
+
+    @Test
+    public void testCreateOrUpdateStudent() throws ProfileException {
+        User user = new User();
+        Student student = new Student();
         student.setUser(user);
 
-        kenntnis = Kenntnis.builder()
-                .bezeichnung("TestKenntnis")
-                .build();
-
-        taetigkeitsfeld = Taetigkeitsfeld.builder()
-                .bezeichnung("TestTaetigkeitsfeld")
-                .build();
-
-        sprache = Sprache.builder()
-                .bezeichnung("TestSprache")
-                .level("TestLevel")
-                .build();
-
-        qualifikation = Qualifikation.builder()
-                .beschreibung("TestBeschreibung")
-                .bereich("TestBereich")
-                .bezeichnung("TestBezeichnung")
-                .institution("TestInstitution")
-                .von(LocalDate.of(2020, 1, 1))
-                .bis(LocalDate.of(2020, 1, 1))
-                .beschaftigungsverhaltnis("TestBeschaeftigungsverhaeltnis")
-                .build();
-
-        student.addKenntnis(kenntnis);
-        student.addTaetigkeitsfeld(taetigkeitsfeld);
-        student.addQualifikation(qualifikation);
-        student.addSprache(sprache);
-
-        student = studentRepository.save(student);
-    }
-
-    @AfterEach
-    void tearDown() {
-        try {
-            student.removeKenntnis(kenntnis);
-            student.removeTaetigkeitsfeld(taetigkeitsfeld);
-            student.removeQualifikation(qualifikation);
-            student.removeSprache(sprache);
-            studentRepository.deleteById(student.getId());
-        }
-        catch (Exception e) {
-            try {
-                studentRepository.deleteById(student.getId());
-            }
-            catch (Exception ex) {
-                System.out.println("Student konnte nicht gelöscht werden.");
-            }
-        }
-        kenntnis = null;
-        taetigkeitsfeld = null;
-        sprache = null;
-        qualifikation = null;
-        student = null;
-        changeStudentInformationDTO = null;
-    }
-
-    @Test
-    void testGetStudent_StudentExists_ReturnsStudent() throws ProfileException {
-        Student newStudent = studentService.getStudent(student.getUser().getUserid());
-        assertEquals(student.getVorname(), newStudent.getVorname());
-        assertEquals(student.getNachname(), newStudent.getNachname());
-        assertEquals(student.getMatrikelNummer(), newStudent.getMatrikelNummer());
-        assertEquals(student.getUser().getUserid(), newStudent.getUser().getUserid());
-    }
-
-    @Test
-    void testGetStudent_StudentDoesNotExist_ThrowsProfileException() {
-        assertThrows(ProfileException.class, () -> studentService.getStudent("TestUserDoesNotExist_xyz"));
-    }
-
-    @Test
-    void testCreateOrUpdateStudent_ValidStudent_StudentSavedSuccessfully() throws ProfileException {
-       changeStudentInformationDTO = StudentProfileDTO.builder()
-               .beschreibung("TestBeschreibung")
-               .email("TestEmail")
-               .lebenslauf("TestLebenslauf")
-               .profilbild("TestProfilbild")
-               .telefonnummer("TestTelefonnummer")
-               .vorname("TestVorname2")
-               .build();
-
-       studentService.updateStudentInformation(student, changeStudentInformationDTO);
-
-       Student newStudent = studentService.getStudent(student.getUser().getUserid());
-       assertEquals(student.getVorname(), newStudent.getVorname());
-       assertEquals(student.getNachname(), newStudent.getNachname());
-       assertEquals(student.getMatrikelNummer(), newStudent.getMatrikelNummer());
-       assertEquals(student.getUser().getUserid(), newStudent.getUser().getUserid());
-       assertEquals(student.getUser().getBeschreibung(), newStudent.getUser().getBeschreibung());
-       assertEquals(student.getUser().getEmail(), newStudent.getUser().getEmail());
-       assertEquals(student.getLebenslauf(), newStudent.getLebenslauf());
-       assertEquals(student.getUser().getProfilePicture(), newStudent.getUser().getProfilePicture());
-
-    }
-
-    @Test
-    void testDeleteStudent_ValidStudent_StudentDeletedSuccessfully() throws ProfileException {
-        studentService.deleteStudent(student);
-        assertFalse(studentRepository.existsById(student.getId()));
+        studentService.createOrUpdateStudent(student);
+        verify(studentRepository,times(1)).save(student);
+        verifyNoMoreInteractions(studentRepository);
     }
 }

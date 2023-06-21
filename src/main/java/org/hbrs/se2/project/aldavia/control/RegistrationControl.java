@@ -13,6 +13,7 @@ import org.hbrs.se2.project.aldavia.repository.StudentRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.hbrs.se2.project.aldavia.util.enums.Reason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -40,15 +41,17 @@ public class RegistrationControl {
         String userName = dto.getUserName();
         Optional<User> oMail= repositoryU.findUserByEmail(mailAddress);
         Optional<User> oName = repositoryU.findUserByUserid(userName);
-        if (!(oMail.isEmpty())) {
-            result.setReason(RegistrationResult.EMAIL_ALREADY_EXISTS);
+        if (oMail.isPresent()) {
+            logger.info("The mail address is already in use.");
+            result.setReason(Reason.EMAIL_ALREADY_EXISTS);
             result.setResult(false);
-        } else if (!(oName.isEmpty())) {
-            result.setReason(RegistrationResult.USERNAME_ALREADY_EXISTS);
+        } else if (oName.isPresent()) {
+            logger.info("The userName is already in use.");
+            result.setReason(Reason.USERNAME_ALREADY_EXISTS);
             result.setResult(false);
 
         } else {
-            result.setReason(RegistrationResult.REGISTRATION_SUCCESSFULL);
+            result.setReason(Reason.REGISTRATION_SUCCESSFULL);
             result.setResult(true);
             Rolle rolle = Rolle.builder().bezeichnung(Globals.Roles.STUDENT).build();
             repositoryR.save(rolle); // Save the role in the repository
@@ -59,7 +62,7 @@ public class RegistrationControl {
                     .build();
 
             userNeu.addRolle(rolle); // Add the role to the user
-            result.setReason(RegistrationResult.REGISTRATION_SUCCESSFULL);
+            result.setReason(Reason.REGISTRATION_SUCCESSFULL);
             result.setResult(true);
 
 
@@ -87,14 +90,14 @@ public class RegistrationControl {
         String mailAddress = dto.getMail();
         String userName = dto.getUserName();
         if (!(repositoryU.findUserByEmail(mailAddress).isEmpty())) {
-            result.setReason(RegistrationResult.EMAIL_ALREADY_EXISTS);
+            result.setReason(Reason.EMAIL_ALREADY_EXISTS);
             result.setResult(false);
         } else if (!(repositoryU.findUserByUserid(userName).isEmpty())) {
-            result.setReason(RegistrationResult.USERNAME_ALREADY_EXISTS);
+            result.setReason(Reason.USERNAME_ALREADY_EXISTS);
             result.setResult(false);
 
         } else {
-            result.setReason(RegistrationResult.REGISTRATION_SUCCESSFULL);
+            result.setReason(Reason.REGISTRATION_SUCCESSFULL);
             result.setResult(true);
             Rolle rolle = Rolle.builder().bezeichnung(Globals.Roles.UNTERNEHMEN).build();
             repositoryR.save(rolle);

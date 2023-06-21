@@ -4,6 +4,8 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.*;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BewerbungTest {
     public static final String VOLLZEIT = "Vollzeit";
 
-    //TODO: Fix this test
-    //TODO: Add round trip test for Bewerbung
-    //TODO: Test Constraints if student or stellenanzeige gets deleted (cascade) -> Bewerbung gets deleted too
-    //TODO: Test add... and remove... methods
-
     @Autowired
     private BewerbungRepository bewerbungRepository;
 
@@ -38,6 +35,8 @@ public class BewerbungTest {
 
     @Autowired
     private UnternehmenRepository unternehmenRepository;
+
+    private Logger logger = LoggerFactory.getLogger(BewerbungTest.class);
 
     User user1 = User.builder()
             .email("Student1@qtest.vn")
@@ -136,7 +135,7 @@ public class BewerbungTest {
             unternehmenRepository.deleteById(unternehmen.getId());
             userRepository.deleteAll(Arrays.asList(user1, user3));
         } catch (Exception e) {
-            System.out.println("Fehler bei RoundTrip: " + e.getMessage());
+           logger.error("Fehler bei RoundTrip: " + e.getMessage());
         }
     }
     @Test

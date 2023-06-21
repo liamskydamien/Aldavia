@@ -11,6 +11,8 @@ import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,8 @@ public class TaetigkeitsfeldServiceTest {
     private TaetigkeitsfeldDTO taetigkeitsfeldDTO;
 
     private Taetigkeitsfeld taetigkeitsfeldTest;
+
+    private Logger logger = LoggerFactory.getLogger(TaetigkeitsfeldServiceTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -70,7 +74,7 @@ public class TaetigkeitsfeldServiceTest {
             taetigkeitsfeldRepository.deleteById(taetigkeitsfeldTest.getBezeichnung());
         }
         catch (Exception e) {
-            System.out.println("Kenntnis not found");
+            logger.error("Kenntnis not found");
         }
         studentRepository.deleteById(student.getId());
         taetigkeitsfeldTest = null;
@@ -117,5 +121,13 @@ public class TaetigkeitsfeldServiceTest {
 
         assertEquals(taetigkeitsfeldNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, MESSAGE);
         assertEquals("Taetigkeitsfeld not found", taetigkeitsfeldNotFound.getReason(), MESSAGE2);
+    }
+
+    @Test
+    public void getTaetigekteitsfeldWithDTO(){
+        taetigkeitsfeldTest = Taetigkeitsfeld.builder().bezeichnung(taetigkeitsfeldDTO.getName()).build();
+        taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
+        Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldService.getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        assertEquals(taetigkeitsfeld.getBezeichnung(), taetigkeitsfeldDTO.getName());
     }
 }
