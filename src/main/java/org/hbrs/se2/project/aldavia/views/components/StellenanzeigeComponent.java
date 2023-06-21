@@ -56,7 +56,8 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         setUpUI();
     }
 
-    private void setUpUI(){
+    @Transactional
+    public void setUpUI(){
         title = new H2("Stellenanzeige");
         createStellenanzeige.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         createStellenanzeige.add(addStellenanzeige());
@@ -70,7 +71,8 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         updateView();
     }
 
-    private void updateView(){
+    @Transactional
+    public void updateView(){
 
         System.out.println(stellenanzeigeSet);
         System.out.println(stellenanzeigeSet.isEmpty());
@@ -109,15 +111,15 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         unternehmenProfileDTO.setStellenanzeigen(stellenanzeigeSet);
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO,getCurrentUserName());
     }
-
-    private void getAndCreateStellenanzeige(String mode){
+@Transactional
+public void getAndCreateStellenanzeige(String mode){
         displayStellenanzeige.removeAll();
         for(Stellenanzeige stellenanzeige : stellenanzeigeSet){
             displayStellenanzeige.add(renderStellenanzeige(stellenanzeige,mode));
         }
     }
-
-    private VerticalLayout renderStellenanzeige(Stellenanzeige stellenanzeige, String mode){
+    @Transactional
+    public VerticalLayout renderStellenanzeige(Stellenanzeige stellenanzeige, String mode){
         //Main Body
         VerticalLayout stellenanzeigenLayout = new VerticalLayout();
         stellenanzeigenLayout.addClassName("stellenanzeigenLayout");
@@ -150,7 +152,8 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         stellenanzeigeTitel.addClassName("stellenanzeigeTitel");
         Span stellenanzeigeBeschaeftigungsverheltnis = new Span(stellenanzeige.getBeschaeftigungsverhaeltnis());
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
-        stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis, renderTaetigkeit(stellenanzeige.getTaetigkeitsfelder()));
+        List<Taetigkeitsfeld> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
+        stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis, renderTaetigkeit(taetigkeitsfeldList));
 
         VerticalLayout stellenanzeigeInfoRight = new VerticalLayout();
         stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
@@ -163,8 +166,8 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         stellenanzeigenLayout.add(stellenanzeigeInfo);
         return stellenanzeigenLayout;
     }
-
-    private HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldList){
+    @Transactional
+    public HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldList){
         HorizontalLayout taetigkeitLayout = new HorizontalLayout();
         taetigkeitLayout.addClassName("kenntnisseLayout");
         if(taetigkeitsfeldList.size()>3){
@@ -331,7 +334,10 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
             stellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
             stellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
             stellenanzeige.setErstellungsdatum(LocalDate.now());
+            System.out.println(stellenanzeige);
+            System.out.println("vor"+stellenanzeigeSet.size());
             stellenanzeigeSet.add(stellenanzeige);
+            System.out.println("nach"+stellenanzeigeSet.size());
             try {
                 updateUnternehmenProfileDTO();
             } catch (ProfileException ex) {

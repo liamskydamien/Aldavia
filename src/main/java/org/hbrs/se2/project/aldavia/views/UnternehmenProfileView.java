@@ -37,6 +37,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private StellenanzeigeComponent stellenanzeigeComponent;
 
     @Override
+    @Transactional
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
             try {
                 unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
@@ -113,7 +114,8 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
         adressenComponent.switchViewMode(getCurrentUserName());
     }
 
-    private VerticalLayout createButtomLayout() {
+    @Transactional
+    public VerticalLayout createButtomLayout() {
         VerticalLayout layout = new VerticalLayout();
         layout.addClassName("bottom-layout");
         layout.add(createAboutAnsprechpartnerAdressenLayout());
