@@ -24,6 +24,9 @@ import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
+import org.hbrs.se2.project.aldavia.service.BewerbungsService;
+import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
+import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +48,17 @@ public class SearchComponent extends VerticalLayout {
     @Autowired
     SearchControl searchControl;
 
-    @Autowired
     BewerbungsControl bewerbungsControl;
+
+    @Autowired
+    BewerbungsService bewerbungsService;
+
+    @Autowired
+    StudentService studentService;
+
+    @Autowired
+    StellenanzeigenService stellenanzeigenService;
+
 
     private List<StellenanzeigeDTO> stellenanzeigeList;
 
@@ -70,7 +82,10 @@ public class SearchComponent extends VerticalLayout {
 
         stellenanzeigeList = searchControl.getAllStellenanzeigen();
 
+        bewerbungsControl = new BewerbungsControl(bewerbungsService,studentService,stellenanzeigenService);
+
         setUpUI(stellenanzeigeList);
+
 
 
     }
@@ -111,6 +126,11 @@ public class SearchComponent extends VerticalLayout {
         }
         profileImg.setWidth("50px");
         profileImg.setHeight("50px");
+
+        profileImg.addClickListener(e -> {
+            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE);
+
+        });
 
         // Header(Bezeichnung und Von-Bis)
         FlexLayout stellenanzeigeCardHeader = new FlexLayout();
@@ -156,6 +176,7 @@ public class SearchComponent extends VerticalLayout {
             } else {
                 UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
                 if (true) {
+                    bewerbungsDialog = new Dialog();
                     bewerbungErstellenComponent = new BewerbungErstellenComponent(stellenanzeigeDTO, bewerbungsControl, userDTO.getUserid());
                     bewerbungsDialog.add(bewerbungErstellenComponent);
                     bewerbungsDialog.open();
@@ -226,7 +247,7 @@ public class SearchComponent extends VerticalLayout {
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
-            } else if (selectJob.getValue().equals("Festanstellung")) {
+            } else if (selectJob.getValue().equals("Festanstellung") || selectJob.getValue().equals("Vollzeit")) {
             displayStellenanzeigen.removeAll();
             List<StellenanzeigeDTO> listNeu = new ArrayList<>();
             for (StellenanzeigeDTO dto : stellenanzeigeList) {
