@@ -14,6 +14,7 @@ import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
 import java.util.HashMap;
@@ -27,20 +28,21 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
 
     private final StudentProfileDTO studentProfileDTO;
 
-    private List<KenntnisDTO> kenntnisDTOS;
+    private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
 
-    private final Div displaySkill;
-    private final HorizontalLayout addSkillsArea;
-    private Span noSkill;
-    private Map<KenntnisDTO, TextField> skillFields = new HashMap<>();
+    private final Div displayTaetigkeit;
+
+    private final HorizontalLayout addTaetigkeitArea;
+    private Span noTaetigkeit;
+    private Map<TaetigkeitsfeldDTO, TextField> taetigkeitsFields = new HashMap<>();
 
     public InterestComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
         this.studentProfileDTO = studentProfileDTO;
-        kenntnisDTOS = studentProfileDTO.getKenntnisse();
+        taetigkeitsfelder = studentProfileDTO.getTaetigkeitsfelder();
         this.studentProfileControl = studentProfileControl;
-        displaySkill = new Div();
-        addSkillsArea = new HorizontalLayout();
-        noSkill = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
+        displayTaetigkeit = new Div();
+        addTaetigkeitArea = new HorizontalLayout();
+        noTaetigkeit = new Span("Es wurden noch keine Kenntnisse hinzugefügt.");
         addClassName("skills-component");
         addClassName("card");
 
@@ -50,33 +52,33 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
 
     //TODO: Refaktoring Header addskillarea in eine eigene Methode
     private void setUpUI(){
-        displaySkill.setClassName("display-Skill");
+        displayTaetigkeit.setClassName("display-Skill");
 
         add(new H2("Kenntnisse"));
 
-        addSkillsArea.addClassName("add-skills-area");
-        add(addSkillsArea);
-        add(displaySkill);
+        addTaetigkeitArea.addClassName("add-skills-area");
+        add(addTaetigkeitArea);
+        add(displayTaetigkeit);
 
         //Header
         TextField addSkillField = new TextField();
         addSkillField.addClassName("add-Skill-Field");
-        addSkillField.setPlaceholder("Füge neue Kenntnisse hinzu.");
+        addSkillField.setPlaceholder("Füge neue Interessen hinzu.");
         addSkillField.setClearButtonVisible(true);
-        addSkillsArea.add(addSkillField);
+        addTaetigkeitArea.add(addSkillField);
 
-        addSkillsArea.add(addSkillButton(addSkillField));
+        addTaetigkeitArea.add(addTaetigkeitButton(addSkillField));
 
 
         updateViewMode();
     }
 
     private void updateViewMode(){
-        addSkillsArea.setVisible(false);
+        addTaetigkeitArea.setVisible(false);
 
-        if(kenntnisDTOS.isEmpty()){
-            noSkill.getStyle().set("font-style", "italic");
-            displaySkill.add(noSkill);
+        if(taetigkeitsfelder.isEmpty()){
+            noTaetigkeit.getStyle().set("font-style", "italic");
+            displayTaetigkeit.add(noTaetigkeit);
         } else {
             getSkillsAndCreatefield(Globals.ProfileViewMode.VIEW);
         }
@@ -85,12 +87,12 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
 
     private void updateEditMode(){
 
-        if(kenntnisDTOS.isEmpty()){
-            noSkill.getStyle().set("font-style", "italic");
-            displaySkill.add(noSkill);
+        if(taetigkeitsfelder.isEmpty()){
+            noTaetigkeit.getStyle().set("font-style", "italic");
+            displayTaetigkeit.add(noTaetigkeit);
         }
 
-        addSkillsArea.setVisible(true);
+        addTaetigkeitArea.setVisible(true);
 
         getSkillsAndCreatefield(Globals.ProfileViewMode.EDIT);
 
@@ -110,68 +112,68 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
     }
 
     private void updateProfileDTO(String userName) throws PersistenceException, ProfileException {
-        studentProfileDTO.setKenntnisse(kenntnisDTOS);
+        studentProfileDTO.setTaetigkeitsfelder(taetigkeitsfelder);
         studentProfileControl.updateStudentProfile(studentProfileDTO,userName);
     }
 
     private void getSkillsAndCreatefield(String mode){
         // Clear any existing fields before re-creating them
-        displaySkill.removeAll();
-        skillFields.clear();
+        displayTaetigkeit.removeAll();
+        taetigkeitsFields.clear();
 
-        for(KenntnisDTO k: kenntnisDTOS){
+        for(TaetigkeitsfeldDTO t: taetigkeitsfelder){
             TextField skill = new TextField();
-            skill.setValue(k.getName());
+            skill.setValue(t.getName());
             skill.addClassName("Skill");
 
             // Store this TextField in the map
-            skillFields.put(k, skill);
+            taetigkeitsFields.put(t, skill);
 
             if (mode.equals("edit")) {
-                skill.setSuffixComponent(deleteSkillButton(k));
+                skill.setSuffixComponent(deleteTaetigkeitButton(t));
                 skill.setReadOnly(false);
             } else if (mode.equals("view")) {
                 skill.setReadOnly(true);
             }
 
-            displaySkill.add(skill);
+            displayTaetigkeit.add(skill);
         }
     }
 
-    private Button deleteSkillButton(KenntnisDTO kenntnis){
+    private Button deleteTaetigkeitButton(TaetigkeitsfeldDTO taetigkeitsfeldDTO){
         Button deleteSkill = new Button(new Icon("lumo","cross"));
         deleteSkill.setClassName("deleteButton");
 
         deleteSkill.addClickListener(buttonClickEvent -> {
-            // Remove the KenntnisDTO from the list
-            kenntnisDTOS.remove(kenntnis);
+            // Remove the TaetigkeitsfeldDTO from the list
+            taetigkeitsfelder.remove(taetigkeitsfeldDTO);
 
             // Also remove the associated TextField from the display and from the map
-            TextField skillField = skillFields.get(kenntnis);
-            displaySkill.remove(skillField);
-            skillFields.remove(kenntnis);
+            TextField skillField = taetigkeitsFields.get(taetigkeitsfeldDTO);
+            displayTaetigkeit.remove(skillField);
+            taetigkeitsFields.remove(taetigkeitsfeldDTO);
         });
         return deleteSkill;
     }
 
-    private Button addSkillButton(TextField addSkillTextField){
-        if(kenntnisDTOS.isEmpty()){
-            displaySkill.remove(noSkill);
+    private Button addTaetigkeitButton(TextField addSkillTextField){
+        if(taetigkeitsfelder.isEmpty()){
+            displayTaetigkeit.remove(noTaetigkeit);
         }
 
         Button addSkillButton = new Button();
         addSkillButton.setIcon(new Icon("lumo","plus"));
 
         addSkillButton.addClickListener(buttonClickEvent ->{
-            if(kenntnisDTOS.size()<11) {
+            if(taetigkeitsfelder.size()<11) {
                 if (!addSkillTextField.getValue().isEmpty()) {
-                    KenntnisDTO newSkill = new KenntnisDTO(addSkillTextField.getValue());
-                    kenntnisDTOS.add(newSkill);
+                    TaetigkeitsfeldDTO newTaetigkeit = new TaetigkeitsfeldDTO(addSkillTextField.getValue());
+                    taetigkeitsfelder.add(newTaetigkeit);
                     getSkillsAndCreatefield("edit");
                     addSkillTextField.clear();
                 }
             } else {
-                Notification.show("Du hast die maximale Kenntnis-Anzahl erreicht.", 20, Notification.Position.MIDDLE);
+                Notification.show("Du hast die maximale Interessen-Anzahl erreicht.", 20, Notification.Position.MIDDLE);
             }
 
         });
