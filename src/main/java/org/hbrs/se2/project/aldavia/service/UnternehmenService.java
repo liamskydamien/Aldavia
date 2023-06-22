@@ -44,15 +44,10 @@ public class UnternehmenService {
             }
 
             if (dto.getAdressen() != null && unternehmen.getAdressen() != null) {
-                List<Adresse> toRemove = new ArrayList<>();
-                Iterator<Adresse> iter = unternehmen.getAdressen().iterator();
                 if (!(dto.getAdressen().equals(unternehmen.getAdressen()))) {
-                    while(iter.hasNext()) {
-                        if (iter.next() != null) {
-                            iter.remove();
-                        }
-                    }
-                    for (Adresse a : dto.getAdressen()) {
+                    unternehmen.getAdressen().clear();
+                    Set<Adresse> adressenFromDTO = dto.getAdressen();
+                    for (Adresse a : adressenFromDTO) {
                         unternehmen.addAdresse(a);
                     }
                 }
