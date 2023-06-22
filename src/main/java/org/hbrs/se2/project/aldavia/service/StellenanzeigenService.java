@@ -6,11 +6,15 @@ import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -22,105 +26,22 @@ public class StellenanzeigenService {
     private final TaetigkeitsfeldService taetigkeitsfeldService;
     private final UnternehmenService unternehmenService;
 
+    private final Logger logger = LoggerFactory.getLogger(StellenanzeigenService.class);
+
 
     public Stellenanzeige getStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigenException {
         try {
+            logger.info("Search for Stellenanzeige: " + stellenanzeigeDTO);
             return stellenanzeigenRepository.findById(stellenanzeigeDTO.getId()).orElseThrow();
         }
         catch (Exception e) {
+            logger.error("Stellenanzeige not found: " + stellenanzeigeDTO);
             throw new StellenanzeigenException("Stellenanzeige not found", StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_NOT_FOUND);
         }
     }
 
     public List<Stellenanzeige> getStellenanzeigen() {
         return stellenanzeigenRepository.findAll();
-    }
-    public void updateStellenanzeige(StellenanzeigeDTO dto) throws StellenanzeigenException, ProfileException {
-        /*try {
-
-            if (dto.getBewerbungen() != null) {
-                if (!(dto.getBewerbungen().equals(stellenanzeige.getBewerbungen()))) {
-                    for (Bewerbung b : stellenanzeige.getBewerbungen()) {
-                        stellenanzeige.removeBewerbung(b);
-                    }
-                    for (BewerbungsDTO b : dto.getBewerbungen()) {
-                        stellenanzeige.addBewerbung(bewerbungsService.getBewerbung(b));
-                    }
-                }
-            }
-
-            if(dto.getBeschreibung() != null) {
-                stellenanzeige.setBeschreibung(dto.getBeschreibung());
-            }
-
-            if(dto.getBezeichnung() != null) {
-                stellenanzeige.setBezeichnung(dto.getBezeichnung());
-            }
-
-            if(dto.getEnde() != null) {
-                stellenanzeige.setEnde(dto.getEnde());
-            }
-
-            if(dto.getBezahlung() != null) {
-                stellenanzeige.setBezahlung(dto.getBezahlung());
-            }
-
-            if(dto.getBeschaeftigungsverhaeltnis() != null) {
-                stellenanzeige.setBeschaeftigungsverhaeltnis(dto.getBeschaeftigungsverhaeltnis());
-            }
-
-            if(dto.getErstellungsdatum() != null) {
-                stellenanzeige.setErstellungsdatum(dto.getErstellungsdatum());
-            }
-
-            if(dto.getTaetigkeitsfelder() != null) {
-                if (!(dto.getTaetigkeitsfelder().equals(stellenanzeige.getTaetigkeitsfelder()))) {
-                    for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
-                        stellenanzeige.removeTaetigkeitsfeld(t);
-                        taetigkeitsfeldRepository.save(t);
-                    }
-                    for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
-                        stellenanzeige.addTaetigkeitsfeld(taetigkeitsfeldService.getTaetigkeitsfeld(t));
-                        taetigkeitsfeldRepository.save(taetigkeitsfeldService.getTaetigkeitsfeld(t));
-                    }
-                }
-
-            }
-
-            if(dto.getUnternehmen() != null) {
-                if (stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
-                    stellenanzeige.setUnternehmen(unternehmenService.getUnternehmen(dto.getUnternehmen().getUsername()));
-                    unternehmenRepository.save(unternehmenService.getUnternehmen(dto.getUnternehmen().getUsername()));
-                }
-            }
-
-
-            if(dto.getStart() != null) {
-                stellenanzeige.setStart(dto.getStart());
-            }
-
-        } catch (Exception e) {
-            throw new ProfileException("Error while updating Stellenazeige information", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
-        }*/
-
-        Stellenanzeige stellenanzeige = getStellenanzeige(dto);
-        stellenanzeige.setBezahlung(dto.getBezahlung());
-        stellenanzeige.setBeschaeftigungsverhaeltnis(dto.getBeschaeftigungsverhaeltnis());
-        stellenanzeige.setBeschreibung(dto.getBeschreibung());
-        stellenanzeige.setBezeichnung(dto.getBezeichnung());
-        stellenanzeige.setEnde(dto.getEnde());
-        stellenanzeige.setErstellungsdatum(dto.getErstellungsdatum());
-        stellenanzeige.setStart(dto.getStart());
-
-        // Deletes and adds the Taeitgkeitsfelder
-        for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
-            taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(t, stellenanzeige);
-        }
-        for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
-            taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(t, stellenanzeige);
-        }
-
-        stellenanzeigenRepository.save(stellenanzeige);
     }
 
     /**
@@ -129,6 +50,7 @@ public class StellenanzeigenService {
      * @throws ProfileException if the Stellenanzeige could not be created
      */
     public void addStellenanzeige(StellenanzeigeDTO dto) throws ProfileException {
+        logger.info("Creating new Stellenanzeige: " + dto);
         Stellenanzeige stellenanzeige = stellenanzeigenRepository.save(Stellenanzeige.builder()
                 .bezeichnung(dto.getBezeichnung())
                 .beschreibung(dto.getBeschreibung())
@@ -139,9 +61,39 @@ public class StellenanzeigenService {
                 .start(dto.getStart())
                 .unternehmen_stellenanzeigen(unternehmenService.getUnternehmen(dto.getUnternehmen().getUsername()))
                 .build());
+        logger.info("Adding Taetigkeitsfelder to Stellenanzeige: " + dto);
         for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
-            taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(t, stellenanzeige);
+            logger.info("Adding Taetigkeitsfeld: " + t);
+            stellenanzeige = taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(t, stellenanzeige);
         }
+        logger.info("Stellenanzeige created: " + stellenanzeige);
         stellenanzeigenRepository.save(stellenanzeige);
+    }
+
+    /**
+     * Deletes a Stellenanzeige
+     * @param dto StellenanzeigeDTO
+     * @throws StellenanzeigenException if the Stellenanzeige could not be deleted
+     */
+    public void deleteStellenanzeige(StellenanzeigeDTO dto) throws StellenanzeigenException {
+        logger.info("Deleting Stellenanzeige: " + dto);
+        Stellenanzeige stellenanzeige = getStellenanzeige(dto);
+        try {
+            logger.info("Deleting Taetigkeitsfelder from Stellenanzeige: " + stellenanzeige);
+            for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
+                logger.info("Deleting Taetigkeitsfeld: " + t);
+                taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(t, stellenanzeige);
+            }
+            logger.info("Deleting Unternehmen from Stellenanzeige: " + stellenanzeige);
+            Unternehmen unternehmen = stellenanzeige.getUnternehmen_stellenanzeigen();
+            unternehmen.removeStellenanzeige(stellenanzeige);
+            stellenanzeigenRepository.save(stellenanzeige);
+            stellenanzeigenRepository.delete(stellenanzeige);
+            logger.info("Stellenanzeige deleted: " + stellenanzeige);
+        }
+        catch (Exception e){
+            logger.error("An error occurred while deleting Stellenanzeige: " + stellenanzeige + " " + Arrays.toString(e.getStackTrace()));
+            throw new StellenanzeigenException("Stellenanzeige could not be deleted", StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_COULD_NOT_BE_DELETED);
+        }
     }
 }

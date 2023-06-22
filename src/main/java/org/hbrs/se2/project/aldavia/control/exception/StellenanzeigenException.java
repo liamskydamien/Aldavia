@@ -3,7 +3,7 @@ package org.hbrs.se2.project.aldavia.control.exception;
 public class StellenanzeigenException extends Exception{
     public enum StellenanzeigenExceptionType {
         STELLENANZEIGE_NOT_FOUND,
-        STELLENANZEIGE_ALREADY_EXISTS
+        STELLENANZEIGE_COULD_NOT_BE_DELETED, STELLENANZEIGE_ALREADY_EXISTS
     }
 
     private final StellenanzeigenExceptionType type;

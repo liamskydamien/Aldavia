@@ -17,15 +17,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -104,13 +103,32 @@ public class StellenanzeigenServiceTest {
                 .unternehmen_stellenanzeigen(unternehmen)
                 .build();
 
+        Stellenanzeige referenceWithoutTaetigkeitsfeld = Stellenanzeige.builder()
+                .bezeichnung("Java")
+                .beschreibung("Java")
+                .start(LocalDate.now())
+                .ende(LocalDate.now().plusDays(10))
+                .bezahlung("1000")
+                .beschaeftigungsumfang("Vollzeit")
+                .taetigkeitsfelder(new ArrayList<>())
+                .beschaeftigungsverhaeltnis("Festanstellung")
+                .id(1)
+                .unternehmen_stellenanzeigen(unternehmen)
+                .build();
+
+        Set<Stellenanzeige> set = new HashSet<>();
+        set.add(reference);
+        unternehmen.setStellenanzeigen(set);
+
         // Mockito
         given(taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference)).willReturn(reference);
         given(taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(taetigkeitsfeldDTO, reference)).willReturn(reference);
         given(unternehmenService.getUnternehmen(unternehmenProfileDTO.getName())).willReturn(unternehmen);
         given(stellenanzeigeRepository.save(any(Stellenanzeige.class))).willReturn(reference);
         given(stellenanzeigeRepository.findById(1)).willReturn(Optional.of(reference));
+        given(stellenanzeigeRepository.findById(2)).willReturn(Optional.empty());
         given(stellenanzeigeRepository.findAll()).willReturn(List.of(reference));
+        given(taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference)).willReturn(referenceWithoutTaetigkeitsfeld);
 
         // Add
 
@@ -139,25 +157,16 @@ public class StellenanzeigenServiceTest {
         assertEquals(stellenanzeigeDTO.getBeschaeftigungsverhaeltnis(), stellenanzeigen.get(0).getBeschaeftigungsverhaeltnis());
         assertEquals(stellenanzeigeDTO.getTaetigkeitsfelder().get(0).getName(), stellenanzeigen.get(0).getTaetigkeitsfelder().get(0).getBezeichnung());
 
-        /*// Update
-
-        TaetigkeitsfeldDTO taetigkeitsfeldDTO2 = TaetigkeitsfeldDTO.builder()
-                .name("C++")
+        StellenanzeigeDTO testException = StellenanzeigeDTO.builder()
+                .id(2)
                 .build();
 
-        StellenanzeigeDTO stellenanzeigeDTOUpdate = StellenanzeigeDTO.builder()
-                .bezeichnung("Java_New")
-                .beschreibung("Java_New")
-                .start(LocalDate.now().plusDays(1))
-                .ende(LocalDate.now().plusDays(115))
-                .bezahlung("1010")
-                .beschaeftigungsumfang("Teilzeit")
-                .taetigkeitsfelder(List.of(taetigkeitsfeldDTO, taetigkeitsfeldDTO2))
-                .beschaeftigungsverhaeltnis("Festanstellung")
-                .id(stellenanzeige.getId())
-                .build();
+        StellenanzeigenException stellenanzeigen1Exception = assertThrows(StellenanzeigenException.class, () -> stellenanzeigenService.getStellenanzeige(testException));
+        assertEquals(stellenanzeigen1Exception.getType(), StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_NOT_FOUND);
 
-        stellenanzeigenService.updateStellenanzeige(stellenanzeigeDTOUpdate);*/
+        // Delete
+
+        stellenanzeigenService.deleteStellenanzeige(stellenanzeigeDTO);
 
     }
 }
