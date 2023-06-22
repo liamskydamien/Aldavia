@@ -29,12 +29,6 @@ public class StellenanzeigenService {
     private final Logger logger = LoggerFactory.getLogger(StellenanzeigenService.class);
 
 
-    @Autowired
-    private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
-
-    @Autowired
-    private UnternehmenRepository unternehmenRepository;
-
     public Stellenanzeige getStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigenException {
         try {
             logger.info("Search for Stellenanzeige: " + stellenanzeigeDTO);
