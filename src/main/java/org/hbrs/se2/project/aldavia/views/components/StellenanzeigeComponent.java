@@ -8,6 +8,8 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -325,26 +327,33 @@ public void getAndCreateStellenanzeige(String mode){
         Button addStellenanzeigeButton = new Button("Erstellen");
         addStellenanzeigeButton.addClassName("addStellenanzeigeButton");
         addStellenanzeigeButton.addClickListener(e -> {
-            Stellenanzeige stellenanzeige = new Stellenanzeige();
-            stellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
-            stellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
-            stellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());
-            stellenanzeige.setStart(addStellenanzeigeFormComponent.getStart().getValue());
-            stellenanzeige.setTaetigkeitsfelder(addStellenanzeigeFormComponent.getTaetigkeitsfelder());
-            stellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
-            stellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
-            stellenanzeige.setErstellungsdatum(LocalDate.now());
-            System.out.println(stellenanzeige);
-            System.out.println("vor"+stellenanzeigeSet.size());
-            stellenanzeigeSet.add(stellenanzeige);
-            System.out.println("nach"+stellenanzeigeSet.size());
-            try {
-                updateUnternehmenProfileDTO();
-            } catch (ProfileException ex) {
-                throw new RuntimeException(ex);
+            if(addStellenanzeigeFormComponent.getBezeichnung().getValue().isEmpty()
+               || addStellenanzeigeFormComponent.getBeschreibung().getValue().isEmpty()
+                  || addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue().isEmpty()
+                    || addStellenanzeigeFormComponent.getStart().getValue() == null){
+                Notification.show("Bitte füllen Sie alle erforderlichen Felder aus!").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            } else {
+                Stellenanzeige stellenanzeige = new Stellenanzeige();
+                stellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
+                stellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
+                stellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());
+                stellenanzeige.setStart(addStellenanzeigeFormComponent.getStart().getValue());
+                stellenanzeige.setTaetigkeitsfelder(addStellenanzeigeFormComponent.getTaetigkeitsfelder());
+                stellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
+                stellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
+                stellenanzeige.setErstellungsdatum(LocalDate.now());
+                System.out.println(stellenanzeige);
+                System.out.println("vor"+stellenanzeigeSet.size());
+                stellenanzeigeSet.add(stellenanzeige);
+                System.out.println("nach"+stellenanzeigeSet.size());
+                try {
+                    updateUnternehmenProfileDTO();
+                } catch (ProfileException ex) {
+                    throw new RuntimeException(ex);
+                }
+                updateView();
+                addDialog.close();
             }
-            updateView();
-            addDialog.close();
         });
         return addStellenanzeigeButton;
     }

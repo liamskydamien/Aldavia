@@ -2,6 +2,8 @@ package org.hbrs.se2.project.aldavia.views.components;
 
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
@@ -73,8 +75,8 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
     }
     @Override
     public void switchViewMode(String userName) throws PersistenceException, ProfileException {
-        updateCompanyDTO(userName);
-        updateView();
+            updateCompanyDTO(userName);
+            updateView();
     }
 
     @Override
@@ -83,8 +85,13 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
     }
 
     private void updateCompanyDTO(String userName) throws PersistenceException, ProfileException {
-        unternehmenProfileDTO.setAp_vorname(vornameAnsprechPartner.getValue());
-        unternehmenProfileDTO.setAp_nachname(nachnameAnsprechPartner.getValue());
-        unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
+        if(vornameAnsprechPartner.getValue().isEmpty() && !(nachnameAnsprechPartner.getValue().isEmpty())
+                || !(vornameAnsprechPartner.getValue().isEmpty()) && nachnameAnsprechPartner.getValue().isEmpty()){
+            Notification.show("Bitte geben Sie einen Vor- und Nachnamen ein!").addThemeVariants(NotificationVariant.LUMO_ERROR);
+        } else {
+            unternehmenProfileDTO.setAp_vorname(vornameAnsprechPartner.getValue());
+            unternehmenProfileDTO.setAp_nachname(nachnameAnsprechPartner.getValue());
+            unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
+        }
     }
 }
