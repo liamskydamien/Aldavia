@@ -12,9 +12,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class BewerbungErstellenComponent extends Div {
-
     private final BewerbungsControl bewerbungsControl;
     private final String studentUsername;
     private final StellenanzeigeDTO stellenanzeigeDTO;

@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.test.unternehmenProfileTest;
 
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.control.factories.UnternehmenProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
@@ -21,6 +22,7 @@ public class UnternehmenProfileControlTest {
 
 
     UnternehmenProfileControl unternehmenProfileControl;
+
 
     @Mock
     UnternehmenService unternehmenServiceMock;

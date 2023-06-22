@@ -1,6 +1,9 @@
 package org.hbrs.se2.project.aldavia.control;
 
 import lombok.RequiredArgsConstructor;
+import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.control.factories.UnternehmenProfileDTOFactory;
@@ -11,13 +14,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class UnternehmenProfileControl {
     private final UnternehmenService unternehmenService;
     private final UnternehmenProfileDTOFactory unternehmenProfileDTOFactory;
-
     private final Logger logger = LoggerFactory.getLogger(UnternehmenProfileControl.class);
 
 
@@ -45,6 +50,7 @@ public class UnternehmenProfileControl {
         }
         logger.info("Sucessfully updatet the information of the company: " + unternehmen.getName());
     }
+
 
 
 

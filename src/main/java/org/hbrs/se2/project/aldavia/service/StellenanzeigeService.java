@@ -1,7 +1,9 @@
 package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.impl.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
@@ -9,6 +11,7 @@ import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,6 +26,15 @@ public class StellenanzeigeService {
     @Autowired
     UnternehmenRepository unternehmenRepository;
 
+    @Autowired
+    BewerbungsService bewerbungsService;
+
+    @Autowired
+    TaetigkeitsfeldService taetigkeitsfeldService;
+
+    @Autowired
+    UnternehmenService unternehmenService;
+
     public Stellenanzeige getStellenanzeigen(Integer id) throws ProfileException {
         Optional<Stellenanzeige> stellenanzeige = stellenanzeigeRepository.findById(id);
         if (stellenanzeige.isPresent()) {
@@ -32,6 +44,10 @@ public class StellenanzeigeService {
         }
     }
 
+    public List<Stellenanzeige> getAllStellenanzeigen() {
+        return stellenanzeigeRepository.findAll();
+    }
+
     public void updateStellenanzeigeInformationen(Stellenanzeige stellenanzeige, StellenanzeigeDTO dto) throws ProfileException {
         try {
 
@@ -39,8 +55,8 @@ public class StellenanzeigeService {
                     for (Bewerbung b : stellenanzeige.getBewerbungen()) {
                         stellenanzeige.removeBewerbung(b);
                     }
-                    for (Bewerbung b : dto.getBewerbungen()) {
-                        stellenanzeige.addBewerbung(b);
+                    for (BewerbungsDTO b : dto.getBewerbungen()) {
+                        stellenanzeige.addBewerbung(bewerbungsService.getBewerbung(b));
                     }
             }
 
@@ -73,15 +89,15 @@ public class StellenanzeigeService {
                         stellenanzeige.removeTaetigkeitsfeld(t);
                         taetigkeitsfeldRepository.save(t);
                     }
-                    for (Taetigkeitsfeld t : dto.getTaetigkeitsfelder()) {
-                        stellenanzeige.addTaetigkeitsfeld(t);
-                        taetigkeitsfeldRepository.save(t);
+                    for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
+                        stellenanzeige.addTaetigkeitsfeld(taetigkeitsfeldService.getTaetigkeitsfeld(t));
+//                        taetigkeitsfeldRepository.save(t);
                     }
             }
 
             if(dto.getUnternehmen() != null & stellenanzeige.getUnternehmen_stellenanzeigen() != null) {
-                   stellenanzeige.setUnternehmen(dto.getUnternehmen());
-                   unternehmenRepository.save(dto.getUnternehmen());
+                   stellenanzeige.setUnternehmen(unternehmenService.getUnternehmen(dto.getUnternehmen().getName()));
+//                   unternehmenRepository.save(dto.getUnternehmen());
             }
 
 
