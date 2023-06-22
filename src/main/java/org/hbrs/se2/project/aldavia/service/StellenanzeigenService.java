@@ -6,6 +6,7 @@ import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
+import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class StellenanzeigenService {
 
     @Autowired
     private StellenanzeigeRepository stellenanzeigenRepository;
+
+    @Autowired
+    private TaetigkeitsfeldRepository taetigkeitsfeldRepository;
+
+    @Autowired
+    private UnternehmenRepository unternehmenRepository;
 
     public Stellenanzeige getStellenanzeige(StellenanzeigeDTO stellenanzeigeDTO) throws StellenanzeigenException {
         try {
