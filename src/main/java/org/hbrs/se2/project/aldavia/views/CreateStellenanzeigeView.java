@@ -86,17 +86,27 @@ public class CreateStellenanzeigeView extends VerticalLayout {
         try {
             unternehmenProfileDTO.setStellenanzeigen(stellenanzeigeSet);
             unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO,getCurrentUserName());
-            if(unternehmenProfileDTO.getStellenanzeigen().size() == stellenanzeigeSet.size()){
-                getUI().get().navigate(Globals.Pages.COMPANY_PROFILE_VIEW+"/"+getCurrentUserName());
-                Notification note = Notification.show("Stellenanzeige wurde erfolgreich erstellt");
-                note.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                note.setPosition(Notification.Position.BOTTOM_START);
+
+            if(addStellenanzeigeFormComponent.getBezeichnung().getValue().isEmpty()
+                    || addStellenanzeigeFormComponent.getBeschreibung().getValue().isEmpty()
+                    || addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue().isEmpty()
+                    || addStellenanzeigeFormComponent.getStart().getValue() == null) {
+                Notification.show("Bitte füllen Sie alle erforderlichen Felder aus!").addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
             else{
-                Notification note = Notification.show("Stellenanzeige konnte nicht erstellt werden");
-                note.addThemeVariants(NotificationVariant.LUMO_ERROR);
-                note.setPosition(Notification.Position.BOTTOM_START);
+                if(unternehmenProfileDTO.getStellenanzeigen().size() == stellenanzeigeSet.size()){
+                    getUI().get().navigate(Globals.Pages.COMPANY_PROFILE_VIEW+"/"+getCurrentUserName());
+                    Notification note = Notification.show("Stellenanzeige wurde erfolgreich erstellt");
+                    note.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    note.setPosition(Notification.Position.BOTTOM_START);
+                }
+                else{
+                    Notification note = Notification.show("Stellenanzeige konnte nicht erstellt werden");
+                    note.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    note.setPosition(Notification.Position.BOTTOM_START);
+                }
             }
+
         } catch (ProfileException e) {
             e.printStackTrace();
         }
