@@ -12,15 +12,17 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 public class BewerbungErstellenComponent extends Div {
+
     private final BewerbungsControl bewerbungsControl;
-    private final String studentUsername;
-    private final StellenanzeigeDTO stellenanzeigeDTO;
+
+    private String studentUsername;
+    private StellenanzeigeDTO stellenanzeigeDTO;
 
     private TextField bewerbungsTextfield = new TextField("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
-    public BewerbungErstellenComponent(StellenanzeigeDTO stellenanzeigeDTO, BewerbungsControl bewerbungsControl, String studentUsername) {
+    public BewerbungErstellenComponent(BewerbungsControl bewerbungsControl, StellenanzeigeDTO stellenanzeigeDTO, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
         this.studentUsername = studentUsername;

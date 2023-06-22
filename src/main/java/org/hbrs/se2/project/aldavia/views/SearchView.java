@@ -1,42 +1,20 @@
 package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.data.renderer.Renderer;
-import com.vaadin.flow.data.renderer.RendererUtil;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import org.apache.commons.lang3.StringUtils;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
-import org.hbrs.se2.project.aldavia.dtos.CarDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
-import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
-import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
-import org.hbrs.se2.project.aldavia.repository.StudentRepository;
-import org.hbrs.se2.project.aldavia.service.StellenanzeigeService;
-import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.views.components.SearchComponent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.BadSqlGrammarException;
 
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @CssImport("./styles/views/main/main-view.css")

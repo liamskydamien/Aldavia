@@ -86,6 +86,6 @@ public class Taetigkeitsfeld {
 
     @Override
     public int hashCode() {
-        return Objects.hash(bezeichnung, students, stellenanzeigen);
+        return Objects.hash(bezeichnung);
     }
 }

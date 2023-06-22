@@ -148,6 +148,6 @@ public class Stellenanzeige {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bezeichnung, beschreibung, beschaeftigungsverhaeltnis, start, ende, erstellungsdatum, bezahlung, beschaeftigungsumfang, taetigkeitsfelder, unternehmen_stellenanzeigen);
+        return Objects.hash(id, bezeichnung, beschreibung, beschaeftigungsverhaeltnis, start, ende, erstellungsdatum, bezahlung, beschaeftigungsumfang, unternehmen_stellenanzeigen);
     }
 }

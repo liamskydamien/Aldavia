@@ -41,7 +41,7 @@ public class UnternehmenProfileControl {
     public void createAndUpdateUnternehmenProfile(UnternehmenProfileDTO dto, String userName) throws ProfileException {
         logger.info("Getting Company from Database to update its information: " + userName);
         Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
-        logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
+        logger.info("Found a company to the userName with the following username: " + unternehmen.getUser().getUserid());
         try {
             unternehmenService.updateUnternehmenInformation(unternehmen,dto);
 

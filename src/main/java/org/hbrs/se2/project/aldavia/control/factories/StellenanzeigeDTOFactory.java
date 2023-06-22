@@ -4,6 +4,7 @@ import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,23 @@ public class StellenanzeigeDTOFactory {
                 .beschaeftigungsumfang(stellenanzeige.getBeschaeftigungsumfang())
                 .taetigkeitsfelder(createTaetigkeitsfeldDTOs(stellenanzeige.getTaetigkeitsfelder()))
                 .unternehmen(UnternehmenProfileDTOFactory.getInstance().createUnternehmenProfileDTO(stellenanzeige.getUnternehmen_stellenanzeigen()))
+                .build();
+
+    }
+
+    public StellenanzeigeDTO createStellenanzeigeDTO(Stellenanzeige stellenanzeige, Unternehmen unternehmen) {
+        return StellenanzeigeDTO.builder()
+                .id(stellenanzeige.getId())
+                .bezeichnung(stellenanzeige.getBezeichnung())
+                .beschreibung(stellenanzeige.getBeschreibung())
+                .beschaeftigungsverhaeltnis(stellenanzeige.getBeschaeftigungsverhaeltnis())
+                .start(stellenanzeige.getStart())
+                .ende(stellenanzeige.getEnde())
+                .erstellungsdatum(stellenanzeige.getErstellungsdatum())
+                .bezahlung(stellenanzeige.getBezahlung())
+                .beschaeftigungsumfang(stellenanzeige.getBeschaeftigungsumfang())
+                .taetigkeitsfelder(createTaetigkeitsfeldDTOs(stellenanzeige.getTaetigkeitsfelder()))
+                .unternehmen(UnternehmenProfileDTOFactory.getInstance().createUnternehmenProfileDTO(unternehmen))
                 .build();
 
     }

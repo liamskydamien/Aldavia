@@ -44,7 +44,7 @@ public class SearchControlTest {
     private Stellenanzeige stellenanzeige3;
     @BeforeEach
     public void setup() {
-        searchControl = new SearchControl(studentService, stellenanzeigenService);
+        searchControl = new SearchControl(null,studentService, stellenanzeigenService);
     }
 
     private List<Stellenanzeige> setupStellenanzeigen(){

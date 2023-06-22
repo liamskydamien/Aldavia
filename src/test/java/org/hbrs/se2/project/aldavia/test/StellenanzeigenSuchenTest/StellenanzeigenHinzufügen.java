@@ -33,27 +33,27 @@ public class StellenanzeigenHinzufügen {
     @Test
     void datenHinzufügen() {
         User u1 = User.builder()
-                .userid("Thomas112")
+                .userid("Thom1234141412341234321421342314as112")
                 .password("12345678910")
                 .beschreibung("Hi ich bin Thomas")
-                .email("11123@gmail.com")
+                .email("11123@g1234124313242131214231324412431234mail.com")
                 .build();
 
         Taetigkeitsfeld t1 = Taetigkeitsfeld.builder()
-                .bezeichnung("Java")
+                .bezeichnung("Ja31121442")
                 .build();
         Taetigkeitsfeld t2 = Taetigkeitsfeld.builder()
-                .bezeichnung("Software")
+                .bezeichnung("111S414")
                 .build();
 
         taetigkeitsfeldRepository.save(t1);
         taetigkeitsfeldRepository.save(t2);
 
-        Unternehmen unternehmen1 = Unternehmen.builder()
-                .name("Adesso111")
+        Unternehmen unternehmen1 = unternehmenRepository.save(Unternehmen.builder()
+                .name("Adesso11342341211")
                 .user(u1)
-                .webseite("Adesso.de")
-                .build();
+                .webseite("Ade143124123sso.de")
+                .build());
 
         Stellenanzeige s1 = Stellenanzeige.builder()
                 .bezeichnung("Java Praktikum")
@@ -87,7 +87,6 @@ public class StellenanzeigenHinzufügen {
                 .unternehmen_stellenanzeigen(unternehmen1)
                 .build();
 
-        unternehmenRepository.save(unternehmen1);
         stellenanzeigeRepository.save(s1);
         stellenanzeigeRepository.save(s2);
         stellenanzeigeRepository.save(s3);

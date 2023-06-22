@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.service;
 
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
+import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Student;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
@@ -36,15 +37,7 @@ public class TaetigkeitsfeldService {
      */
     public void addStudentToTaetigkeitsfeld (TaetigkeitsfeldDTO taetigkeitsfeldDTO, Student student) {
         logger.info("Add student " + student.getUser().getUserid() + " to " + taetigkeitsfeldDTO.getName());
-        Optional<Taetigkeitsfeld> awaitTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName());
-        Taetigkeitsfeld taetigkeitsfeld;
-        if (awaitTaetigkeitsfeld.isPresent()){
-            taetigkeitsfeld = awaitTaetigkeitsfeld.get();
-        }
-        else {
-            taetigkeitsfeld = new Taetigkeitsfeld();
-            taetigkeitsfeld.setBezeichnung(taetigkeitsfeldDTO.getName());
-        }
+        Taetigkeitsfeld taetigkeitsfeld = getTaetigkeitsfeld(taetigkeitsfeldDTO);
         taetigkeitsfeld = taetigkeitsfeld.addStudent(student);
         taetigkeitsfeldRepository.save(taetigkeitsfeld);
     }
@@ -65,5 +58,32 @@ public class TaetigkeitsfeldService {
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, "Taetigkeitsfeld not found");
         }
+    }
+
+    /**
+     * Add a Taetigkeitsfeld to a Stellenanzeige
+     * @param taetigkeitsfeldDTO The TaetigkeitsfeldDTO
+     * @param stellenanzeige The Stellenanzeige
+     * @return Stellenanzeige with the added Taetigkeitsfeld
+     */
+    public Stellenanzeige addTaetigkeitsfeldToStellenanzeige(TaetigkeitsfeldDTO taetigkeitsfeldDTO, Stellenanzeige stellenanzeige) {
+        logger.info("Add Stellenanzeige " + stellenanzeige.getId() + " to " + taetigkeitsfeldDTO.getName());
+        Taetigkeitsfeld taetigkeitsfeld = getTaetigkeitsfeld(taetigkeitsfeldDTO);
+        taetigkeitsfeld.addStellenanzeige(stellenanzeige);
+        taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        return stellenanzeige;
+    }
+
+    /**
+     * Delete a Taetigkeitsfeld from a Stellenanzeige
+     * @param taetigkeitsfeld The Taetigkeitsfeld
+     * @param stellenanzeige The Stellenanzeige
+     * @return Stellenanzeige with the deleted Taetigkeitsfeld
+     */
+    public Stellenanzeige deleteTaetigkeitsfeldFromStellenanzeige(Taetigkeitsfeld taetigkeitsfeld, Stellenanzeige stellenanzeige){
+        logger.info("Delete Stellenanzeige " + stellenanzeige.getId() + " from " + taetigkeitsfeld.getBezeichnung());
+        taetigkeitsfeld.removeStellenanzeige(stellenanzeige);
+        taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        return stellenanzeige;
     }
 }
