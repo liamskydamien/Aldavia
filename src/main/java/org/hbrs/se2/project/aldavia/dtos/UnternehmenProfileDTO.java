@@ -22,7 +22,7 @@ public class UnternehmenProfileDTO {
     private String email;
     private String telefonnummer;
     private String profilbild;
-    private Set<StellenanzeigeDTO> stellenanzeigen;
+    private Set<Stellenanzeige> stellenanzeigen;
     private Set<Adresse> adressen;
     private String profilePicture;
 

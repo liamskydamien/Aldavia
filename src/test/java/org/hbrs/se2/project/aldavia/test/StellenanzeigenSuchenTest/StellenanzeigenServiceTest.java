@@ -38,14 +38,12 @@ public class StellenanzeigenServiceTest {
     private TaetigkeitsfeldService taetigkeitsfeldService;
 
     @Mock
-    private UnternehmenService unternehmenService;
-    @Mock
     private StellenanzeigeRepository stellenanzeigeRepository;
 
 
     @BeforeEach
     public void setUp() {
-        stellenanzeigenService = new StellenanzeigenService(stellenanzeigeRepository, taetigkeitsfeldService, unternehmenService);
+        stellenanzeigenService = new StellenanzeigenService(stellenanzeigeRepository, taetigkeitsfeldService);
     }
 
     @AfterEach
@@ -123,7 +121,6 @@ public class StellenanzeigenServiceTest {
         // Mockito
         given(taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference)).willReturn(reference);
         given(taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(taetigkeitsfeldDTO, reference)).willReturn(reference);
-        given(unternehmenService.getUnternehmen(unternehmenProfileDTO.getName())).willReturn(unternehmen);
         given(stellenanzeigeRepository.save(any(Stellenanzeige.class))).willReturn(reference);
         given(stellenanzeigeRepository.findById(1)).willReturn(Optional.of(reference));
         given(stellenanzeigeRepository.findById(2)).willReturn(Optional.empty());
@@ -132,7 +129,7 @@ public class StellenanzeigenServiceTest {
 
         // Add
 
-        stellenanzeigenService.addStellenanzeige(stellenanzeigeDTO);
+        stellenanzeigenService.addStellenanzeige(stellenanzeigeDTO, unternehmen);
 
         // Read
 

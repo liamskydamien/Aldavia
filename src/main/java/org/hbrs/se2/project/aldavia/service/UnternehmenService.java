@@ -2,6 +2,8 @@ package org.hbrs.se2.project.aldavia.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
@@ -16,6 +18,9 @@ public class UnternehmenService {
 
     private final UnternehmenRepository unternehmenRepository;
 
+    private final StellenanzeigeDTOFactory stellenanzeigeDTOFactory = StellenanzeigeDTOFactory.getInstance();
+
+    private final StellenanzeigenService stellenanzeigeService;
 
     private final UserRepository userRepository;
 
@@ -63,7 +68,8 @@ public class UnternehmenService {
                     unternehmen.getStellenanzeigen().clear();
                     Set<Stellenanzeige> stellenanzeigeFromDTO = dto.getStellenanzeigen();
                     for (Stellenanzeige s : stellenanzeigeFromDTO) {
-                        unternehmen.addStellenanzeige(s);
+                        StellenanzeigeDTO stellenanzeigeDTO = stellenanzeigeDTOFactory.createStellenanzeigeDTO(s, unternehmen);
+                        stellenanzeigeService.addStellenanzeige(stellenanzeigeDTO, unternehmen);
                     }
                 }
             }

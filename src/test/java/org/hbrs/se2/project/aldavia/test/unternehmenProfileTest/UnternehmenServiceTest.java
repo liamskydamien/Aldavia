@@ -6,6 +6,7 @@ import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
+import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,12 @@ public class UnternehmenServiceTest {
     @Mock
     UserRepository userRepositoryMock;
 
+    @Mock
+    StellenanzeigenService stellenanzeigenServiceMock;
+
     @BeforeEach
     void setUp() {
-        unternehmenService = new UnternehmenService(unternehmenRepositoryMock, userRepositoryMock);
+        unternehmenService = new UnternehmenService(unternehmenRepositoryMock,stellenanzeigenServiceMock , userRepositoryMock);
     }
 
     @Test

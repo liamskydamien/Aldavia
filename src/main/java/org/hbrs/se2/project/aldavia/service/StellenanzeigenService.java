@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hbrs.se2.project.aldavia.control.exception.StellenanzeigenException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
+import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
@@ -24,7 +25,6 @@ public class StellenanzeigenService {
 
     private final StellenanzeigeRepository stellenanzeigenRepository;
     private final TaetigkeitsfeldService taetigkeitsfeldService;
-    private final UnternehmenService unternehmenService;
 
     private final Logger logger = LoggerFactory.getLogger(StellenanzeigenService.class);
 
@@ -49,7 +49,7 @@ public class StellenanzeigenService {
      * @param dto StellenanzeigeDTO
      * @throws ProfileException if the Stellenanzeige could not be created
      */
-    public void addStellenanzeige(StellenanzeigeDTO dto) throws ProfileException {
+    public void addStellenanzeige(StellenanzeigeDTO dto, Unternehmen unternehmen) throws ProfileException {
         logger.info("Creating new Stellenanzeige: " + dto);
         Stellenanzeige stellenanzeige = stellenanzeigenRepository.save(Stellenanzeige.builder()
                 .bezeichnung(dto.getBezeichnung())
@@ -59,7 +59,7 @@ public class StellenanzeigenService {
                 .erstellungsdatum(dto.getErstellungsdatum())
                 .ende(dto.getEnde())
                 .start(dto.getStart())
-                .unternehmen_stellenanzeigen(unternehmenService.getUnternehmen(dto.getUnternehmen().getUsername()))
+                .unternehmen_stellenanzeigen(unternehmen)
                 .build());
         logger.info("Adding Taetigkeitsfelder to Stellenanzeige: " + dto);
         for (TaetigkeitsfeldDTO t : dto.getTaetigkeitsfelder()) {
