@@ -58,6 +58,7 @@ public class UnternehmenService {
                 }
             }
 
+            // TODO: Stellenanzeigen und Taetigkeitsfeld Service zwischen schalten
             if (dto.getStellenanzeigen() != null) {
                 if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
                     unternehmen.getStellenanzeigen().clear();
