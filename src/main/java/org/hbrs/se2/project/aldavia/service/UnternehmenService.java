@@ -9,11 +9,13 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UnternehmenService {
 
     private final UnternehmenRepository unternehmenRepository;

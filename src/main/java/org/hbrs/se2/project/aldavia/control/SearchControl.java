@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class SearchControl {
 
+    // Controls
+    private final BewerbungsControl bewerbungsControl;
+
     // Services
     private final StudentService studentService;
     private final StellenanzeigenService stellenanzeigenService;
@@ -70,6 +73,10 @@ public class SearchControl {
             logger.error("Could not find user {}", username);
             return getAllStellenanzeigen();
         }
+    }
+
+    public BewerbungsControl getBewerbungsControl() {
+        return bewerbungsControl;
     }
 
 }

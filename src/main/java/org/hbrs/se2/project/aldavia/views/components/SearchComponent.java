@@ -16,22 +16,15 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.StreamResource;
-import org.apache.tomcat.util.modeler.NotificationInfo;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
-import org.hbrs.se2.project.aldavia.service.BewerbungsService;
-import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
-import org.hbrs.se2.project.aldavia.service.StudentService;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -39,26 +32,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @CssImport("./styles/views/profile/studentProfile.css")
 public class SearchComponent extends VerticalLayout {
 
-    @Autowired
-    SearchControl searchControl;
+    private final SearchControl searchControl;
 
-    BewerbungsControl bewerbungsControl;
-
-    @Autowired
-    BewerbungsService bewerbungsService;
-
-    @Autowired
-    StudentService studentService;
-
-    @Autowired
-    StellenanzeigenService stellenanzeigenService;
-
+    private final BewerbungsControl bewerbungsControl;
 
     private List<StellenanzeigeDTO> stellenanzeigeList;
 
@@ -78,11 +59,10 @@ public class SearchComponent extends VerticalLayout {
 
     public SearchComponent(SearchControl searchControl) {
         this.searchControl = searchControl;
+        this.bewerbungsControl = searchControl.getBewerbungsControl();
         displayStellenanzeigen = new VerticalLayout();
 
         stellenanzeigeList = searchControl.getAllStellenanzeigen();
-
-        bewerbungsControl = new BewerbungsControl(bewerbungsService,studentService,stellenanzeigenService);
 
         setUpUI(stellenanzeigeList);
 
@@ -175,9 +155,10 @@ public class SearchComponent extends VerticalLayout {
 
             } else {
                 UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+                // TODO: Why? Check for role instead
                 if (true) {
                     bewerbungsDialog = new Dialog();
-                    bewerbungErstellenComponent = new BewerbungErstellenComponent(stellenanzeigeDTO, bewerbungsControl, userDTO.getUserid());
+                    bewerbungErstellenComponent = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO, userDTO.getUserid());
                     bewerbungsDialog.add(bewerbungErstellenComponent);
                     bewerbungsDialog.open();
 
