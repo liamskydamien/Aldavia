@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.aldavia.dtos.impl;
+package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class AdresseDTOImpl implements AddressDTO {
+public class AdresseDTO{
     private String strasse;
 
     private int id;
@@ -26,9 +26,6 @@ public class AdresseDTOImpl implements AddressDTO {
 
     private String land;
 
-    private List<Unternehmen> unternehmen;
-
-
-
+    private List<UnternehmenProfileDTO> unternehmen;
 
 }
