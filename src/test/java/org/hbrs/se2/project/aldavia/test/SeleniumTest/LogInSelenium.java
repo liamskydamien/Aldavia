@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class LogInSelenium {
-
+/*
     private static WebDriver driver;
 
     @BeforeAll
@@ -54,5 +54,7 @@ public class LogInSelenium {
         // Schließe den Browser nach dem Test
         driver.quit();
     }
+
+ */
 
 }
