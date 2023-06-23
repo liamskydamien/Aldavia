@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -14,7 +15,7 @@ import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.springframework.stereotype.Component;
 
-public class BewerbungErstellenComponent extends Div {
+public class BewerbungErstellenComponent extends Dialog {
 
     private final BewerbungsControl bewerbungsControl;
 
@@ -26,7 +27,15 @@ public class BewerbungErstellenComponent extends Div {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
         this.studentUsername = studentUsername;
-        this.add(setUpBewerbungsLayout());
+        this.add(createComponent());
+        this.open();
+    }
+
+    private Div createComponent() {
+        Div div = new Div();
+        div.addClassName("bewerbung-erstellen-component");
+        div.add(setUpBewerbungsLayout());
+        return div;
     }
 
 
@@ -73,6 +82,8 @@ public class BewerbungErstellenComponent extends Div {
     private void addBewerbung() {
         try {
             bewerbungsControl.addBewerbung(studentUsername, stellenanzeigeDTO, bewerbungsTextfield.getValue());
+            Notification.show("Bewerbung erfolgreich abgeschickt");
+            this.close();
         } catch (BewerbungsException e) {
             Notification.show("Fehler beim Speichern der Bewerbung");
         }
