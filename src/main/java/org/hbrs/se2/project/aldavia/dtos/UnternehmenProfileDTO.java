@@ -22,8 +22,8 @@ public class UnternehmenProfileDTO {
     private String email;
     private String telefonnummer;
     private String profilbild;
-    private Set<Stellenanzeige> stellenanzeigen;
-    private Set<Adresse> adressen;
+    private Set<StellenanzeigeDTO> stellenanzeigen;
+    private Set<AdresseDTO> adressen;
     private String profilePicture;
 
 }

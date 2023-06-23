@@ -81,9 +81,11 @@ public class TaetigkeitsfeldService {
      * @return Stellenanzeige with the deleted Taetigkeitsfeld
      */
     public Stellenanzeige deleteTaetigkeitsfeldFromStellenanzeige(Taetigkeitsfeld taetigkeitsfeld, Stellenanzeige stellenanzeige){
-        logger.info("Delete Stellenanzeige " + stellenanzeige.getId() + " from " + taetigkeitsfeld.getBezeichnung());
+        logger.info("Remove Stellenanzeige " + stellenanzeige.getId() + " from " + taetigkeitsfeld.getBezeichnung());
         taetigkeitsfeld.removeStellenanzeige(stellenanzeige);
+        logger.info("REMOVE STELLENANZEIGE WAS SUCCESSFUL: " + taetigkeitsfeld.getBezeichnung() + "FROM " + stellenanzeige.getId() + ". Size of Stellenanzeige: " + taetigkeitsfeld.getStellenanzeigen().size());
         taetigkeitsfeldRepository.save(taetigkeitsfeld);
+        logger.info("SAVE WAS SUCCESSFUL");
         return stellenanzeige;
     }
 }

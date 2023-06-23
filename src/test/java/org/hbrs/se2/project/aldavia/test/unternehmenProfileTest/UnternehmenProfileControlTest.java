@@ -6,6 +6,8 @@ import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.control.factories.UnternehmenProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
+import org.hbrs.se2.project.aldavia.service.AdresseService;
+import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +31,14 @@ public class UnternehmenProfileControlTest {
 
     @Mock
     UnternehmenProfileDTOFactory factoryMock;
+    @Mock
+    StellenanzeigenService stellenanzeigenServiceMock;
+    @Mock
+    AdresseService adresseServiceMock;
 
     @BeforeEach
     void setUp() {
-        unternehmenProfileControl = new UnternehmenProfileControl(unternehmenServiceMock, factoryMock);
+        unternehmenProfileControl = new UnternehmenProfileControl(unternehmenServiceMock, factoryMock, stellenanzeigenServiceMock, adresseServiceMock);
 
     }
 

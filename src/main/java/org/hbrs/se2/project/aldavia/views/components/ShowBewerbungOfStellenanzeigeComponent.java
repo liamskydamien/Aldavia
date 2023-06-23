@@ -15,8 +15,7 @@ import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
+import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
@@ -34,18 +33,18 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
     private UnternehmenProfileControl unternehmenProfileControl;
     private StudentProfileControl studentProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
-    private Stellenanzeige pickedStellenanzeige;
+    private StellenanzeigeDTO pickedStellenanzeige;
     private Div displayBewerbungen;
     private Span noBewerbungen;
-    private List<Bewerbung> bewerbungen;
+    private List<BewerbungsDTO> bewerbungen;
     @SneakyThrows
     @Override
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
         if (parameter != null) {
             unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
             // Laden der Bewerbungen für die entsprechende Stellenanzeige
-            Set<Stellenanzeige> stellenanzeige = unternehmenProfileDTO.getStellenanzeigen();
-            for(Stellenanzeige s : stellenanzeige){
+            Set<StellenanzeigeDTO> stellenanzeige = unternehmenProfileDTO.getStellenanzeigen();
+            for(StellenanzeigeDTO s : stellenanzeige){
                 if(s.getId() == Long.parseLong(parameter)){
                     this.pickedStellenanzeige = s;
                 }
@@ -72,7 +71,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         if(bewerbungen.size() == 0) {
             this.add(noBewerbungen);
         }else{
-            for(Bewerbung b : bewerbungen){
+            for(BewerbungsDTO b : bewerbungen){
                 displayBewerbungen.add(createBewerbungLayout(b));
             }
             this.add(displayBewerbungen);
@@ -87,7 +86,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
     }
 
     @SneakyThrows
-    private HorizontalLayout createBewerbungLayout(Bewerbung bewerbung) {
+    private HorizontalLayout createBewerbungLayout(BewerbungsDTO bewerbung) {
         HorizontalLayout bewerbungLayout = new HorizontalLayout();
         bewerbungLayout.addClassName("bewerbung-layout");
         bewerbungLayout.addClassName("card");
@@ -102,7 +101,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         profile.addClassName("profile");
 
         //Profilbild und Studentenname
-        StudentProfileDTO student = getStudent(bewerbung.getStudent().getUser().getUserid());
+        StudentProfileDTO student = getStudent(bewerbung.getStudent().getUsername());
         Image profileImg;
         if(student.getProfilbild() == null || student.getProfilbild().equals("")){
             profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
@@ -177,13 +176,13 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         return stellenanzeigeLayout;
     }
 
-    private HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldListe){
+    private HorizontalLayout renderTaetigkeit(List<TaetigkeitsfeldDTO> taetigkeitsfeldListe){
         HorizontalLayout taetigkeitenLayout = new HorizontalLayout();
         taetigkeitenLayout.addClassName("kenntnisseLayout");
         if(taetigkeitsfeldListe.size()>3){
             for (int i = 0; i < 3; i++){
-                Taetigkeitsfeld pickedTaetigkeitsfeld = taetigkeitsfeldListe.get(i);
-                Span taetigkeitCapsul = new Span(pickedTaetigkeitsfeld.getBezeichnung());
+                TaetigkeitsfeldDTO pickedTaetigkeitsfeld = taetigkeitsfeldListe.get(i);
+                Span taetigkeitCapsul = new Span(pickedTaetigkeitsfeld.getName());
                 taetigkeitCapsul.getElement().getThemeList().add("badge pill");
                 taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
                 taetigkeitCapsul.getElement().getThemeList().add("badge pill");
@@ -193,8 +192,8 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
             restlicheTaetigkeiten.addClassName("stellenanzeige-taetigkeit");
             taetigkeitenLayout.add(restlicheTaetigkeiten);
         } else {
-            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfeldListe){
-                Span taetigkeitCapsul = new Span(taetigkeitsfeld.getBezeichnung());
+            for (TaetigkeitsfeldDTO taetigkeitsfeld : taetigkeitsfeldListe){
+                Span taetigkeitCapsul = new Span(taetigkeitsfeld.getName());
                 taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
                 taetigkeitCapsul.getElement().getThemeList().add("badge pill");
                 taetigkeitenLayout.add(taetigkeitCapsul);

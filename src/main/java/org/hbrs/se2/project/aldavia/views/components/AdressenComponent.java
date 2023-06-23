@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
@@ -27,7 +28,7 @@ import java.util.Set;
 public class AdressenComponent extends VerticalLayout implements ProfileComponent{
     private final UnternehmenProfileControl unternehmenProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
-    private Set<Adresse> adressen;
+    private Set<AdresseDTO> adressen;
     private TextField strasse;
     private TextField hausnr;
     private TextField plz;
@@ -114,12 +115,12 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
 
     private void renderAdressen(String mode) {
         displayAdressen.removeAll();
-        for (Adresse adresse : adressen) {
+        for (AdresseDTO adresse : adressen) {
             displayAdressen.add(createAdressDisplay(mode, adresse));
         }
     }
 
-    private VerticalLayout createAdressDisplay(String mode, Adresse adresse) {
+    private VerticalLayout createAdressDisplay(String mode, AdresseDTO adresse) {
         VerticalLayout adressDisplay = new VerticalLayout();
         adressDisplay.addClassName("adress-display");
         System.out.println("mode: " + mode);
@@ -142,12 +143,12 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
     private Button saveAdressButton() {
         Button saveAdress = new Button("Hinzufügen");
         saveAdress.addClickListener(e -> {
-            Adresse adresseNeu = null;
+            AdresseDTO adresseNeu = null;
             if (Objects.equals(strasse.getValue(), "") || Objects.equals(hausnr.getValue(), "") || Objects.equals(plz.getValue(), "") || Objects.equals(ort.getValue(), "")
                     || Objects. equals(land.getValue(), "")) {
                 Notification.show("Bitte alle Adress-Felder ausfüllen!");
             } else {
-                adresseNeu = Adresse.builder()
+                adresseNeu = AdresseDTO.builder()
                         .strasse(strasse.getValue())
                         .hausnummer(hausnr.getValue())
                         .plz(plz.getValue())
@@ -166,7 +167,7 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         return saveAdress;
     }
 
-    private Button deleteAdresseButton(Adresse adresse) {
+    private Button deleteAdresseButton(AdresseDTO adresse) {
         Button deleteAdress = new Button(new Icon("lumo", "cross"));
         deleteAdress.addClickListener(e -> {
 

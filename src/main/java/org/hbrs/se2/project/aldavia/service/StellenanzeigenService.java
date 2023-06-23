@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.exception.StellenanzeigenException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class StellenanzeigenService {
      * @throws StellenanzeigenException if the Stellenanzeige could not be deleted
      */
     public void deleteStellenanzeige(StellenanzeigeDTO dto) throws StellenanzeigenException {
-        logger.info("Deleting Stellenanzeige: " + dto);
+        logger.info("Deleting StellenanzeigeDTO: " + dto);
         Stellenanzeige stellenanzeige = getStellenanzeige(dto);
         try {
             logger.info("Deleting Taetigkeitsfelder from Stellenanzeige: " + stellenanzeige);
@@ -95,5 +98,37 @@ public class StellenanzeigenService {
             logger.error("An error occurred while deleting Stellenanzeige: " + stellenanzeige + " " + Arrays.toString(e.getStackTrace()));
             throw new StellenanzeigenException("Stellenanzeige could not be deleted", StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_COULD_NOT_BE_DELETED);
         }
+    }
+
+    @SneakyThrows
+    public void deleteStellenanzeige(Stellenanzeige stellenanzeige) {
+        logger.info("Deleting Stellenanzeige: " + stellenanzeige);
+
+        try{
+            logger.info("Deleting Taetigkeitsfelder from Stellenanzeige: " + stellenanzeige);
+            List<Taetigkeitsfeld> toRemoveTaetigkeitsfelder = new ArrayList<>();
+            for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
+                logger.info("Adding Taetigkeitsfeld to toRemoveTaetigkeitsfelder");
+                toRemoveTaetigkeitsfelder.add(t);
+            }
+            for (Taetigkeitsfeld t : toRemoveTaetigkeitsfelder){
+                logger.info("Deleting Taetigkeitsfeld: " + t);
+                taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(t, stellenanzeige);
+            }
+            logger.info("Deleting Unternehmen from Stellenanzeige: " + stellenanzeige);
+            Unternehmen unternehmen = stellenanzeige.getUnternehmen_stellenanzeigen();
+            unternehmen.removeStellenanzeige(stellenanzeige);
+            stellenanzeigenRepository.save(stellenanzeige);
+            stellenanzeigenRepository.delete(stellenanzeige);
+            logger.info("Stellenanzeige deleted: " + stellenanzeige);
+        } catch (UndeclaredThrowableException e){
+            e.getUndeclaredThrowable().printStackTrace();
+
+        } catch (Exception e) {
+            logger.error("An error occurred while deleting Stellenanzeige: " + stellenanzeige + " " + Arrays.toString(e.getStackTrace()));
+            throw new StellenanzeigenException("Stellenanzeige could not be deleted. Here Stacktrace: " + Arrays.toString(e.getStackTrace()), StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_COULD_NOT_BE_DELETED);
+
+        }
+
     }
 }

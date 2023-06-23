@@ -3,10 +3,8 @@ package org.hbrs.se2.project.aldavia.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -14,8 +12,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import lombok.Setter;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +32,9 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
     private TextField bezahlung;
     private FlexLayout displayTaetigkeitsfeld;
     private VerticalLayout taetigkeitsfeldArea;
-    private List<Taetigkeitsfeld> taetigkeitsfelder;
+    private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
     private  HorizontalLayout addTaetigkeitsArea;
-    private Map<Taetigkeitsfeld, TextField> interestFields = new HashMap<>();
+    private Map<TaetigkeitsfeldDTO, TextField> interestFields = new HashMap<>();
 
     //Mit Stellenanzeige als Parameter (für Edit)
     private Stellenanzeige stellenanzeige;
@@ -114,9 +112,9 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
         displayTaetigkeitsfeld.removeAll();
         interestFields.clear();
 
-        for(Taetigkeitsfeld t : taetigkeitsfelder){
+        for(TaetigkeitsfeldDTO t : taetigkeitsfelder){
             TextField taetigkeit = new TextField();
-            taetigkeit.setValue(t.getBezeichnung());
+            taetigkeit.setValue(t.getName());
             taetigkeit.addClassName("Skill");
             taetigkeit.getElement().getStyle().set("margin-right", "10px");
 
@@ -131,7 +129,7 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
         }
     }
 
-    private Button deleteSkillButton(Taetigkeitsfeld taetigkeitsfeld){
+    private Button deleteSkillButton(TaetigkeitsfeldDTO taetigkeitsfeld){
         Button deleteTaetigkeit = new Button(new Icon("lumo","cross"));
         deleteTaetigkeit.setClassName("deleteButton");
 
@@ -155,8 +153,8 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
         addTaetikeits.addClickListener(buttonClickEvent ->{
             if(taetigkeitsfelder.size()<11) {
                 if (!addTaetigkeitTextField.getValue().isEmpty()) {
-                    Taetigkeitsfeld newTaetigkeit = new Taetigkeitsfeld();
-                    newTaetigkeit.setBezeichnung(addTaetigkeitTextField.getValue());
+                    TaetigkeitsfeldDTO newTaetigkeit = new TaetigkeitsfeldDTO();
+                    newTaetigkeit.setName(addTaetigkeitTextField.getValue());
                     taetigkeitsfelder.add(newTaetigkeit);
                     getTaetigkeitAndCreatefield();
                     addTaetigkeitTextField.clear();

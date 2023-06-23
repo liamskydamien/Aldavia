@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.util.Globals;
@@ -30,7 +31,7 @@ public class CreateStellenanzeigeView extends VerticalLayout {
     private UnternehmenProfileDTO unternehmenProfileDTO;
     private UnternehmenProfileControl unternehmenProfileControl;
     private AddStellenanzeigeFormComponent addStellenanzeigeFormComponent;
-    private Set<Stellenanzeige> stellenanzeigeSet;
+    private Set<StellenanzeigeDTO> stellenanzeigeSet;
 
     @Autowired
     public CreateStellenanzeigeView(UnternehmenProfileControl unternehmenProfileControl) throws ProfileException {
@@ -66,7 +67,7 @@ public class CreateStellenanzeigeView extends VerticalLayout {
         Button addStellenanzeige = new Button("Erstellen");
         addStellenanzeige.addClassName("addStellenanzeigeButton");
         addStellenanzeige.addClickListener(e -> {
-            Stellenanzeige neueStellenanzeige = new Stellenanzeige();
+            StellenanzeigeDTO neueStellenanzeige = new StellenanzeigeDTO();
             neueStellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
             neueStellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
             neueStellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());
