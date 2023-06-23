@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
@@ -12,15 +11,14 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Bewerbung;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +31,11 @@ import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentU
 public class StellenanzeigeComponent extends VerticalLayout implements ProfileComponent{
     private UnternehmenProfileControl unternehmenProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
-    private Set<Stellenanzeige> stellenanzeigeSet;
+    private Set<StellenanzeigeDTO> stellenanzeigeSet;
     private Div displayStellenanzeige;
     private HorizontalLayout createStellenanzeige;
     private H2 title;
     private Span noStellenanzeige;
-    private Dialog editDialog;
     private Dialog addDialog;
 
     public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
@@ -52,13 +49,12 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         noStellenanzeige = new Span("Keine Stellenanzeige vorhanden");
         noStellenanzeige.addClassName("noStellenanzeige");
         noStellenanzeige.addClassName("card");
-        editDialog = new Dialog();
         addDialog = new Dialog();
         addClassName("stellenanzeige");
         setUpUI();
     }
 
-    @Transactional
+
     public void setUpUI(){
         title = new H2("Stellenanzeige");
         createStellenanzeige.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
@@ -73,7 +69,7 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         updateView();
     }
 
-    @Transactional
+
     public void updateView(){
 
         System.out.println(stellenanzeigeSet);
@@ -116,12 +112,12 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
 @Transactional
 public void getAndCreateStellenanzeige(String mode){
         displayStellenanzeige.removeAll();
-        for(Stellenanzeige stellenanzeige : stellenanzeigeSet){
+        for(StellenanzeigeDTO stellenanzeige : stellenanzeigeSet){
             displayStellenanzeige.add(renderStellenanzeige(stellenanzeige,mode));
         }
     }
     @Transactional
-    public VerticalLayout renderStellenanzeige(Stellenanzeige stellenanzeige, String mode){
+    public VerticalLayout renderStellenanzeige(StellenanzeigeDTO stellenanzeige, String mode){
         //Main Body
         VerticalLayout stellenanzeigenLayout = new VerticalLayout();
         stellenanzeigenLayout.addClassName("stellenanzeigenLayout");
@@ -133,7 +129,7 @@ public void getAndCreateStellenanzeige(String mode){
         editAndDeleteStellenanzeigeArea.addClassName("editAndDeleteStellenanzeigeArea");
         editAndDeleteStellenanzeigeArea.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         editAndDeleteStellenanzeigeArea.setWidthFull();
-        editAndDeleteStellenanzeigeArea.add(editStellenanzeige(stellenanzeige),deleteStellenanzeige(stellenanzeige));
+        editAndDeleteStellenanzeigeArea.add(deleteStellenanzeige(stellenanzeige));
         stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea);
 
         if(mode.equals(Globals.ProfileViewMode.EDIT)) {
@@ -154,7 +150,7 @@ public void getAndCreateStellenanzeige(String mode){
         stellenanzeigeTitel.addClassName("stellenanzeigeTitel");
         Span stellenanzeigeBeschaeftigungsverheltnis = new Span(stellenanzeige.getBeschaeftigungsverhaeltnis());
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
-        List<Taetigkeitsfeld> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
+        List<TaetigkeitsfeldDTO> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
         stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis, renderTaetigkeit(taetigkeitsfeldList));
 
         VerticalLayout stellenanzeigeInfoRight = new VerticalLayout();
@@ -169,13 +165,13 @@ public void getAndCreateStellenanzeige(String mode){
         return stellenanzeigenLayout;
     }
     @Transactional
-    public HorizontalLayout renderTaetigkeit(List<Taetigkeitsfeld> taetigkeitsfeldList){
+    public HorizontalLayout renderTaetigkeit(List<TaetigkeitsfeldDTO> taetigkeitsfeldList){
         HorizontalLayout taetigkeitLayout = new HorizontalLayout();
         taetigkeitLayout.addClassName("kenntnisseLayout");
         if(taetigkeitsfeldList.size()>3){
             for (int i = 0; i < 3; i++){
-                Taetigkeitsfeld taetigkeitsfeld = taetigkeitsfeldList.get(i);
-                Span taetigkeit = new Span(taetigkeitsfeld.getBezeichnung());
+                TaetigkeitsfeldDTO taetigkeitsfeld = taetigkeitsfeldList.get(i);
+                Span taetigkeit = new Span(taetigkeitsfeld.getName());
                 taetigkeit.getElement().getThemeList().add("badge pill");
                 taetigkeit.addClassName("stellenanzeige-taetigkeit");
                 taetigkeitLayout.add(taetigkeit);
@@ -184,8 +180,8 @@ public void getAndCreateStellenanzeige(String mode){
             restlicheTaetigkeiten.addClassName("stellenanzeige-taetigkeit");
             taetigkeitLayout.add(restlicheTaetigkeiten);
         } else {
-            for (Taetigkeitsfeld taetigkeitsfeld : taetigkeitsfeldList){
-                Span taetigkeit = new Span(taetigkeitsfeld.getBezeichnung());
+            for (TaetigkeitsfeldDTO taetigkeitsfeld : taetigkeitsfeldList){
+                Span taetigkeit = new Span(taetigkeitsfeld.getName());
                 taetigkeit.addClassName("stellenanzeige-taetigkeit");
                 taetigkeit.getElement().getThemeList().add("badge pill");
                 taetigkeitLayout.add(taetigkeit);
@@ -195,24 +191,6 @@ public void getAndCreateStellenanzeige(String mode){
         return taetigkeitLayout;
     }
 
-    private void navigateToBewerbung(Stellenanzeige stellenanzeige){
-        UI.getCurrent().navigate(Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW+"/" + stellenanzeige.getId());
-    }
-
-    //TODO: Woanders hin?
-
-    private Scroller bewerbungenScroler(List<Bewerbung> bewerbungList){
-        Scroller bewerbungScroller = new Scroller();
-        VerticalLayout bewerbungLayout = new VerticalLayout();
-        bewerbungLayout.addClassName("bewerbungLayout");
-        for (Bewerbung bewerbung : bewerbungList){
-            bewerbungLayout.add(renderBewerbung(bewerbung));
-        }
-        return bewerbungScroller;
-    }
-
-
-    //TODO: Bewerbung rendern welche Daten?
     private VerticalLayout renderBewerbung(Bewerbung bewerbung){
         VerticalLayout bewerbungLayout = new VerticalLayout();
         bewerbungLayout.addClassName("bewerbungLayout");
@@ -221,16 +199,16 @@ public void getAndCreateStellenanzeige(String mode){
         return bewerbungLayout;
     }
 
-    private HorizontalLayout editAndDeleteStellenanzeigeArea(Stellenanzeige stellenanzeigen) {
+    private HorizontalLayout editAndDeleteStellenanzeigeArea(StellenanzeigeDTO stellenanzeigen) {
         HorizontalLayout editAndDeleteStellenanzeigeArea = new HorizontalLayout();
         editAndDeleteStellenanzeigeArea.addClassName("editAndDeleteStellenanzeigeArea");
         editAndDeleteStellenanzeigeArea.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        editAndDeleteStellenanzeigeArea.add(editStellenanzeige(stellenanzeigen), deleteStellenanzeige(stellenanzeigen));
+        editAndDeleteStellenanzeigeArea.add(deleteStellenanzeige(stellenanzeigen));
         return editAndDeleteStellenanzeigeArea;
 
     }
 
-    private Button deleteStellenanzeige(Stellenanzeige stellenanzeige){
+    private Button deleteStellenanzeige(StellenanzeigeDTO stellenanzeige){
         Button deleteStellenanzeige = new Button(new Icon("lumo", "cross"));
         deleteStellenanzeige.addClassName("deleteStellenanzeige");
         deleteStellenanzeige.addClickListener(e -> {
@@ -240,35 +218,7 @@ public void getAndCreateStellenanzeige(String mode){
         return deleteStellenanzeige;
     }
 
-    private Button editStellenanzeige(Stellenanzeige stellenanzeige){
-        Button editStellenanzeige = new Button(new Icon("lumo", "edit"));
-        editStellenanzeige.addClassName("editStellenanzeige");
-        editStellenanzeige.addClickListener(e -> {
-            editPopup(stellenanzeige);
-            editDialog.open();
-        });
-        return editStellenanzeige;
-    }
 
-    private void editPopup(Stellenanzeige stellenanzeige){
-
-        editDialog.setCloseOnEsc(false);
-        editDialog.setCloseOnOutsideClick(false);
-        editDialog.setWidth("400px");
-        editDialog.setHeight("150px");
-        editDialog.setModal(true);
-        editDialog.setCloseOnEsc(true);
-
-        VerticalLayout dialogLayout = new VerticalLayout();
-        H1 dialogTitel = new H1("Stellenanzeige bearbeiten");
-        dialogLayout.addClassName("dialogLayout");
-
-        //Todo: Formular für Stellenanzeige bearbeiten
-
-
-
-        editDialog.add(dialogLayout);
-    }
 
     private Button addStellenanzeige(){
         Button addStellenanzeige = new Button("Erstellen");
@@ -333,7 +283,7 @@ public void getAndCreateStellenanzeige(String mode){
                     || addStellenanzeigeFormComponent.getStart().getValue() == null){
                 Notification.show("Bitte füllen Sie alle erforderlichen Felder aus!").addThemeVariants(NotificationVariant.LUMO_ERROR);
             } else {
-                Stellenanzeige stellenanzeige = new Stellenanzeige();
+                StellenanzeigeDTO stellenanzeige = new StellenanzeigeDTO();
                 stellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());
                 stellenanzeige.setBeschreibung(addStellenanzeigeFormComponent.getBeschreibung().getValue());
                 stellenanzeige.setEnde(addStellenanzeigeFormComponent.getEnde().getValue());

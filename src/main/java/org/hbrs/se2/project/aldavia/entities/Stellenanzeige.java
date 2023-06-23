@@ -81,11 +81,13 @@ public class Stellenanzeige {
     }
 
     public void removeTaetigkeitsfeld(Taetigkeitsfeld taetigkeitsfeld) {
-        if (taetigkeitsfelder == null) {
+        if (taetigkeitsfelder == null || !taetigkeitsfelder.contains(taetigkeitsfeld)) {
             return;
         }
         taetigkeitsfelder.remove(taetigkeitsfeld);
-        taetigkeitsfeld.removeStellenanzeige(this);
+        if(taetigkeitsfeld.getStellenanzeigen().contains(this)){
+            taetigkeitsfeld.removeStellenanzeige(this);
+        }
     }
 
     // stellenanzeige_hat_bewerbungen

@@ -42,7 +42,7 @@ public class Adresse {
     @ManyToMany(mappedBy = "adressen")
     private Set<Unternehmen> unternehmen;
 
-    public void addUnternehmen(Unternehmen unternehmen) {
+    public Adresse addUnternehmen(Unternehmen unternehmen) {
         if (this.unternehmen == null) {
             this.unternehmen = new HashSet<>();
         }
@@ -50,13 +50,15 @@ public class Adresse {
             this.unternehmen.add(unternehmen);
             unternehmen.addAdresse(this);
         }
+        return this;
     }
 
-    public void removeUnternehmen(Unternehmen unternehmen) {
+    public Adresse removeUnternehmen(Unternehmen unternehmen) {
         if (this.unternehmen != null && this.unternehmen.contains(unternehmen)) {
             this.unternehmen.remove(unternehmen);
             unternehmen.removeAdresse(this);
         }
+        return this;
     }
 
     // Methoden

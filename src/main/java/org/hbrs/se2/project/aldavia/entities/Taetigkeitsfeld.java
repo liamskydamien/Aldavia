@@ -65,11 +65,11 @@ public class Taetigkeitsfeld {
     }
 
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
-        if (stellenanzeigen == null) {
+        if (stellenanzeigen == null || !this.stellenanzeigen.contains(stellenanzeige)) {
             return;
         }
-        if (this.stellenanzeigen.contains(stellenanzeige)) {
-            this.stellenanzeigen.remove(stellenanzeige);
+        this.stellenanzeigen.remove(stellenanzeige);
+        if (stellenanzeige.getTaetigkeitsfelder().contains(this)) {
             stellenanzeige.removeTaetigkeitsfeld(this);
         }
     }
