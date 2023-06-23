@@ -17,7 +17,7 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
-import org.hbrs.se2.project.aldavia.control.SearchControl;;
+import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
