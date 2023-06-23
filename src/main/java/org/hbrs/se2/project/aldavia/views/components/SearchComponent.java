@@ -86,23 +86,21 @@ public class SearchComponent extends VerticalLayout {
 
     private void addStellenanzeigeToCard(StellenanzeigeDTO stellenanzeigeDTO){
 
-        //Load Profile Image
         UnternehmenProfileDTO unternehmenProfileDTO = stellenanzeigeDTO.getUnternehmen();
         if(unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")){
             profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
         } else {
-            // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-            String fileName = unternehmenProfileDTO.getProfilbild();
-            String path = "./src/main/webapp/profile-images/" + fileName;
-            StreamResource resource = new StreamResource(fileName, () -> {
+            String file = unternehmenProfileDTO.getProfilbild();
+            String imagePath = "./src/main/webapp/profile-images/" + file;
+            StreamResource streamResource = new StreamResource(file, () -> {
                 try {
-                    return new FileInputStream(path);
+                    return new FileInputStream(imagePath);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    return InputStream.nullInputStream(); // In case of an error return an empty stream
+                    return InputStream.nullInputStream();
                 }
             });
-            profileImg = new Image(resource, "Profilbild");
+            profileImg = new Image(streamResource, "Profilbild");
         }
         profileImg.setWidth("50px");
         profileImg.setHeight("50px");
