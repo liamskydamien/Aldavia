@@ -121,9 +121,6 @@ public class StellenanzeigenService {
             stellenanzeigenRepository.save(stellenanzeige);
             stellenanzeigenRepository.delete(stellenanzeige);
             logger.info("Stellenanzeige deleted: " + stellenanzeige);
-        } catch (UndeclaredThrowableException e){
-            e.getUndeclaredThrowable().printStackTrace();
-
         } catch (Exception e) {
             logger.error("An error occurred while deleting Stellenanzeige: " + stellenanzeige + " " + Arrays.toString(e.getStackTrace()));
             throw new StellenanzeigenException("Stellenanzeige could not be deleted. Here Stacktrace: " + Arrays.toString(e.getStackTrace()), StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_COULD_NOT_BE_DELETED);
