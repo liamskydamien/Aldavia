@@ -37,10 +37,8 @@ public class UnternehmenProfileControl {
         try {
             logger.info("Getting Company from Database with username: " + userName);
             Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
-            System.out.println("UNTERNEHMEN HAT AUS DER DATEN BANK STELLENANZEIGE: " + unternehmen.getStellenanzeigen().size());
             logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
             UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
-            System.out.println("UNTERNEHMEN HAT VON DTO STELLENANZEGE: " + dto.getStellenanzeigen().size());
             return dto;
         } catch (Exception e) {
             throw e;
