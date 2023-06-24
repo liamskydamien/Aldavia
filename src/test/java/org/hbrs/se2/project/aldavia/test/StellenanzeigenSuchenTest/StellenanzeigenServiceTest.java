@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
@@ -162,7 +163,9 @@ public class StellenanzeigenServiceTest {
 
         // Delete
 
-        stellenanzeigenService.deleteStellenanzeige(stellenanzeigeDTO);
-
+        stellenanzeigenService.deleteStellenanzeige(stellenanzeige);
+        verify(taetigkeitsfeldService, times(1)).deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference);
+        verify(stellenanzeigeRepository, times(2)).save(stellenanzeige);
+        verify(stellenanzeigeRepository, times(1)).delete(stellenanzeige);
     }
 }
