@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -117,6 +118,7 @@ public class SearchComponent extends VerticalLayout {
         Button bewerben = new Button("Bewerben");
         bewerben.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+
         HorizontalLayout pictureBewerben = new HorizontalLayout();
         pictureBewerben.add(profileImg,bewerben);
         pictureBewerben.setSpacing(true);
@@ -210,7 +212,15 @@ public class SearchComponent extends VerticalLayout {
     public void setUpUI(List<StellenanzeigeDTO> list) {
         HorizontalLayout headerLayout = new HorizontalLayout();
         HorizontalLayout unternehmenSearchLayout = new HorizontalLayout();
-        unternehmenSearchLayout.add(unternehmenSearch);
+        unternehmenSearch.setPlaceholder("Unternehmen");
+        unternehmenSearch.setLabel("Unternehmen Filter");
+        HorizontalLayout usLayout = new HorizontalLayout();
+        usLayout.add(unternehmenSearch);
+        usLayout.setPadding(true);
+        unternehmenSearchLayout.add(usLayout);
+        unternehmenSearchLayout.setWidth("700px");
+        unternehmenSearchLayout.setPadding(true);
+        unternehmenSearchLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
         H2 header = new H2("Stellenanzeigen");
         headerLayout.add(header);
         //Erstellen des Filters für Arbeitsverhaletnis
@@ -223,10 +233,19 @@ public class SearchComponent extends VerticalLayout {
 
         unternehmenSearch.addValueChangeListener(e -> {
             List<StellenanzeigeDTO> listNeu = new ArrayList<>();
+            if (selectedAnzeigen.size() == 0) {
+                for (StellenanzeigeDTO dto : stellenanzeigeList) {
+                    if (dto.getUnternehmen().getName().toLowerCase().contains(unternehmenSearch.getValue().toLowerCase())) {
+                        listNeu.add(dto);
+                    }
+
+                }
+            } else {
             for (StellenanzeigeDTO dto : selectedAnzeigen) {
                 if (dto.getUnternehmen().getName().toLowerCase().contains(unternehmenSearch.getValue().toLowerCase())) {
                     listNeu.add(dto);
                 }
+            }
             }
 
             displayStellenanzeigen.removeAll();
