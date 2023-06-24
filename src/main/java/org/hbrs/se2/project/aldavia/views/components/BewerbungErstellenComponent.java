@@ -1,5 +1,7 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
@@ -21,12 +23,16 @@ public class BewerbungErstellenComponent extends Div {
     private String studentUsername;
     private StellenanzeigeDTO stellenanzeigeDTO;
 
+    private boolean closeDialog;
+
+
     private TextField bewerbungsTextfield = new TextField("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
     public BewerbungErstellenComponent(BewerbungsControl bewerbungsControl, StellenanzeigeDTO stellenanzeigeDTO, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
         this.studentUsername = studentUsername;
         this.add(setUpBewerbungsLayout());
+        closeDialog = false;
     }
 
 
@@ -65,10 +71,13 @@ public class BewerbungErstellenComponent extends Div {
             }
             else {
                 addBewerbung();
+                this.setVisible(false);
             }
         });
         return createButton;
     }
+
+
 
     private void addBewerbung() {
         try {

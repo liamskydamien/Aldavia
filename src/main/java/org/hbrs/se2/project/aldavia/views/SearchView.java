@@ -37,9 +37,19 @@ public class SearchView extends VerticalLayout {
         VerticalLayout gridVertical = new VerticalLayout();
         grid.setSizeFull();
         Component ui = setUpUI();
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(new HorizontalLayout());
+        gridVertical.add(ui);
         searchField.setWidth("100%");
-        grid.add(ui);
-        grid.setWidth("2400px");
+        gridVertical.setHeightFull();
+        gridVertical.setAlignItems(Alignment.STRETCH);
+        grid.add(gridVertical);
+        grid.setWidth("1800px");
 
 
 

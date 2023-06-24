@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -21,10 +22,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
-import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
-import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
-import org.hbrs.se2.project.aldavia.dtos.UserDTO;
+import org.hbrs.se2.project.aldavia.dtos.*;
+import org.hbrs.se2.project.aldavia.entities.Rolle;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
@@ -167,15 +166,21 @@ public class SearchComponent extends VerticalLayout {
             } else {
                 UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
                 // TODO: Why? Check for role instead
-                if (userDTO.getRoles().equals("Student")) {
-                    bewerbungsDialog = new Dialog();
-                    bewerbungErstellenComponent = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO, userDTO.getUserid());
-                    bewerbungsDialog.add(bewerbungErstellenComponent);
-                    bewerbungsDialog.open();
 
-                } else {
-                    Notification.show("Nur Studenten können sich auf Stellenanzeigen bewerben!");
+
+                for (RolleDTO r : userDTO.getRoles()) {
+                    if (r.getBezeichhnung().equals(Globals.Roles.STUDENT)) {
+                        bewerbungsDialog = new Dialog();
+                        bewerbungErstellenComponent = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO, userDTO.getUserid());
+                        bewerbungsDialog.add(bewerbungErstellenComponent);
+                        bewerbungsDialog.open();
+
+
+                    } else {
+                        Notification.show("Nur Studenten können sich auf Stellenanzeigen bewerben!");
+                    }
                 }
+
 
             }
 
