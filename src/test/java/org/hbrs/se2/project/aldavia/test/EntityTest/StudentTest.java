@@ -2,9 +2,11 @@ package org.hbrs.se2.project.aldavia.test.EntityTest;
 
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class StudentTest {
     @Test
     public void testMissingCode(){
