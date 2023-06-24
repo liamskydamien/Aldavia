@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.test.StellenanzeigenSuchenTest;
 
+import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
@@ -37,6 +38,9 @@ public class SearchControlTest {
     @Mock
     private StellenanzeigenService stellenanzeigenService;
 
+    @Mock
+    private BewerbungsControl bewerbungsControl;
+
     private SearchControl searchControl;
 
     private Stellenanzeige stellenanzeige1;
@@ -44,11 +48,10 @@ public class SearchControlTest {
     private Stellenanzeige stellenanzeige3;
     @BeforeEach
     public void setup() {
-        searchControl = new SearchControl(null,studentService, stellenanzeigenService);
+        searchControl = new SearchControl(bewerbungsControl,studentService, stellenanzeigenService);
     }
 
     private List<Stellenanzeige> setupStellenanzeigen(){
-
         Unternehmen unternehmen = Unternehmen.builder()
                 .id(1)
                 .name(TEST)
@@ -243,5 +246,10 @@ public class SearchControlTest {
         assertEquals(stellenanzeige1.getId(), stellenanzeigeDTOSNotSorted.get(0).getId());
         assertEquals(stellenanzeige2.getId(), stellenanzeigeDTOSNotSorted.get(1).getId());
         assertEquals(stellenanzeige3.getId(), stellenanzeigeDTOSNotSorted.get(2).getId());
+    }
+
+    @Test
+    public void getBewerbungsControl(){
+        assertEquals(bewerbungsControl, searchControl.getBewerbungsControl());
     }
 }
