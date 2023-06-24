@@ -6,6 +6,7 @@ import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
 import org.hbrs.se2.project.aldavia.control.factories.UnternehmenProfileDTOFactory;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
+import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.service.AdresseService;
 import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(SpringExtension.class)
 public class UnternehmenProfileControlTest {
@@ -65,6 +67,11 @@ public class UnternehmenProfileControlTest {
         String userName = "Tom";
         UnternehmenProfileDTO dto = new UnternehmenProfileDTO();
         Unternehmen unternehmenMock = new Unternehmen();
+        unternehmenMock.setUser(User.builder()
+                .userid(userName)
+                .email("email")
+                .password("password")
+                .build());
 
         given(unternehmenServiceMock.getUnternehmen(userName)).willReturn(unternehmenMock);
 
@@ -72,8 +79,8 @@ public class UnternehmenProfileControlTest {
         //when
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(dto, userName);
 
-        verify(unternehmenServiceMock, times(1)).updateUnternehmenInformation(unternehmenMock,dto);
         verify(unternehmenServiceMock,times(1)).getUnternehmen(userName);
+        verify(unternehmenServiceMock, times(1)).createOrUpdateUnternehmen(unternehmenMock);
         verifyNoMoreInteractions(unternehmenServiceMock);
 
         //then -> fällt weg, da void Methode
