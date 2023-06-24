@@ -34,10 +34,12 @@ public class SearchView extends VerticalLayout {
         setBackgroundImage();
         searchComponent = new SearchComponent(searchControl);
         HorizontalLayout grid = new HorizontalLayout();
+        VerticalLayout gridVertical = new VerticalLayout();
         grid.setSizeFull();
         Component ui = setUpUI();
+        searchField.setWidth("100%");
         grid.add(ui);
-        grid.setWidth("2600px");
+        grid.setWidth("2400px");
 
 
 
@@ -45,7 +47,7 @@ public class SearchView extends VerticalLayout {
         if (stellenanzeigeList != null) {
             grid.add(searchComponent);
         }
-        grid.setJustifyContentMode(JustifyContentMode.END);
+        grid.setJustifyContentMode(JustifyContentMode.START);
         add(grid);
 
 
