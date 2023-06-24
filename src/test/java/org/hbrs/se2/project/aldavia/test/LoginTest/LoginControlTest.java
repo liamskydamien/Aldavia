@@ -108,10 +108,16 @@ public class LoginControlTest {
                     loginControl.authenticate("", "");
         });
 
+        DatabaseUserException exceptionWrongEmail3 = assertThrows(
+                DatabaseUserException.class, () -> {
+                    loginControl.authenticate(null, null);
+        });
+
         assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongEmail.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongEmail2.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
+        assertEquals(exceptionWrongEmail3.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
     }
 
 }

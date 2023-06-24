@@ -75,31 +75,8 @@ public class StellenanzeigenService {
 
     /**
      * Deletes a Stellenanzeige
-     * @param dto StellenanzeigeDTO
-     * @throws StellenanzeigenException if the Stellenanzeige could not be deleted
+     * @param stellenanzeige Stellenanzeige
      */
-    public void deleteStellenanzeige(StellenanzeigeDTO dto) throws StellenanzeigenException {
-        logger.info("Deleting StellenanzeigeDTO: " + dto);
-        Stellenanzeige stellenanzeige = getStellenanzeige(dto);
-        try {
-            logger.info("Deleting Taetigkeitsfelder from Stellenanzeige: " + stellenanzeige);
-            for (Taetigkeitsfeld t : stellenanzeige.getTaetigkeitsfelder()) {
-                logger.info("Deleting Taetigkeitsfeld: " + t);
-                taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(t, stellenanzeige);
-            }
-            logger.info("Deleting Unternehmen from Stellenanzeige: " + stellenanzeige);
-            Unternehmen unternehmen = stellenanzeige.getUnternehmen_stellenanzeigen();
-            unternehmen.removeStellenanzeige(stellenanzeige);
-            stellenanzeigenRepository.save(stellenanzeige);
-            stellenanzeigenRepository.delete(stellenanzeige);
-            logger.info("Stellenanzeige deleted: " + stellenanzeige);
-        }
-        catch (Exception e){
-            logger.error("An error occurred while deleting Stellenanzeige: " + stellenanzeige + " " + Arrays.toString(e.getStackTrace()));
-            throw new StellenanzeigenException("Stellenanzeige could not be deleted", StellenanzeigenException.StellenanzeigenExceptionType.STELLENANZEIGE_COULD_NOT_BE_DELETED);
-        }
-    }
-
     @SneakyThrows
     public void deleteStellenanzeige(Stellenanzeige stellenanzeige) {
         logger.info("Deleting Stellenanzeige: " + stellenanzeige);
