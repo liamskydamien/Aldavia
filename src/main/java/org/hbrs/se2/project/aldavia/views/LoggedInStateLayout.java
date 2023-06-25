@@ -225,6 +225,9 @@ public class LoggedInStateLayout extends AppLayout {
 
 
     public static String getCurrentUserName() {
+        if (getCurrentUser() == null) {
+            return null;
+        }
         return getCurrentUser().getUserid();
     }
 
@@ -233,9 +236,6 @@ public class LoggedInStateLayout extends AppLayout {
         return student.getVorname();
     }*/
 
-    private String createProfileURL(String username) {
-        return Globals.Pages.PROFILE_VIEW + "?username=" + username;
-    }
 
 
 

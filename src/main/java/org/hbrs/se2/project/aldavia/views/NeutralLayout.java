@@ -22,15 +22,11 @@ import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
 @CssImport("./styles/views/navbar/navbar.css")
-
-
 public class NeutralLayout extends AppLayout {
 
-    private AuthorizationControl authorizationControl;
-
-    private Tabs menu;
 
     public NeutralLayout() {
+
         setUpUI();
     }
 
@@ -56,19 +52,7 @@ public class NeutralLayout extends AppLayout {
         topRightLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
 
-            topRightLayout.add(createMenuItems());
-
-
-        if(checkIfUserIsStudent()){
-            topRightLayout.add(createMenuItemsStudent());
-            // Logout-Button am rechts-oberen Rand.
-            MenuBar bar = new MenuBar();
-            Icon iconSignOut = VaadinIcon.SIGN_OUT.create();
-            Text textLogOut = new Text("Log out");
-            MenuItem item = bar.addItem(new HorizontalLayout(iconSignOut,textLogOut ), e -> logoutUser());
-            item.setId("logout-button");
-            topRightLayout.add(bar);
-        }
+        topRightLayout.add(createMenuItems());
 
         layout.add(topRightLayout);
 
@@ -89,44 +73,12 @@ public class NeutralLayout extends AppLayout {
         return tabs;
     }
 
-    private Component[] createMenuItemsStudent() {
-
-
-        Icon iconUser = VaadinIcon.USER.create();
-
-
-
-        Tab[] tabs = new Tab[]{
-                createTabWithIcon("Profile", LoginView.class, iconUser)
-        };
-        tabs[0].setId("student-srofil-tab");
-        return tabs;
-    }
 
 
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
         tab.add(new RouterLink(text, navigationTarget));
-        return tab;
-    }
-
-    private static Tab createTabWithIcon(String text, Class<? extends Component> navigationTarget, Icon icon) {
-        final Tab tab = new Tab();
-
-        // Erstelle das Icon
-        icon.setSize("24px");
-        icon.setColor("blue");
-
-        // Erstelle das Text-Label
-        Label label = new Label(text);
-
-        // Erstelle den RouterLink mit dem Icon und dem Label als Inhalt
-        RouterLink routerLink = new RouterLink(null, navigationTarget);
-        routerLink.add(icon, label);
-
-        // Füge den RouterLink zum Tab hinzu
-        tab.add(routerLink);
         return tab;
     }
 
@@ -141,46 +93,6 @@ public class NeutralLayout extends AppLayout {
     private static void navigateHomeLogo(Image img) {
         img.addClickListener(event -> img.getUI().ifPresent(ui -> ui.navigate(Globals.Pages.MAIN_VIEW)));
     }
-
-
-
-    private UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-    }
-
-    private boolean checkIfUserIsLoggedIn() {
-        // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
-        UserDTO userDTO = this.getCurrentUser();
-        if (userDTO == null) {
-            UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
-            return false;
-        }
-        return true;
-    }
-
-    private boolean checkIfUserIsStudent(){
-        if(!checkIfUserIsLoggedIn()){
-            return false;
-        }
-        authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT);
-    }
-
-    private boolean checkIfUserIsUnternehmen(){
-        if(!checkIfUserIsLoggedIn()){
-            return false;
-        }
-        authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.UNTERNEHMEN);
-    }
-
-    private void logoutUser() {
-        UI ui = this.getUI().get();
-        ui.getSession().close();
-        ui.getPage().setLocation("/");
-    }
-
-
 
 }
 

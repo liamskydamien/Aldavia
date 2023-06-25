@@ -41,6 +41,7 @@ public class UnternehmenProfileDTOFactory {
 
             unternehmenProfileDTO = UnternehmenProfileDTO.builder()
                     .name(unternehmen.getName())
+                    .username(user.getUserid())
                     .email(user.getEmail())
                     .beschreibung(unternehmen.getBeschreibung())
                     .telefonnummer(user.getPhone())

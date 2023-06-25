@@ -89,8 +89,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     private void setUpUI(){
         VerticalLayout introductionLayout = new VerticalLayout();
         introductionLayout.setClassName("introductionLayout");
-        System.out.println("Current User over URL: " + getUserOverUrl());
-        System.out.println("Current User: " + getCurrentUserName());
         if(getUserOverUrl().equals(getCurrentUserName())){
             if(checkIfUserIsStudent()){
                 introductionLayout.add(firstNameAndLastName,studiengang,description);
@@ -100,7 +98,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         } else if(!getUserOverUrl().equals(getCurrentUserName())){
             if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
                 introductionLayout.add(firstNameAndLastName,studiengang,description);
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
                 introductionLayout.add(companyName,website,email);
             }
         }
@@ -140,7 +138,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
                updateViewModeStudent();
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
                 updateViewModeCompany();
             }
         }
@@ -194,7 +192,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 profilePicture.add(profileImg);
             }
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
-            if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)) {
+            if (getProfileType().equals(Globals.Pages.PROFILE_VIEW) ) {
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
                     profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
                 } else {
@@ -212,7 +210,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                     profileImg = new Image(resource, "Profilbild");
                 }
                 profilePicture.add(profileImg);
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
                 if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
                     profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
                 } else {
@@ -374,7 +372,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
                 updateProfileDTOStudent(userName);
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)){
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)){
                 updateProfileDTOCompany(userName);
             }
         }
@@ -458,7 +456,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             } else if (!getUserOverUrl().equals(getCurrentUserName())) {
                 if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
                     studentProfileDTO.setProfilbild(uniqueFileName);
-                } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)){
+                } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)){
                     unternehmenProfileDTO.setProfilbild(uniqueFileName);
                 }
             }

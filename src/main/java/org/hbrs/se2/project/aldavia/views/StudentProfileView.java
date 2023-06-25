@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Objects;
+
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
 
@@ -42,6 +44,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private QualificationComponent qualificationComponent;
     private EditAndSaveProfileButton editAndSaveProfileButton;
     private String url;
+    private boolean isUser = true;
 
     @Override
     public void setParameter(BeforeEvent event,
@@ -49,6 +52,30 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         try {
             studentProfileDTO = studentProfileControl.getStudentProfile(parameter);
             url = event.getLocation().getPath();
+
+            if(!Objects.equals(getCurrentUserName(), parameter)){
+                isUser = false;
+            } else {
+                isUser = true;
+            }
+
+            if(isUser){
+                editAndSaveProfileButton.addListenerToEditButton(e -> {
+                    switchToEditMode();
+                });
+                editAndSaveProfileButton.addListenerToSaveButton(e -> {
+                    try {
+                        switchToViewMode();
+                    } catch (PersistenceException | ProfileException persistenceException) {
+                        persistenceException.printStackTrace();
+                    }
+                });
+
+                editAndSaveProfileButton.setEditButtonVisible(true);
+                editAndSaveProfileButton.setSaveButtonVisible(false);
+
+                add(editAndSaveProfileButton);
+            }
 
 
             ui.access(() -> {
@@ -72,22 +99,6 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         this.studentProfileControl = studentProfileControl;
         editAndSaveProfileButton = new EditAndSaveProfileButton();
         addClassName("profile-view");
-
-        editAndSaveProfileButton.addListenerToEditButton(e -> {
-            switchToEditMode();
-        });
-        editAndSaveProfileButton.addListenerToSaveButton(e -> {
-            try {
-                switchToViewMode();
-            } catch (PersistenceException | ProfileException persistenceException) {
-                persistenceException.printStackTrace();
-            }
-        });
-
-        editAndSaveProfileButton.setEditButtonVisible(true);
-        editAndSaveProfileButton.setSaveButtonVisible(false);
-
-        add(editAndSaveProfileButton);
 
     }
 

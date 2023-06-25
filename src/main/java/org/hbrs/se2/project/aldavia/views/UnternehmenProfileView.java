@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
@@ -14,8 +15,12 @@ import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
+import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUser;
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
 
@@ -36,7 +41,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private EditAndSaveProfileButton editAndSaveProfileButtonComapany;
     private StellenanzeigeComponent stellenanzeigeComponent;
     private String url;
-    private boolean isSameUser;
+    private boolean isSameUser = true;
 
     @Override
     @Transactional
@@ -44,7 +49,12 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
             try {
                 unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
                 url = beforeEvent.getLocation().getPath();
-                isSameUser = getCurrentUserName().equals(parameter);
+                if(getCurrentUser() == null){
+                    isSameUser = false;
+                } else{
+                    isSameUser = Objects.equals(getCurrentUserName(), parameter);
+                }
+
                 ui.access(() -> {
                     if (companyProfileWrapper == null) {
                         unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl, url);
@@ -61,6 +71,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     }
 
 
+    @Autowired
     public UnternehmenProfileView(UnternehmenProfileControl control) throws ProfileException {
         this.unternehmenProfileControl = control;
 
@@ -88,6 +99,28 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
 
     }
 
+
+    public UnternehmenProfileView(UnternehmenProfileControl control, String url) throws ProfileException {
+        this.unternehmenProfileControl = control;
+        this.url = url;
+
+
+        String[] split = url.split("/");
+        String parameter = split[split.length - 1];
+        unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
+
+        ui.access(() -> {
+            if (companyProfileWrapper == null) {
+                unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl, url);
+                companyProfileWrapper = new Div();
+                companyProfileWrapper.addClassName("profile-wrapper");
+                companyProfileWrapper.add(unternehmenPersonalDetailsComponent);
+                companyProfileWrapper.add(createButtomLayout());
+                add(companyProfileWrapper);
+            }
+        });
+
+    }
 
     public Adresse reverseInput(String adresseString) {
         String[] split = adresseString.split(" ");

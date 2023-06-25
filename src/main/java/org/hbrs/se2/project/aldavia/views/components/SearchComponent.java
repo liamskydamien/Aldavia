@@ -5,10 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -32,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Component
 @CssImport("./styles/views/profile/studentProfile.css")
@@ -123,13 +121,13 @@ public class SearchComponent extends VerticalLayout {
         bewerben.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
 
-
-
-
-
         // Institution
-        Span institution = new Span(stellenanzeigeDTO.getUnternehmen().getName());
-        institution.addClassName("institution");
+        Anchor institution = new Anchor();
+        String institutionName = stellenanzeigeDTO.getUnternehmen().getName();
+        String institutionId = stellenanzeigeDTO.getUnternehmen().getUsername();
+        institution.setText(institutionName);
+        institution.setHref(Globals.Pages.NOT_LOGIN_COMPANY_VIEW +"/"+ institutionId);
+        institution.setTarget("_blank");
         //ToDO: Profilbild es Unternehmens hinzufügen
 
         // Beschaeftigungsverhaeltnis
@@ -190,7 +188,7 @@ public class SearchComponent extends VerticalLayout {
         List<Span> badgeList = new ArrayList<>();
         for (TaetigkeitsfeldDTO t : list) {
             Span span = new Span(t.getName());
-            span.getElement().getThemeList().add("badge");
+            span.getElement().getThemeList().add("badge pill");
             badgeList.add(span);
         }
         return badgeList;

@@ -102,7 +102,7 @@ public class BewerbungsOverviewUnternehmenView extends Div {
 
     private Button createButtonLink(StudentProfileDTO studentProfileDTO){
         Button button = new Button("Profil ansehen");
-        button.addClickListener(e -> UI.getCurrent().navigate("studentProfile/" + studentProfileDTO.getUsername()));
+        button.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.PROFILE_VIEW +"/"+ studentProfileDTO.getUsername()));
         return button;
     }
 
