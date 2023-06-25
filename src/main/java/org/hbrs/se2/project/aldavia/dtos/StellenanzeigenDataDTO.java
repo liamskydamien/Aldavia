@@ -1,9 +1,6 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +8,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 public class StellenanzeigenDataDTO {
     private List<BewerbungsDTO> bewerbungen;
     private StellenanzeigeDTO stellenanzeige;
