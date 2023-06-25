@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 
-@Route(value = "bewerbungsOverviewUnternehmen", layout = LoggedInStateLayout.class)
+@Route(value = Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW, layout = LoggedInStateLayout.class)
 public class BewerbungsOverviewUnternehmenView extends Div {
     private final BewerbungsOverviewUnternehmen bewerbungsOverviewUnternehmen;
     private final UserDTO currentUser;
@@ -102,7 +102,7 @@ public class BewerbungsOverviewUnternehmenView extends Div {
 
     private Button createButtonLink(StudentProfileDTO studentProfileDTO){
         Button button = new Button("Profil ansehen");
-        button.addClickListener(e -> UI.getCurrent().navigate("studentProfile/" + studentProfileDTO.getUsername()));
+        button.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.PROFILE_VIEW +"/"+ studentProfileDTO.getUsername()));
         return button;
     }
 

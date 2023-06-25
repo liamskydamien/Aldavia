@@ -31,8 +31,9 @@ import java.util.Set;
 @Route(value = Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW, layout = LoggedInStateLayout.class)
 public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout implements HasUrlParameter<String> {
     private UnternehmenProfileControl unternehmenProfileControl;
-    private StudentProfileControl studentProfileControl;
+
     private UnternehmenProfileDTO unternehmenProfileDTO;
+    private StudentProfileControl studentProfileControl;
     private StellenanzeigeDTO pickedStellenanzeige;
     private Div displayBewerbungen;
     private Span noBewerbungen;
@@ -55,8 +56,9 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         }
 
     }
-    public ShowBewerbungOfStellenanzeigeComponent(UnternehmenProfileControl unternehmenProfileControl, StudentProfileControl studentProfileControl) {
+    public ShowBewerbungOfStellenanzeigeComponent(UnternehmenProfileControl unternehmenProfileControl, UnternehmenProfileDTO unternehmenProfileDTO, StudentProfileControl studentProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
+        this.unternehmenProfileDTO = unternehmenProfileDTO;
         this.studentProfileControl = studentProfileControl;
         noBewerbungen = new Span("Es gibt keine Bewerbungen für diese Stellenanzeige");
         displayBewerbungen = new Div();

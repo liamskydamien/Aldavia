@@ -15,6 +15,7 @@ import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class BewerbungsOverviewStudentView extends Div {
     private final BewerbungsOverviewStudent bewerbungsOverviewStudent;
     private final UserDTO currentUser;
 
+    @Autowired
     public BewerbungsOverviewStudentView(BewerbungsOverviewStudent bewerbungsOverviewStudent) {
         this.bewerbungsOverviewStudent = bewerbungsOverviewStudent;
         currentUser = getCurrentUser();
@@ -57,6 +59,7 @@ public class BewerbungsOverviewStudentView extends Div {
     private VerticalLayout createBewerbungenLayout(){
         try {
             List<BewerbungsDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungenStudent(currentUser.getUserid());
+            System.out.println(bewerbungen.size());
             if(bewerbungen.isEmpty()){
                 return new VerticalLayout(new H3("Du hast dich noch auf keine Stellenanzeige beworben."));
             }
@@ -65,6 +68,8 @@ public class BewerbungsOverviewStudentView extends Div {
             layout.setClassName("bewerbungen-layout");
             layout.add(new H1("Deine Bewerbungen"));
             for (BewerbungsDTO bewerbung : bewerbungen) {
+                System.out.println(bewerbung);
+                System.out.println(bewerbung.getStudent().getVorname());
                 layout.add(createBewerbung(bewerbung));
             }
             return layout;
@@ -129,11 +134,17 @@ public class BewerbungsOverviewStudentView extends Div {
         layout.addClassName("stellenanzeigen-infos-layout");
         Anchor anchor = new Anchor();
         anchor.setText(bewerbung.getStellenanzeige().getUnternehmen().getName());
-        anchor.setHref("unternehmen/" + bewerbung.getStellenanzeige().getUnternehmen().getName());
+        anchor.setHref(Globals.Pages.COMPANY_PROFILE_VIEW +"/"+ bewerbung.getStellenanzeige().getUnternehmen().getUsername());
+        anchor.setTarget("_blank");
         layout.add(anchor);
         layout.add(new H2(bewerbung.getStellenanzeige().getBezeichnung()));
         layout.add(new H3(bewerbung.getStellenanzeige().getBeschaeftigungsverhaeltnis()));
-        layout.add(createVonBis(bewerbung.getStellenanzeige().getStart().toString(), bewerbung.getStellenanzeige().getEnde().toString()));
+        if(bewerbung.getStellenanzeige().getEnde() != null){
+            layout.add(createVonBis(bewerbung.getStellenanzeige().getStart().toString(), bewerbung.getStellenanzeige().getEnde().toString()));
+        }
+        else{
+            layout.add(createVonBis(bewerbung.getStellenanzeige().getStart().toString(), "-"));
+        }
         layout.add(createTaetigkeitenLayout(bewerbung));
         return layout;
     }

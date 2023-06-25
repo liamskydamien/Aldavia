@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
+import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
@@ -14,8 +15,12 @@ import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
+import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUser;
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 
 
@@ -35,15 +40,45 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private AdressenComponent adressenComponent;
     private EditAndSaveProfileButton editAndSaveProfileButtonComapany;
     private StellenanzeigeComponent stellenanzeigeComponent;
+    private String url;
+    private boolean isSameUser = true;
 
     @Override
     @Transactional
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
             try {
                 unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
+                url = beforeEvent.getLocation().getPath();
+                if(getCurrentUser() == null){
+                    isSameUser = false;
+                } else{
+                    isSameUser = Objects.equals(getCurrentUserName(), parameter);
+                }
+                if(isSameUser){
+                    editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
+                    addClassName("profile-view");
+
+                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
+                        switchToEditMode();
+                    });
+                    editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
+                        try {
+                            switchToViewMode();
+                        } catch (PersistenceException | ProfileException persistenceException) {
+                            persistenceException.printStackTrace();
+                        }
+                    });
+
+                    editAndSaveProfileButtonComapany.setEditButtonVisible(true);
+                    editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
+
+                    add(editAndSaveProfileButtonComapany);
+                }
+
+
                 ui.access(() -> {
                     if (companyProfileWrapper == null) {
-                        unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl);
+                        unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl, url);
                         companyProfileWrapper = new Div();
                         companyProfileWrapper.addClassName("profile-wrapper");
                         companyProfileWrapper.add(unternehmenPersonalDetailsComponent);
@@ -57,29 +92,34 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     }
 
 
+    @Autowired
     public UnternehmenProfileView(UnternehmenProfileControl control) throws ProfileException {
         this.unternehmenProfileControl = control;
-        editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
-        addClassName("profile-view");
-
-        editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
-            switchToEditMode();
-        });
-        editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
-            try {
-                switchToViewMode();
-            } catch (PersistenceException | ProfileException persistenceException) {
-                persistenceException.printStackTrace();
-            }
-        });
-
-        editAndSaveProfileButtonComapany.setEditButtonVisible(true);
-        editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
-
-        add(editAndSaveProfileButtonComapany);
 
     }
 
+
+    public UnternehmenProfileView(UnternehmenProfileControl control, String url) throws ProfileException {
+        this.unternehmenProfileControl = control;
+        this.url = url;
+
+
+        String[] split = url.split("/");
+        String parameter = split[split.length - 1];
+        unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
+
+        ui.access(() -> {
+            if (companyProfileWrapper == null) {
+                unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl, url);
+                companyProfileWrapper = new Div();
+                companyProfileWrapper.addClassName("profile-wrapper");
+                companyProfileWrapper.add(unternehmenPersonalDetailsComponent);
+                companyProfileWrapper.add(createButtomLayout());
+                add(companyProfileWrapper);
+            }
+        });
+
+    }
 
     public Adresse reverseInput(String adresseString) {
         String[] split = adresseString.split(" ");

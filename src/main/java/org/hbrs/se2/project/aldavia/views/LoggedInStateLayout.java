@@ -85,6 +85,7 @@ public class LoggedInStateLayout extends AppLayout {
 
         Tab[] tabs = new Tab[]{
                 createTabProfileTab(),
+                createBewerbungsOverviewStudentView(),
         };
         tabs[0].setId("student-srofil-tab");
         return tabs;
@@ -94,10 +95,25 @@ public class LoggedInStateLayout extends AppLayout {
 
         Tab[] tabs = new Tab[]{
                 createTabProfileTab(),
+                createBewerbungsOverviewUnternehmenView(),
                 createButtonCreateStellenanzeige()
         };
         tabs[0].setId("unternehmen-srofil-tab");
         return tabs;
+    }
+    private Tab createBewerbungsOverviewStudentView(){
+        final Tab tab = new Tab();
+        RouterLink routerLink = new RouterLink(null, BewerbungsOverviewStudentView.class);
+        routerLink.add( new Text("Meine Bewerbungen"));
+        tab.add(routerLink);
+        return tab;
+    }
+    private Tab createBewerbungsOverviewUnternehmenView(){
+        final Tab tab = new Tab();
+        RouterLink routerLink = new RouterLink(null, BewerbungsOverviewUnternehmenView.class);
+        routerLink.add(new Icon(VaadinIcon.BRIEFCASE), new Text("Bewerbungen"));
+        tab.add(routerLink);
+        return tab;
     }
 
 
@@ -169,10 +185,13 @@ public class LoggedInStateLayout extends AppLayout {
 
 
     public static UserDTO getCurrentUser() {
+        if(UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) == null){
+            return null;
+        }
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
-    private static boolean checkIfUserIsLoggedIn() {
+    public static boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = getCurrentUser();
         if (userDTO == null) {
@@ -204,9 +223,11 @@ public class LoggedInStateLayout extends AppLayout {
         ui.getPage().setLocation("/");
     }
 
-    //TODO:Methode spezifisch für Student und unternehmen
 
     public static String getCurrentUserName() {
+        if (getCurrentUser() == null) {
+            return null;
+        }
         return getCurrentUser().getUserid();
     }
 
@@ -215,9 +236,6 @@ public class LoggedInStateLayout extends AppLayout {
         return student.getVorname();
     }*/
 
-    private String createProfileURL(String username) {
-        return Globals.Pages.PROFILE_VIEW + "?username=" + username;
-    }
 
 
 

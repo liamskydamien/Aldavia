@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -28,6 +30,7 @@ import java.util.Set;
 
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentUserName;
 @Transactional
+@CssImport("./styles/views/profile/studentProfile.css")
 public class StellenanzeigeComponent extends VerticalLayout implements ProfileComponent{
     private UnternehmenProfileControl unternehmenProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
@@ -128,9 +131,10 @@ public void getAndCreateStellenanzeige(String mode){
         HorizontalLayout editAndDeleteStellenanzeigeArea = new HorizontalLayout();
         editAndDeleteStellenanzeigeArea.addClassName("editAndDeleteStellenanzeigeArea");
         editAndDeleteStellenanzeigeArea.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        editAndDeleteStellenanzeigeArea.setVisible(false);
         editAndDeleteStellenanzeigeArea.setWidthFull();
         editAndDeleteStellenanzeigeArea.add(deleteStellenanzeige(stellenanzeige));
-        stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea);
+        stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea(stellenanzeige));
 
         if(mode.equals(Globals.ProfileViewMode.EDIT)) {
             editAndDeleteStellenanzeigeArea.setVisible(true);
@@ -155,9 +159,11 @@ public void getAndCreateStellenanzeige(String mode){
 
         VerticalLayout stellenanzeigeInfoRight = new VerticalLayout();
         stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
+        stellenanzeigeInfoRight.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         Span stellenanzeigeDatum = new Span(stellenanzeige.getErstellungsdatum().toString());
         stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
         stellenanzeigeInfoRight.add(stellenanzeigeDatum);
+        //stellenanzeigeInfoRight.add(bewerbungAnsehenButton(stellenanzeige));
 
 
         stellenanzeigeInfo.add(stellenanzeigeInfoLeft, stellenanzeigeInfoRight);
@@ -189,14 +195,6 @@ public void getAndCreateStellenanzeige(String mode){
         }
 
         return taetigkeitLayout;
-    }
-
-    private VerticalLayout renderBewerbung(Bewerbung bewerbung){
-        VerticalLayout bewerbungLayout = new VerticalLayout();
-        bewerbungLayout.addClassName("bewerbungLayout");
-        Span bewerbungDatum = new Span(bewerbung.getDatum().toString());
-        bewerbungLayout.add(bewerbungDatum);
-        return bewerbungLayout;
     }
 
     private HorizontalLayout editAndDeleteStellenanzeigeArea(StellenanzeigeDTO stellenanzeigen) {
@@ -306,5 +304,14 @@ public void getAndCreateStellenanzeige(String mode){
             }
         });
         return addStellenanzeigeButton;
+    }
+
+    private Button bewerbungAnsehenButton(StellenanzeigeDTO stellenanzeige) {
+        Button bewerbungAnsehenButton = new Button("Bewerbungen ansehen");
+        bewerbungAnsehenButton.addClassName("bewerbungAnsehenButton");
+        bewerbungAnsehenButton.addClickListener(e -> {
+            UI.getCurrent().navigate(Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW + "/" + stellenanzeige.getId());
+        });
+        return bewerbungAnsehenButton;
     }
 }
