@@ -19,7 +19,6 @@ public class Globals {
         public static final String LOGIN_VIEW = "login";
         public static final String MAIN_VIEW = "";
     }
-
     public static class Roles {
         public static final String ADMIN = "admin";
         public static final String USER = "user";
@@ -29,13 +28,6 @@ public class Globals {
         public static final String UNTERNEHMEN = "unternehmen";
 
     }
-
-    public static class Errors {
-        public static final String NOUSERFOUND = "nouser";
-        public static final String SQLERROR = "sql";
-        public static final String DATABASE = "database";
-    }
-
     public static class LanguageLevels {
         public static final String MOTHER_TONGUE = "Muttersprache";
         public static final String A1 = "A1";
@@ -43,7 +35,6 @@ public class Globals {
         public static final String B1 = "B1";
         public static final String B2 = "B2";
         public static final String C1 = "C1";
-
         public static final String C2 = "C2";
     }
 
