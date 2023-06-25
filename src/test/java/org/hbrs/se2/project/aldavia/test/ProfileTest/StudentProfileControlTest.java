@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,6 +76,37 @@ public class StudentProfileControlTest {
     @Test
     public void testUpdateStudentProfile() throws ProfileException, PersistenceException {
         //Setup
+        QualifikationsDTO qualifikationDTO = QualifikationsDTO.builder()
+                .bezeichnung("QTester")
+                .beschreibung("Ability to write JUnit tests.")
+                .bereich("Software Engineering 1")
+                .institution("H-BRS")
+                .beschaeftigungsart("Teilzeit")
+                .von(LocalDate.of(2023,4, 1))
+                .bis(LocalDate.of(2023, 6, 30))
+                .build();
+        List<QualifikationsDTO> qualifikationenDTO = new ArrayList<>();
+        qualifikationenDTO.add(qualifikationDTO);
+
+        TaetigkeitsfeldDTO taetigkeitsfeldDTO = TaetigkeitsfeldDTO.builder()
+                .name("IT-Dienstleister")
+                .build();
+        List<TaetigkeitsfeldDTO> taetigkeitsfelderDTO = new ArrayList<>();
+        taetigkeitsfelderDTO.add(taetigkeitsfeldDTO);
+
+        KenntnisDTO kenntnisDTO = KenntnisDTO.builder()
+                .name("Java_Test_Kenntnis")
+                .build();
+        List<KenntnisDTO> kenntnisseDTO = new ArrayList<>();
+        kenntnisseDTO.add(kenntnisDTO);
+
+        SpracheDTO spracheDTO = SpracheDTO.builder()
+                .name("Testionisch")
+                .level("B2")
+                .build();
+        List<SpracheDTO> sprachenDTO = new ArrayList<>();
+        sprachenDTO.add(spracheDTO);
+
         User user = new User();
         Student student = new Student();
         student.setUser(user);
@@ -91,6 +124,12 @@ public class StudentProfileControlTest {
                 .telefonnummer("987654321")
                 .profilbild("/dir/profilbilder/1.jpg")
                 .email("123@abc.de")
+                .qualifikationen(qualifikationenDTO)
+                .taetigkeitsfelder(taetigkeitsfelderDTO)
+                .kenntnisse(kenntnisseDTO)
+                .sprachen(sprachenDTO)
+                .build();
+        StudentProfileDTO updatedVersionNull = StudentProfileDTO.builder()
                 .build();
         // Create a mock StudentProfileDTO for the old version
         StudentProfileDTO oldVersion = StudentProfileDTO.builder()
@@ -100,10 +139,6 @@ public class StudentProfileControlTest {
                 .studiengang("Wirtschaftsinformatik")
                 .studienbeginn(LocalDate.now())
                 .matrikelNummer("123456")
-                .lebenslauf("/dir/lebenslauf/lebenslauf1.pdf")
-                .beschreibung("Hello.")
-                .telefonnummer("9876543210")
-                .profilbild("/dir/profilbilder/2.jpg")
                 .email("123@abc")
                 .build();
         // Mock the behavior of getStudentProfile(username) method
@@ -112,9 +147,10 @@ public class StudentProfileControlTest {
         given(studentProfileControl.getStudentProfile(userId)).willReturn(oldVersion);
         // Perform the updateStudentProfile operation
         studentProfileControl.updateStudentProfile(updatedVersion, userId);
+        studentProfileControl.updateStudentProfile(updatedVersionNull, userId);
 
-        verify(studentService, times(1)).createOrUpdateStudent(student);
-        verify(studentService, times(3)).getStudent(userId);
+        verify(studentService, times(2)).createOrUpdateStudent(student);
+        verify(studentService, times(5)).getStudent(userId);
         verifyNoMoreInteractions(studentService);
     }
 }
