@@ -54,6 +54,27 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
                 } else{
                     isSameUser = Objects.equals(getCurrentUserName(), parameter);
                 }
+                if(isSameUser){
+                    editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
+                    addClassName("profile-view");
+
+                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
+                        switchToEditMode();
+                    });
+                    editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
+                        try {
+                            switchToViewMode();
+                        } catch (PersistenceException | ProfileException persistenceException) {
+                            persistenceException.printStackTrace();
+                        }
+                    });
+
+                    editAndSaveProfileButtonComapany.setEditButtonVisible(true);
+                    editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
+
+                    add(editAndSaveProfileButtonComapany);
+                }
+
 
                 ui.access(() -> {
                     if (companyProfileWrapper == null) {
@@ -74,28 +95,6 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     @Autowired
     public UnternehmenProfileView(UnternehmenProfileControl control) throws ProfileException {
         this.unternehmenProfileControl = control;
-
-        if(isSameUser){
-            editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
-            addClassName("profile-view");
-
-            editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
-                switchToEditMode();
-            });
-            editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
-                try {
-                    switchToViewMode();
-                } catch (PersistenceException | ProfileException persistenceException) {
-                    persistenceException.printStackTrace();
-                }
-            });
-
-            editAndSaveProfileButtonComapany.setEditButtonVisible(true);
-            editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
-
-            add(editAndSaveProfileButtonComapany);
-        }
-
 
     }
 
