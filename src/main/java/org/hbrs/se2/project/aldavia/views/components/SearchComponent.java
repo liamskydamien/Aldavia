@@ -2,6 +2,7 @@ package org.hbrs.se2.project.aldavia.views.components;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -57,7 +58,11 @@ public class SearchComponent extends VerticalLayout {
 
     Select<String> selectJob = new Select<>();
 
+    Select<String> selectRecommendet = new Select<>();
+
     TextField unternehmenSearch = new TextField();
+
+
 
 
 
@@ -233,6 +238,10 @@ public class SearchComponent extends VerticalLayout {
         selectJob.setItems("Alle", "Praktikum", "Festanstellung", "Werkstudent", "Teilzeit");
         selectJob.setValue("Alle");
 
+        selectRecommendet.setLabel("Sort by recommendet");
+        selectRecommendet.setItems("Recommendet", "All");
+        selectRecommendet.setValue("All");
+
 
         List<StellenanzeigeDTO> selectedAnzeigen = new ArrayList<>();
 
@@ -263,8 +272,48 @@ public class SearchComponent extends VerticalLayout {
         unternehmenSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
 
+         headerLayout.add(selectRecommendet, selectJob, unternehmenSearch);
 
-        headerLayout.add(selectJob, unternehmenSearch);
+
+         if( UI.getCurrent() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER)!= null) {
+             UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+
+             selectRecommendet.addValueChangeListener(e -> {
+                 List<StellenanzeigeDTO> recommendetStellenanzeigen = searchControl.getRecommendedStellenanzeigen(userDTO.getUserid());
+                 if (selectRecommendet.getValue().equals("Recommendet")) {
+                     if (selectedAnzeigen.size() > 0) {
+                         for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                             selectedAnzeigen.remove(i);
+                         }
+                     }
+                     for (StellenanzeigeDTO dto : recommendetStellenanzeigen) {
+                         selectedAnzeigen.add(dto);
+                     }
+                     displayStellenanzeigen.removeAll();
+                     createCard(selectedAnzeigen);
+                     remove(displayStellenanzeigen);
+                     add(displayStellenanzeigen);
+
+                 }
+                 if (selectRecommendet.getValue().equals("Alle")) {
+                     selectJob.setValue("Alle");
+                 }
+
+             });
+         } else {
+             selectRecommendet.addValueChangeListener(e -> {
+                 Notification.show("Sie müssen eingeloggt sein,um dieses Feature nutzen zu können!");
+             });
+         }
+
+
+
+
+
+
+
+
+
 
         this.add(headerLayout);
         createCard(list);
