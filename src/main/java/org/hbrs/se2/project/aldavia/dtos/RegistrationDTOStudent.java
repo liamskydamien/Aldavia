@@ -20,11 +20,4 @@ public class RegistrationDTOStudent {
 	private String mail;
 	private String password;
 	private int registrationDate;
-	
-
-	@Override
-	public String toString() {
-		return "UserDTO [UserName=" + userName + ", password=" + password + "]";
-	}
-
 }

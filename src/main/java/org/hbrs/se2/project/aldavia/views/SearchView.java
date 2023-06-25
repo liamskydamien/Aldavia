@@ -12,7 +12,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.views.components.SearchComponent;
-import org.hbrs.se2.project.aldavia.views.components.SearchComponentNew;
 
 
 import java.util.List;

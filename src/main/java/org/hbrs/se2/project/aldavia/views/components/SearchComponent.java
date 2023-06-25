@@ -37,7 +37,7 @@ import java.util.List;
 
 
 @Component
-@CssImport("./styles/views/profile/studentProfile.css")
+@CssImport("./styles/views/SearchView/SearchView.css")
 public class SearchComponent extends VerticalLayout {
 
     private final SearchControl searchControl;
@@ -324,6 +324,7 @@ public class SearchComponent extends VerticalLayout {
 
     private Button createBewerbenButton(StellenanzeigeDTO stellenanzeigeDTO){
         Button bewerbenButton = new Button("Bewerben");
+        bewerbenButton.addClassName("bewerbenButton");
         bewerbenButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         bewerbenButton.addClickListener(e -> {
             if (UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) == null) {
