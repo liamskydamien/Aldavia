@@ -95,7 +95,7 @@ public class Unternehmen {
     }
 
     public void removeAdresse(Adresse adresse) {
-        if (adressen != null && adressen.contains(adresse)) {
+        if (adressen != null) {
             adressen.remove(adresse);
             adresse.removeUnternehmen(this);
         }
@@ -108,7 +108,7 @@ public class Unternehmen {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Unternehmen that = (Unternehmen) o;
-        return id == that.id && Objects.equals(name, that.name) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(ap_vorname, that.ap_vorname) && Objects.equals(ap_nachname, that.ap_nachname) && Objects.equals(webseite, that.webseite) && Objects.equals(user, that.user) && Objects.equals(stellenanzeigen, that.stellenanzeigen) && Objects.equals(adressen, that.adressen);
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(beschreibung, that.beschreibung) && Objects.equals(ap_vorname, that.ap_vorname) && Objects.equals(ap_nachname, that.ap_nachname) && Objects.equals(webseite, that.webseite) && Objects.equals(user, that.user);
     }
 
     @Override

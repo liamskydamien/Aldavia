@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.aldavia.test.EntityTest;
 
 import org.hbrs.se2.project.aldavia.entities.Adresse;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,6 +16,7 @@ public class AdresseTest {
         adresse.setId(1);
         Adresse adresse2 = new Adresse();
         adresse2.setId(2);
+        adresse.addUnternehmen(new Unternehmen());
 
         assertNotEquals(adresse, adresse2);
         adresse2.setId(1);

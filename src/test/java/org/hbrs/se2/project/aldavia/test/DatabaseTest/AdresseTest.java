@@ -59,7 +59,7 @@ public class AdresseTest {
         adresse.setPlz("54321");
         adresse.setOrt("Neuer Ort");
         adresse.setLand("Neues Land");
-        adresse.addUnternehmen(unternehmen);
+        unternehmen.addAdresse(adresse);
 
         assertEquals("Neue Straße", adresse.getStrasse());
         assertEquals("456", adresse.getHausnummer());
@@ -67,8 +67,8 @@ public class AdresseTest {
         assertEquals("Neuer Ort", adresse.getOrt());
         assertEquals("Neues Land", adresse.getLand());
         assertTrue(adresse.getUnternehmen().contains(unternehmen));
-        assertTrue(unternehmen.getAdressen().contains(adresse));
         assertEquals(1, adresse.getUnternehmen().size());
+        assertEquals(1, unternehmen.getAdressen().size());
 
     }
 
@@ -86,15 +86,16 @@ public class AdresseTest {
                 .build();
         unternehmenRepository.save(unternehmen);
 
-        adresse.addUnternehmen(unternehmen);
+        unternehmen.addAdresse(adresse);
 
-        adresse.addUnternehmen(unternehmen);
         assertTrue(adresse.getUnternehmen().contains(unternehmen));
 
-        adresse.removeUnternehmen(unternehmen);
+        unternehmen.removeAdresse(adresse);
 
         assertFalse(adresse.getUnternehmen().contains(unternehmen));
+        assertEquals(0, adresse.getUnternehmen().size());
         assertFalse(unternehmen.getAdressen().contains(adresse));
+        assertEquals(0, unternehmen.getAdressen().size());
     }
 
     @Test

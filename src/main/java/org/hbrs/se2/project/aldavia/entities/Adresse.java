@@ -51,8 +51,9 @@ public class Adresse {
     }
 
     public Adresse removeUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen != null) {
+        if (this.unternehmen != null && this.unternehmen.contains(unternehmen)) {
             this.unternehmen.remove(unternehmen);
+            unternehmen.removeAdresse(this);
         }
         return this;
     }
@@ -64,7 +65,7 @@ public class Adresse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
-        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land) && Objects.equals(unternehmen, adresse.unternehmen);
+        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land);
     }
 
     @Override
