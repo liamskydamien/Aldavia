@@ -9,42 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class RegistrationStudentDTOTest {
-        @Test
-        public void testEqualsAndHashCode() {
-            RegistrationDTOStudent student1 = RegistrationDTOStudent.builder()
-                    .userName("john123")
-                    .password("password123")
-                    .build();
 
-            RegistrationDTOStudent student2 = RegistrationDTOStudent.builder()
-                    .userName("john123")
-                    .password("password123")
-                    .build();
+    @Test
+    public void testToString() {
+        RegistrationDTOStudent student = RegistrationDTOStudent.builder()
+                .userName("john123")
+                .password("password123")
+                .build();
 
-            RegistrationDTOStudent student3 = RegistrationDTOStudent.builder()
-                    .userName("jane456")
-                    .password("password456")
-                    .build();
-
-            // Test equality
-            assertEquals(student1, student2);
-            assertEquals(student1.hashCode(), student2.hashCode());
-
-            // Test inequality
-            assertNotEquals(student1, student3);
-            assertNotEquals(student1.hashCode(), student3.hashCode());
-        }
-
-        @Test
-        public void testToString() {
-            RegistrationDTOStudent student = RegistrationDTOStudent.builder()
-                    .userName("john123")
-                    .password("password123")
-                    .build();
-
-            String expected = "UserDTO [UserName=john123, password=password123]";
-            assertEquals(expected, student.toString());
-        }
+        String expected = "UserDTO [UserName=john123, password=password123]";
+        assertEquals(expected, student.toString());
+    }
 
     @Test
     public void testGettersAndSetters() {

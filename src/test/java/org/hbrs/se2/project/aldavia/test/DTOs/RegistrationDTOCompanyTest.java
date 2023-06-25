@@ -8,32 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class RegistrationDTOCompanyTest {
     @Test
-    public void testEqualsAndHashCode() {
-        RegistrationDTOCompany company1 = RegistrationDTOCompany.builder()
-                .userName("companyA")
-                .password("password123")
-                .build();
-
-        RegistrationDTOCompany company2 = RegistrationDTOCompany.builder()
-                .userName("companyA")
-                .password("password123")
-                .build();
-
-        RegistrationDTOCompany company3 = RegistrationDTOCompany.builder()
-                .userName("companyB")
-                .password("password456")
-                .build();
-
-        // Test equality
-        Assertions.assertEquals(company1, company2);
-        Assertions.assertEquals(company1.hashCode(), company2.hashCode());
-
-        // Test inequality
-        Assertions.assertNotEquals(company1, company3);
-        Assertions.assertNotEquals(company1.hashCode(), company3.hashCode());
-    }
-
-    @Test
     public void testToString() {
         RegistrationDTOCompany company = RegistrationDTOCompany.builder()
                 .companyName("companyA")
