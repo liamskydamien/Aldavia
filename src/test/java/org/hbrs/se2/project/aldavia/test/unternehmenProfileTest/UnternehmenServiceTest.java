@@ -169,7 +169,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testCreateOrUpdateUnternehmen() throws ProfileException {
+    void testCreateOrUpdateUnternehmen() {
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         unternehmen.setUser(user);
