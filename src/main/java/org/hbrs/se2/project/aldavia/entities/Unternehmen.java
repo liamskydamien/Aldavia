@@ -58,14 +58,14 @@ public class Unternehmen {
         }
         if(!stellenanzeigen.contains(stellenanzeige)) {
             stellenanzeigen.add(stellenanzeige);
-            stellenanzeige.setUnternehmen(this);
+            stellenanzeige.setUnternehmen_stellenanzeigen(this);
         }
     }
 
     public void removeStellenanzeige(Stellenanzeige stellenanzeige) {
         if (stellenanzeigen != null && stellenanzeigen.contains(stellenanzeige)) {
             stellenanzeigen.remove(stellenanzeige);
-            stellenanzeige.setUnternehmen(null);
+            stellenanzeige.setUnternehmen_stellenanzeigen(null);
         }
     }
 

@@ -46,17 +46,13 @@ public class Adresse {
         if (this.unternehmen == null) {
             this.unternehmen = new HashSet<>();
         }
-        if (!this.unternehmen.contains(unternehmen)) {
-            this.unternehmen.add(unternehmen);
-            unternehmen.addAdresse(this);
-        }
+        this.unternehmen.add(unternehmen);
         return this;
     }
 
     public Adresse removeUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen != null && this.unternehmen.contains(unternehmen)) {
+        if (this.unternehmen != null) {
             this.unternehmen.remove(unternehmen);
-            unternehmen.removeAdresse(this);
         }
         return this;
     }
@@ -76,7 +72,8 @@ public class Adresse {
         return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
     }
 
+    @Override
     public String toString() {
-        return ""+ strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
+        return strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
     }
 }
