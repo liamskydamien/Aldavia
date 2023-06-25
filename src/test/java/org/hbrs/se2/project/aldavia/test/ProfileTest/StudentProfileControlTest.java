@@ -13,7 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -51,7 +54,8 @@ public class StudentProfileControlTest {
         Student student = new Student();
         student.setVorname("John");
         student.setNachname("Doe");
-        String userId = "test";
+        String userId = "test1";
+
         StudentProfileDTO studentProfileDTO = new StudentProfileDTO();
 
         given(studentService.getStudent(userId)).willReturn(student);
@@ -59,6 +63,9 @@ public class StudentProfileControlTest {
 
         //when
         StudentProfileDTO await = studentProfileControl.getStudentProfile(userId);
+
+        //Test Exception
+        assertThrows(ProfileException.class, () -> studentProfileControl.getStudentProfile(anyString()));
 
         //then
         assertThat(await).hasSameClassAs(studentProfileDTO);
@@ -72,13 +79,33 @@ public class StudentProfileControlTest {
         student.setUser(user);
         String userId = "testUpdate";
         // Create a mock StudentProfileDTO for the updated version
-        StudentProfileDTO updatedVersion = new StudentProfileDTO();
-        updatedVersion.setVorname("John");
-        updatedVersion.setNachname("Doe");
+        StudentProfileDTO updatedVersion = StudentProfileDTO.builder()
+                .vorname("John")
+                .nachname("Doe")
+                .geburtsdatum(LocalDate.now())
+                .studiengang("Wirtschaftsinformatik")
+                .studienbeginn(LocalDate.now())
+                .matrikelNummer("12345")
+                .lebenslauf("/dir/lebenslauf/lebenslauf.pdf")
+                .beschreibung("Hello, I am John now.")
+                .telefonnummer("987654321")
+                .profilbild("/dir/profilbilder/1.jpg")
+                .email("123@abc.de")
+                .build();
         // Create a mock StudentProfileDTO for the old version
-        StudentProfileDTO oldVersion = new StudentProfileDTO();
-        oldVersion.setVorname("Jane");
-        oldVersion.setNachname("Doe");
+        StudentProfileDTO oldVersion = StudentProfileDTO.builder()
+                .vorname("Jane")
+                .nachname("Doe")
+                .geburtsdatum(LocalDate.now())
+                .studiengang("Wirtschaftsinformatik")
+                .studienbeginn(LocalDate.now())
+                .matrikelNummer("123456")
+                .lebenslauf("/dir/lebenslauf/lebenslauf1.pdf")
+                .beschreibung("Hello.")
+                .telefonnummer("9876543210")
+                .profilbild("/dir/profilbilder/2.jpg")
+                .email("123@abc")
+                .build();
         // Mock the behavior of getStudentProfile(username) method
         given(studentService.getStudent(userId)).willReturn(student);
         given(studentProfileDTOFactory.createStudentProfileDTO(student)).willReturn(oldVersion);
