@@ -38,7 +38,7 @@ public class AdresseService {
     }
 
     @SneakyThrows
-    public Adresse removeStudenFromAdresse(AdresseDTO adresseDTO, Unternehmen unternehmen){
+    public Adresse removeUnternehmenFromAdresse(AdresseDTO adresseDTO, Unternehmen unternehmen){
         logger.info("Removing student from Adresse");
         Optional<Adresse> awaitAdresse = addressenRepository.findById(adresseDTO.getId());
         if(awaitAdresse.isPresent()){

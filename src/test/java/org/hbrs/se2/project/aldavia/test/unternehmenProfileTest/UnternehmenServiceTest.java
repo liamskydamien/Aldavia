@@ -1,7 +1,10 @@
 package org.hbrs.se2.project.aldavia.test.unternehmenProfileTest;
 
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
+import org.hbrs.se2.project.aldavia.entities.Adresse;
+import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
@@ -14,9 +17,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -57,16 +63,64 @@ public class UnternehmenServiceTest {
         //then
         assertEquals(unternehmenMock,await);
 
-
     }
+
+    @Test
+    void testGetUnternehmen_ProfileException() {
+        when(userRepositoryMock.findByUserid("testuser")).thenReturn(Optional.empty());
+
+        assertThrows(ProfileException.class, () -> unternehmenService.getUnternehmen("testuser"));
+
+        verify(userRepositoryMock, times(1)).findByUserid("testuser");
+        verify(unternehmenRepositoryMock, never()).findByUser(any());
+    }
+
     @Test
     void testUpdateUnternehmenInformationen() throws ProfileException {
         //given
         User userMock = new User();
         Unternehmen unternehmenMock = new Unternehmen();
         unternehmenMock.setUser(userMock);
-        UnternehmenProfileDTO dto = new UnternehmenProfileDTO();
 
+        Set<AdresseDTO> adressenDTO = new HashSet<>();
+        AdresseDTO adresseDTO = AdresseDTO.builder().land("Deutschland").build();
+        adressenDTO.add(adresseDTO);
+
+        Set<Adresse> adressen = new HashSet<>();
+        Adresse adresse = Adresse.builder().land("Germany").build();
+        adressen.add(adresse);
+        unternehmenMock.setAdressen(adressen);
+
+        UnternehmenProfileDTO dto = UnternehmenProfileDTO.builder()
+                .name("testUnternehmenProfile")
+                .email("123@abc.de")
+                .telefonnummer("1234567890")
+                .profilbild("/dir/profilbild.png")
+                .password("iamapassword123")
+                .ap_nachname("Nguyen")
+                .ap_vorname("Hong Quang")
+                .beschreibung("Test")
+                .webside("uhm Tippfehler")
+                .adressen(adressenDTO)
+                .build();
+
+
+        //when
+        unternehmenService.updateUnternehmenInformation(unternehmenMock,dto);
+        verify(unternehmenRepositoryMock,times(1)).save(unternehmenMock);
+        verifyNoMoreInteractions(unternehmenRepositoryMock);
+
+
+        //then -> fällt weg, da void Methode
+    }
+
+    @Test
+    void testUpdateUnternehmenInformationenNull() throws ProfileException {
+        //given
+        User userMock = new User();
+        Unternehmen unternehmenMock = new Unternehmen();
+        unternehmenMock.setUser(userMock);
+        UnternehmenProfileDTO dto = new UnternehmenProfileDTO();
 
         //when
         unternehmenService.updateUnternehmenInformation(unternehmenMock,dto);
@@ -82,8 +136,63 @@ public class UnternehmenServiceTest {
         //given
         Unternehmen unternehmenMock = new Unternehmen();
 
+        Set<Stellenanzeige> stellenanzeigen = new HashSet<>();
+        Stellenanzeige stellenanzeige = new Stellenanzeige();
+        stellenanzeigen.add(stellenanzeige);
+        unternehmenMock.setStellenanzeigen(stellenanzeigen);
+
+        Set<Adresse> adressen = new HashSet<>();
+        Adresse adresse = new Adresse();
+        adressen.add(adresse);
+        unternehmenMock.setAdressen(adressen);
+
         //when
         unternehmenService.deleteUnternehmen(unternehmenMock);
         verify(unternehmenRepositoryMock,times(1)).delete(unternehmenMock);
+    }
+
+    @Test
+    void testDeleteUnternehmen_NullLists() throws ProfileException {
+        User user = new User();
+        Unternehmen unternehmen = new Unternehmen();
+        String userId = "testuser";
+        unternehmen.setUser(user);
+        unternehmen.setName("Test Company");
+        unternehmen.setStellenanzeigen(null);
+        unternehmen.setAdressen(null);
+
+        when(unternehmenRepositoryMock.findByUserID(userId)).thenReturn(Optional.of(unternehmen));
+
+        unternehmenService.deleteUnternehmen(unternehmen);
+
+        verify(unternehmenRepositoryMock, times(1)).delete(unternehmen);
+    }
+
+    @Test
+    void testCreateOrUpdateUnternehmen() {
+        User user = new User();
+        Unternehmen unternehmen = new Unternehmen();
+        unternehmen.setUser(user);
+        unternehmen.setName("Test Company");
+
+        when(unternehmenRepositoryMock.save(unternehmen)).thenReturn(unternehmen);
+
+        unternehmenService.createOrUpdateUnternehmen(unternehmen);
+
+        verify(unternehmenRepositoryMock, times(1)).save(unternehmen);
+    }
+
+    @Test
+    void testCreateOrUpdateUnternehmen_Exception() {
+        User user = new User();
+        Unternehmen unternehmen = new Unternehmen();
+        unternehmen.setUser(user);
+        unternehmen.setName("Test Company");
+
+        when(unternehmenRepositoryMock.save(unternehmen)).thenThrow(new RuntimeException("Database connection failed"));
+
+        assertThrows(ProfileException.class, () -> unternehmenService.createOrUpdateUnternehmen(unternehmen));
+
+        verify(unternehmenRepositoryMock, times(1)).save(unternehmen);
     }
 }
