@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 
-@Route(value = "bewerbungsOverviewUnternehmen", layout = LoggedInStateLayout.class)
+@Route(value = Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW, layout = LoggedInStateLayout.class)
 public class BewerbungsOverviewUnternehmenView extends Div {
     private final BewerbungsOverviewUnternehmen bewerbungsOverviewUnternehmen;
     private final UserDTO currentUser;

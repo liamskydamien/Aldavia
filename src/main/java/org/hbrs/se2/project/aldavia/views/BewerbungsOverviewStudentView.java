@@ -129,7 +129,8 @@ public class BewerbungsOverviewStudentView extends Div {
         layout.addClassName("stellenanzeigen-infos-layout");
         Anchor anchor = new Anchor();
         anchor.setText(bewerbung.getStellenanzeige().getUnternehmen().getName());
-        anchor.setHref("unternehmen/" + bewerbung.getStellenanzeige().getUnternehmen().getName());
+        anchor.setHref(Globals.Pages.COMPANY_PROFILE_VIEW +"/"+ bewerbung.getStellenanzeige().getUnternehmen().getName());
+        anchor.setTarget("_blank");
         layout.add(anchor);
         layout.add(new H2(bewerbung.getStellenanzeige().getBezeichnung()));
         layout.add(new H3(bewerbung.getStellenanzeige().getBeschaeftigungsverhaeltnis()));

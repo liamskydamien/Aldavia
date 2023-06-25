@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -17,14 +18,17 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
+import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.UIUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,11 +58,13 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     private TextField studiengang;
     private TextArea description;
     private Image profileImg;
+    private String url;
 
 
-    public PersonalProfileDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl) {
+    public PersonalProfileDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl, String url) {
         this.studentProfileDTO = studentProfileDTO;
         this.studentProfileControl = studentProfileControl;
+        this.url = url;
         addClassName("personal-details-component");
         firstNameAndLastName = new TextField();
         firstNameAndLastName.addClassName("first-name-and-last-name");
@@ -68,8 +74,9 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
     }
 
-    public PersonalProfileDetailsComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl){
+    public PersonalProfileDetailsComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl, String url) {
         this.unternehmenProfileDTO = unternehmenProfileDTO;
+        this.url = url;
         this.unternehmenProfileControl = unternehmenProfileControl;
         addClassName("personal-details-component");
         companyName = new TextField();
@@ -82,10 +89,20 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     private void setUpUI(){
         VerticalLayout introductionLayout = new VerticalLayout();
         introductionLayout.setClassName("introductionLayout");
-        if(checkIfUserIsStudent()){
-            introductionLayout.add(firstNameAndLastName,studiengang,description);
-        } else if (checkIfUserIsUnternehmen()) {
-            introductionLayout.add(companyName,website,email);
+        System.out.println("Current User over URL: " + getUserOverUrl());
+        System.out.println("Current User: " + getCurrentUserName());
+        if(getUserOverUrl().equals(getCurrentUserName())){
+            if(checkIfUserIsStudent()){
+                introductionLayout.add(firstNameAndLastName,studiengang,description);
+            } else if (checkIfUserIsUnternehmen()) {
+                introductionLayout.add(companyName,website,email);
+            }
+        } else if(!getUserOverUrl().equals(getCurrentUserName())){
+            if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+                introductionLayout.add(firstNameAndLastName,studiengang,description);
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+                introductionLayout.add(companyName,website,email);
+            }
         }
 
         introduction.add(introductionLayout);
@@ -99,118 +116,161 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     }
 
 
+    private String getUserOverUrl(){
+            String[] parts = url.split("/");
+            String requestedProfile = parts[parts.length - 1];
+            return requestedProfile;
+
+    }
+    private String getProfileType(){
+            String[] parts = url.split("/");
+            String requestedProfile = parts[parts.length - 2];
+            return requestedProfile;
+    }
+
+
 
     public void updateViewMode() {
-        if(checkIfUserIsStudent()){
-            firstNameAndLastName.setValue(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
-            studiengang.setValue(studentProfileDTO.getStudiengang());
-            description.setValue(studentProfileDTO.getBeschreibung());
-            firstNameAndLastName.setReadOnly(true);
-            studiengang.setReadOnly(true);
-            description.setReadOnly(true);
-        } else if (checkIfUserIsUnternehmen()) {
-            companyName.setValue(unternehmenProfileDTO.getName());
-            website.setValue(unternehmenProfileDTO.getWebside());
-            email.setValue(unternehmenProfileDTO.getEmail());
-            companyName.setReadOnly(true);
-            website.setReadOnly(true);
-            email.setReadOnly(true);
+        if(getUserOverUrl().equals(getCurrentUserName())){
+            if(checkIfUserIsStudent()){
+                updateViewModeStudent();
+            } else if (checkIfUserIsUnternehmen()) {
+                updateViewModeCompany();
+            }
+        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+               updateViewModeStudent();
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+                updateViewModeCompany();
+            }
         }
 
 
         profilePicture.removeAll();
+        String fileName = null;
 
-        if(checkIfUserIsStudent()){
-            if(studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")){
-                profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-            } else {
-                // lade das Profilbild aus studentProfileDTO.getProfilbild()
-                String fileName = studentProfileDTO.getProfilbild();
-                String path = "./src/main/webapp/profile-images/" + fileName;
-                StreamResource resource = new StreamResource(fileName, () -> {
-                    try {
-                        return new FileInputStream(path);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        return InputStream.nullInputStream(); // In case of an error return an empty stream
-                    }
-                });
-                profileImg = new Image(resource, "Profilbild");
+        if (getUserOverUrl().equals(getCurrentUserName())) {
+            if (checkIfUserIsStudent()) {
+                System.out.println("CheckPoint 1");
+                if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
+                    System.out.println("Default Profilbild");
+                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+
+                } else {
+                    // lade das Profilbild aus studentProfileDTO.getProfilbild()
+
+                    fileName = studentProfileDTO.getProfilbild();
+                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    StreamResource resource = new StreamResource(fileName, () -> {
+                        try {
+                            return new FileInputStream(path);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return InputStream.nullInputStream(); // In case of an error return an empty stream
+                        }
+                    });
+                    profileImg = new Image(resource, "Profilbild");
+                }
+                profilePicture.add(profileImg);
+            } else if (checkIfUserIsUnternehmen()) {
+                if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
+                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                } else {
+                    // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
+                    System.out.println("CheckPoint 2");
+                    fileName = unternehmenProfileDTO.getProfilbild();
+                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    StreamResource resource = new StreamResource(fileName, () -> {
+                        try {
+                            return new FileInputStream(path);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return InputStream.nullInputStream(); // In case of an error return an empty stream
+                        }
+                    });
+                    profileImg = new Image(resource, "Profilbild");
+
+                }
+                profilePicture.add(profileImg);
             }
-        } else if(checkIfUserIsUnternehmen()){
-            if(unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")){
-                profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-            } else {
-                // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-                String fileName = unternehmenProfileDTO.getProfilbild();
-                String path = "./src/main/webapp/profile-images/" + fileName;
-                StreamResource resource = new StreamResource(fileName, () -> {
-                    try {
-                        return new FileInputStream(path);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        return InputStream.nullInputStream(); // In case of an error return an empty stream
-                    }
-                });
-                profileImg = new Image(resource, "Profilbild");
+        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)) {
+                if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
+                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                } else {
+                    // lade das Profilbild aus studentProfileDTO.getProfilbild()
+                    fileName = studentProfileDTO.getProfilbild();
+                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    StreamResource resource = new StreamResource(fileName, () -> {
+                        try {
+                            return new FileInputStream(path);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return InputStream.nullInputStream(); // In case of an error return an empty stream
+                        }
+                    });
+                    profileImg = new Image(resource, "Profilbild");
+                }
+                profilePicture.add(profileImg);
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+                if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
+                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                } else {
+                    // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
+                    fileName = unternehmenProfileDTO.getProfilbild();
+                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    StreamResource resource = new StreamResource(fileName, () -> {
+                        try {
+                            return new FileInputStream(path);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            return InputStream.nullInputStream(); // In case of an error return an empty stream
+                        }
+                    });
+                    profileImg = new Image(resource, "Profilbild");
+                }
+                profilePicture.add(profileImg);
             }
         }
-        profilePicture.add(profileImg);
-
 
     }
 
+    private void updateViewModeStudent() {
+        firstNameAndLastName.setValue(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());
+        studiengang.setValue(studentProfileDTO.getStudiengang());
+        description.setValue(studentProfileDTO.getBeschreibung());
+        firstNameAndLastName.setReadOnly(true);
+        studiengang.setReadOnly(true);
+        description.setReadOnly(true);
+    }
+
+    private void updateViewModeCompany() {
+        companyName.setValue(unternehmenProfileDTO.getName());
+        website.setValue(unternehmenProfileDTO.getWebside());
+        email.setValue(unternehmenProfileDTO.getEmail());
+        companyName.setReadOnly(true);
+        website.setReadOnly(true);
+        email.setReadOnly(true);
+    }
+
+
+
     public void updateEditMode() {
-        if(checkIfUserIsStudent()){
-            firstNameAndLastName.setReadOnly(false);
-            studiengang.setReadOnly(false);
-            description.setReadOnly(false);
+        if(getUserOverUrl().equals(getCurrentUserName())) {
+            if (checkIfUserIsStudent()) {
+                updateEditModeStudent();
 
-            //Name
-            if(UIUtils.checkIfTextFieldIsEmpty(firstNameAndLastName)){
-                firstNameAndLastName.setPlaceholder("Vor- und Nachname");
-            }firstNameAndLastName.setClearButtonVisible(true);
-
-            //Studiengang
-            if (UIUtils.checkIfTextFieldIsEmpty(studiengang)){
-                studiengang.setPlaceholder("Studiengang");
+            } else if (checkIfUserIsUnternehmen()) {
+                updateEditModeCompany();
             }
-            studiengang.setClearButtonVisible(true);
+        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+               updateEditModeStudent();
 
-            //Description
-            if (UIUtils.checkIfTextAreaIsEmpty(description)){
-                description.setPlaceholder("Schreibe etwas über dich...");
+
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)) {
+                updateEditModeCompany();
             }
-            description.setClearButtonVisible(true);
-            description.setMaxLength(500);
-            description.setValueChangeMode(ValueChangeMode.EAGER);
-            description.setHelperText("0/500");
-            description.addValueChangeListener(e -> {
-                e.getSource()
-                        .setHelperText(e.getValue().length() + "/" + 500);
-            });
-
-        } else if (checkIfUserIsUnternehmen()) {
-            companyName.setReadOnly(false);
-            website.setReadOnly(false);
-            email.setReadOnly(false);
-
-            //Name
-            if(UIUtils.checkIfTextFieldIsEmpty(companyName)){
-                companyName.setPlaceholder("Name");
-            }companyName.setClearButtonVisible(true);
-
-            //Website
-            if (UIUtils.checkIfTextFieldIsEmpty(website)){
-                website.setPlaceholder("Website");
-            }
-            website.setClearButtonVisible(true);
-
-            //Email
-            if (UIUtils.checkIfTextFieldIsEmpty(email)){
-                email.setPlaceholder("Email");
-            }
-            email.setClearButtonVisible(true);
         }
 
 
@@ -237,6 +297,59 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
 
     }
+    private void updateEditModeStudent(){
+        firstNameAndLastName.setReadOnly(false);
+        studiengang.setReadOnly(false);
+        description.setReadOnly(false);
+
+        //Name
+        if(UIUtils.checkIfTextFieldIsEmpty(firstNameAndLastName)){
+            firstNameAndLastName.setPlaceholder("Vor- und Nachname");
+        }firstNameAndLastName.setClearButtonVisible(true);
+
+        //Studiengang
+        if (UIUtils.checkIfTextFieldIsEmpty(studiengang)){
+            studiengang.setPlaceholder("Studiengang");
+        }
+        studiengang.setClearButtonVisible(true);
+
+        //Description
+        if (UIUtils.checkIfTextAreaIsEmpty(description)){
+            description.setPlaceholder("Schreibe etwas über dich...");
+        }
+        description.setClearButtonVisible(true);
+        description.setMaxLength(500);
+        description.setValueChangeMode(ValueChangeMode.EAGER);
+        description.setHelperText("0/500");
+        description.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + 500);
+        });
+    }
+
+    private void updateEditModeCompany(){
+        companyName.setReadOnly(false);
+        website.setReadOnly(false);
+        email.setReadOnly(false);
+
+        //Name
+        if(UIUtils.checkIfTextFieldIsEmpty(companyName)){
+            companyName.setPlaceholder("Name");
+        }companyName.setClearButtonVisible(true);
+
+        //Website
+        if (UIUtils.checkIfTextFieldIsEmpty(website)){
+            website.setPlaceholder("Website");
+        }
+        website.setClearButtonVisible(true);
+
+        //Email
+        if (UIUtils.checkIfTextFieldIsEmpty(email)){
+            email.setPlaceholder("Email");
+        }
+        email.setClearButtonVisible(true);
+    }
+
 
     @Override
     public void switchViewMode(String userName) throws PersistenceException, ProfileException {
@@ -251,39 +364,55 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     }
 
     private void updateProfileDTO(String userName) throws PersistenceException, ProfileException {
-        if(checkIfUserIsStudent()){
-            if(firstNameAndLastName.getValue().equals("")){
-                Notification.show("Name darf nicht leer sein!");
-                return;
-            } else if (firstNameAndLastName.getValue().split(" ").length < 2){
-                Notification.show("Bitte Vor- und Nachname angeben!");
-                return;
+        if(getUserOverUrl().equals(getCurrentUserName())) {
+            if(checkIfUserIsStudent()){
+                updateProfileDTOStudent(userName);
             }
-            String firstname = UIUtils.splitOnSpaces(firstNameAndLastName.getValue())[0];
-            String lastname = UIUtils.splitOnSpaces(firstNameAndLastName.getValue())[1];
-            studentProfileDTO.setVorname(firstname);
-            studentProfileDTO.setNachname(lastname);
-            studentProfileDTO.setStudiengang(studiengang.getValue());
-            studentProfileDTO.setBeschreibung(description.getValue());
-            studentProfileControl.updateStudentProfile(studentProfileDTO, userName);
-        }
-        else if (checkIfUserIsUnternehmen()){
-            if(companyName.getValue().equals("")){
-                Notification.show("Name darf nicht leer sein!");
-                return;
-            } else if (website.getValue().equals("")){
-                Notification.show("Website darf nicht leer sein!");
-                return;
-            } else if (email.getValue().equals("")){
-                Notification.show("Email darf nicht leer sein!");
-                return;
+            else if (checkIfUserIsUnternehmen()){
+                updateProfileDTOCompany(userName);
             }
-            unternehmenProfileDTO.setName(companyName.getValue());
-            unternehmenProfileDTO.setWebside(website.getValue());
-            unternehmenProfileDTO.setEmail(email.getValue());
-            unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
+        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+                updateProfileDTOStudent(userName);
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)){
+                updateProfileDTOCompany(userName);
+            }
         }
 
+
+    }
+    private void updateProfileDTOStudent(String userName) throws PersistenceException, ProfileException {
+        if(firstNameAndLastName.getValue().equals("")){
+            Notification.show("Name darf nicht leer sein!");
+            return;
+        } else if (firstNameAndLastName.getValue().split(" ").length < 2){
+            Notification.show("Bitte Vor- und Nachname angeben!");
+            return;
+        }
+        String firstname = UIUtils.splitOnSpaces(firstNameAndLastName.getValue())[0];
+        String lastname = UIUtils.splitOnSpaces(firstNameAndLastName.getValue())[1];
+        studentProfileDTO.setVorname(firstname);
+        studentProfileDTO.setNachname(lastname);
+        studentProfileDTO.setStudiengang(studiengang.getValue());
+        studentProfileDTO.setBeschreibung(description.getValue());
+        studentProfileControl.updateStudentProfile(studentProfileDTO, userName);
+    }
+
+    private void updateProfileDTOCompany(String userName) throws PersistenceException, ProfileException {
+        if(companyName.getValue().equals("")){
+            Notification.show("Name darf nicht leer sein!");
+            return;
+        } else if (website.getValue().equals("")){
+            Notification.show("Website darf nicht leer sein!");
+            return;
+        } else if (email.getValue().equals("")){
+            Notification.show("Email darf nicht leer sein!");
+            return;
+        }
+        unternehmenProfileDTO.setName(companyName.getValue());
+        unternehmenProfileDTO.setWebside(website.getValue());
+        unternehmenProfileDTO.setEmail(email.getValue());
+        unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
     private VerticalLayout uploadProfilePicture(Dialog dialogUploadPic) {
@@ -319,11 +448,19 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
             }
 
-            if (checkIfUserIsStudent()){
-                // Save the path to the image in the database
-                studentProfileDTO.setProfilbild(uniqueFileName);
-            } else if (checkIfUserIsUnternehmen()) {
-                unternehmenProfileDTO.setProfilbild(uniqueFileName);
+            if(getUserOverUrl().equals(getCurrentUserName())){
+                if (checkIfUserIsStudent()){
+                    // Save the path to the image in the database
+                    studentProfileDTO.setProfilbild(uniqueFileName);
+                } else if (checkIfUserIsUnternehmen()) {
+                    unternehmenProfileDTO.setProfilbild(uniqueFileName);
+                }
+            } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+                if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+                    studentProfileDTO.setProfilbild(uniqueFileName);
+                } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW)){
+                    unternehmenProfileDTO.setProfilbild(uniqueFileName);
+                }
             }
 
 

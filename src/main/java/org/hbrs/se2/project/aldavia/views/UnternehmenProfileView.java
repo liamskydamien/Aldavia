@@ -35,15 +35,19 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private AdressenComponent adressenComponent;
     private EditAndSaveProfileButton editAndSaveProfileButtonComapany;
     private StellenanzeigeComponent stellenanzeigeComponent;
+    private String url;
+    private boolean isSameUser;
 
     @Override
     @Transactional
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
             try {
                 unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
+                url = beforeEvent.getLocation().getPath();
+                isSameUser = getCurrentUserName().equals(parameter);
                 ui.access(() -> {
                     if (companyProfileWrapper == null) {
-                        unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl);
+                        unternehmenPersonalDetailsComponent = new PersonalProfileDetailsComponent(unternehmenProfileDTO, unternehmenProfileControl, url);
                         companyProfileWrapper = new Div();
                         companyProfileWrapper.addClassName("profile-wrapper");
                         companyProfileWrapper.add(unternehmenPersonalDetailsComponent);
@@ -59,24 +63,28 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
 
     public UnternehmenProfileView(UnternehmenProfileControl control) throws ProfileException {
         this.unternehmenProfileControl = control;
-        editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
-        addClassName("profile-view");
 
-        editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
-            switchToEditMode();
-        });
-        editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
-            try {
-                switchToViewMode();
-            } catch (PersistenceException | ProfileException persistenceException) {
-                persistenceException.printStackTrace();
-            }
-        });
+        if(isSameUser){
+            editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
+            addClassName("profile-view");
 
-        editAndSaveProfileButtonComapany.setEditButtonVisible(true);
-        editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
+            editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
+                switchToEditMode();
+            });
+            editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
+                try {
+                    switchToViewMode();
+                } catch (PersistenceException | ProfileException persistenceException) {
+                    persistenceException.printStackTrace();
+                }
+            });
 
-        add(editAndSaveProfileButtonComapany);
+            editAndSaveProfileButtonComapany.setEditButtonVisible(true);
+            editAndSaveProfileButtonComapany.setSaveButtonVisible(false);
+
+            add(editAndSaveProfileButtonComapany);
+        }
+
 
     }
 

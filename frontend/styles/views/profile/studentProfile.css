@@ -294,6 +294,9 @@ vaadin-email-field[invalid]::part(input-field)::after {
 .add-Taetigkeit-Field{
     width: 100%;
 }
+.editAndDeleteStellenanzeigeArea{
+    width: 100%;
+}
 
 
 

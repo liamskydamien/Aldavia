@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.exception.StellenanzeigenException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,10 +110,10 @@ public class StellenanzeigenService {
                 toRemoveTaetigkeitsfelder.add(t);
             }
             for (Taetigkeitsfeld t : toRemoveTaetigkeitsfelder){
-                logger.info("Deleting Taetigkeitsfeld: " + t);
+                logger.info("Removing Taetigkeitsfeld: " + t);
                 taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(t, stellenanzeige);
             }
-            logger.info("Deleting Unternehmen from Stellenanzeige: " + stellenanzeige);
+            logger.info("Removing Unternehmen from Stellenanzeige: " + stellenanzeige);
             Unternehmen unternehmen = stellenanzeige.getUnternehmen_stellenanzeigen();
             unternehmen.removeStellenanzeige(stellenanzeige);
             stellenanzeigenRepository.save(stellenanzeige);
