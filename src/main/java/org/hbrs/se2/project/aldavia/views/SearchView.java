@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
+import org.hbrs.se2.project.aldavia.views.components.SearchComponent;
 import org.hbrs.se2.project.aldavia.views.components.SearchComponentNew;
 
 
@@ -22,7 +23,7 @@ public class SearchView extends VerticalLayout {
     private TextField searchField = new TextField();
     private Button searchButton = new Button("Search");
 
-    private SearchComponentNew searchComponent;
+    private SearchComponent searchComponent;
 
     private List<StellenanzeigeDTO> stellenanzeigeList;
 
@@ -31,7 +32,7 @@ public class SearchView extends VerticalLayout {
         searchButton.setId("search-button");
         setId("main-view");
         setBackgroundImage();
-        searchComponent = new SearchComponentNew(searchControl);
+        searchComponent = new SearchComponent(searchControl);
         HorizontalLayout grid = new HorizontalLayout();
         VerticalLayout gridVertical = new VerticalLayout();
         grid.setSizeFull();
