@@ -1,9 +1,7 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -11,19 +9,15 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
-import org.hbrs.se2.project.aldavia.entities.Rolle;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +43,6 @@ public class SearchComponent extends VerticalLayout {
     private VerticalLayout displayStellenanzeigen;
 
     private final Logger logger = LoggerFactory.getLogger(SearchComponent.class);
-
-    private BewerbungErstellenComponent bewerbungErstellenComponent;
-    private Dialog bewerbungsDialog;
-
     private Image profileImg;
 
     Select<String> selectJob = new Select<>();
@@ -96,20 +86,14 @@ public class SearchComponent extends VerticalLayout {
         displayStellenanzeigen.add(createStellenanzeigenCard(stellenanzeigeDTO));
     }
 
-    public void setUpUI(List<StellenanzeigeDTO> list) {
+    private VerticalLayout createHeadCard(){
+        VerticalLayout headCard = new VerticalLayout();
+        headCard.addClassName("card");
+        headCard.setWidthFull();
         HorizontalLayout headerLayout = new HorizontalLayout();
-        HorizontalLayout unternehmenSearchLayout = new HorizontalLayout();
-        unternehmenSearch.setPlaceholder("Unternehmen");
-        unternehmenSearch.setLabel("Unternehmen Filter");
-        HorizontalLayout usLayout = new HorizontalLayout();
-        usLayout.add(unternehmenSearch);
-        usLayout.setPadding(true);
-        unternehmenSearchLayout.add(usLayout);
-        unternehmenSearchLayout.setWidth("700px");
-        unternehmenSearchLayout.setPadding(true);
-        unternehmenSearchLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        unternehmenSearch.setPlaceholder("Aldavia GmbH");
+        unternehmenSearch.setLabel("Suche nach Unternehmen");
         H2 header = new H2("Stellenanzeigen");
-        headerLayout.add(header);
         //Erstellen des Filters für Arbeitsverhaletnis
         selectJob.setLabel("Filter nach Arbeitsverhältnis");
         selectJob.setItems("Alle", "Praktikum", "Festanstellung", "Werkstudent", "Teilzeit");
@@ -119,6 +103,13 @@ public class SearchComponent extends VerticalLayout {
         selectRecommendet.setItems("Empfohlen", "Nicht sortieren");
         selectRecommendet.setValue("Nicht sortieren");
 
+        headerLayout.add( unternehmenSearch ,selectJob, selectRecommendet);
+        headCard.add(header,headerLayout);
+        return headCard;
+    }
+
+    public void setUpUI(List<StellenanzeigeDTO> list) {
+        this.add(createHeadCard());
 
         List<StellenanzeigeDTO> selectedAnzeigen = new ArrayList<>();
 
@@ -147,9 +138,6 @@ public class SearchComponent extends VerticalLayout {
 
         });
         unternehmenSearch.setValueChangeMode(ValueChangeMode.EAGER);
-
-
-        headerLayout.add(selectRecommendet, selectJob, unternehmenSearch);
 
 
         if( UI.getCurrent() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER)!= null) {
@@ -183,7 +171,6 @@ public class SearchComponent extends VerticalLayout {
             });
         }
 
-        this.add(headerLayout);
         createCard(list);
         this.add(displayStellenanzeigen);
 
