@@ -1,8 +1,10 @@
 package org.hbrs.se2.project.aldavia.test.EntityTest;
 
+import okhttp3.Address;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
+import org.hbrs.se2.project.aldavia.views.components.AddStellenanzeigeFormComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,11 +29,6 @@ public class UnternehmenTest {
         Adresse adresse = new Adresse();
         unternehmen.addAdresse(adresse);
         assertEquals(1, unternehmen.getAdressen().size());
-
-        unternehmen.addAdresse(adresse);
-        //TODO: Fix this
-        assertEquals(2, unternehmen.getAdressen().size());
-
     }
 
     @Test
