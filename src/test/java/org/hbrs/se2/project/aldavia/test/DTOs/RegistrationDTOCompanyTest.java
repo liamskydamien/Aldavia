@@ -3,7 +3,9 @@ package org.hbrs.se2.project.aldavia.test.DTOs;
 import org.hbrs.se2.project.aldavia.dtos.RegistrationDTOCompany;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class RegistrationDTOCompanyTest {
     @Test
     public void testEqualsAndHashCode() {
