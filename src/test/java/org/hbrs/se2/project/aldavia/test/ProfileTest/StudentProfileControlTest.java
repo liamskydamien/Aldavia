@@ -140,7 +140,15 @@ public class StudentProfileControlTest {
                 .studienbeginn(LocalDate.now())
                 .matrikelNummer("123456")
                 .email("123@abc")
+                .qualifikationen(qualifikationenDTO)
+                .taetigkeitsfelder(taetigkeitsfelderDTO)
+                .kenntnisse(kenntnisseDTO)
+                .sprachen(sprachenDTO)
                 .build();
+
+        //Test Exception
+        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(),"random123"));
+
         // Mock the behavior of getStudentProfile(username) method
         given(studentService.getStudent(userId)).willReturn(student);
         given(studentProfileDTOFactory.createStudentProfileDTO(student)).willReturn(oldVersion);
@@ -149,6 +157,7 @@ public class StudentProfileControlTest {
         studentProfileControl.updateStudentProfile(updatedVersion, userId);
         studentProfileControl.updateStudentProfile(updatedVersionNull, userId);
 
+        verify(studentService, times(1)).getStudent("random123");
         verify(studentService, times(2)).createOrUpdateStudent(student);
         verify(studentService, times(5)).getStudent(userId);
         verifyNoMoreInteractions(studentService);
