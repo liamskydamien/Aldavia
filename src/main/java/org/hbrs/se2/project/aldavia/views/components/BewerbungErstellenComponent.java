@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.views.components;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -16,23 +17,27 @@ import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.springframework.stereotype.Component;
 
-public class BewerbungErstellenComponent extends Div {
+public class BewerbungErstellenComponent extends Dialog {
 
     private final BewerbungsControl bewerbungsControl;
 
     private String studentUsername;
     private StellenanzeigeDTO stellenanzeigeDTO;
 
-    private boolean closeDialog;
-
-
     private TextField bewerbungsTextfield = new TextField("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
     public BewerbungErstellenComponent(BewerbungsControl bewerbungsControl, StellenanzeigeDTO stellenanzeigeDTO, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
         this.studentUsername = studentUsername;
-        this.add(setUpBewerbungsLayout());
-        closeDialog = false;
+        this.add(createDiv());
+        this.open();
+    }
+
+    private Div createDiv(){
+        Div div = new Div();
+        div.addClassName("div");
+        div.add(setUpBewerbungsLayout());
+        return div;
     }
 
 
@@ -58,7 +63,7 @@ public class BewerbungErstellenComponent extends Div {
     private Button createAbbruchButton(){
         Button abbruchButton = new Button("Abbrechen");
         abbruchButton.addClickListener(e -> {
-            this.setVisible(false);
+            this.close();
         });
         return abbruchButton;
     }
@@ -71,7 +76,7 @@ public class BewerbungErstellenComponent extends Div {
             }
             else {
                 addBewerbung();
-                this.setVisible(false);
+                this.close();
             }
         });
         return createButton;

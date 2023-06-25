@@ -170,17 +170,9 @@ public class SearchComponent extends VerticalLayout {
 
             } else {
                 UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-                // TODO: Why? Check for role instead
-
-
                 for (RolleDTO r : userDTO.getRoles()) {
                     if (r.getBezeichhnung().equals(Globals.Roles.STUDENT)) {
-                        bewerbungsDialog = new Dialog();
-                        bewerbungErstellenComponent = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO, userDTO.getUserid());
-                        bewerbungsDialog.add(bewerbungErstellenComponent);
-                        bewerbungsDialog.open();
-
-
+                        bewerbungsDialog = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO ,userDTO.getUserid());
                     } else {
                         Notification.show("Nur Studenten können sich auf Stellenanzeigen bewerben!");
                     }
