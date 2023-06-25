@@ -4,7 +4,6 @@ import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.repository.TaetigkeitsfeldRepository;
-import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 public class TaetigkeitsfeldStellenanzeigenTest {
@@ -47,8 +45,13 @@ public class TaetigkeitsfeldStellenanzeigenTest {
                 .stellenanzeigen(new ArrayList<>())
                 .build();
 
+        Taetigkeitsfeld taetigkeitsfeld1 = Taetigkeitsfeld.builder()
+                .bezeichnung(taetigkeitsfeldDTO.getName())
+                .stellenanzeigen(List.of(stellenanzeige))
+                .build();
+
         given(taetigkeitsfeldRepository.findById("Java")).willReturn(Optional.of(taetigkeitsfeld));
-        given(taetigkeitsfeldRepository.save(any(Taetigkeitsfeld.class)));
+        given(taetigkeitsfeldRepository.save(any(Taetigkeitsfeld.class))).willReturn(taetigkeitsfeld1);
 
         Stellenanzeige stellenanzeige1 = taetigkeitsfeldService.addTaetigkeitsfeldToStellenanzeige(taetigkeitsfeldDTO,stellenanzeige);
 
