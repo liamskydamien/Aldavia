@@ -232,7 +232,7 @@ public class StudentTest {
                                         .start(LocalDate.now())
                                         .ende(LocalDate.of(2026, 12, 31))
                                         .build();
-        stellenanzeige.setUnternehmen(unternehmen);
+        stellenanzeige.setUnternehmen_stellenanzeigen(unternehmen);
         stellenanzeigeRepository.save(stellenanzeige);
 
         Bewerbung bewerbung = Bewerbung.builder()

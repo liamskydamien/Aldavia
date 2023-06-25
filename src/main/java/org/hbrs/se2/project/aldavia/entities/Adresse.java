@@ -46,10 +46,7 @@ public class Adresse {
         if (this.unternehmen == null) {
             this.unternehmen = new HashSet<>();
         }
-        if (!this.unternehmen.contains(unternehmen)) {
-            this.unternehmen.add(unternehmen);
-            unternehmen.addAdresse(this);
-        }
+        this.unternehmen.add(unternehmen);
         return this;
     }
 
@@ -68,7 +65,7 @@ public class Adresse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
-        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land) && Objects.equals(unternehmen, adresse.unternehmen);
+        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land);
     }
 
     @Override
@@ -76,7 +73,8 @@ public class Adresse {
         return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
     }
 
+    @Override
     public String toString() {
-        return ""+ strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
+        return strasse + " " + hausnummer + ", " + plz + " " + ort + ", " + land;
     }
 }

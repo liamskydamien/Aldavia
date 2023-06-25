@@ -126,18 +126,7 @@ public class Stellenanzeige {
     @ManyToOne
     @JoinColumn(name = "unternehmen_id", referencedColumnName = "id", nullable = false)
     private Unternehmen unternehmen_stellenanzeigen;
-
-    public void setUnternehmen(Unternehmen unternehmen) {
-        if (this.unternehmen_stellenanzeigen != null && !(this.unternehmen_stellenanzeigen.equals(unternehmen))) {
-            this.unternehmen_stellenanzeigen.removeStellenanzeige(this);
-        }
-        this.unternehmen_stellenanzeigen = unternehmen;
-        if (unternehmen != null) {
-            unternehmen.addStellenanzeige(this);
-        }
-    }
-
-
+    
     // Methoden
 
     @Override
