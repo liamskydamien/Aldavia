@@ -3,6 +3,7 @@ package org.hbrs.se2.project.aldavia.control.factories;
 import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
+import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class AdressenDTOFactory {
         }
         return instance;
     }
-    public AdressenDTOFactory() {}
+    private AdressenDTOFactory() {}
 
     public AdresseDTO createAdressenDTO(Adresse adressen) {
         return AdresseDTO.builder()
@@ -26,18 +27,9 @@ public class AdressenDTOFactory {
                 .plz(adressen.getPlz())
                 .ort(adressen.getOrt())
                 .land(adressen.getLand())
-                .unternehmen(createUnternehmenProfileDTO(adressen))
                 .build();
     }
 
-    public List<UnternehmenProfileDTO> createUnternehmenProfileDTO(Adresse adressen) {
-        if(adressen.getUnternehmen() != null && !adressen.getUnternehmen().isEmpty()) {
-            return adressen.getUnternehmen().stream()
-                    .map(UnternehmenProfileDTOFactory.getInstance()::createUnternehmenProfileDTO)
-                    .collect(java.util.stream.Collectors.toList());
-        }
-        return new ArrayList<>();
-    }
 
 
 

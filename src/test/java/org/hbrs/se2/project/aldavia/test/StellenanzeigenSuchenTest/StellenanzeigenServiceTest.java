@@ -12,7 +12,6 @@ import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
-import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
@@ -163,7 +163,9 @@ public class StellenanzeigenServiceTest {
 
         // Delete
 
-        stellenanzeigenService.deleteStellenanzeige(stellenanzeigeDTO);
-
+        stellenanzeigenService.deleteStellenanzeige(stellenanzeige);
+        verify(taetigkeitsfeldService, times(1)).deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference);
+        verify(stellenanzeigeRepository, times(2)).save(stellenanzeige);
+        verify(stellenanzeigeRepository, times(1)).delete(stellenanzeige);
     }
 }

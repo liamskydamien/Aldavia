@@ -22,7 +22,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    private final QualifikationenService qualifikationenService = new QualifikationenService();
+    private final QualifikationenService qualifikationenService;
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 

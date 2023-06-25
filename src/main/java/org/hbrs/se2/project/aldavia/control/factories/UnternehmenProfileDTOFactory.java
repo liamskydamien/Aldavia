@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class UnternehmenProfileDTOFactory {
 
     private Logger logger = LoggerFactory.getLogger(UnternehmenProfileDTOFactory.class);
+    private final AdressenDTOFactory adressenDTOFactory = AdressenDTOFactory.getInstance();
     private UnternehmenProfileDTOFactory() {
     }
 
@@ -37,9 +38,7 @@ public class UnternehmenProfileDTOFactory {
     public UnternehmenProfileDTO createUnternehmenProfileDTO(Unternehmen unternehmen) {
         try{
             User user = unternehmen.getUser();
-            UnternehmenProfileDTO unternehmenProfileDTO = null;
-
-            unternehmenProfileDTO = UnternehmenProfileDTO.builder()
+            UnternehmenProfileDTO unternehmenProfileDTO = UnternehmenProfileDTO.builder()
                     .name(unternehmen.getName())
                     .username(user.getUserid())
                     .email(user.getEmail())
@@ -57,9 +56,7 @@ public class UnternehmenProfileDTOFactory {
             unternehmenProfileDTO.setStellenanzeigen(stellenanzeigenDTO);
             Set<AdresseDTO> adressenDTO = createAdresseList(unternehmen);
             unternehmenProfileDTO.setAdressen(adressenDTO);
-
             return unternehmenProfileDTO;
-
 
         } catch (Exception e) {
             throw new ProfileException("Fehler beim Erstellen des Unternehmensprofils", ProfileException.ProfileExceptionType.ERROR_CREATING_PROFILE_DTO);
@@ -84,7 +81,7 @@ public class UnternehmenProfileDTOFactory {
 
     private Set<AdresseDTO> createAdresseList(Unternehmen unternehmen) {
         if(unternehmen.getAdressen() != null && !unternehmen.getAdressen().isEmpty()){
-            return unternehmen.getAdressen().stream().map(AdressenDTOFactory.getInstance()::createAdressenDTO).collect(Collectors.toSet());
+            return unternehmen.getAdressen().stream().map(adressenDTOFactory::createAdressenDTO).collect(Collectors.toSet());
         }
         return new HashSet<>();
 

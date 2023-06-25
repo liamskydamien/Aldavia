@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "bewerbungen", schema = "aldavia_new")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -55,15 +56,6 @@ public class Bewerbung {
     @ManyToOne
     @JoinColumn(name = "stellenanzeige_id", referencedColumnName = "id", nullable = false)
     private Stellenanzeige stellenanzeige;
-
-    public void setStellenanzeige(Stellenanzeige stellenanzeige){
-        if (this.stellenanzeige != null && !(this.stellenanzeige.equals(stellenanzeige))) {
-            this.stellenanzeige.removeBewerbung(this);
-            return;
-        }
-        this.stellenanzeige = stellenanzeige;
-    }
-
     // Methoden
 
     @Override

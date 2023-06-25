@@ -1,13 +1,9 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
