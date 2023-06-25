@@ -1,0 +1,7 @@
+.bewerbenButton{
+    cursor: pointer;
+    height: 55px;
+    width: 15rem;
+    border-radius: 20px;
+    margin-top: 30px !important;
+}

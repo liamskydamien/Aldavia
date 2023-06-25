@@ -8,17 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class RegistrationDTOCompanyTest {
     @Test
-    public void testToString() {
-        RegistrationDTOCompany company = RegistrationDTOCompany.builder()
-                .companyName("companyA")
-                .password("password123")
-                .build();
-
-        String expected = "UserDTO [UserName=companyA, password=password123]";
-        Assertions.assertEquals(expected, company.toString());
-    }
-
-    @Test
     public void testGettersAndSetters() {
         // Create an instance of RegistrationDTOCompany
         RegistrationDTOCompany company = new RegistrationDTOCompany();

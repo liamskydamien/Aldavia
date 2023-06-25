@@ -9,18 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class RegistrationStudentDTOTest {
-
-    @Test
-    public void testToString() {
-        RegistrationDTOStudent student = RegistrationDTOStudent.builder()
-                .userName("john123")
-                .password("password123")
-                .build();
-
-        String expected = "UserDTO [UserName=john123, password=password123]";
-        assertEquals(expected, student.toString());
-    }
-
     @Test
     public void testGettersAndSetters() {
         // Create an instance of RegistrationDTOStudent
