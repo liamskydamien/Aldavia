@@ -2,6 +2,8 @@ package org.hbrs.se2.project.aldavia.views.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
@@ -36,15 +38,19 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
     private TextField land;
     private Span noAdressen;
     private Div displayAdressen;
-    private FlexLayout editLayout;
+    private FormLayout editLayout;
+    private Dialog popup;
+    private Button add;
+    private HorizontalLayout editArea;
 
     public AdressenComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
         this.unternehmenProfileDTO = unternehmenProfileDTO;
         adressen = unternehmenProfileDTO.getAdressen();
-        System.out.println("SIZE"+adressen.size());
+        System.out.println("SIZE Adresse DTO"+adressen.size());
         displayAdressen = new Div();
-        editLayout = new FlexLayout();
+        editArea = new HorizontalLayout();
+        editLayout = new FormLayout();
         editLayout.addClassName("edit-adresse-layout");
         displayAdressen.addClassName("display-adressen");
         this.addClassName("adressen-component");
@@ -68,7 +74,10 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         add(title);
         add(noAdressen);
         noAdressen.setVisible(false);
-        add(createAdressPicker());
+        editArea.add(add());
+        editArea.setWidthFull();
+        editArea.setJustifyContentMode(JustifyContentMode.END);
+        add(editArea);
         add(displayAdressen);
 
         updateView();
@@ -77,10 +86,11 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
     }
 
     private void updateView() {
-        editLayout.setVisible(false);
+        editArea.setVisible(false);
         displayAdressen.setVisible(true);
         if (unternehmenProfileDTO.getAdressen().isEmpty()) {
             noAdressen.setVisible(true);
+            displayAdressen.setVisible(false);
         } else {
             noAdressen.setVisible(false);
            renderAdressen(Globals.ProfileViewMode.VIEW);
@@ -89,7 +99,8 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
     }
 
     private void updateEdit() {
-        editLayout.setVisible(true);
+        editArea.setVisible(true);
+        noAdressen.setVisible(false);
         renderAdressen(Globals.ProfileViewMode.EDIT);
     }
 
@@ -111,40 +122,76 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
-    private FlexLayout createAdressPicker() {
+    private Button add(){
+        add = new Button("Hinzufügen", new Icon("lumo", "plus"));
+        add.setClassName("editSaveButton");
+        add.addClickListener(e -> {
+            addAdressenPopup();
+            popup.open();
+        });
+        return add;
+    }
+
+    private void addAdressenPopup(){
+        popup = new Dialog();
+        popup.getElement().getThemeList().add("adressen-popup");
+        HorizontalLayout header = new HorizontalLayout();
+        header.setWidthFull();
+        header.setJustifyContentMode(JustifyContentMode.END);
+        Button close = new Button(new Icon("lumo", "cross"));
+        close.addClickListener(e -> popup.close());
+        header.add(close);
+
+        popup.add(new H2("Adresse Hinzufügen"),header,createAdressPicker());
+    }
+
+    private FormLayout createAdressPicker() {
         editLayout.add(strasse, hausnr, plz, ort, land, saveAdressButton());
+        editLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("600px",2));
         return editLayout;
     }
 
     private void renderAdressen(String mode) {
         displayAdressen.removeAll();
+        int i = 0;
         for (AdresseDTO adresse : adressen) {
-            displayAdressen.add(createAdressDisplay(mode, adresse));
+            ++i;
+            displayAdressen.add(createAdressDisplay(mode, adresse, i));
         }
     }
 
-    private VerticalLayout createAdressDisplay(String mode, AdresseDTO adresse) {
-        VerticalLayout adressDisplay = new VerticalLayout();
+    private VerticalLayout createAdressDisplay(String mode, AdresseDTO adresse, int index) {
+        VerticalLayout adresseWrapper = new VerticalLayout();
+        HorizontalLayout adressDisplay = new HorizontalLayout();
         adressDisplay.addClassName("adress-display");
-        System.out.println("mode: " + mode);
         if (mode.equals(Globals.ProfileViewMode.EDIT)) {
             System.out.println("edited gerade");
             HorizontalLayout buttons = new HorizontalLayout();
             buttons.setJustifyContentMode(JustifyContentMode.END);
             buttons.setWidthFull();
             buttons.add(deleteAdresseButton(adresse));
-            adressDisplay.add(buttons);
+            adresseWrapper.add(buttons);
         }
-        adressDisplay.add(new Span(adresse.getStrasse()+ " " + adresse.getHausnummer()));
-        adressDisplay.add(new Span(adresse.getPlz() + " " + adresse.getOrt()));
-        adressDisplay.add(new Span(adresse.getLand()));
-        return adressDisplay;
+
+        Span adressNr = new Span(String.valueOf(index));
+        adressNr.getElement().getThemeList().add("badge pill");
+        adressDisplay.add(adressNr);
+
+        VerticalLayout adress = new VerticalLayout();
+        adress.add(new Span(adresse.getStrasse()+ " " + adresse.getHausnummer()));
+        adress.add(new Span(adresse.getPlz() + " " + adresse.getOrt()));
+        adress.add(new Span(adresse.getLand()));
+        adressDisplay.add(adress);
+        adresseWrapper.add(adressDisplay);
+        return adresseWrapper;
     }
 
 
 
     private Button saveAdressButton() {
         Button saveAdress = new Button("Hinzufügen");
+        saveAdress.setId("saveAdressButton");
+        saveAdress.setClassName("editSaveButton");
         saveAdress.addClickListener(e -> {
             AdresseDTO adresseNeu = null;
             if (Objects.equals(strasse.getValue(), "") || Objects.equals(hausnr.getValue(), "") || Objects.equals(plz.getValue(), "") || Objects.equals(ort.getValue(), "")
@@ -160,12 +207,17 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
                         .build();
             }
             adressen.add(adresseNeu);
-            renderAdressen(Globals.ProfileViewMode.EDIT);
+            System.out.println("SIZE Adresse DTO Nach save "+ adressen.size());
             strasse.clear();
             hausnr.clear();
             plz.clear();
             ort.clear();
             land.clear();
+            renderAdressen(Globals.ProfileViewMode.EDIT);
+            popup.close();
+
+
+
         });
         return saveAdress;
     }

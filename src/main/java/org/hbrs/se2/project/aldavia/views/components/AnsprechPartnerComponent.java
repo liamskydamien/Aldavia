@@ -56,6 +56,8 @@ public class AnsprechPartnerComponent extends VerticalLayout implements ProfileC
             noAnsprechPartner.setVisible(false);
             ansprechPartner = new Span();
             ansprechPartner.setText(unternehmenProfileDTO.getAp_vorname() + " " + unternehmenProfileDTO.getAp_nachname());
+            ansprechPartner.addClassName("ansprechpartner");
+            ansprechPartner.getElement().getThemeList().add("badge pill");
             add(ansprechPartner);
             vornameAnsprechPartner.setValue(unternehmenProfileDTO.getAp_vorname());
             nachnameAnsprechPartner.setValue(unternehmenProfileDTO.getAp_nachname());

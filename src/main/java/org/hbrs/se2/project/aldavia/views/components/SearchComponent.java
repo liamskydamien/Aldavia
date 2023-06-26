@@ -5,6 +5,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -298,10 +300,16 @@ public class SearchComponent extends VerticalLayout {
         stellenanzeigenLayout.setHeight("100%");
         stellenanzeigenLayout.add(new H2(stellenanzeigeDTO.getBezeichnung()));
         stellenanzeigenLayout.add(createProfilBildAndName(stellenanzeigeDTO));
-        stellenanzeigenLayout.add(new Text(stellenanzeigeDTO.getBeschreibung()));
+        Div beschreibung = new Div();
+        beschreibung.addClassName("beschreibung");
+        beschreibung.setText(stellenanzeigeDTO.getBeschreibung());
+        Details beschreibugnDetails = new Details("Stellenbeschreibung", beschreibung);
+        beschreibugnDetails.addThemeVariants(DetailsVariant.REVERSE);
+
         stellenanzeigenLayout.add(createInformationLayout(stellenanzeigeDTO));
         stellenanzeigenLayout.add(createVonBisLayout(stellenanzeigeDTO));
         stellenanzeigenLayout.add(createTaetigkeitenLayout(stellenanzeigeDTO));
+        stellenanzeigenLayout.add(beschreibugnDetails);
         stellenanzeigenLayout.add(createBewerbenButton(stellenanzeigeDTO));
         return stellenanzeigenLayout;
     }
