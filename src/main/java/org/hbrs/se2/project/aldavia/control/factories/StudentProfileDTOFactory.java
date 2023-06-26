@@ -124,7 +124,7 @@ public class StudentProfileDTOFactory{
                 .beschaeftigungsart(qualifikation.getBeschaftigungsverhaltnis())
                 .von(qualifikation.getVon())
                 .bis(qualifikation.getBis())
-                .id(qualifikation.getId())
+                .id(-1)
                 .build();
     }
 
