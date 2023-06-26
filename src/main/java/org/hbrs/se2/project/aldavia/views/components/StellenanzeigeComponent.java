@@ -43,6 +43,7 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
     private Dialog addDialog;
     private Button addStellenanzeige;
     private String url;
+    private HorizontalLayout noStellenanzeigeArea;
 
     public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl, String url) {
         this.unternehmenProfileControl = unternehmenProfileControl;
@@ -54,6 +55,7 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         noStellenanzeige = new Span("Keine Stellenanzeige vorhanden");
         noStellenanzeige.addClassName("noStellenanzeige");
         noStellenanzeige.addClassName("card");
+        noStellenanzeigeArea = new HorizontalLayout();
         addDialog = new Dialog();
         addClassName("stellenanzeige");
         setUpUI();
@@ -66,7 +68,9 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
         add(createAddstellenanzeigeArea());
         add(displayStellenanzeige);
         displayStellenanzeige.setWidthFull();
-        displayStellenanzeige.add(noStellenanzeige);
+        noStellenanzeigeArea.add(noStellenanzeige);
+        noStellenanzeigeArea.setWidthFull();
+        displayStellenanzeige.add(noStellenanzeigeArea);
         updateView();
     }
 
@@ -75,12 +79,12 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
 
         createStellenanzeige.setVisible(true);
         if(stellenanzeigeSet.isEmpty()) {
-            displayStellenanzeige.add(noStellenanzeige);
-            noStellenanzeige.setVisible(true);
+            displayStellenanzeige.add(noStellenanzeigeArea);
+            noStellenanzeigeArea.setVisible(true);
             noStellenanzeige.getStyle().set("font-style", "italic");
-            noStellenanzeige.setWidthFull();
+            noStellenanzeigeArea.setWidthFull();
         }else{
-            noStellenanzeige.setVisible(false);
+            noStellenanzeigeArea.setVisible(false);
             createStellenanzeige.setVisible(true);
             getAndCreateStellenanzeige(Globals.ProfileViewMode.VIEW);
         }
@@ -88,7 +92,7 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
     }
 
     private void updateEdit(){
-        noStellenanzeige.setVisible(false);
+        noStellenanzeigeArea.setVisible(false);
         createStellenanzeige.setVisible(false);
         getAndCreateStellenanzeige(Globals.ProfileViewMode.EDIT);
     }
@@ -150,26 +154,48 @@ public void getAndCreateStellenanzeige(String mode){
         stellenanzeigeTitel.addClassName("stellenanzeigeTitel");
         Span stellenanzeigeBeschaeftigungsverheltnis = new Span(stellenanzeige.getBeschaeftigungsverhaeltnis());
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
+        Span zeitraum = new Span();
+        if(stellenanzeige.getEnde() == null || stellenanzeige.getEnde().toString().equals("")){
+            zeitraum.setText("Ab " + stellenanzeige.getStart().getDayOfYear() + " " + stellenanzeige.getStart().getMonthValue() + " " + stellenanzeige.getStart().getYear());
+        } else{
+            zeitraum.setText(stellenanzeige.getStart().getDayOfMonth() + " " + stellenanzeige.getStart().getMonthValue() + " " + stellenanzeige.getStart().getYear() + " - " + stellenanzeige.getEnde().getDayOfYear() + " " + stellenanzeige.getEnde().getMonthValue() + " " + stellenanzeige.getEnde().getYear());
+        }
+        Span bezahlung = new Span("Bezahlung: "+stellenanzeige.getBezahlung());
+        bezahlung.addClassName("bezahlung");
 
-        Details beschreibugnDetails = new Details("Stellenbeschreibung", new Span(stellenanzeige.getBeschreibung()));
+        if(stellenanzeige.getBezahlung() != null && !stellenanzeige.getBezahlung().equals("")){
+            stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis,zeitraum,bezahlung);
+
+        } else {
+            stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis,zeitraum);
+        }
+
+        // Unterer Teil der Stellenanzeige
+        VerticalLayout stellenanzeigenUnten = new VerticalLayout();
+        stellenanzeigenUnten.addClassName("stellenanzeigenUnten");
+        stellenanzeigenUnten.setWidthFull();
+        Div textBlock = new Div();
+        textBlock.addClassName("beschreibung");
+        textBlock.setText(stellenanzeige.getBeschreibung());
+        Details beschreibugnDetails = new Details("Stellenbeschreibung", textBlock);
         beschreibugnDetails.addThemeVariants(DetailsVariant.REVERSE);
 
-
         List<TaetigkeitsfeldDTO> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
-        stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis,beschreibugnDetails, renderTaetigkeit(taetigkeitsfeldList));
+        stellenanzeigenUnten.add(beschreibugnDetails, renderTaetigkeit(taetigkeitsfeldList));
+
 
         HorizontalLayout stellenanzeigeInfoRight = new HorizontalLayout();
         stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
         stellenanzeigeInfoRight.setJustifyContentMode(JustifyContentMode.END);
         stellenanzeigeInfoRight.setWidthFull();
-        Span stellenanzeigeDatum = new Span(stellenanzeige.getErstellungsdatum().toString());
+        Span stellenanzeigeDatum = new Span("Erstellt am: " + stellenanzeige.getErstellungsdatum().getDayOfMonth() + " " + stellenanzeige.getErstellungsdatum().getMonthValue() + " " + stellenanzeige.getErstellungsdatum().getYear());
         stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
         stellenanzeigeInfoRight.add(stellenanzeigeDatum);
         //stellenanzeigeInfoRight.add(bewerbungAnsehenButton(stellenanzeige));
 
 
         stellenanzeigeInfo.add(stellenanzeigeInfoLeft, stellenanzeigeInfoRight);
-        stellenanzeigenLayout.add(stellenanzeigeInfo);
+        stellenanzeigenLayout.add(stellenanzeigeInfo, stellenanzeigenUnten);
         return stellenanzeigenLayout;
     }
     @Transactional
@@ -228,6 +254,7 @@ public void getAndCreateStellenanzeige(String mode){
         addStellenanzeige = new Button("Erstellen");
         addStellenanzeige.setIcon(new Icon("lumo", "plus"));
         addStellenanzeige.addClassName("addStellenanzeige");
+        addStellenanzeige.addClassName("editSaveButton");
         addStellenanzeige.addClickListener(e -> {
             addPopup();
             addDialog.open();
@@ -280,6 +307,7 @@ public void getAndCreateStellenanzeige(String mode){
     private Button saveStellenanzeigeButton(AddStellenanzeigeFormComponent addStellenanzeigeFormComponent) {
         Button addStellenanzeigeButton = new Button("Erstellen");
         addStellenanzeigeButton.addClassName("addStellenanzeigeButton");
+        addStellenanzeigeButton.addClassName("editSaveButton");
         addStellenanzeigeButton.addClickListener(e -> {
             if(addStellenanzeigeFormComponent.getBezeichnung().getValue().isEmpty()
                || addStellenanzeigeFormComponent.getBeschreibung().getValue().isEmpty()

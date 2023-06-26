@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,6 +23,7 @@ public class AboutCompany extends VerticalLayout implements ProfileComponent{
 
         addClassName("about-company");
         aboutCompany = new TextArea();
+        aboutCompany.addClassName("about-company-textarea");
         aboutCompany.setPlaceholder("Über das Unternehmen");
         aboutCompany.setWidthFull();
         title = new H2("Über das Unternehmen");

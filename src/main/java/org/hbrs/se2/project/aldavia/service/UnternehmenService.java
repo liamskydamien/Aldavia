@@ -15,12 +15,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class UnternehmenService {
+
+    private final EntityManager entityManager;
+
 
     private final UnternehmenRepository unternehmenRepository;
     private final StellenanzeigeDTOFactory stellenanzeigeDTOFactory = StellenanzeigeDTOFactory.getInstance();
@@ -108,18 +112,6 @@ public class UnternehmenService {
                 }
             }
 
-        //Comparing by size since there is no update opition for Adressen
-        /*if (dto.getStellenanzeigen() != null) {
-            if (!(dto.getStellenanzeigen().equals(unternehmen.getStellenanzeigen()))) {
-                unternehmen.getStellenanzeigen().clear();
-                Set<StellenanzeigeDTO> stellenanzeigeFromDTO = dto.getStellenanzeigen();
-                for (StellenanzeigeDTO s : stellenanzeigeFromDTO) {
-                    StellenanzeigeDTO stellenanzeigeDTO = stellenanzeigeDTOFactory.createStellenanzeigeDTO(s, unternehmen);
-                    stellenanzeigeService.addStellenanzeige(stellenanzeigeDTO, unternehmen);
-                }
-            }
-        }*/
-
         if (dto.getAp_nachname() != null) {
             if (!dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {
                 unternehmen.setAp_nachname(dto.getAp_nachname());
@@ -147,13 +139,12 @@ public class UnternehmenService {
         logger.info("Creating or Updating Unternehmen " + unternehmen.getUser().getUserid());
         try{
             unternehmenRepository.save(unternehmen);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error while creating or updating Unternehmen " + unternehmen.getUser().getUserid());
+            e.printStackTrace();
             throw new ProfileException("Unternehmen konnte nicht geupdatet werden", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
-
-
     }
 
-    }
+}
 

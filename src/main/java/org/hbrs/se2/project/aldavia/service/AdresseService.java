@@ -21,7 +21,7 @@ public class AdresseService {
     private AdresseRepository addressenRepository;
     private final Logger logger = LoggerFactory.getLogger(AdresseService.class);
 
-    public Adresse addUnternehmenToAdresse (AdresseDTO adresseDTO, Unternehmen unternehmen) {
+    public Adresse addUnternehmenToAdresse(AdresseDTO adresseDTO, Unternehmen unternehmen) {
         logger.info("Adding unternehmen " + unternehmen.getUser().getUserid() + " to " + adresseDTO.getId());
         Optional<Adresse> awaitAdresse = addressenRepository.findById(adresseDTO.getId());
         Adresse adresse;
@@ -34,18 +34,34 @@ public class AdresseService {
                 .land(adresseDTO.getLand())
                 .build());
         adresse = adresse.addUnternehmen(unternehmen);
+        unternehmen.addAdresse(adresse);
+        System.out.println("Adresse size nach addUnternehmen: " + unternehmen.getAdressen().size());
         return addressenRepository.save(adresse);
     }
 
     @SneakyThrows
-    public void removeUnternehmenFromAdresse(Adresse adresse, Unternehmen unternehmen){
+    public Adresse removeUnternehmenFromAdresse(AdresseDTO adresse, Unternehmen unternehmen) {
         logger.info("Removing student from Adresse");
         Optional<Adresse> awaitAdresse = addressenRepository.findById(adresse.getId());
-        if(awaitAdresse.isPresent()){
-            adresse.removeUnternehmen(unternehmen);
-            addressenRepository.delete(adresse);
+        if (awaitAdresse.isPresent()) {
+            Adresse adresse1 = awaitAdresse.get();
+            adresse1 = adresse1.removeUnternehmen(unternehmen);
+            addressenRepository.delete(adresse1);
+            return adresse1;
+        } else {
+            throw new PersistenceException(PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, "Adresse not found");
         }
-        else {
+    }
+    @SneakyThrows
+    public Adresse removeUnternehmenFromAdresse(Adresse adresse, Unternehmen unternehmen) {
+        logger.info("Removing student from Adresse");
+        Optional<Adresse> awaitAdresse = addressenRepository.findById(adresse.getId());
+        if (awaitAdresse.isPresent()) {
+            Adresse adresse1 = awaitAdresse.get();
+            adresse1 = adresse1.removeUnternehmen(unternehmen);
+            addressenRepository.delete(adresse1);
+            return adresse1;
+        } else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, "Adresse not found");
         }
     }

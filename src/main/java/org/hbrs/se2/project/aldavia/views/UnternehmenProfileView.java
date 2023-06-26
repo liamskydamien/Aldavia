@@ -166,7 +166,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private HorizontalLayout createAnsprechpartnerAdressenLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.addClassName("ansprechpartner-adressen");
-        layout.add(createAnsprechpartnerLayout(), createAdressenLayout());
+        layout.add(createAdressenLayout(),createAnsprechpartnerLayout() );
         return layout;
     }
 
