@@ -229,10 +229,10 @@ public class LoggedInStateLayout extends AppLayout {
 
 
     public static String getCurrentUserName() {
-        if (getCurrentUser() == null) {
-            return null;
+        if (getCurrentUser() != null) {
+            return getCurrentUser().getUserid() != null ? getCurrentUser().getUserid() : "";
         }
-        return getCurrentUser().getUserid();
+        return null;
     }
 
     /*private String getCurrentStudentName() throws ProfileException {
