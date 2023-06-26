@@ -173,7 +173,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-                    System.out.println("CheckPoint 2");
                     fileName = unternehmenProfileDTO.getProfilbild();
                     String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
@@ -406,6 +405,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         unternehmenProfileDTO.setName(companyName.getValue());
         unternehmenProfileDTO.setWebside(website.getValue());
         unternehmenProfileDTO.setEmail(email.getValue());
+        System.out.println("Befire hinzufügen: "+unternehmenProfileDTO.getProfilePicture());
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
@@ -475,6 +475,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 studentProfileDTO.setProfilbild(uniqueFileName);
             } else if (checkIfUserIsUnternehmen()) {
                 unternehmenProfileDTO.setProfilbild(uniqueFileName);
+                System.out.println("View Bild" + unternehmenProfileDTO.getProfilbild());
             }
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){

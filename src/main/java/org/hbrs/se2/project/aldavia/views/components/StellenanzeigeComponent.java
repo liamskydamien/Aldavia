@@ -243,7 +243,7 @@ public void getAndCreateStellenanzeige(String mode){
         deleteStellenanzeige.addClassName("deleteStellenanzeige");
         deleteStellenanzeige.addClickListener(e -> {
             stellenanzeigeSet.remove(stellenanzeige);
-            updateView();
+            updateEdit();
         });
         return deleteStellenanzeige;
     }

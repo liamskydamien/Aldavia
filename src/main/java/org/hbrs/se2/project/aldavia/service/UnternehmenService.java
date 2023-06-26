@@ -22,8 +22,6 @@ import java.util.*;
 @Transactional
 public class UnternehmenService {
 
-    private final EntityManager entityManager;
-
 
     private final UnternehmenRepository unternehmenRepository;
 
@@ -128,6 +126,10 @@ public class UnternehmenService {
             e.printStackTrace();
             throw new ProfileException("Unternehmen konnte nicht geupdatet werden", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
+    }
+
+    public void flush() {
+        unternehmenRepository.flush();
     }
 
 }
