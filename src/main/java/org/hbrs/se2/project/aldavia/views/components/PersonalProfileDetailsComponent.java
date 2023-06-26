@@ -129,109 +129,60 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
 
     public void updateViewMode() {
-        if(getUserOverUrl().equals(getCurrentUserName())){
+        String userOverUrl = getUserOverUrl();
+        String currentUserName = getCurrentUserName();
+        boolean isSameUser = userOverUrl.equals(currentUserName);
+
+        if(isSameUser && checkIfUserIsStudent() || !isSameUser && getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+            updateViewModeStudent();
+        }
+        else if(isSameUser && checkIfUserIsUnternehmen() || !isSameUser && (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW))){
+            updateViewModeCompany();
+        }
+
+        if(isSameUser){
             if(checkIfUserIsStudent()){
-                updateViewModeStudent();
-            } else if (checkIfUserIsUnternehmen()) {
-                updateViewModeCompany();
+                setProfilePicture(studentProfileDTO.getProfilbild(), "CheckPoint 1");
             }
-        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            else if(checkIfUserIsUnternehmen()){
+                setProfilePicture(unternehmenProfileDTO.getProfilbild(), "CheckPoint 2");
+            }
+        }
+        else {
             if(getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
-               updateViewModeStudent();
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
-                updateViewModeCompany();
+                setProfilePicture(studentProfileDTO.getProfilbild(), "CheckPoint 1");
+            }
+            else if(getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)){
+                setProfilePicture(unternehmenProfileDTO.getProfilbild(), "CheckPoint 2");
             }
         }
-
-
-        profilePicture.removeAll();
-        String fileName;
-
-        if (getUserOverUrl().equals(getCurrentUserName())) {
-            if (checkIfUserIsStudent()) {
-               logger.info("CheckPoint 1");
-                if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
-                   logger.info("Default Profilbild");
-                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
-
-                } else {
-                    // lade das Profilbild aus studentProfileDTO.getProfilbild()
-
-                    fileName = studentProfileDTO.getProfilbild();
-                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
-                    StreamResource resource = new StreamResource(fileName, () -> {
-                        try {
-                            return new FileInputStream(path);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            return InputStream.nullInputStream(); // In case of an error return an empty stream
-                        }
-                    });
-                    profileImg = new Image(resource, PROFILBILD);
-                }
-                profilePicture.add(profileImg);
-            } else if (checkIfUserIsUnternehmen()) {
-                if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
-                } else {
-                    // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-                    logger.info("CheckPoint 2");
-                    fileName = unternehmenProfileDTO.getProfilbild();
-                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
-                    StreamResource resource = new StreamResource(fileName, () -> {
-                        try {
-                            return new FileInputStream(path);
-                        } catch (FileNotFoundException e) {
-                            logger.error("File not found");
-                            return InputStream.nullInputStream(); // In case of an error return an empty stream
-                        }
-                    });
-                    profileImg = new Image(resource, PROFILBILD);
-
-                }
-                profilePicture.add(profileImg);
-            }
-        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
-            if (getProfileType().equals(Globals.Pages.PROFILE_VIEW) ) {
-                if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
-                } else {
-                    // lade das Profilbild aus studentProfileDTO.getProfilbild()
-                    fileName = studentProfileDTO.getProfilbild();
-                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
-                    StreamResource resource = new StreamResource(fileName, () -> {
-                        try {
-                            return new FileInputStream(path);
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            return InputStream.nullInputStream(); // In case of an error return an empty stream
-                        }
-                    });
-                    profileImg = new Image(resource, PROFILBILD);
-                }
-                profilePicture.add(profileImg);
-            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
-                if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
-                } else {
-                    // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-                    fileName = unternehmenProfileDTO.getProfilbild();
-                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
-                    StreamResource resource = new StreamResource(fileName, () -> {
-                        try {
-                            return new FileInputStream(path);
-                        } catch (FileNotFoundException e) {
-                            logger.error("File not found");
-                            return InputStream.nullInputStream(); // In case of an error return an empty stream
-                        }
-                    });
-                    profileImg = new Image(resource, PROFILBILD);
-                }
-                profilePicture.add(profileImg);
-            }
-        }
-
     }
+
+    private void setProfilePicture(String profileImageName, String logCheckPoint){
+        String fileName;
+        profilePicture.removeAll();
+
+        if(profileImageName == null || profileImageName.equals("")){
+            logger.info("Default Profilbild");
+            profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
+        }
+        else {
+            logger.info(logCheckPoint);
+            fileName = profileImageName;
+            String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
+            StreamResource resource = new StreamResource(fileName, () -> {
+                try {
+                    return new FileInputStream(path);
+                } catch (FileNotFoundException e) {
+                    logger.error("File not found");
+                    return InputStream.nullInputStream();
+                }
+            });
+            profileImg = new Image(resource, PROFILBILD);
+        }
+        profilePicture.add(profileImg);
+    }
+
 
     private void updateViewModeStudent() {
         firstNameAndLastName.setValue(studentProfileDTO.getVorname() + " " + studentProfileDTO.getNachname());

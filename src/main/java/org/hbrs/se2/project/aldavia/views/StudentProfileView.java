@@ -55,8 +55,9 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
                 editAndSaveProfileButton.addListenerToSaveButton(e -> {
                     try {
                         switchToViewMode();
-                    } catch (PersistenceException | ProfileException persistenceException) {
+                    } catch (PersistenceException | ProfileException persistenceException ) {
                         Notification.show("Fehler beim Speichern");
+                        persistenceException.printStackTrace();
                     }
                 });
 
