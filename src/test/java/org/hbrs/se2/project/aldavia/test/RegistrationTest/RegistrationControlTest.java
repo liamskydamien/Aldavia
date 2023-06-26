@@ -15,8 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.servlet.Registration;
-
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

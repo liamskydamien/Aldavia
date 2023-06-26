@@ -279,7 +279,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             HorizontalLayout dialogHeader = new HorizontalLayout();
             dialogHeader.setJustifyContentMode(JustifyContentMode.END);
             Button closeButton = new Button(new Icon("lumo", "cross"),
-                    (event) -> dialogUploadPic.close());
+                    event -> dialogUploadPic.close());
             closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             dialogHeader.add(closeButton);
             dialogUploadPic.add(dialogHeader);
@@ -418,10 +418,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         upload.setAcceptedFileTypes("image/jpeg", "image/png");
         upload.setDropAllowed(true);
 
-        upload.addFailedListener(event -> {
-            // handle the error here
-            Notification.show("Upload fehlgeschlagen: " + event.getReason());
-        });
+        upload.addFailedListener(event -> Notification.show("Upload fehlgeschlagen: " + event.getReason()));
 
         upload.addSucceededListener(event -> {
             // Generate a unique name for the image file

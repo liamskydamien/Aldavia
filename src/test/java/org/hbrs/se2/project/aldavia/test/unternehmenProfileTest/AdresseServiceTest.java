@@ -119,7 +119,7 @@ public class AdresseServiceTest {
     }
 
     @Test
-    void testRemoveUnternehmenFromAdresse_NotFound() {
+    void testRemoveUnternehmenFromAdresseNotFound() {
         Adresse adresse = new Adresse();
 
         Unternehmen unternehmen = new Unternehmen();

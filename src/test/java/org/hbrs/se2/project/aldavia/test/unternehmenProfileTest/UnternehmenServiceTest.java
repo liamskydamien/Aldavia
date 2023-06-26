@@ -65,7 +65,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testGetUnternehmen_ProfileException() {
+    void testGetUnternehmenProfileException() {
         when(userRepositoryMock.findByUserid(TESTUSER)).thenReturn(Optional.empty());
 
         assertThrows(ProfileException.class, () -> unternehmenService.getUnternehmen(TESTUSER));
@@ -151,7 +151,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testDeleteUnternehmen_NullLists(){
+    void testDeleteUnternehmenNullLists(){
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         unternehmen.setUser(user);
@@ -181,7 +181,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testCreateOrUpdateUnternehmen_Exception() {
+    void testCreateOrUpdateUnternehmenException() {
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         unternehmen.setUser(user);
