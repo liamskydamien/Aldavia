@@ -23,9 +23,10 @@ import java.util.Set;
 
 @Route(value = Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW, layout = LoggedInStateLayout.class)
 public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout implements HasUrlParameter<String> {
+    public static final String STELLENANZEIGE_TAETIGKEIT = "stellenanzeige-taetigkeit";
+    public static final String BADGE_PILL = "badge pill";
     private final UnternehmenProfileControl unternehmenProfileControl;
 
-    private UnternehmenProfileDTO unternehmenProfileDTO;
     private final StudentProfileControl studentProfileControl;
     private StellenanzeigeDTO pickedStellenanzeige;
     private final Div displayBewerbungen;
@@ -35,7 +36,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
     @Override
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
         if (parameter != null) {
-            unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
+            UnternehmenProfileDTO unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
             // Laden der Bewerbungen für die entsprechende Stellenanzeige
             Set<StellenanzeigeDTO> stellenanzeige = unternehmenProfileDTO.getStellenanzeigen();
             for(StellenanzeigeDTO s : stellenanzeige){
@@ -160,19 +161,19 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
             for (int i = 0; i < 3; i++){
                 TaetigkeitsfeldDTO pickedTaetigkeitsfeld = taetigkeitsfeldListe.get(i);
                 Span taetigkeitCapsul = new Span(pickedTaetigkeitsfeld.getName());
-                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
-                taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
-                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
+                taetigkeitCapsul.getElement().getThemeList().add(BADGE_PILL);
+                taetigkeitCapsul.addClassName(STELLENANZEIGE_TAETIGKEIT);
+                taetigkeitCapsul.getElement().getThemeList().add(BADGE_PILL);
                 taetigkeitenLayout.add(taetigkeitCapsul);
             }
             Span restlicheTaetigkeiten = new Span("+" + (taetigkeitsfeldListe.size()-3) + " weitere");
-            restlicheTaetigkeiten.addClassName("stellenanzeige-taetigkeit");
+            restlicheTaetigkeiten.addClassName(STELLENANZEIGE_TAETIGKEIT);
             taetigkeitenLayout.add(restlicheTaetigkeiten);
         } else {
             for (TaetigkeitsfeldDTO taetigkeitsfeld : taetigkeitsfeldListe){
                 Span taetigkeitCapsul = new Span(taetigkeitsfeld.getName());
-                taetigkeitCapsul.addClassName("stellenanzeige-taetigkeit");
-                taetigkeitCapsul.getElement().getThemeList().add("badge pill");
+                taetigkeitCapsul.addClassName(STELLENANZEIGE_TAETIGKEIT);
+                taetigkeitCapsul.getElement().getThemeList().add(BADGE_PILL);
                 taetigkeitenLayout.add(taetigkeitCapsul);
             }
         }

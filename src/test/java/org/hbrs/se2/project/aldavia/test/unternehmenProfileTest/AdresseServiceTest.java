@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class AdresseServiceTest {
+    public static final String DEUTSCHLAND = "Deutschland";
     @Mock
     private AdresseRepository adresseRepository;
 
@@ -43,7 +44,7 @@ public class AdresseServiceTest {
                 .hausnummer("15")
                 .plz("53122")
                 .ort("Bonn")
-                .land("Deutschland")
+                .land(DEUTSCHLAND)
                 .build();
 
         Adresse existingAdresse = Adresse.builder()
@@ -51,7 +52,7 @@ public class AdresseServiceTest {
                 .hausnummer("6")
                 .plz("53121")
                 .ort("Bonn")
-                .land("Deutschland")
+                .land(DEUTSCHLAND)
                 .build();
         Optional<Adresse> adresseOpt = Optional.of(existingAdresse);
 
@@ -81,7 +82,7 @@ public class AdresseServiceTest {
                 .hausnummer("15")
                 .plz("53122")
                 .ort("Bonn")
-                .land("Deutschland")
+                .land(DEUTSCHLAND)
                 .build();
         Adresse builtAdresse = Adresse.builder()
                 .id(adresseDTO.getId())
@@ -118,7 +119,7 @@ public class AdresseServiceTest {
     }
 
     @Test
-    void testRemoveUnternehmenFromAdresse_NotFound() {
+    void testRemoveUnternehmenFromAdresseNotFound() {
         Adresse adresse = new Adresse();
 
         Unternehmen unternehmen = new Unternehmen();

@@ -1,10 +1,8 @@
 package org.hbrs.se2.project.aldavia.test.EntityTest;
 
-import okhttp3.Address;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.entities.Unternehmen;
-import org.hbrs.se2.project.aldavia.views.components.AddStellenanzeigeFormComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

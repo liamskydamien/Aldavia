@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -36,9 +35,9 @@ public class SearchComponent extends VerticalLayout {
 
     private final BewerbungsControl bewerbungsControl;
 
-    private List<StellenanzeigeDTO> stellenanzeigeList;
+    private final List<StellenanzeigeDTO> stellenanzeigeList;
 
-    private VerticalLayout displayStellenanzeigen;
+    private final VerticalLayout displayStellenanzeigen;
 
     private final Logger logger = LoggerFactory.getLogger(SearchComponent.class);
 
@@ -48,9 +47,12 @@ public class SearchComponent extends VerticalLayout {
 
     TextField unternehmenSearch = new TextField();
 
+    private List<StellenanzeigeDTO> selectedAnzeigen;
+
 
     public SearchComponent(SearchControl searchControl) {
         this.searchControl = searchControl;
+        selectedAnzeigen = new ArrayList<>();
         this.bewerbungsControl = searchControl.getBewerbungsControl();
         displayStellenanzeigen = new VerticalLayout();
 
@@ -69,9 +71,8 @@ public class SearchComponent extends VerticalLayout {
         displayStellenanzeigen.setWidthFull();
         logger.info("Stellenanzeigen: " + stellenanzeigeList.size());
         logger.info("To render: " + stellenanzeigeList.size());
-        if (displayStellenanzeigen != null) {
-            displayStellenanzeigen.removeAll();
-        }
+        displayStellenanzeigen.removeAll();
+
 
         for(StellenanzeigeDTO stellenanzeigeDTO : stellenanzeigeList){
             addStellenanzeigeToCard(stellenanzeigeDTO);
@@ -112,7 +113,7 @@ public class SearchComponent extends VerticalLayout {
     public void setUpUI(List<StellenanzeigeDTO> list) {
         this.add(createHeadCard());
 
-        List<StellenanzeigeDTO> selectedAnzeigen = new ArrayList<>();
+
 
         unternehmenSearch.addValueChangeListener(e -> {
             List<StellenanzeigeDTO> listNeu = new ArrayList<>();
@@ -143,26 +144,19 @@ public class SearchComponent extends VerticalLayout {
 
         if( UI.getCurrent() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER)!= null) {
             UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+            List<StellenanzeigeDTO> recommendetStellenanzeigen = searchControl.getRecommendedStellenanzeigen(userDTO.getUserid());
 
             selectRecommendet.addValueChangeListener(e -> {
-                List<StellenanzeigeDTO> recommendetStellenanzeigen = searchControl.getRecommendedStellenanzeigen(userDTO.getUserid());
+
                 if (selectRecommendet.getValue().equals("Empfohlen")) {
-                    if (selectedAnzeigen.size() > 0) {
-                        for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                            selectedAnzeigen.remove(i);
-                        }
-                    }
-                    for (StellenanzeigeDTO dto : recommendetStellenanzeigen) {
-                        selectedAnzeigen.add(dto);
-                    }
                     displayStellenanzeigen.removeAll();
-                    createCard(selectedAnzeigen);
+                    createCard(recommendetStellenanzeigen);
                     remove(displayStellenanzeigen);
                     add(displayStellenanzeigen);
 
                 }
                 if (selectRecommendet.getValue().equals(NICHT_SORTIEREN)) {
-                    selectJob.setValue("Alle");
+                    createAll();
                 }
 
             });
@@ -175,84 +169,27 @@ public class SearchComponent extends VerticalLayout {
 
         selectJob.addValueChangeListener(e -> {
             if (selectJob.getValue().equals("Alle")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    selectedAnzeigen.add(dto);
-                }
-                createCard(stellenanzeigeList);
+                createAll();
             } else if (selectJob.getValue().equals("Praktikum")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("praktikum")) {
-                        listNeu.add(dto);
-                        selectedAnzeigen.add(dto);
-                    }
-                }
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"praktikum");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
             } else if (selectJob.getValue().equals("Festanstellung") || selectJob.getValue().equals("Vollzeit")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("festanstellung")) {
-                        listNeu.add(dto);
-                        selectedAnzeigen.add(dto);
-                    }
-                }
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"vollzeit");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
             } else if (selectJob.getValue().equals("Werkstudent")) {
-                displayStellenanzeigen.removeAll();
-                if (stellenanzeigeList.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("werkstudent")) {
-                        listNeu.add(dto);
-                        selectedAnzeigen.add(dto);
-                    }
-                }
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"werkstudent");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
             }else if (selectJob.getValue().equals("Teilzeit")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("teilzeit")) {
-                        listNeu.add(dto);
-                        selectedAnzeigen.add(dto);
-                    }
-                }
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"teilzeit");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
@@ -416,4 +353,37 @@ public class SearchComponent extends VerticalLayout {
         vonBisLayout.add(new Label("Bis: " + bis));
         return vonBisLayout;
     }
+
+    private List<StellenanzeigeDTO> addToSelectedStellenanzeigen(List<StellenanzeigeDTO> list, String word) {
+        displayStellenanzeigen.removeAll();
+        if (selectedAnzeigen.size() > 0) {
+            for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                selectedAnzeigen.remove(i);
+            }
+        }
+        List<StellenanzeigeDTO> listNeu = new ArrayList<>();
+        for (StellenanzeigeDTO dto : list) {
+            if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains(word)) {
+                listNeu.add(dto);
+                selectedAnzeigen.add(dto);
+            }
+        }
+        return listNeu;
+    }
+
+    private void createAll() {
+        displayStellenanzeigen.removeAll();
+        if (selectedAnzeigen.size() > 0) {
+            for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                selectedAnzeigen.remove(i);
+            }
+        }
+        for (StellenanzeigeDTO dto : stellenanzeigeList) {
+            selectedAnzeigen.add(dto);
+        }
+        createCard(stellenanzeigeList);
+    }
+
+
+
 }

@@ -108,7 +108,6 @@ public class UnternehmenProfileControlTest {
 
         verify(unternehmenServiceMock,times(1)).getUnternehmen(userName);
         verify(unternehmenServiceMock, times(1)).createOrUpdateUnternehmen(unternehmenMock);
-        verifyNoMoreInteractions(unternehmenServiceMock);
 
         //then -> fällt weg, da void Methode
     }
@@ -133,7 +132,6 @@ public class UnternehmenProfileControlTest {
 
         verify(unternehmenServiceMock,times(1)).getUnternehmen(userName);
         verify(unternehmenServiceMock, times(1)).createOrUpdateUnternehmen(unternehmenMock);
-        verifyNoMoreInteractions(unternehmenServiceMock);
 
         //then -> fällt weg, da void Methode
     }

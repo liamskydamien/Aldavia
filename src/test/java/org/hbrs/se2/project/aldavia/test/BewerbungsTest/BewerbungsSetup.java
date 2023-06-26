@@ -5,12 +5,15 @@ import org.hbrs.se2.project.aldavia.entities.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BewerbungsSetup {
+    private BewerbungsSetup() {
+    }
 
     private static final String TEST = "test";
 
-    public static HashMap<String, Object> setup() {
+    public static Map<String, Object> setup() {
         String userid = "testBewerbung";
 
         User user = User.builder()

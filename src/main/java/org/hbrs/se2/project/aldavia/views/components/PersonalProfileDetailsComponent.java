@@ -25,14 +25,14 @@ import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.UIUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Logger;
-
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.*;
 
 
@@ -59,6 +59,8 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     private TextArea description;
     private Image profileImg;
     private final String url;
+
+    private final Logger logger = LoggerFactory.getLogger(PersonalProfileDetailsComponent.class);
 
 
     public PersonalProfileDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl, String url) {
@@ -147,9 +149,9 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
         if (getUserOverUrl().equals(getCurrentUserName())) {
             if (checkIfUserIsStudent()) {
-                System.out.println("CheckPoint 1");
+               logger.info("CheckPoint 1");
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
-                    System.out.println("Default Profilbild");
+                   logger.info("Default Profilbild");
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
 
                 } else {
@@ -173,13 +175,14 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
+                    logger.info("CheckPoint 2");
                     fileName = unternehmenProfileDTO.getProfilbild();
                     String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            logger.error("File not found");
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
@@ -218,7 +221,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                         try {
                             return new FileInputStream(path);
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            logger.error("File not found");
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
@@ -248,8 +251,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         email.setReadOnly(true);
     }
 
-
-
     public void updateEditMode() {
         if(getUserOverUrl().equals(getCurrentUserName())) {
             if (checkIfUserIsStudent()) {
@@ -268,9 +269,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             }
         }
 
-
-
-
         //Profile Picture
         Icon profilePiceditIcon = new Icon("lumo","edit");
         profilePiceditIcon.setClassName("profilePicEditIcon");
@@ -281,7 +279,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             HorizontalLayout dialogHeader = new HorizontalLayout();
             dialogHeader.setJustifyContentMode(JustifyContentMode.END);
             Button closeButton = new Button(new Icon("lumo", "cross"),
-                    (event) -> dialogUploadPic.close());
+                    event -> dialogUploadPic.close());
             closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             dialogHeader.add(closeButton);
             dialogUploadPic.add(dialogHeader);
@@ -405,12 +403,11 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         unternehmenProfileDTO.setName(companyName.getValue());
         unternehmenProfileDTO.setWebside(website.getValue());
         unternehmenProfileDTO.setEmail(email.getValue());
-        System.out.println("Befire hinzufügen: "+unternehmenProfileDTO.getProfilePicture());
+        logger.info(unternehmenProfileDTO.getProfilePicture());
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
     private VerticalLayout uploadProfilePicture(Dialog dialogUploadPic) {
-        Logger LOGGER = Logger.getLogger(PersonalProfileDetailsComponent.class.getName());
 
         VerticalLayout uploadLayout = new VerticalLayout();
         uploadLayout.setClassName("uploadLayout");
@@ -421,10 +418,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         upload.setAcceptedFileTypes("image/jpeg", "image/png");
         upload.setDropAllowed(true);
 
-        upload.addFailedListener(event -> {
-            // handle the error here
-            Notification.show("Upload fehlgeschlagen: " + event.getReason());
-        });
+        upload.addFailedListener(event -> Notification.show("Upload fehlgeschlagen: " + event.getReason()));
 
         upload.addSucceededListener(event -> {
             // Generate a unique name for the image file
@@ -432,22 +426,22 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             Path imagePath = Paths.get("./src/main/webapp/profile-images", uniqueFileName);
             String path = imagePath.toAbsolutePath().toString();
 
-            LOGGER.info("Starting file upload: " + path);
+            logger.info("Starting file upload: " + path);
 
             // Save the image on the disk
-            saveProfilePicture(memoryBuffer, uniqueFileName, imagePath, LOGGER);
+            saveProfilePicture(memoryBuffer, uniqueFileName, imagePath, logger);
 
             // Update the UI to display the new image
             StreamResource resource = new StreamResource(uniqueFileName, () -> {
                 try {
                     return new FileInputStream(path);
                 } catch (FileNotFoundException e) {
-                        LOGGER.warning("Error while uploading file");
+                        logger.error("Error while uploading file");
                     return InputStream.nullInputStream(); // In case of an error return an empty stream
                 }
             });
 
-            LOGGER.info("File upload successful");
+            logger.info("File upload successful");
 
             profileImg = new Image(resource, PROFILBILD);
 
@@ -460,12 +454,12 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         return uploadLayout;
     }
 
-    private void saveProfilePicture(MemoryBuffer memoryBuffer, String uniqueFileName, Path imagePath, Logger LOGGER) {
+    private void saveProfilePicture(MemoryBuffer memoryBuffer, String uniqueFileName, Path imagePath, Logger logger) {
         // Save the image on the disk
         try (InputStream inputStream = memoryBuffer.getInputStream()) {
             Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.warning("Error while uploading file");
+            logger.info("Error while uploading file");
 
         }
 
@@ -475,7 +469,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 studentProfileDTO.setProfilbild(uniqueFileName);
             } else if (checkIfUserIsUnternehmen()) {
                 unternehmenProfileDTO.setProfilbild(uniqueFileName);
-                System.out.println("View Bild" + unternehmenProfileDTO.getProfilbild());
+                logger.info("View Bild" + unternehmenProfileDTO.getProfilbild());
             }
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){

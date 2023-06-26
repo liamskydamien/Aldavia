@@ -1,6 +1,8 @@
 package org.hbrs.se2.project.aldavia.util;
 
 public class Globals {
+    private Globals() {
+    }
     public static String CURRENT_USER = "current_User";
 
     public static class Pages {
@@ -61,6 +63,8 @@ public class Globals {
 
 
     public static class ProfileViewMode {
+        private ProfileViewMode() {
+        }
         public static final String VIEW = "view";
         public static final String EDIT = "edit";
     }

@@ -1,7 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -12,46 +10,45 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 
 public class AboutCompany extends VerticalLayout implements ProfileComponent{
-    private UnternehmenProfileDTO unternehmenProfileDTO;
+    private final UnternehmenProfileDTO unternehmenProfileDTO;
     private final UnternehmenProfileControl unternehmenProfileControl;
-    private TextArea aboutCompany;
-    private H2 title;
+    private final TextArea aboutCompanyTextField;
+    private final H2 title;
 
     public AboutCompany(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
         this.unternehmenProfileDTO = unternehmenProfileDTO;
 
         addClassName("about-company");
-        aboutCompany = new TextArea();
-        aboutCompany.addClassName("about-company-textarea");
-        aboutCompany.setPlaceholder("Über das Unternehmen");
-        aboutCompany.setWidthFull();
+        aboutCompanyTextField = new TextArea();
+        aboutCompanyTextField.addClassName("about-company-textarea");
+        aboutCompanyTextField.setPlaceholder("Über das Unternehmen");
+        aboutCompanyTextField.setWidthFull();
         title = new H2("Über das Unternehmen");
         setUpUI();
     }
     private void setUpUI(){
         add(title);
-        add(aboutCompany);
-        aboutCompany.setClearButtonVisible(true);
-        aboutCompany.setMaxLength(1200);
-        aboutCompany.setValueChangeMode(ValueChangeMode.EAGER);
-        aboutCompany.setHelperText("0/1200");
-        aboutCompany.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + 1200);
-        });
+        add(aboutCompanyTextField);
+        aboutCompanyTextField.setClearButtonVisible(true);
+        aboutCompanyTextField.setMaxLength(1200);
+        aboutCompanyTextField.setValueChangeMode(ValueChangeMode.EAGER);
+        aboutCompanyTextField.setHelperText("0/1200");
+        aboutCompanyTextField.addValueChangeListener(e -> e.getSource()
+                .setHelperText(e.getValue().length() + "/" + 1200));
         updateView();
     }
 
     private void updateView(){
-        aboutCompany.setReadOnly(true);
+        aboutCompanyTextField.setReadOnly(true);
+
         if(unternehmenProfileDTO.getBeschreibung() != null){
-            aboutCompany.setValue(unternehmenProfileDTO.getBeschreibung());
+            aboutCompanyTextField.setValue(unternehmenProfileDTO.getBeschreibung());
         }
     }
 
     private void updateEdit(){
-        aboutCompany.setReadOnly(false);
+        aboutCompanyTextField.setReadOnly(false);
     }
 
 
@@ -67,7 +64,7 @@ public class AboutCompany extends VerticalLayout implements ProfileComponent{
     }
 
     private void updateCompanyDTO(String userName) throws ProfileException {
-        unternehmenProfileDTO.setBeschreibung(aboutCompany.getValue());
+        unternehmenProfileDTO.setBeschreibung(aboutCompanyTextField.getValue());
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
 
 

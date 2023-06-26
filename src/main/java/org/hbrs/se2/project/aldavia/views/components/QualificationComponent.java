@@ -21,6 +21,9 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 @CssImport("./styles/views/profile/studentProfile.css")
@@ -29,7 +32,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private final StudentProfileControl studentProfileControl;
 
     private final StudentProfileDTO studentProfileDTO;
-    private List<QualifikationsDTO> qualificationList;
+    private final List<QualifikationsDTO> qualificationList;
     private final TextField bezeichnung;
     private final TextArea beschreibung;
     private final TextField bereich;
@@ -39,10 +42,12 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private final DatePicker bis;
     private Dialog addQualificationPopUp;
     private Dialog editQualificationPopUp;
-    private Button addQualification;
-    private Span noQualifications;
-    private VerticalLayout displayQualifications;
-    HorizontalLayout addQualificationLayout;
+    private final Button addQualification;
+    private final Span noQualifications;
+    private final VerticalLayout displayQualifications;
+    private final HorizontalLayout addQualificationLayout;
+
+    private final Logger logger = LoggerFactory.getLogger(QualificationComponent.class);
 
     public QualificationComponent(StudentProfileControl studentProfileControl, StudentProfileDTO studentProfileDTO) {
         this.studentProfileControl = studentProfileControl;
@@ -250,11 +255,11 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         qualificationCardHeader.add(bezeichnung, vonBis);
 
         // Institution
-        Span institution = new Span(qualifikationsDTO.getInstitution());
-        institution.addClassName("institution");
+        Span institutionName = new Span(qualifikationsDTO.getInstitution());
+        institutionName.addClassName("institution");
 
         // Beschaeftigungsart
-        Span beschaeftigungsart = new Span(qualifikationsDTO.getBeschaeftigungsart());
+        Span beschaeftigungsartName = new Span(qualifikationsDTO.getBeschaeftigungsart());
 
         // Beschreibung
         Div beschreibung = new Div();
@@ -262,7 +267,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         beschreibung.addClassName("beschreibung");
 
         // Bereich
-        Span bereich = new Span(qualifikationsDTO.getBereich());
+        Span bereichName = new Span(qualifikationsDTO.getBereich());
         bereich.addClassName("bereich");
 
         if(mode.equals(Globals.ProfileViewMode.EDIT)){

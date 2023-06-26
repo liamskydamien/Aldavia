@@ -2,8 +2,6 @@ package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.*;
 
-import java.util.Objects;
-
 @Getter
 @Setter
 @NoArgsConstructor

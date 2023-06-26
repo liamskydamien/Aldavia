@@ -38,9 +38,6 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
     private  HorizontalLayout addTaetigkeitsArea;
     private Map<TaetigkeitsfeldDTO, TextField> interestFields = new HashMap<>();
 
-    //Mit Stellenanzeige als Parameter (für Edit)
-    private Stellenanzeige stellenanzeige;
-
     public AddStellenanzeigeFormComponent() {
         formLayout = new FormLayout();
         bezeichnung = new TextField("Bezeichnung");
@@ -76,7 +73,6 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
     //Für Edit
 
     public AddStellenanzeigeFormComponent(Stellenanzeige stellenanzeige){
-        this.stellenanzeige = stellenanzeige;
         new AddStellenanzeigeFormComponent();
         bezeichnung.setValue(stellenanzeige.getBezeichnung());
         beschreibung.setValue(stellenanzeige.getBeschreibung());

@@ -10,10 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class TestUIUtils {
+
+    public static final String HALLO = "Hallo";
+
     @Test
     public void testSplitOnSpaces(){
         String[] split = UIUtils.splitOnSpaces("Hallo Welt");
-        assertEquals("Hallo", split[0]);
+        assertEquals(HALLO, split[0]);
         assertEquals("Welt", split[1]);
         String[] split2 = UIUtils.splitOnSpaces("Hallo,Welt,Hallo,Welt");
         assertEquals("Hallo,Welt,Hallo,Welt", split2[0]);
@@ -23,7 +26,7 @@ public class TestUIUtils {
     public void testCheckIfTextFieldIsEmpty(){
         assertTrue(UIUtils.checkIfTextFieldIsEmpty(new TextField()));
         TextField textField = new TextField();
-        textField.setValue("Hallo");
+        textField.setValue(HALLO);
         assertFalse(UIUtils.checkIfTextFieldIsEmpty(textField));
     }
 
@@ -32,7 +35,7 @@ public class TestUIUtils {
         assertTrue(UIUtils.checkIfTextAreaIsEmpty(null));
         assertTrue(UIUtils.checkIfTextAreaIsEmpty(new TextArea()));
         TextArea textField = new TextArea();
-        textField.setValue("Hallo");
+        textField.setValue(HALLO);
         assertFalse(UIUtils.checkIfTextAreaIsEmpty(textField));
     }
 }

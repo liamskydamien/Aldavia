@@ -7,14 +7,14 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
-import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
-import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +41,8 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
     private EditAndSaveProfileButton editAndSaveProfileButtonComapany;
     private StellenanzeigeComponent stellenanzeigeComponent;
     private String url;
-    private boolean isSameUser = true;
+
+    private final Logger logger = LoggerFactory.getLogger(UnternehmenProfileView.class);
 
     @Override
     @Transactional
@@ -49,6 +50,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
             try {
                 unternehmenProfileDTO = unternehmenProfileControl.getUnternehmenProfileDTO(parameter);
                 url = beforeEvent.getLocation().getPath();
+                boolean isSameUser;
                 if(getCurrentUser() == null){
                     isSameUser = false;
                 } else{
@@ -58,9 +60,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
                     editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
                     addClassName("profile-view");
 
-                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
-                        switchToEditMode();
-                    });
+                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> switchToEditMode());
                     editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
                         try {
                             switchToViewMode();
@@ -87,7 +87,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
                     }
                 });
             } catch (ProfileException ex) {
-                throw new RuntimeException(ex);
+                logger.error(ex.getMessage());
             }
     }
 

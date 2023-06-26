@@ -1,24 +1,14 @@
 package org.hbrs.se2.project.aldavia.views;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
-import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
-import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
 @CssImport("./styles/views/navbar/navbar.css")
@@ -65,8 +55,8 @@ public class NeutralLayout extends AppLayout {
         Button button = new Button("Sign Up");
         button.setId("sign-up-button");
         Tab[] tabs = new Tab[]{
-                createTab("Log In", LoginView.class),
-                createButtonInTab(button, RegistrationLayout.class )
+                createTab(),
+                createButtonInTab(button)
         };
         tabs[0].setId("login-tab");
         tabs[1].setId("sign-up-tab");
@@ -76,15 +66,15 @@ public class NeutralLayout extends AppLayout {
 
 
 
-    private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
+    private static Tab createTab() {
         final Tab tab = new Tab();
-        tab.add(new RouterLink(text, navigationTarget));
+        tab.add(new RouterLink("Log In", LoginView.class));
         return tab;
     }
 
-    private static Tab createButtonInTab(Button button, Class<? extends Component> navigationTarget) {
+    private static Tab createButtonInTab(Button button) {
         final Tab tab = new Tab();
-        button.addClickListener(event -> button.getUI().ifPresent(ui -> ui.navigate(navigationTarget)));
+        button.addClickListener(event -> button.getUI().ifPresent(ui -> ui.navigate(RegistrationLayout.class)));
         tab.add(button);
         return tab;
     }

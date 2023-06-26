@@ -58,8 +58,5 @@ public class TaetigkeitsfeldStellenanzeigenTest {
         assertEquals(1, stellenanzeige1.getTaetigkeitsfelder().size());
         assertEquals("Java", stellenanzeige1.getTaetigkeitsfelder().get(0).getBezeichnung());
         assertEquals(1, stellenanzeige1.getTaetigkeitsfelder().get(0).getStellenanzeigen().size());
-
-        /*Stellenanzeige stellenanzeige2 = taetigkeitsfeldService.deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld,stellenanzeige);
-        assertEquals(0, stellenanzeige2.getTaetigkeitsfelder().size());*/
     }
 }

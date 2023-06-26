@@ -16,14 +16,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class StudentProfileDTOFactoryTest {
 
-    private StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
+    public static final String USERID = "username";
+    public static final String EMAIL = "email";
+    public static final String BEZEICHNUNG = "bezeichnung";
+    public static final String BESCHREIBUNG = "beschreibung";
+    private final StudentProfileDTOFactory studentProfileDTOFactory = StudentProfileDTOFactory.getInstance();
     @Test
     public void testEmpty() throws ProfileException {
         Student student = Student.builder()
                 .user(User.builder()
-                        .userid("username")
+                        .userid(USERID)
                         .password("password")
-                        .email("email")
+                        .email(EMAIL)
                         .build())
                 .build();
         StudentProfileDTO studentProfileDTO = studentProfileDTOFactory.createStudentProfileDTO(student);
@@ -39,7 +43,7 @@ public class StudentProfileDTOFactoryTest {
         assertEquals(studentProfileDTO.getStudienbeginn().getMonthValue(), LocalDate.now().getMonthValue());
         assertEquals(studentProfileDTO.getStudienbeginn().getYear(), LocalDate.now().getYear());
         assertEquals(studentProfileDTO.getBeschreibung(), "");
-        assertEquals(studentProfileDTO.getUsername(), "username");
+        assertEquals(studentProfileDTO.getUsername(), USERID);
 
     }
 
@@ -47,37 +51,37 @@ public class StudentProfileDTOFactoryTest {
     public void testFull() throws ProfileException {
 
         Kenntnis kenntnis = Kenntnis.builder()
-                .bezeichnung("bezeichnung")
+                .bezeichnung(BEZEICHNUNG)
                 .build();
 
         Taetigkeitsfeld taetigkeitsfeld = Taetigkeitsfeld.builder()
-                .bezeichnung("bezeichnung")
+                .bezeichnung(BEZEICHNUNG)
                 .build();
 
         Sprache sprache = Sprache.builder()
-                .bezeichnung("bezeichnung")
+                .bezeichnung(BEZEICHNUNG)
                 .level("level")
                 .build();
 
         Qualifikation qualifikation = Qualifikation.builder()
-                .bezeichnung("bezeichnung")
+                .bezeichnung(BEZEICHNUNG)
                 .bereich("bereich")
                 .institution("institution")
                 .von(LocalDate.of(2000, 1, 1))
                 .bis(LocalDate.of(2000, 1, 1))
-                .beschreibung("beschreibung")
+                .beschreibung(BESCHREIBUNG)
                 .beschaftigungsverhaltnis("beschaftigungsverhaltnis")
                 .id(1)
                 .build();
 
         Student student = Student.builder()
                 .user(User.builder()
-                        .userid("username")
+                        .userid(USERID)
                         .password("password")
-                        .email("email")
+                        .email(EMAIL)
                         .phone("phone")
                         .profilePicture("profilePicture")
-                        .beschreibung("beschreibung")
+                        .beschreibung(BESCHREIBUNG)
                         .build())
                 .vorname("vorname")
                 .nachname("nachname")
@@ -104,8 +108,8 @@ public class StudentProfileDTOFactoryTest {
         assertEquals(studentProfileDTO.getStudienbeginn().getDayOfYear(), LocalDate.of(2000, 1, 1).getDayOfYear());
         assertEquals(studentProfileDTO.getStudienbeginn().getMonthValue(), LocalDate.of(2000, 1, 1).getMonthValue());
         assertEquals(studentProfileDTO.getStudienbeginn().getYear(), LocalDate.of(2000, 1, 1).getYear());
-        assertEquals(studentProfileDTO.getUsername(), "username");
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), "bezeichnung");
+        assertEquals(studentProfileDTO.getUsername(), USERID);
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBezeichnung(), BEZEICHNUNG);
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getBereich(), "bereich");
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getInstitution(), "institution");
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getVon().getDayOfYear(), LocalDate.of(2000, 1, 1).getDayOfYear());
@@ -114,15 +118,15 @@ public class StudentProfileDTOFactoryTest {
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis().getDayOfYear(), LocalDate.of(2000, 1, 1).getDayOfYear());
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis().getMonthValue(), LocalDate.of(2000, 1, 1).getMonthValue());
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getBis().getYear(), LocalDate.of(2000, 1, 1).getYear());
-        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), "beschreibung");
+        assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschreibung(), BESCHREIBUNG);
         assertEquals(studentProfileDTO.getQualifikationen().get(0).getBeschaeftigungsart(), "beschaftigungsverhaltnis");
-        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), "bezeichnung");
-        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), "bezeichnung");
-        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), "bezeichnung");
+        assertEquals(studentProfileDTO.getKenntnisse().get(0).getName(), BEZEICHNUNG);
+        assertEquals(studentProfileDTO.getTaetigkeitsfelder().get(0).getName(), BEZEICHNUNG);
+        assertEquals(studentProfileDTO.getSprachen().get(0).getName(), BEZEICHNUNG);
         assertEquals(studentProfileDTO.getSprachen().get(0).getLevel(), "level");
-        assertEquals(studentProfileDTO.getBeschreibung(), "beschreibung");
+        assertEquals(studentProfileDTO.getBeschreibung(), BESCHREIBUNG);
         assertEquals(studentProfileDTO.getProfilbild(), "profilePicture");
-        assertEquals(studentProfileDTO.getEmail(), "email");
+        assertEquals(studentProfileDTO.getEmail(), EMAIL);
         assertEquals(studentProfileDTO.getMatrikelNummer(), "matrikelNummer");
     }
 

@@ -9,7 +9,6 @@ import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 import org.hbrs.se2.project.aldavia.entities.User;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
 import org.hbrs.se2.project.aldavia.repository.UserRepository;
-import org.hbrs.se2.project.aldavia.service.StellenanzeigenService;
 import org.hbrs.se2.project.aldavia.service.UnternehmenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 public class UnternehmenServiceTest {
 
+    public static final String TESTUSER = "testuser";
+    public static final String TEST_COMPANY = "Test Company";
     UnternehmenService unternehmenService;
 
     @Mock
@@ -64,12 +65,12 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testGetUnternehmen_ProfileException() {
-        when(userRepositoryMock.findByUserid("testuser")).thenReturn(Optional.empty());
+    void testGetUnternehmenProfileException() {
+        when(userRepositoryMock.findByUserid(TESTUSER)).thenReturn(Optional.empty());
 
-        assertThrows(ProfileException.class, () -> unternehmenService.getUnternehmen("testuser"));
+        assertThrows(ProfileException.class, () -> unternehmenService.getUnternehmen(TESTUSER));
 
-        verify(userRepositoryMock, times(1)).findByUserid("testuser");
+        verify(userRepositoryMock, times(1)).findByUserid(TESTUSER);
         verify(unternehmenRepositoryMock, never()).findByUser(any());
     }
 
@@ -150,16 +151,15 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testDeleteUnternehmen_NullLists(){
+    void testDeleteUnternehmenNullLists(){
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
-        String userId = "testuser";
         unternehmen.setUser(user);
-        unternehmen.setName("Test Company");
+        unternehmen.setName(TEST_COMPANY);
         unternehmen.setStellenanzeigen(null);
         unternehmen.setAdressen(null);
 
-        when(unternehmenRepositoryMock.findByUserID(userId)).thenReturn(Optional.of(unternehmen));
+        when(unternehmenRepositoryMock.findByUserID(TESTUSER)).thenReturn(Optional.of(unternehmen));
 
         unternehmenService.deleteUnternehmen(unternehmen);
 
@@ -171,7 +171,7 @@ public class UnternehmenServiceTest {
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         unternehmen.setUser(user);
-        unternehmen.setName("Test Company");
+        unternehmen.setName(TEST_COMPANY);
 
         when(unternehmenRepositoryMock.save(unternehmen)).thenReturn(unternehmen);
 
@@ -181,11 +181,11 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testCreateOrUpdateUnternehmen_Exception() {
+    void testCreateOrUpdateUnternehmenException() {
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         unternehmen.setUser(user);
-        unternehmen.setName("Test Company");
+        unternehmen.setName(TEST_COMPANY);
 
         when(unternehmenRepositoryMock.save(unternehmen)).thenThrow(new RuntimeException("Database connection failed"));
 

@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -35,7 +34,7 @@ public class BewerbungsOverviewUnternehmenTest {
     public void testGetBewerbungenStellenanzeige() throws ProfileException {
         // Setup
 
-        HashMap<String, Object> map = BewerbungsSetup.setup();
+        Map<String, Object> map = BewerbungsSetup.setup();
         String userid = (String) map.get("userid");
         Unternehmen unternehmen = (Unternehmen) map.get("unternehmen");
 

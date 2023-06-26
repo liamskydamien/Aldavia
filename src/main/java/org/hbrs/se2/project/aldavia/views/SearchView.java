@@ -19,18 +19,15 @@ import java.util.List;
 @CssImport("./styles/views/main/main-view.css")
 public class SearchView extends VerticalLayout {
 
-    private TextField searchField = new TextField();
-    private Button searchButton = new Button("Search");
+    private final TextField searchField = new TextField();
+    private final Button searchButton = new Button("Search");
 
-    private SearchComponent searchComponent;
-
-    private List<StellenanzeigeDTO> stellenanzeigeList;
-    private VerticalLayout gridVertical;
+    private final SearchComponent searchComponent;
 
 
     public SearchView(SearchControl searchControl) {
         searchComponent = new SearchComponent(searchControl);
-        gridVertical = new VerticalLayout();
+        VerticalLayout gridVertical = new VerticalLayout();
         this.addClassName("search-view");
         add(gridVertical);
         gridVertical.add(setUpUI());
@@ -38,7 +35,7 @@ public class SearchView extends VerticalLayout {
         setId("main-view");
         setBackgroundImage();
 
-        stellenanzeigeList = searchControl.getAllStellenanzeigen();
+        List<StellenanzeigeDTO> stellenanzeigeList = searchControl.getAllStellenanzeigen();
         if (stellenanzeigeList != null) {
             gridVertical.add(searchComponent);
         }

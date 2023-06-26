@@ -32,6 +32,9 @@ import static org.mockito.Mockito.*;
 @Transactional
 public class StellenanzeigenServiceTest {
 
+    public static final String ALDAVIA = "Aldavia";
+    public static final String VOLLZEIT = "Vollzeit";
+    public static final String FESTANSTELLUNG = "Festanstellung";
     private StellenanzeigenService stellenanzeigenService;
 
     @Mock
@@ -61,7 +64,7 @@ public class StellenanzeigenServiceTest {
                 .build();
 
         UnternehmenProfileDTO unternehmenProfileDTO = UnternehmenProfileDTO.builder()
-                .username("Aldavia")
+                .username(ALDAVIA)
                 .build();
 
         StellenanzeigeDTO stellenanzeigeDTO = StellenanzeigeDTO.builder()
@@ -70,9 +73,9 @@ public class StellenanzeigenServiceTest {
                 .start(LocalDate.now())
                 .ende(LocalDate.now().plusDays(10))
                 .bezahlung("1000")
-                .beschaeftigungsumfang("Vollzeit")
+                .beschaeftigungsumfang(VOLLZEIT)
                 .taetigkeitsfelder(List.of(taetigkeitsfeldDTO))
-                .beschaeftigungsverhaeltnis("Festanstellung")
+                .beschaeftigungsverhaeltnis(FESTANSTELLUNG)
                 .unternehmen(unternehmenProfileDTO)
                 .id(1)
                 .build();
@@ -82,9 +85,9 @@ public class StellenanzeigenServiceTest {
                 .build();
 
         Unternehmen unternehmen = Unternehmen.builder()
-                .name("Aldavia")
+                .name(ALDAVIA)
                 .user(User.builder()
-                        .userid("Aldavia")
+                        .userid(ALDAVIA)
                         .build())
                 .build();
 
@@ -94,9 +97,9 @@ public class StellenanzeigenServiceTest {
                 .start(LocalDate.now())
                 .ende(LocalDate.now().plusDays(10))
                 .bezahlung("1000")
-                .beschaeftigungsumfang("Vollzeit")
+                .beschaeftigungsumfang(VOLLZEIT)
                 .taetigkeitsfelder(List.of(taetigkeitsfeld))
-                .beschaeftigungsverhaeltnis("Festanstellung")
+                .beschaeftigungsverhaeltnis(FESTANSTELLUNG)
                 .id(1)
                 .unternehmen_stellenanzeigen(unternehmen)
                 .build();
@@ -107,9 +110,9 @@ public class StellenanzeigenServiceTest {
                 .start(LocalDate.now())
                 .ende(LocalDate.now().plusDays(10))
                 .bezahlung("1000")
-                .beschaeftigungsumfang("Vollzeit")
+                .beschaeftigungsumfang(VOLLZEIT)
                 .taetigkeitsfelder(new ArrayList<>())
-                .beschaeftigungsverhaeltnis("Festanstellung")
+                .beschaeftigungsverhaeltnis(FESTANSTELLUNG)
                 .id(1)
                 .unternehmen_stellenanzeigen(unternehmen)
                 .build();

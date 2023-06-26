@@ -1,7 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
@@ -17,16 +15,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
-import org.springframework.stereotype.Component;
 
 public class BewerbungErstellenComponent extends Dialog {
 
     private final BewerbungsControl bewerbungsControl;
 
-    private String studentUsername;
-    private StellenanzeigeDTO stellenanzeigeDTO;
+    private final String studentUsername;
+    private final StellenanzeigeDTO stellenanzeigeDTO;
 
-    private TextArea bewerbungsTextfield = new TextArea("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
+    private final TextArea bewerbungsTextfield = new TextArea("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
     public BewerbungErstellenComponent(BewerbungsControl bewerbungsControl, StellenanzeigeDTO stellenanzeigeDTO, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
@@ -65,9 +62,7 @@ public class BewerbungErstellenComponent extends Dialog {
 
     private Button createAbbruchButton(){
         Button abbruchButton = new Button("Abbrechen");
-        abbruchButton.addClickListener(e -> {
-            this.close();
-        });
+        abbruchButton.addClickListener(e -> this.close());
         return abbruchButton;
     }
 

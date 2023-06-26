@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class StudentProfileControlTest {
+    public static final String RANDOM_123 = "random123";
     @Mock
     private StudentService studentService;
 
@@ -160,7 +161,7 @@ public class StudentProfileControlTest {
                 .build();
 
         //Test Exception
-        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(),"random123"));
+        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(), RANDOM_123));
 
         // Mock the behavior of getStudentProfile(username) method
         given(studentService.getStudent(userId)).willReturn(student);
@@ -171,7 +172,7 @@ public class StudentProfileControlTest {
 
         verify(studentService, times(1)).createOrUpdateStudent(student);
         verify(studentService, times(3)).getStudent(userId);
-        verify(studentService, times(1)).getStudent("random123");
+        verify(studentService, times(1)).getStudent(RANDOM_123);
         verifyNoMoreInteractions(studentService);
     }
 
@@ -190,7 +191,7 @@ public class StudentProfileControlTest {
                 .build();
 
         //Test Exception
-        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(),"random123"));
+        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(), RANDOM_123));
 
         // Mock the behavior of getStudentProfile(username) method
         given(studentService.getStudent(userId)).willReturn(student);
@@ -203,7 +204,7 @@ public class StudentProfileControlTest {
 
         verify(studentService, times(1)).createOrUpdateStudent(student);
         verify(studentService, times(3)).getStudent(userId);
-        verify(studentService, times(1)).getStudent("random123");
+        verify(studentService, times(1)).getStudent(RANDOM_123);
         verifyNoMoreInteractions(studentService);
     }
 }
