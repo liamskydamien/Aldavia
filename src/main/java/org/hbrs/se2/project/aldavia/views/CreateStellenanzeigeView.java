@@ -64,6 +64,7 @@ public class CreateStellenanzeigeView extends VerticalLayout {
     private Button saveStellenanzeigeButton() {
         Button addStellenanzeige = new Button("Erstellen");
         addStellenanzeige.addClassName("addStellenanzeigeButton");
+        addStellenanzeige.addClassName("editSaveButton");
         addStellenanzeige.addClickListener(e -> {
             StellenanzeigeDTO neueStellenanzeige = new StellenanzeigeDTO();
             neueStellenanzeige.setBezeichnung(addStellenanzeigeFormComponent.getBezeichnung().getValue());

@@ -93,8 +93,13 @@ public class SearchComponent extends VerticalLayout {
         H2 header = new H2("Stellenanzeigen");
         //Erstellen des Filters für Arbeitsverhaletnis
         selectJob.setLabel("Filter nach Arbeitsverhältnis");
-        selectJob.setItems("Alle", "Praktikum", "Festanstellung", "Werkstudent", "Teilzeit");
-        selectJob.setValue("Alle");
+        selectJob.setItems(Globals.Beschaefting.ALLE
+                , Globals.Beschaefting.PRAKTIKUM
+                , Globals.Beschaefting.FESTANSTELLUNG
+                , Globals.Beschaefting.WERKSTUDENT
+                , Globals.Beschaefting.TEILZEIT
+                ,Globals.Beschaefting.VOLLZEIT);
+        selectJob.setValue(Globals.Beschaefting.ALLE);
 
         selectRecommendet.setLabel("Sortiere nach Empfehlung");
         selectRecommendet.setItems("Empfohlen", NICHT_SORTIEREN);
@@ -144,22 +149,14 @@ public class SearchComponent extends VerticalLayout {
             selectRecommendet.addValueChangeListener(e -> {
 
                 if (selectRecommendet.getValue().equals("Empfohlen")) {
-                    if (selectedAnzeigen.size() > 0) {
-                        for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                            selectedAnzeigen.remove(i);
-                        }
-                    }
-                    for (StellenanzeigeDTO dto : recommendetStellenanzeigen) {
-                        selectedAnzeigen.add(dto);
-                    }
                     displayStellenanzeigen.removeAll();
-                    createCard(selectedAnzeigen);
+                    createCard(recommendetStellenanzeigen);
                     remove(displayStellenanzeigen);
                     add(displayStellenanzeigen);
 
                 }
                 if (selectRecommendet.getValue().equals(NICHT_SORTIEREN)) {
-                    selectJob.setValue("Alle");
+                    createAll();
                 }
 
             });
@@ -172,16 +169,7 @@ public class SearchComponent extends VerticalLayout {
 
         selectJob.addValueChangeListener(e -> {
             if (selectJob.getValue().equals("Alle")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    selectedAnzeigen.add(dto);
-                }
-                createCard(stellenanzeigeList);
+                createAll();
             } else if (selectJob.getValue().equals("Praktikum")) {
                 List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"praktikum");
                 createCard(listNeu);
@@ -382,5 +370,20 @@ public class SearchComponent extends VerticalLayout {
         }
         return listNeu;
     }
+
+    private void createAll() {
+        displayStellenanzeigen.removeAll();
+        if (selectedAnzeigen.size() > 0) {
+            for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                selectedAnzeigen.remove(i);
+            }
+        }
+        for (StellenanzeigeDTO dto : stellenanzeigeList) {
+            selectedAnzeigen.add(dto);
+        }
+        createCard(stellenanzeigeList);
+    }
+
+
 
 }

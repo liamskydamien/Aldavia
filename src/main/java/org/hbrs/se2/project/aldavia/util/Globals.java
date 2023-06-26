@@ -25,6 +25,16 @@ public class Globals {
         public static final String LOGIN_VIEW = "login";
         public static final String MAIN_VIEW = "";
     }
+    public static class Beschaefting{
+        private Beschaefting(){}
+        public static final String ALLE = "Alle";
+        public static final String PRAKTIKUM = "Praktikum";
+        public static final String FESTANSTELLUNG = "Festanstellung";
+        public static final String WERKSTUDENT = "Werkstudent";
+        public static final String TEILZEIT = "Teilzeit";
+        public static final String VOLLZEIT = "Vollzeit";
+
+    }
     public static class Roles {
 
         private Roles() {
