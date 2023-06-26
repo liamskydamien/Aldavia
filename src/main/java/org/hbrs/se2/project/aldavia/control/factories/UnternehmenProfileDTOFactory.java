@@ -81,7 +81,12 @@ public class UnternehmenProfileDTOFactory {
 
     private Set<AdresseDTO> createAdresseList(Unternehmen unternehmen) {
         if(unternehmen.getAdressen() != null && !unternehmen.getAdressen().isEmpty()){
-            return unternehmen.getAdressen().stream().map(adressenDTOFactory::createAdressenDTO).collect(Collectors.toSet());
+            Set<AdresseDTO> adressenDTOs = new HashSet<>();
+            for (Adresse adresse : unternehmen.getAdressen()) {
+                AdresseDTO adresseDTO = adressenDTOFactory.createAdressenDTO(adresse);
+                adressenDTOs.add(adresseDTO);
+            }
+            return adressenDTOs;
         }
         return new HashSet<>();
 

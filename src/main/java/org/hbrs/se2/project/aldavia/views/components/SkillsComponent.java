@@ -64,7 +64,7 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         //Header
         TextField addSkillField = new TextField();
         addSkillField.addClassName("add-Skill-Field");
-        addSkillField.setPlaceholder("Füge neue Kenntnisse hinzu.");
+        addSkillField.setPlaceholder("Neue Kenntnisse");
         addSkillField.setClearButtonVisible(true);
         addSkillsArea.add(addSkillField);
 
@@ -122,23 +122,26 @@ public class SkillsComponent extends VerticalLayout implements ProfileComponent{
         displaySkill.removeAll();
         skillFields.clear();
 
-        for(KenntnisDTO k: kenntnisDTOS){
-            TextField skill = new TextField();
-            skill.setValue(k.getName());
-            skill.addClassName("Skill");
+        if(mode.equals(Globals.ProfileViewMode.EDIT)) {
+            for (KenntnisDTO k : kenntnisDTOS) {
+                TextField skill = new TextField();
+                skill.setValue(k.getName());
+                skill.addClassName("Skill");
 
-            // Store this TextField in the map
-            skillFields.put(k, skill);
-
-            if (mode.equals("edit")) {
+                // Store this TextField in the map
+                skillFields.put(k, skill);
                 skill.setSuffixComponent(deleteSkillButton(k));
                 skill.setReadOnly(false);
-            } else if (mode.equals("view")) {
-                skill.setReadOnly(true);
+                displaySkill.add(skill);
             }
-
-            displaySkill.add(skill);
+        } else if(mode.equals(Globals.ProfileViewMode.VIEW)) {
+            for (KenntnisDTO k : kenntnisDTOS) {
+                Span skill = new Span(k.getName());
+                skill.getElement().getThemeList().add("badge pill");
+                displaySkill.add(skill);
+            }
         }
+
     }
 
     private Button deleteSkillButton(KenntnisDTO kenntnis){

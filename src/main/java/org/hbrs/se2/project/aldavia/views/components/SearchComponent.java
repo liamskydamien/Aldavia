@@ -113,7 +113,7 @@ public class SearchComponent extends VerticalLayout {
         profileImg.setHeight("50px");
 
         profileImg.addClickListener(e -> {
-            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE);
+            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE_VIEW);
 
         });
 
@@ -143,9 +143,13 @@ public class SearchComponent extends VerticalLayout {
         String institutionName = stellenanzeigeDTO.getUnternehmen().getName();
         String institutionId = stellenanzeigeDTO.getUnternehmen().getUsername();
         institution.setText(institutionName);
-        institution.setHref(Globals.Pages.NOT_LOGIN_COMPANY_VIEW +"/"+ institutionId);
+        if(UI.getCurrent() != null && UI.getCurrent().getSession() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) != null){
+            institution.setHref(Globals.Pages.COMPANY_PROFILE_VIEW +"/"+ institutionId);
+        } else {
+            institution.setHref(Globals.Pages.NOT_LOGIN_COMPANY_VIEW +"/"+ institutionId);
+        }
+
         institution.setTarget("_blank");
-        //ToDO: Profilbild es Unternehmens hinzufügen
 
         // Beschaeftigungsverhaeltnis
         Span beschaeftigungsverhaeltnis = new Span(stellenanzeigeDTO.getBeschaeftigungsverhaeltnis());

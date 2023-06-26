@@ -39,6 +39,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         this.studentProfileDTO = studentProfileDTO;
         spracheList = studentProfileDTO.getSprachen();
         displayLanguage = new Div();
+        displayLanguage.setWidthFull();
         languageID = 0;
         addLanguage = new Button();
         languageLevelDropDown = new ComboBox<>();
@@ -95,13 +96,17 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     }
     private VerticalLayout createAddLanguageArea() {
         addLanguageArea = new VerticalLayout();
+        addLanguageArea.addClassName("add-skills-area");
 
         //Header
+        HorizontalLayout addLanguageHeader = new HorizontalLayout();
         TextField addLanguageField = new TextField();
         addLanguageField.addClassName("add-Skill-Field");
-        addLanguageField.setPlaceholder("Füge neue Kenntnisse hinzu.");
+        addLanguageField.setPlaceholder("Neue Sprache");
         addLanguageField.setClearButtonVisible(true);
-        addLanguageArea.add(addLanguageField);
+        addLanguageHeader.add(addLanguageField);
+        addLanguageHeader.add(addLanguageButton(addLanguageField,languageLevelDropDown));
+        addLanguageArea.add(addLanguageHeader);
 
         //Sprachlevel
         HorizontalLayout addLanguageLevel = new HorizontalLayout();
@@ -114,7 +119,6 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
                                Globals.LanguageLevels.C2,
                                Globals.LanguageLevels.MOTHER_TONGUE);
         addLanguageLevel.add(languageLevelDropDown);
-        addLanguageLevel.add(addLanguageButton(addLanguageField,languageLevelDropDown));
         addLanguageArea.add(addLanguageLevel);
 
 
@@ -125,7 +129,14 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
     private Button addLanguageButton(TextField addLanguageField, ComboBox<String> languageLevelDropDown) {
         addLanguage.setIcon(new Icon("lumo", "plus"));
         addLanguage.addClickListener(event -> {
-            if(spracheList.size()<11) {
+            if(addLanguageField.isEmpty() && languageLevelDropDown.isEmpty()){
+                Notification.show("Bitte füge die Sprache und das Sprachlevel hinzu.");
+            } else if (addLanguageField.isEmpty() && !languageLevelDropDown.isEmpty()) {
+                Notification.show("Bitte füge die Sprache hinzu.");
+            } else if (addLanguageField.isEmpty() && languageLevelDropDown.isEmpty()) {
+                Notification.show("Bitte füge das Sprachlevel hinzu.");
+
+            } else if(spracheList.size()<11) {
                 if (!addLanguageField.getValue().isEmpty()) {
                     SpracheDTO newSkill = new SpracheDTO(addLanguageField.getValue(),languageLevelDropDown.getValue(),languageID);
                     languageID++;
@@ -157,17 +168,24 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
         HorizontalLayout languageCapsulLayout = new HorizontalLayout();
         languageCapsulLayout.addClassName("language-Capsul-Layout");
 
-        VerticalLayout languageCapsulLayoutLeft = new VerticalLayout();
-        languageCapsulLayoutLeft.addClassName("language-Capsul-Layout-Left");
 
+        Div languageDiv = new Div();
+        languageDiv.addClassName("language-Capsul-Layout-Left-Div");
         Span language = new Span(s.getName());
         language.addClassName("language-Capsul-Text");
-        Span languageLevel = new Span(s.getLevel());
-        languageLevel.addClassName("language-Capsul-Text");
+        languageDiv.add(language);
 
-        languageCapsulLayoutLeft.add(language);
-        languageCapsulLayoutLeft.add(languageLevel);
-        languageCapsulLayout.add(languageCapsulLayoutLeft);
+        Div languageLevelDiv = new Div();
+        languageLevelDiv.addClassName("language-Capsul-Layout-Level-Div");
+        Span languageLevel = new Span(s.getLevel());
+        languageLevel.addClassName("language-Capsul-Text-Level");
+        languageLevelDiv.add(languageLevel);
+
+        Div capsulDiv = new Div();
+        capsulDiv.addClassName("language-Capsul-Div");
+        capsulDiv.add(languageDiv,languageLevelDiv);
+
+        languageCapsulLayout.add(capsulDiv);
 
         if (mode.equals(Globals.ProfileViewMode.EDIT)) {
             languageCapsulLayout.add(deleteLanguageButton(s));

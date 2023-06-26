@@ -43,6 +43,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
     private LanguageComponent languageComponent;
     private QualificationComponent qualificationComponent;
     private EditAndSaveProfileButton editAndSaveProfileButton;
+    private InterestComponent interestComponent;
     private String url;
     private boolean isUser = true;
 
@@ -111,6 +112,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         skillsComponent.switchEditMode();
         languageComponent.switchEditMode();
         qualificationComponent.switchEditMode();
+        interestComponent.switchEditMode();
 
     }
 
@@ -123,6 +125,7 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         skillsComponent.switchViewMode(getCurrentUserName());
         languageComponent.switchViewMode(getCurrentUserName());
         qualificationComponent.switchViewMode(getCurrentUserName());
+        interestComponent.switchViewMode(getCurrentUserName());
     }
 
     private HorizontalLayout createBottomLayout(){
@@ -137,24 +140,15 @@ public class StudentProfileView extends VerticalLayout implements HasUrlParamete
         aboutStudentComponent = new AboutStudentComponent(studentProfileDTO,studentProfileControl);
         skillsComponent = new SkillsComponent(studentProfileDTO,studentProfileControl);
         languageComponent = new LanguageComponent(studentProfileDTO,studentProfileControl);
+        interestComponent = new InterestComponent(studentProfileDTO,studentProfileControl);
         VerticalLayout leftLayout = new VerticalLayout();
         leftLayout.addClassName("left");
         leftLayout.add(aboutStudentComponent);
         leftLayout.add(skillsComponent);
         leftLayout.add(languageComponent);
+        leftLayout.add(interestComponent);
         return leftLayout;
     }
-
-
-
-    /*private HorizontalLayout createInteressenLayout(){
-        HorizontalLayout interessenLayout = new HorizontalLayout();
-        interessenLayout.addClassName("interessen");
-        for (TaetigkeitsfeldDTO taetigkeitsfeldDTO : studentProfileDTO.getTaetigkeitsfelder()){
-            interessenLayout.add(new Label(taetigkeitsfeldDTO.getName()));
-        }
-        return interessenLayout;
-    }*/
 
 
     private VerticalLayout createQualifikationsLayout(){

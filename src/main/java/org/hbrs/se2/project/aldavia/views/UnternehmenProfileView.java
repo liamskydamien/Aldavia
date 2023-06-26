@@ -121,19 +121,6 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
 
     }
 
-    public Adresse reverseInput(String adresseString) {
-        String[] split = adresseString.split(" ");
-        Adresse adresseDelete = Adresse.builder()
-                .strasse(split[0])
-                .hausnummer(split[1])
-                .plz(split[2])
-                .ort(split[3])
-                .land(split[4])
-                .build();
-
-        return adresseDelete;
-
-    }
     private void switchToEditMode(){
         editAndSaveProfileButtonComapany.setEditButtonVisible(false);
         editAndSaveProfileButtonComapany.setSaveButtonVisible(true);
@@ -142,6 +129,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
         aboutCompany.switchEditMode();
         ansprechPartnerComponent.switchEditMode();
         adressenComponent.switchEditMode();
+        stellenanzeigeComponent.switchEditMode();
     }
 
     private void switchToViewMode() throws PersistenceException, ProfileException {
@@ -152,6 +140,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
         aboutCompany.switchViewMode(getCurrentUserName());
         ansprechPartnerComponent.switchViewMode(getCurrentUserName());
         adressenComponent.switchViewMode(getCurrentUserName());
+        stellenanzeigeComponent.switchViewMode(getCurrentUserName());
     }
 
     @Transactional
@@ -160,7 +149,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
         layout.addClassName("bottom-layout");
         layout.add(createAboutAnsprechpartnerAdressenLayout());
 
-        stellenanzeigeComponent = new StellenanzeigeComponent(unternehmenProfileDTO, unternehmenProfileControl);
+        stellenanzeigeComponent = new StellenanzeigeComponent(unternehmenProfileDTO, unternehmenProfileControl,url);
         layout.add(stellenanzeigeComponent);
         return layout;
     }
