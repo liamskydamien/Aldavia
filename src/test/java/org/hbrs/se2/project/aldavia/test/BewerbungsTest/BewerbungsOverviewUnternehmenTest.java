@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 public class BewerbungsOverviewUnternehmenTest {
 
-    private static final String TEST = "testvalue";
+    private static final String TEST = "test";
     @Mock
     private UnternehmenService unternehmenServiceMock;
 
@@ -33,69 +34,10 @@ public class BewerbungsOverviewUnternehmenTest {
     @Test
     public void testGetBewerbungenStellenanzeige() throws ProfileException {
         // Setup
-        String userid = "testBewerbung";
 
-        User user = User.builder()
-                .userid(userid)
-                .build();
-
-        Unternehmen unternehmen = Unternehmen.builder()
-                .id(1)
-                .name(TEST)
-                .user(user)
-                .build();
-
-        Stellenanzeige stellenanzeige = Stellenanzeige.builder()
-                .id(1)
-                .beschreibung(TEST)
-                .unternehmen_stellenanzeigen(unternehmen)
-                .bezeichnung(TEST)
-                .taetigkeitsfelder(new ArrayList<>())
-                .start(null)
-                .ende(null)
-                .erstellungsdatum(null)
-                .bezahlung(TEST)
-                .beschaeftigungsverhaeltnis(TEST)
-                .bezeichnung(TEST)
-                .build();
-
-
-        Student student = Student.builder()
-                .user(user)
-                .matrikelNummer("123456")
-                .id(1)
-                .studiengang(TEST)
-                .vorname(TEST)
-                .nachname(TEST)
-                .build();
-
-        Bewerbung bewerbung = Bewerbung.builder()
-                .id(1)
-                .student(student)
-                .datum(null)
-                .status(null)
-                .student(student)
-                .stellenanzeige(stellenanzeige)
-                .bewerbungsSchreiben(TEST)
-                .build();
-
-        Bewerbung bewerbung2 = Bewerbung.builder()
-                .id(2)
-                .student(null)
-                .datum(null)
-                .status(null)
-                .student(student)
-                .stellenanzeige(stellenanzeige)
-                .bewerbungsSchreiben(TEST)
-                .build();
-
-        List<Bewerbung> bewerbungen = new ArrayList<>();
-        bewerbungen.add(bewerbung);
-        bewerbungen.add(bewerbung2);
-        student.setBewerbungen(bewerbungen);
-        stellenanzeige.addBewerbung(bewerbung);
-        stellenanzeige.addBewerbung(bewerbung2);
-        unternehmen.addStellenanzeige(stellenanzeige);
+        HashMap<String, Object> map = BewerbungsSetup.setup();
+        String userid = (String) map.get("userid");
+        Unternehmen unternehmen = (Unternehmen) map.get("unternehmen");
 
         given(unternehmenServiceMock.getUnternehmen(userid)).willReturn(unternehmen);
 
