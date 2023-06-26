@@ -12,7 +12,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
@@ -22,9 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -338,6 +334,7 @@ public class SearchComponent extends VerticalLayout {
         profilBildAndName.setWidth("100%");
         profilBildAndName.setHeight("100%");
         UnternehmenProfileDTO unternehmenProfileDTO = stellenanzeigeDTO.getUnternehmen();
+        logger.warn("Unternehmen: " + unternehmenProfileDTO.getProfilbild());
         profileImg = UIUtils.getImage(unternehmenProfileDTO.getProfilbild());
         profileImg.setWidth("50px");
         profileImg.setHeight("50px");

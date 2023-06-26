@@ -70,6 +70,7 @@ public class UnternehmenProfileControl {
         unternehmen.setWebseite(dto.getWebside());
         unternehmen.setAp_nachname(dto.getAp_nachname());
         unternehmen.setAp_vorname(dto.getAp_vorname());
+        unternehmen.getUser().setProfilePicture(dto.getProfilePicture());
         logger.info("Sucessfully updatet the information of the company: " + unternehmen.getName());
 
         //Remove Attributes

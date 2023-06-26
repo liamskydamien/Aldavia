@@ -93,7 +93,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
 
 
     @Autowired
-    public UnternehmenProfileView(UnternehmenProfileControl control) throws ProfileException {
+    public UnternehmenProfileView(UnternehmenProfileControl control) {
         this.unternehmenProfileControl = control;
 
     }
