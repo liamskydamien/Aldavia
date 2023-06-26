@@ -71,47 +71,63 @@ public class AdresseServiceTest {
     }
 
     @Test
-    void testRemoveUnternehmenFromAdresse() {
-        AdresseDTO adresseDTO = new AdresseDTO();
-        adresseDTO.setId(1);
-
+    public void testAddUnternehmenToBuiltAdresse() {
+        User user = new User();
         Unternehmen unternehmen = new Unternehmen();
+        unternehmen.setUser(user);
 
-        Adresse existingAdresse = new Adresse();
-        existingAdresse.setId(1);
+        AdresseDTO adresseDTO = AdresseDTO.builder()
+                .strasse("Efertzstraße")
+                .hausnummer("15")
+                .plz("53122")
+                .ort("Bonn")
+                .land("Deutschland")
+                .build();
+        Adresse builtAdresse = Adresse.builder()
+                .id(adresseDTO.getId())
+                .strasse(adresseDTO.getStrasse())
+                .hausnummer(adresseDTO.getHausnummer())
+                .plz(adresseDTO.getPlz())
+                .ort(adresseDTO.getOrt())
+                .land(adresseDTO.getLand())
+                .build();
 
-        when(adresseRepository.findById(1)).thenReturn(Optional.of(existingAdresse));
-        when(adresseRepository.save(any(Adresse.class))).thenReturn(existingAdresse);
+        given(adresseRepository.findById(adresseDTO.getId())).willReturn(Optional.empty());
+        given(adresseRepository.save(any(Adresse.class))).willReturn(builtAdresse);
 
-        Adresse result = adresseService.removeUnternehmenFromAdresse(adresseDTO, unternehmen);
+        Adresse result = adresseService.addUnternehmenToAdresse(adresseDTO, unternehmen);
 
         // Verify that the repository's findById method was called
-        verify(adresseRepository, times(1)).findById(1);
-
-        // Verify that the repository's save method was called
-        verify(adresseRepository, times(1)).save(existingAdresse);
+        verify(adresseRepository, times(1)).findById(adresseDTO.getId());
 
         // Verify the returned result
-        assertEquals(existingAdresse, result);
+        assertEquals(builtAdresse, result);
     }
 
     @Test
-    void testRemoveUnternehmenFromAdresse_AddressNotFound() {
-        AdresseDTO adresseDTO = new AdresseDTO();
-        adresseDTO.setId(1);
+    void testRemoveUnternehmenFromAdresse() {
+        Adresse adresse = new Adresse();
 
         Unternehmen unternehmen = new Unternehmen();
 
-        when(adresseRepository.findById(1)).thenReturn(Optional.empty());
+        when(adresseRepository.findById(adresse.getId())).thenReturn(Optional.of(adresse));
 
-        // Use assertThrows to verify that the expected PersistenceException is thrown
-        assertThrows(PersistenceException.class, () -> adresseService.removeUnternehmenFromAdresse(adresseDTO, unternehmen));
+        adresseService.removeUnternehmenFromAdresse(adresse, unternehmen);
 
-        // Verify that the repository's findById method was called
-        verify(adresseRepository, times(1)).findById(1);
+        verify(adresseRepository, times(1)).delete(adresse);
+    }
 
-        // Verify that the repository's save method was not called
-        verify(adresseRepository, never()).save(any(Adresse.class));
+    @Test
+    void testRemoveUnternehmenFromAdresse_NotFound() {
+        Adresse adresse = new Adresse();
+
+        Unternehmen unternehmen = new Unternehmen();
+
+        when(adresseRepository.findById(adresse.getId())).thenReturn(Optional.empty());
+
+        assertThrows(PersistenceException.class, () -> adresseService.removeUnternehmenFromAdresse(adresse, unternehmen));
+
+        verify(adresseRepository, never()).delete(adresse);
     }
 
 }
