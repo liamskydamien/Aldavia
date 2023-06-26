@@ -43,37 +43,7 @@ public class SearchView extends VerticalLayout {
             gridVertical.add(searchComponent);
         }
 
-        /*
-        searchComponent = new SearchComponent(searchControl);
-        //HorizontalLayout grid = new HorizontalLayout();
-        VerticalLayout
-        //grid.setSizeFull();
-        Component ui = setUpUI();
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(new HorizontalLayout());
-        gridVertical.add(ui);
-        searchField.setWidth("100%");
-        gridVertical.setHeightFull();
-        gridVertical.setAlignItems(Alignment.STRETCH);
-        gridVertical.add(ui);
-        //grid.add(gridVertical);
-        //grid.setWidth("1800px");*/
-
-
-
         stellenanzeigeList = searchControl.getAllStellenanzeigen();
-        if (stellenanzeigeList != null) {
-            //grid.add(searchComponent);
-            //add(searchComponent);
-        }
-        //grid.setJustifyContentMode(JustifyContentMode.START);
-        //add(grid);
-
 
         searchField.addValueChangeListener(e -> {
             searchComponent.updateList(searchField.getValue());

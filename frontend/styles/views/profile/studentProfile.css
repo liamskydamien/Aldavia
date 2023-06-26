@@ -136,6 +136,9 @@ vaadin-text-field[readonly].first-name-and-last-name::part(input-field){
 }
 
 /*Edit Profile */
+.introductionLayout vaadin-text-area[readonly]::part(helper-text){
+    display: none;
+}
 .editSaveButton{
     margin: 30px 30px 0 0;
     background-color: transparent;
@@ -216,11 +219,29 @@ vaadin-email-field[invalid]::part(input-field)::after {
     margin-top: 10px;
 }
 
+/*----------------- Berufserfahrung*----------------------*/
+.qualificationCardLayout2 Span{
+    margin-top: 0 !important;
+}
+
+.qualificationCardLayout2{
+    border-left: 2px solid #73a7e8;
+    margin-bottom: 10px;
+}
+
+.qualificationCardUnten{
+    margin-left: 16px;
+}
+
 
 /*----------------- Kenntnisse*----------------------*/
 .add-skills-area vaadin-text-field::part(input-field){
     height: 40px;
     width: 200px;
+}
+.display-Skill Span{
+    margin-right: 5px;
+    margin-top: 5px;
 }
 
 .add-skills-area vaadin-button{
