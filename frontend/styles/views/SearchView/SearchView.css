@@ -5,3 +5,10 @@
     border-radius: 20px;
     margin-top: 30px !important;
 }
+
+.search-component{
+    width:80% !important;
+}
+.headCardLayout{
+    margin-left: 50px !important;
+}

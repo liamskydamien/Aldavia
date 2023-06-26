@@ -12,11 +12,9 @@ import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.views.components.AddStellenanzeigeFormComponent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Set;

@@ -25,16 +25,29 @@ public class SearchView extends VerticalLayout {
     private SearchComponent searchComponent;
 
     private List<StellenanzeigeDTO> stellenanzeigeList;
+    private VerticalLayout gridVertical;
 
 
     public SearchView(SearchControl searchControl) {
+        searchComponent = new SearchComponent(searchControl);
+        gridVertical = new VerticalLayout();
+        this.addClassName("search-view");
+        add(gridVertical);
+        gridVertical.add(setUpUI());
         searchButton.setId("search-button");
         setId("main-view");
         setBackgroundImage();
+
+        stellenanzeigeList = searchControl.getAllStellenanzeigen();
+        if (stellenanzeigeList != null) {
+            gridVertical.add(searchComponent);
+        }
+
+        /*
         searchComponent = new SearchComponent(searchControl);
-        HorizontalLayout grid = new HorizontalLayout();
-        VerticalLayout gridVertical = new VerticalLayout();
-        grid.setSizeFull();
+        //HorizontalLayout grid = new HorizontalLayout();
+        VerticalLayout
+        //grid.setSizeFull();
         Component ui = setUpUI();
         gridVertical.add(new HorizontalLayout());
         gridVertical.add(new HorizontalLayout());
@@ -47,17 +60,19 @@ public class SearchView extends VerticalLayout {
         searchField.setWidth("100%");
         gridVertical.setHeightFull();
         gridVertical.setAlignItems(Alignment.STRETCH);
-        grid.add(gridVertical);
-        grid.setWidth("1800px");
+        gridVertical.add(ui);
+        //grid.add(gridVertical);
+        //grid.setWidth("1800px");*/
 
 
 
         stellenanzeigeList = searchControl.getAllStellenanzeigen();
         if (stellenanzeigeList != null) {
-            grid.add(searchComponent);
+            //grid.add(searchComponent);
+            //add(searchComponent);
         }
-        grid.setJustifyContentMode(JustifyContentMode.START);
-        add(grid);
+        //grid.setJustifyContentMode(JustifyContentMode.START);
+        //add(grid);
 
 
         searchField.addValueChangeListener(e -> {
