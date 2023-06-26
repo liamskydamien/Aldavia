@@ -6,7 +6,7 @@ h2{
     margin: auto;
     width: 50%;
     padding: 10px;
-    background-color: #edf2fd;
+    background-color: #edf2fd  ;
 }
 
 .profile-wrapper
@@ -43,11 +43,10 @@ h2{
 }
 
 .introductionField{
-
-    width: 600px;
+    width: 700px;
     height: auto;
-    padding: 20px 100px 20px 150px;
-    margin-left: 13%;
+    padding: 20px 0 20px 150px !important;
+    margin-left: 15% !important;
     align-items: flex-start;
 }
 
@@ -256,6 +255,55 @@ vaadin-email-field[invalid]::part(input-field)::after {
 
 }
 
+/*----------------- Sprache*----------------------*/
+
+vaadin-combo-box-overlay::part(overlay){
+border-radius: 20px;
+}
+
+vaadin-combo-box::part(input-field){
+    border-radius: 20px !important;
+    background-color: #F44336;
+}
+
+
+.language-Capsul vaadin-button{
+    background-color: transparent;
+    border: none;
+    color: #1a73e8;
+    border-radius: 20px;
+}
+.language-Capsul-Text{
+    margin-left: 10px;
+    margin-right: 15px;
+    color: #1a73e8;
+
+}
+.language-Capsul-Div{
+    border-radius: 50px;
+    border: 2px solid #dbe7ff;
+    display: flex;
+    margin-bottom: 5px;
+}
+.language-Capsul-Text-Level{
+    font-size: medium;
+    font-weight: 400;
+}
+.language-Capsul-Layout-Left-Div{
+background-color: #dbe7ff;
+    min-width: 60px;
+    border-radius: 50px;
+
+}
+
+.language-Capsul-Layout-Level-Div{
+    margin-right: 15px;
+    margin-left: 10px;
+
+}
+.add-skills-area{
+    padding-left: 0;
+}
 /***************** Unternehmen *******************/
 .about-ansprechpartner-adressen{
     display: flex;
@@ -273,11 +321,12 @@ vaadin-email-field[invalid]::part(input-field)::after {
 }
 .about-company{
     position: relative;
-    width: 70% !important;
+    width: 100% !important;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: 30px;
 }
 
 /*Stellenanzeigen*/
@@ -296,6 +345,31 @@ vaadin-email-field[invalid]::part(input-field)::after {
 }
 .editAndDeleteStellenanzeigeArea{
     width: 100%;
+}
+
+.stellenanzeigenLayout{
+    margin-left: 0 !important;
+}
+
+:host([theme~="reverse"]) [part="toggle"] {
+    margin-left: 15px !important;
+}
+.stellenanzeigeInfoLeft vaadin-details-summary{
+    color: #1a73e8;
+}
+
+.about-ansprechpartner-adressen{
+    width: 75% !important;
+}
+.ansprechpartner-adressen{
+    width: 100% !important;
+}
+.edit-adresse-layout{
+    max-width: 700px !important;
+    display: flex;
+    flex-direction: column;
+
+
 }
 
 

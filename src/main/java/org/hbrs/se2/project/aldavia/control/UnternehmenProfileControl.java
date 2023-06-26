@@ -95,7 +95,7 @@ public class UnternehmenProfileControl {
 
        // Remove Adressen
         for (Adresse adresse : adresseSet){
-            unternehmen.removeAdresse(adresse);
+            adresseService.removeUnternehmenFromAdresse(adresse, unternehmen);
         }
     }
 

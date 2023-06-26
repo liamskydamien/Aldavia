@@ -42,8 +42,10 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         this.unternehmenProfileControl = unternehmenProfileControl;
         this.unternehmenProfileDTO = unternehmenProfileDTO;
         adressen = unternehmenProfileDTO.getAdressen();
+        System.out.println("SIZE"+adressen.size());
         displayAdressen = new Div();
         editLayout = new FlexLayout();
+        editLayout.addClassName("edit-adresse-layout");
         displayAdressen.addClassName("display-adressen");
         this.addClassName("adressen-component");
         this.addClassName("card");
@@ -80,6 +82,7 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         if (unternehmenProfileDTO.getAdressen().isEmpty()) {
             noAdressen.setVisible(true);
         } else {
+            noAdressen.setVisible(false);
            renderAdressen(Globals.ProfileViewMode.VIEW);
         }
 

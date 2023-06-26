@@ -19,8 +19,8 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
 }
-vaadin-app-layout::part(navbar) {
-
+vaadin-app-layout {
+background-color: white!important;
 }
 
 #top-right-layout{

@@ -1,8 +1,10 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.UI;
+
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.details.Details;
+import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -20,7 +22,6 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
-import org.hbrs.se2.project.aldavia.entities.Bewerbung;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,15 +41,16 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
     private H2 title;
     private Span noStellenanzeige;
     private Dialog addDialog;
+    private Button addStellenanzeige;
+    private String url;
 
-    public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
+    public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl, String url) {
         this.unternehmenProfileControl = unternehmenProfileControl;
         this.unternehmenProfileDTO = unternehmenProfileDTO;
+        this.url = url;
         stellenanzeigeSet = unternehmenProfileDTO.getStellenanzeigen();
         displayStellenanzeige = new Div();
         displayStellenanzeige.addClassName("displayStellenanzeige");
-        createStellenanzeige = new HorizontalLayout();
-        createStellenanzeige.addClassName("createStellenanzeige" );
         noStellenanzeige = new Span("Keine Stellenanzeige vorhanden");
         noStellenanzeige.addClassName("noStellenanzeige");
         noStellenanzeige.addClassName("card");
@@ -60,24 +62,18 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
 
     public void setUpUI(){
         title = new H2("Stellenanzeige");
-        createStellenanzeige.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        createStellenanzeige.add(addStellenanzeige());
-        createStellenanzeige.setWidthFull();
-        displayStellenanzeige.setWidthFull();
         add(title);
-        add(createStellenanzeige);
+        add(createAddstellenanzeigeArea());
         add(displayStellenanzeige);
+        displayStellenanzeige.setWidthFull();
         displayStellenanzeige.add(noStellenanzeige);
-        createStellenanzeige.setVisible(true);
         updateView();
     }
 
 
     public void updateView(){
 
-        System.out.println(stellenanzeigeSet);
-        System.out.println(stellenanzeigeSet.isEmpty());
-        System.out.println(stellenanzeigeSet.size());
+        createStellenanzeige.setVisible(true);
         if(stellenanzeigeSet.isEmpty()) {
             displayStellenanzeige.add(noStellenanzeige);
             noStellenanzeige.setVisible(true);
@@ -85,14 +81,15 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
             noStellenanzeige.setWidthFull();
         }else{
             noStellenanzeige.setVisible(false);
+            createStellenanzeige.setVisible(true);
             getAndCreateStellenanzeige(Globals.ProfileViewMode.VIEW);
         }
 
     }
 
     private void updateEdit(){
-        createStellenanzeige.setVisible(true);
         noStellenanzeige.setVisible(false);
+        createStellenanzeige.setVisible(false);
         getAndCreateStellenanzeige(Globals.ProfileViewMode.EDIT);
     }
 
@@ -131,14 +128,13 @@ public void getAndCreateStellenanzeige(String mode){
         HorizontalLayout editAndDeleteStellenanzeigeArea = new HorizontalLayout();
         editAndDeleteStellenanzeigeArea.addClassName("editAndDeleteStellenanzeigeArea");
         editAndDeleteStellenanzeigeArea.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        editAndDeleteStellenanzeigeArea.setVisible(false);
         editAndDeleteStellenanzeigeArea.setWidthFull();
         editAndDeleteStellenanzeigeArea.add(deleteStellenanzeige(stellenanzeige));
-        stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea(stellenanzeige));
+        stellenanzeigenLayout.add(editAndDeleteStellenanzeigeArea);
 
         if(mode.equals(Globals.ProfileViewMode.EDIT)) {
             editAndDeleteStellenanzeigeArea.setVisible(true);
-        } else {
+        } else if(mode.equals(Globals.ProfileViewMode.VIEW)) {
             editAndDeleteStellenanzeigeArea.setVisible(false);
         }
 
@@ -154,12 +150,18 @@ public void getAndCreateStellenanzeige(String mode){
         stellenanzeigeTitel.addClassName("stellenanzeigeTitel");
         Span stellenanzeigeBeschaeftigungsverheltnis = new Span(stellenanzeige.getBeschaeftigungsverhaeltnis());
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
-        List<TaetigkeitsfeldDTO> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
-        stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis, renderTaetigkeit(taetigkeitsfeldList));
 
-        VerticalLayout stellenanzeigeInfoRight = new VerticalLayout();
+        Details beschreibugnDetails = new Details("Stellenbeschreibung", new Span(stellenanzeige.getBeschreibung()));
+        beschreibugnDetails.addThemeVariants(DetailsVariant.REVERSE);
+
+
+        List<TaetigkeitsfeldDTO> taetigkeitsfeldList = stellenanzeige.getTaetigkeitsfelder();
+        stellenanzeigeInfoLeft.add(stellenanzeigeTitel, stellenanzeigeBeschaeftigungsverheltnis,beschreibugnDetails, renderTaetigkeit(taetigkeitsfeldList));
+
+        HorizontalLayout stellenanzeigeInfoRight = new HorizontalLayout();
         stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
-        stellenanzeigeInfoRight.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        stellenanzeigeInfoRight.setJustifyContentMode(JustifyContentMode.END);
+        stellenanzeigeInfoRight.setWidthFull();
         Span stellenanzeigeDatum = new Span(stellenanzeige.getErstellungsdatum().toString());
         stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
         stellenanzeigeInfoRight.add(stellenanzeigeDatum);
@@ -197,14 +199,18 @@ public void getAndCreateStellenanzeige(String mode){
         return taetigkeitLayout;
     }
 
-    private HorizontalLayout editAndDeleteStellenanzeigeArea(StellenanzeigeDTO stellenanzeigen) {
-        HorizontalLayout editAndDeleteStellenanzeigeArea = new HorizontalLayout();
-        editAndDeleteStellenanzeigeArea.addClassName("editAndDeleteStellenanzeigeArea");
-        editAndDeleteStellenanzeigeArea.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-        editAndDeleteStellenanzeigeArea.add(deleteStellenanzeige(stellenanzeigen));
-        return editAndDeleteStellenanzeigeArea;
+    private HorizontalLayout createAddstellenanzeigeArea(){
+        createStellenanzeige = new HorizontalLayout();
+        createStellenanzeige.addClassName("createStellenanzeige" );
+        createStellenanzeige.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        createStellenanzeige.setWidthFull();
+        if(getUserOverUrl().equals(getCurrentUserName())){
+            createStellenanzeige.add(addStellenanzeige());
+        }
 
+        return createStellenanzeige;
     }
+
 
     private Button deleteStellenanzeige(StellenanzeigeDTO stellenanzeige){
         Button deleteStellenanzeige = new Button(new Icon("lumo", "cross"));
@@ -219,7 +225,7 @@ public void getAndCreateStellenanzeige(String mode){
 
 
     private Button addStellenanzeige(){
-        Button addStellenanzeige = new Button("Erstellen");
+        addStellenanzeige = new Button("Erstellen");
         addStellenanzeige.setIcon(new Icon("lumo", "plus"));
         addStellenanzeige.addClassName("addStellenanzeige");
         addStellenanzeige.addClickListener(e -> {
@@ -306,12 +312,10 @@ public void getAndCreateStellenanzeige(String mode){
         return addStellenanzeigeButton;
     }
 
-    private Button bewerbungAnsehenButton(StellenanzeigeDTO stellenanzeige) {
-        Button bewerbungAnsehenButton = new Button("Bewerbungen ansehen");
-        bewerbungAnsehenButton.addClassName("bewerbungAnsehenButton");
-        bewerbungAnsehenButton.addClickListener(e -> {
-            UI.getCurrent().navigate(Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW + "/" + stellenanzeige.getId());
-        });
-        return bewerbungAnsehenButton;
+    private String getUserOverUrl(){
+        String[] split = url.split("/");
+        String user = split[split.length-1];
+        return user;
     }
+
 }

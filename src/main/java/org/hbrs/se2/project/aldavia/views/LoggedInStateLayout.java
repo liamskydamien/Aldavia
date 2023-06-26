@@ -111,7 +111,11 @@ public class LoggedInStateLayout extends AppLayout {
     private Tab createBewerbungsOverviewUnternehmenView(){
         final Tab tab = new Tab();
         RouterLink routerLink = new RouterLink(null, BewerbungsOverviewUnternehmenView.class);
-        routerLink.add(new Icon(VaadinIcon.BRIEFCASE), new Text("Bewerbungen"));
+        Image iconBriefcase = new Image("icons/briefcase.png", "Briefcase");
+        iconBriefcase.addClassName("iconProfile");
+        iconBriefcase.setHeight("24px");
+        iconBriefcase.setWidth("24px");
+        routerLink.add(iconBriefcase, new Text("Bewerbungen"));
         tab.add(routerLink);
         return tab;
     }

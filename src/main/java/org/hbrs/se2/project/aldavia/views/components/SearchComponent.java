@@ -5,10 +5,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -52,15 +50,14 @@ public class SearchComponent extends VerticalLayout {
     TextField unternehmenSearch = new TextField();
 
 
-
-
-
     public SearchComponent(SearchControl searchControl) {
         this.searchControl = searchControl;
         this.bewerbungsControl = searchControl.getBewerbungsControl();
         displayStellenanzeigen = new VerticalLayout();
 
         stellenanzeigeList = searchControl.getAllStellenanzeigen();
+
+        this.addClassName("search-component");
 
         setUpUI(stellenanzeigeList);
 
@@ -88,7 +85,7 @@ public class SearchComponent extends VerticalLayout {
 
     private VerticalLayout createHeadCard(){
         VerticalLayout headCard = new VerticalLayout();
-        headCard.addClassName("card");
+        headCard.addClassName("headCardLayout");
         headCard.setWidthFull();
         HorizontalLayout headerLayout = new HorizontalLayout();
         unternehmenSearch.setPlaceholder("Aldavia GmbH");
@@ -358,7 +355,6 @@ public class SearchComponent extends VerticalLayout {
         }
         profileImg.setWidth("50px");
         profileImg.setHeight("50px");
-
         profileImg.addClickListener(e -> {
             UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE);
 
@@ -367,7 +363,13 @@ public class SearchComponent extends VerticalLayout {
         Span name = new Span(unternehmenProfileDTO.getName());
         Anchor anchor = new Anchor();
         anchor.add(name);
-        anchor.setHref(Globals.Pages.COMPANY_PROFILE + "/" + unternehmenProfileDTO.getUsername());
+        if(UI.getCurrent() != null && UI.getCurrent().getSession() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) != null ) {
+
+            anchor.setHref(Globals.Pages.COMPANY_PROFILE_VIEW + "/" + unternehmenProfileDTO.getUsername());
+        } else {
+            anchor.setHref(Globals.Pages.NOT_LOGIN_COMPANY_VIEW + "/" + unternehmenProfileDTO.getUsername());
+        }
+
         profilBildAndName.add(anchor);
         return profilBildAndName;
     }

@@ -38,13 +38,12 @@ public class AdresseService {
     }
 
     @SneakyThrows
-    public Adresse removeUnternehmenFromAdresse(AdresseDTO adresseDTO, Unternehmen unternehmen){
+    public void removeUnternehmenFromAdresse(Adresse adresse, Unternehmen unternehmen){
         logger.info("Removing student from Adresse");
-        Optional<Adresse> awaitAdresse = addressenRepository.findById(adresseDTO.getId());
+        Optional<Adresse> awaitAdresse = addressenRepository.findById(adresse.getId());
         if(awaitAdresse.isPresent()){
-            Adresse adresse = awaitAdresse.get();
-            adresse = adresse.removeUnternehmen(unternehmen);
-            return addressenRepository.save(adresse);
+            adresse.removeUnternehmen(unternehmen);
+            addressenRepository.delete(adresse);
         }
         else {
             throw new PersistenceException(PersistenceException.PersistenceExceptionType.SPRACHE_NOT_FOUND, "Adresse not found");

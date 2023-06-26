@@ -54,7 +54,7 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
     private void setUpUI(){
         displayTaetigkeit.setClassName("display-Skill");
 
-        add(new H2("Kenntnisse"));
+        add(new H2("Interessen"));
 
         addTaetigkeitArea.addClassName("add-skills-area");
         add(addTaetigkeitArea);
@@ -63,7 +63,7 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
         //Header
         TextField addSkillField = new TextField();
         addSkillField.addClassName("add-Skill-Field");
-        addSkillField.setPlaceholder("Füge neue Interessen hinzu.");
+        addSkillField.setPlaceholder("Neue Interessen");
         addSkillField.setClearButtonVisible(true);
         addTaetigkeitArea.add(addSkillField);
 
@@ -121,22 +121,28 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
         displayTaetigkeit.removeAll();
         taetigkeitsFields.clear();
 
-        for(TaetigkeitsfeldDTO t: taetigkeitsfelder){
-            TextField skill = new TextField();
-            skill.setValue(t.getName());
-            skill.addClassName("Skill");
+        if(mode.equals(Globals.ProfileViewMode.EDIT)) {
+            for (TaetigkeitsfeldDTO t : taetigkeitsfelder) {
+                TextField skill = new TextField();
+                skill.setValue(t.getName());
+                skill.addClassName("Skill");
 
-            // Store this TextField in the map
-            taetigkeitsFields.put(t, skill);
-
-            if (mode.equals("edit")) {
+                // Store this TextField in the map
+                taetigkeitsFields.put(t, skill);
                 skill.setSuffixComponent(deleteTaetigkeitButton(t));
                 skill.setReadOnly(false);
-            } else if (mode.equals("view")) {
-                skill.setReadOnly(true);
+                displayTaetigkeit.add(skill);
             }
+        } else if(mode.equals(Globals.ProfileViewMode.VIEW)) {
+            for (TaetigkeitsfeldDTO t : taetigkeitsfelder) {
+                Span skill = new Span(t.getName());
+                skill.getElement().getThemeList().add("badge pill");
+                displayTaetigkeit.add(skill);
 
-            displayTaetigkeit.add(skill);
+        }
+
+
+
         }
     }
 
