@@ -201,19 +201,7 @@ public class SearchComponent extends VerticalLayout {
                 add(displayStellenanzeigen);
 
             }else if (selectJob.getValue().equals("Teilzeit")) {
-                displayStellenanzeigen.removeAll();
-                if (selectedAnzeigen.size() > 0) {
-                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                        selectedAnzeigen.remove(i);
-                    }
-                }
-                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-                for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("teilzeit")) {
-                        listNeu.add(dto);
-                        selectedAnzeigen.add(dto);
-                    }
-                }
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"teilzeit");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
