@@ -12,7 +12,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
-import org.hbrs.se2.project.aldavia.dtos.KenntnisDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
@@ -28,13 +27,13 @@ public class InterestComponent extends VerticalLayout implements ProfileComponen
 
     private final StudentProfileDTO studentProfileDTO;
 
-    private List<TaetigkeitsfeldDTO> taetigkeitsfelder;
+    private final List<TaetigkeitsfeldDTO> taetigkeitsfelder;
 
     private final Div displayTaetigkeit;
 
     private final HorizontalLayout addTaetigkeitArea;
-    private Span noTaetigkeit;
-    private Map<TaetigkeitsfeldDTO, TextField> taetigkeitsFields = new HashMap<>();
+    private final Span noTaetigkeit;
+    private final Map<TaetigkeitsfeldDTO, TextField> taetigkeitsFields = new HashMap<>();
 
     public InterestComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl ) {
         this.studentProfileDTO = studentProfileDTO;
