@@ -5,13 +5,9 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -20,6 +16,8 @@ import org.hbrs.se2.project.aldavia.control.AuthorizationControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UserDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+
+import java.util.Objects;
 
 
 @CssImport("./styles/views/navbar/navbar.css")
@@ -210,7 +208,7 @@ public class LoggedInStateLayout extends AppLayout {
             return false;
         }
         authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(getCurrentUser(), Globals.Roles.STUDENT);
+        return authorizationControl.isUserInRole(Objects.requireNonNull(getCurrentUser()), Globals.Roles.STUDENT);
     }
 
     public static boolean checkIfUserIsUnternehmen(){
@@ -218,32 +216,22 @@ public class LoggedInStateLayout extends AppLayout {
             return false;
         }
         authorizationControl = new AuthorizationControl();
-        return authorizationControl.isUserInRole(getCurrentUser(), Globals.Roles.UNTERNEHMEN);
+        return authorizationControl.isUserInRole(Objects.requireNonNull(getCurrentUser()), Globals.Roles.UNTERNEHMEN);
     }
 
     private void logoutUser() {
-        UI ui = this.getUI().get();
+        UI ui = this.getUI().orElseThrow();
         ui.getSession().close();
         ui.getPage().setLocation("/");
     }
 
 
     public static String getCurrentUserName() {
-        if (getCurrentUser() != null) {
-            return getCurrentUser().getUserid() != null ? getCurrentUser().getUserid() : "";
+        UserDTO userDTO = getCurrentUser();
+        if (userDTO != null) {
+            return userDTO.getUserid() != null ? userDTO.getUserid() : "";
         }
-        return null;
+        return "";
     }
-
-    /*private String getCurrentStudentName() throws ProfileException {
-        Student student = studentControl.getStudent(getCurrentUserName());
-        return student.getVorname();
-    }*/
-
-
-
-
-
-
 
 }

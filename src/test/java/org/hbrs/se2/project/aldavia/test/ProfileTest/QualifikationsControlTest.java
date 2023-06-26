@@ -43,7 +43,7 @@ public class QualifikationsControlTest {
     private QualifikationsDTO qualifikationDTO;
     private Qualifikation qualifikationTest;
 
-    private Logger logger = LoggerFactory.getLogger(QualifikationsControlTest.class);
+    private final Logger logger = LoggerFactory.getLogger(QualifikationsControlTest.class);
 
     @BeforeEach
     public void setUp(){
@@ -108,7 +108,7 @@ public class QualifikationsControlTest {
 
         qualifikationControl.addUpdateQualifikation(qualifikationDTO, student);
 
-        qualifikationTest = qualifikationsRepository.findById(qualifikationTest.getId()).get();
+        qualifikationTest = qualifikationsRepository.findById(qualifikationTest.getId()).orElseThrow();
         assertEquals(qualifikationDTO.getBezeichnung(), qualifikationTest.getBezeichnung());
         assertEquals(qualifikationTest.getStudent().getId(), student.getId());
     }
@@ -117,33 +117,10 @@ public class QualifikationsControlTest {
     public void test_AddQualificationWithNewQualifikation() throws PersistenceException {
         qualifikationTest = qualifikationControl.addUpdateQualifikation(qualifikationDTO, student);
 
-        qualifikationTest = qualifikationsRepository.findById(qualifikationTest.getId()).get();
+        qualifikationTest = qualifikationsRepository.findById(qualifikationTest.getId()).orElseThrow();
         assertEquals(qualifikationDTO.getBezeichnung(), qualifikationTest.getBezeichnung());
         assertEquals(qualifikationTest.getStudent().getId(), student.getId());
     }
-
-    /*@Test
-    public void test_RemoveQualifikationWithPresentQualifikation() throws PersistenceException {
-        qualifikationTest = Qualifikation.builder()
-                .bezeichnung(qualifikationDTO.getBezeichnung())
-                .bereich(qualifikationDTO.getBereich())
-                .von(qualifikationDTO.getVon())
-                .bis(qualifikationDTO.getBis())
-                .institution(qualifikationDTO.getInstitution())
-                .beschaftigungsverhaltnis(qualifikationDTO.getBeschaeftigungsart())
-                .beschreibung(qualifikationDTO.getBeschreibung())
-                .build();
-
-        qualifikationTest.setStudent(student);
-
-        qualifikationTest = qualifikationsRepository.save(qualifikationTest);
-
-        qualifikationDTO.setId(qualifikationTest.getId());
-
-        qualifikationControl.removeQualifikation(qualifikationDTO);
-
-        assertFalse(qualifikationsRepository.existsById(qualifikationDTO.getId()), "Qualifikation wurde nicht gelöscht " + qualifikationDTO.getId());
-    }*/
 
     @Test
     public void test_RemoveQualificationWithNewQualifikation(){

@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -9,7 +8,6 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,35 +17,35 @@ import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
-import org.hbrs.se2.project.aldavia.entities.Adresse;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
 public class AdressenComponent extends VerticalLayout implements ProfileComponent{
     private final UnternehmenProfileControl unternehmenProfileControl;
-    private UnternehmenProfileDTO unternehmenProfileDTO;
-    private Set<AdresseDTO> adressen;
-    private TextField strasse;
-    private TextField hausnr;
-    private TextField plz;
-    private TextField ort;
-    private TextField land;
-    private Span noAdressen;
-    private Div displayAdressen;
-    private FormLayout editLayout;
+    private final UnternehmenProfileDTO unternehmenProfileDTO;
+    private final Set<AdresseDTO> adressen;
+    private final TextField strasse;
+    private final TextField hausnr;
+    private final TextField plz;
+    private final TextField ort;
+    private final TextField land;
+    private final Span noAdressen;
+    private final Div displayAdressen;
+    private final FormLayout editLayout;
     private Dialog popup;
-    private Button add;
-    private HorizontalLayout editArea;
+    private final HorizontalLayout editArea;
+
+    private final Logger logger = LoggerFactory.getLogger(AdressenComponent.class);
 
     public AdressenComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
         this.unternehmenProfileDTO = unternehmenProfileDTO;
         adressen = unternehmenProfileDTO.getAdressen();
-        System.out.println("SIZE Adresse DTO"+adressen.size());
+        logger.info("SIZE Adresse DTO"+adressen.size());
         displayAdressen = new Div();
         editArea = new HorizontalLayout();
         editLayout = new FormLayout();
@@ -123,7 +121,7 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
     }
 
     private Button add(){
-        add = new Button("Hinzufügen", new Icon("lumo", "plus"));
+        Button add = new Button("Hinzufügen", new Icon("lumo", "plus"));
         add.setClassName("editSaveButton");
         add.addClickListener(e -> {
             addAdressenPopup();
@@ -165,7 +163,7 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
         HorizontalLayout adressDisplay = new HorizontalLayout();
         adressDisplay.addClassName("adress-display");
         if (mode.equals(Globals.ProfileViewMode.EDIT)) {
-            System.out.println("edited gerade");
+           logger.info("edited gerade");
             HorizontalLayout buttons = new HorizontalLayout();
             buttons.setJustifyContentMode(JustifyContentMode.END);
             buttons.setWidthFull();
@@ -207,7 +205,7 @@ public class AdressenComponent extends VerticalLayout implements ProfileComponen
                         .build();
             }
             adressen.add(adresseNeu);
-            System.out.println("SIZE Adresse DTO Nach save "+ adressen.size());
+            logger.info("SIZE Adresse DTO Nach save "+ adressen.size());
             strasse.clear();
             hausnr.clear();
             plz.clear();

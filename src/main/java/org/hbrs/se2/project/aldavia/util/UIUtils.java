@@ -11,6 +11,9 @@ import java.io.InputStream;
 
 public class UIUtils {
 
+    private UIUtils() {
+    }
+
     public static String[] splitOnSpaces(String input) {
         return input.split(" ");
     }

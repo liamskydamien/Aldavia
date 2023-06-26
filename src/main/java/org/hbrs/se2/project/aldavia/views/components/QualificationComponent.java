@@ -19,8 +19,9 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.QualifikationsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @CssImport("./styles/views/profile/studentProfile.css")
@@ -29,7 +30,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private final StudentProfileControl studentProfileControl;
 
     private final StudentProfileDTO studentProfileDTO;
-    private List<QualifikationsDTO> qualificationList;
+    private final List<QualifikationsDTO> qualificationList;
     private final TextField bezeichnung;
     private final TextField beschreibung;
     private final TextField bereich;
@@ -39,10 +40,12 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private final DatePicker bis;
     private Dialog addQualificationPopUp;
     private Dialog editQualificationPopUp;
-    private Button addQualification;
-    private Span noQualifications;
-    private VerticalLayout displayQualifications;
-    HorizontalLayout addQualificationLayout;
+    private final Button addQualification;
+    private final Span noQualifications;
+    private final VerticalLayout displayQualifications;
+    private final HorizontalLayout addQualificationLayout;
+
+    private final Logger logger = LoggerFactory.getLogger(QualificationComponent.class);
 
 
     //TODO: add delete button
@@ -211,8 +214,8 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     }
 
     private void getQulifikationAndCreateCard(String mode){
-        System.out.println("In render");
-        System.out.println("Listen Anzahl: " + qualificationList.size());
+       logger.info("In render");
+        logger.info("Listen Anzahl: " + qualificationList.size());
         displayQualifications.removeAll();
         for(QualifikationsDTO qualifikationsDTO : qualificationList){
             createQualificationCard(qualifikationsDTO, mode);
@@ -230,24 +233,24 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         qualificationCardHeader.addClassName("qualificationCardHeader");
         qualificationCardHeader.setJustifyContentMode(JustifyContentMode.BETWEEN);
         qualificationCardHeader.setWidthFull();
-        H3 bezeichnung = new H3(qualifikationsDTO.getBezeichnung());
+        H3 bezeichnungHeader = new H3(qualifikationsDTO.getBezeichnung());
         Span vonBis = new Span(qualifikationsDTO.getVon() + " - " + qualifikationsDTO.getBis());
-        qualificationCardHeader.add(bezeichnung, vonBis);
+        qualificationCardHeader.add(bezeichnungHeader, vonBis);
 
 
         // Institution
-        Span institution = new Span(qualifikationsDTO.getInstitution());
-        institution.addClassName("institution");
+        Span institutionName = new Span(qualifikationsDTO.getInstitution());
+        institutionName.addClassName("institution");
 
         // Beschaeftigungsart
-        Span beschaeftigungsart = new Span(qualifikationsDTO.getBeschaeftigungsart());
+        Span beschaeftigungsartName = new Span(qualifikationsDTO.getBeschaeftigungsart());
 
         // Beschreibung
-        Span beschreibung = new Span(qualifikationsDTO.getBeschreibung());
+        Span beschreibungName = new Span(qualifikationsDTO.getBeschreibung());
         beschreibung.addClassName("beschreibung");
 
         // Bereich
-        Span bereich = new Span(qualifikationsDTO.getBereich());
+        Span bereichName = new Span(qualifikationsDTO.getBereich());
         bereich.addClassName("bereich");
 
         if(mode.equals(Globals.ProfileViewMode.EDIT)){
@@ -258,7 +261,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
             qualificationCardLayout.add(editButtonLayout);
         }
 
-        qualificationCardLayout.add(qualificationCardHeader, institution, beschaeftigungsart, bereich, beschreibung);
+        qualificationCardLayout.add(qualificationCardHeader, institutionName, beschaeftigungsartName, bereichName, beschreibungName);
         displayQualifications.add(qualificationCardLayout);
     }
 
