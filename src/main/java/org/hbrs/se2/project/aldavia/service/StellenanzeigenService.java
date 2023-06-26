@@ -93,7 +93,7 @@ public class StellenanzeigenService {
             logger.info("Removing Unternehmen from Stellenanzeige: " + stellenanzeige);
             Unternehmen unternehmen = stellenanzeige.getUnternehmen_stellenanzeigen();
             unternehmen.removeStellenanzeige(stellenanzeige);
-            stellenanzeigenRepository.save(stellenanzeige);
+            logger.info("Stellenanzeige removed from Unternehmen: " + unternehmen);
             stellenanzeigenRepository.delete(stellenanzeige);
             logger.info("Stellenanzeige deleted: " + stellenanzeige);
         } catch (Exception e) {

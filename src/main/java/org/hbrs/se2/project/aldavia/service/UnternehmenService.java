@@ -14,12 +14,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class UnternehmenService {
+
+    private final EntityManager entityManager;
+
 
     private final UnternehmenRepository unternehmenRepository;
 
@@ -119,13 +123,12 @@ public class UnternehmenService {
         logger.info("Creating or Updating Unternehmen " + unternehmen.getUser().getUserid());
         try{
             unternehmenRepository.save(unternehmen);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error while creating or updating Unternehmen " + unternehmen.getUser().getUserid());
+            e.printStackTrace();
             throw new ProfileException("Unternehmen konnte nicht geupdatet werden", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
-
-
     }
 
-    }
+}
 

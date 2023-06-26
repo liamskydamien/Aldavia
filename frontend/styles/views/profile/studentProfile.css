@@ -2,6 +2,10 @@ h2{
     margin: 15px 0 0 0;
 }
 
+vaadin-dialog-overlay::part(backdrop){
+    filter: blur(10px);
+}
+
 .profile-view{
     margin: auto;
     width: 50%;
@@ -350,6 +354,9 @@ background-color: #dbe7ff;
 .stellenanzeigenLayout{
     margin-left: 0 !important;
 }
+.noStellenanzeige{
+    padding-right: 500px !important;
+}
 
 :host([theme~="reverse"]) [part="toggle"] {
     margin-left: 15px !important;
@@ -358,19 +365,85 @@ background-color: #dbe7ff;
     color: #1a73e8;
 }
 
+vaadin-dialog-overlay::part(overlay){
+    border-radius: 25px;
+}
+
+.dialogLayout h1{
+    margin-top: 0 !important;
+}
+.addStellenanzeigeButton{
+    margin-right: 50px !important;
+    margin-bottom: 50px !important;
+}
+
+.stellenanzeigeTitel{
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.stellenanzeigeInfoLeft Span{
+    margin-top: 0 !important;
+}
+.beschreibung{
+    max-width: 700px !important;
+    word-wrap: break-word;
+}
+
+.stellenanzeigeDatum{
+    margin-top: 10px !important;
+    margin-right: 50px !important;
+}
+/*----------------- Ansprechpartner + Adressen*----------------------*/
+.about-company vaadin-text-area::part(input-field){
+    border-radius: 30px;
+    min-height: 100px;
+    padding: 20px;
+}
+.about-company vaadin-text-area[readonly]::part(input-field){
+    border: 1px solid #1a73e8;
+    border-radius: 25px;
+    min-height: 100px;
+
+}
+.about-company vaadin-text-area[readonly]::part(helper-text){
+    display: none;
+}
+
+
 .about-ansprechpartner-adressen{
     width: 75% !important;
+}
+
+.ansprechpartner{
+    font-size: 1rem;
 }
 .ansprechpartner-adressen{
     width: 100% !important;
 }
 .edit-adresse-layout{
-    max-width: 700px !important;
-    display: flex;
-    flex-direction: column;
 
+    display: flex;
+    width: 600px !important;
+    height: 400px !important;
 
 }
+.saveAdressButton{
+    width: 50px !important;
+    height: 40px;
+}
+.display-adressen{
+    width: 100% !important;
+}
+.adress-display{
+    width: 100% !important;
+
+}
+.adress-display span{
+    margin-top: 0 !important;
+    margin-bottom: 10px;
+}
+
+
 
 
 

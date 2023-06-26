@@ -39,25 +39,12 @@ public class UnternehmenProfileControl {
             Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
             logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
             UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
+            System.out.println(("Adressen size: " + dto.getAdressen().size()));
             return dto;
         } catch (Exception e) {
             throw e;
         }
     }
-
-    /*public void createAndUpdateUnternehmenProfile(UnternehmenProfileDTO dto, String userName) throws ProfileException {
-        logger.info("Getting Company from Database to update its information: " + userName);
-        Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
-        logger.info("Found a company to the userName with the following username: " + unternehmen.getUser().getUserid());
-        try {
-            unternehmenService.updateUnternehmenInformation(unternehmen,dto);
-
-        } catch(Exception e) {
-            throw e;
-        }
-        logger.info("Sucessfully updatet the information of the company: " + unternehmen.getName());
-    }
-*/
 
     public void createAndUpdateUnternehmenProfile(UnternehmenProfileDTO dto, String userName) throws ProfileException {
         logger.info("Getting Company from Database to update its information: " + userName);
@@ -92,12 +79,16 @@ public class UnternehmenProfileControl {
         //Remove Stellenanzeigen
         for(Stellenanzeige stellenanzeige : stellenanzeigeSet){
             stellenanzeigenService.deleteStellenanzeige(stellenanzeige);
+            unternehmen.getStellenanzeigen().remove(stellenanzeige);
         }
 
        // Remove Adressen
         for (Adresse adresse : adresseSet){
+            unternehmen.removeAdresse(adresse);
             adresseService.removeUnternehmenFromAdresse(adresse, unternehmen);
         }
+
+        System.out.println("Adressen size Nach löschen: " + unternehmen.getAdressen().size());
     }
 
     @SneakyThrows
@@ -114,6 +105,7 @@ public class UnternehmenProfileControl {
             for (AdresseDTO adresse : dto.getAdressen()){
                 adresseService.addUnternehmenToAdresse(adresse, unternehmen);
             }
+            System.out.println("Adressen size Nach hinzufügen: " + unternehmen.getAdressen().size());
         }
     }
 }

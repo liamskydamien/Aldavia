@@ -65,12 +65,17 @@ public class Adresse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
-        return id == adresse.id && Objects.equals(strasse, adresse.strasse) && Objects.equals(hausnummer, adresse.hausnummer) && Objects.equals(plz, adresse.plz) && Objects.equals(ort, adresse.ort) && Objects.equals(land, adresse.land);
+        return id == adresse.id
+                && Objects.equals(strasse, adresse.strasse)
+                && Objects.equals(hausnummer, adresse.hausnummer)
+                && Objects.equals(plz, adresse.plz)
+                && Objects.equals(ort, adresse.ort)
+                && Objects.equals(land, adresse.land);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, strasse, hausnummer, plz, ort, land, unternehmen);
+        return Objects.hash(id, strasse, hausnummer, plz, ort, land);
     }
 
     @Override
