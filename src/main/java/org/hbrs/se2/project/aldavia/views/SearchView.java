@@ -32,7 +32,7 @@ public class SearchView extends VerticalLayout {
         add(gridVertical);
         gridVertical.add(setUpUI());
         searchButton.setId("search-button");
-        setId("main-view");
+        addClassName("main-view");
         setBackgroundImage();
 
         List<StellenanzeigeDTO> stellenanzeigeList = searchControl.getAllStellenanzeigen();

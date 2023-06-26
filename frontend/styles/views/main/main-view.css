@@ -1,4 +1,4 @@
-#main-view{
+.main-view{
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -40,3 +40,18 @@
 }
 
 /***************+**** Company Main ******************/
+.main-view .addStellenanzeigeButton{
+    background-color: #1a73e8;
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 500;
+    border-radius: 40px;
+    padding: 10px 20px 10px 20px;
+    border: 1px solid #1a73e8;
+    height: 71px;
+    width: 150px;
+    line-height: 20px;
+    cursor: pointer;
+    margin-left: 100px;
+    margin-top: 400px;
+}
