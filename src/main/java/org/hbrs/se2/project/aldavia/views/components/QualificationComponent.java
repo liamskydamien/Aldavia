@@ -5,6 +5,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
@@ -12,6 +13,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
@@ -32,7 +34,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private final StudentProfileDTO studentProfileDTO;
     private final List<QualifikationsDTO> qualificationList;
     private final TextField bezeichnung;
-    private final TextField beschreibung;
+    private final TextArea beschreibung;
     private final TextField bereich;
     private final TextField institution;
     private final TextField beschaeftigungsart;
@@ -47,15 +49,13 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
 
     private final Logger logger = LoggerFactory.getLogger(QualificationComponent.class);
 
-
-    //TODO: add delete button
     public QualificationComponent(StudentProfileControl studentProfileControl, StudentProfileDTO studentProfileDTO) {
         this.studentProfileControl = studentProfileControl;
         this.studentProfileDTO = studentProfileDTO;
         qualificationList = studentProfileDTO.getQualifikationen();
 
         bezeichnung = new TextField("Bezeichnung");
-        beschreibung = new TextField("Beschreibung");
+        beschreibung = new TextArea("Beschreibung");
         bereich = new TextField("Bereich");
         institution = new TextField("Institution");
         von = new DatePicker("Von");
@@ -70,6 +70,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         addQualification = new Button("Hinzufügen");
         addQualification.setIcon(new Icon("lumo", "plus"));
         addQualification.addClassName("addQualificationButton");
+        addQualification.addClassName("editSaveButton");
 
         addQualificationLayout = new HorizontalLayout();
 
@@ -86,6 +87,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
 
         addQualificationLayout.addClassName("addQualificationLayout");
         addQualificationLayout.add(addQualificationButton());
+        addQualificationLayout.setWidthFull();
         addQualificationLayout.setJustifyContentMode(JustifyContentMode.END);
 
 
@@ -131,11 +133,14 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     }
 
     private void createAddQualificationPopUp() {
+        H2 header = new H2("Qualifikation hinzufügen");
         addQualificationPopUp = new Dialog();
         addQualificationPopUp.setModal(true);
         addQualificationPopUp.setCloseOnOutsideClick(false);
         addQualificationPopUp.setCloseOnEsc(true);
+        addQualificationPopUp.setWidth("75%");
 
+        addQualificationPopUp.add(header);
 
         // Form Layout
         FormLayout addQualificationForm = new FormLayout();
@@ -180,6 +185,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private Button saveButton() {
         Button saveButton = new Button("Speichern");
         saveButton.addClassName("saveButton");
+        saveButton.addClassName("editSaveButton");
         saveButton.addClickListener(e -> {
             createNewQalification();
             clearFields();
@@ -214,8 +220,6 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     }
 
     private void getQulifikationAndCreateCard(String mode){
-       logger.info("In render");
-        logger.info("Listen Anzahl: " + qualificationList.size());
         displayQualifications.removeAll();
         for(QualifikationsDTO qualifikationsDTO : qualificationList){
             createQualificationCard(qualifikationsDTO, mode);
@@ -225,18 +229,30 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     private void createQualificationCard(QualifikationsDTO qualifikationsDTO, String mode){
 
         VerticalLayout qualificationCardLayout = new VerticalLayout();
-        qualificationCardLayout.addClassName("qualificationCardLayout");
+        qualificationCardLayout.addClassName("qualificationCardLayout2");
         qualificationCardLayout.setWidthFull();
+
+        HorizontalLayout qualificationCardOben = new HorizontalLayout();
+        qualificationCardOben.addClassName("qualificationCardOben");
+        qualificationCardOben.setWidthFull();
+
+        HorizontalLayout qualificationCardUnten = new HorizontalLayout();
+        qualificationCardUnten.addClassName("qualificationCardUnten");
+        qualificationCardUnten.setWidthFull();
+
+        VerticalLayout qualificationCardLinks = new VerticalLayout();
+        qualificationCardLinks.addClassName("qualificationCardLinks");
+        qualificationCardLinks.setWidthFull();
+
 
         // Header(Bezeichnung und Von-Bis)
         FlexLayout qualificationCardHeader = new FlexLayout();
         qualificationCardHeader.addClassName("qualificationCardHeader");
-        qualificationCardHeader.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        qualificationCardHeader.setJustifyContentMode(JustifyContentMode.END);
         qualificationCardHeader.setWidthFull();
-        H3 bezeichnungHeader = new H3(qualifikationsDTO.getBezeichnung());
-        Span vonBis = new Span(qualifikationsDTO.getVon() + " - " + qualifikationsDTO.getBis());
-        qualificationCardHeader.add(bezeichnungHeader, vonBis);
-
+        H3 bezeichnung = new H3(qualifikationsDTO.getBezeichnung());
+        Span vonBis = new Span(qualifikationsDTO.getVon().getDayOfMonth()+"/" + qualifikationsDTO.getVon().getYear() + " - " + qualifikationsDTO.getBis().getDayOfMonth()+"/"+ qualifikationsDTO.getBis().getYear());
+        qualificationCardHeader.add(bezeichnung, vonBis);
 
         // Institution
         Span institutionName = new Span(qualifikationsDTO.getInstitution());
@@ -246,7 +262,8 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         Span beschaeftigungsartName = new Span(qualifikationsDTO.getBeschaeftigungsart());
 
         // Beschreibung
-        Span beschreibungName = new Span(qualifikationsDTO.getBeschreibung());
+        Div beschreibung = new Div();
+        beschreibung.setText(qualifikationsDTO.getBeschreibung());
         beschreibung.addClassName("beschreibung");
 
         // Bereich
@@ -258,10 +275,13 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
             editButtonLayout.setJustifyContentMode(JustifyContentMode.END);
             editButtonLayout.setWidthFull();
             editButtonLayout.add(editButton(qualifikationsDTO));
+            editButtonLayout.add(deleteQualification(qualifikationsDTO));
             qualificationCardLayout.add(editButtonLayout);
         }
-
-        qualificationCardLayout.add(qualificationCardHeader, institutionName, beschaeftigungsartName, bereichName, beschreibungName);
+        qualificationCardUnten.add(beschreibung);
+        qualificationCardLinks.add(bezeichnung,institution, beschaeftigungsart, bereich);
+        qualificationCardOben.add(qualificationCardLinks, qualificationCardHeader);
+        qualificationCardLayout.add(qualificationCardOben, qualificationCardUnten);
         displayQualifications.add(qualificationCardLayout);
     }
 
@@ -275,10 +295,14 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
     }
 
     private void createEditQualificationPopUp(QualifikationsDTO qualifikationsDTO){
+        H2 editQualificationHeader = new H2("Qualifikation bearbeiten");
         editQualificationPopUp = new Dialog();
         editQualificationPopUp.setModal(true);
         editQualificationPopUp.setCloseOnOutsideClick(false);
         editQualificationPopUp.setCloseOnEsc(true);
+        editQualificationPopUp.setWidth("75%");
+
+        editQualificationPopUp.add(editQualificationHeader);
 
         // Form Layout
         FormLayout editQualificationForm = new FormLayout();
@@ -350,5 +374,14 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
         institution.clear();
         von.clear();
         bis.clear();
+    }
+
+    private Button deleteQualification(QualifikationsDTO qualifikationsDTO){
+       Button deleteButton = new Button(new Icon("lumo", "cross"));
+         deleteButton.addClickListener(e -> {
+              qualificationList.remove(qualifikationsDTO);
+                getQulifikationAndCreateCard(Globals.ProfileViewMode.EDIT);
+         });
+         return deleteButton;
     }
 }

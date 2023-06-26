@@ -93,8 +93,13 @@ public class SearchComponent extends VerticalLayout {
         H2 header = new H2("Stellenanzeigen");
         //Erstellen des Filters für Arbeitsverhaletnis
         selectJob.setLabel("Filter nach Arbeitsverhältnis");
-        selectJob.setItems("Alle", "Praktikum", "Festanstellung", "Werkstudent", "Teilzeit");
-        selectJob.setValue("Alle");
+        selectJob.setItems(Globals.Beschaefting.ALLE
+                , Globals.Beschaefting.PRAKTIKUM
+                , Globals.Beschaefting.FESTANSTELLUNG
+                , Globals.Beschaefting.WERKSTUDENT
+                , Globals.Beschaefting.TEILZEIT
+                ,Globals.Beschaefting.VOLLZEIT);
+        selectJob.setValue(Globals.Beschaefting.ALLE);
 
         selectRecommendet.setLabel("Sortiere nach Empfehlung");
         selectRecommendet.setItems("Empfohlen", NICHT_SORTIEREN);

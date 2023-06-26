@@ -8,12 +8,14 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import lombok.Setter;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
+import org.hbrs.se2.project.aldavia.util.Globals;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +28,7 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
     private FormLayout formLayout;
     private TextField bezeichnung;
     private TextArea beschreibung;
-    private TextField beschaeftigungsverhaeltnis;
+    private Select<String> beschaeftigungsverhaeltnis;
     private DatePicker start;
     private DatePicker ende;
     private TextField bezahlung;
@@ -46,9 +48,10 @@ public class AddStellenanzeigeFormComponent extends VerticalLayout {
         beschreibung.setPlaceholder("Beschreibe die Stelelnanzeige...");
         beschreibung.setRequired(true);
         beschreibung.setRequiredIndicatorVisible(true);
-        beschaeftigungsverhaeltnis = new TextField("Beschäftigungsverhältnis");
+        beschaeftigungsverhaeltnis = new Select<>();
+        beschaeftigungsverhaeltnis.setLabel("Beschäftigungsverhältnis");
         beschaeftigungsverhaeltnis.setPlaceholder("Beschäftigungsverhältnis");
-        beschaeftigungsverhaeltnis.setRequired(true);
+        beschaeftigungsverhaeltnis.setItems(Globals.Beschaefting.PRAKTIKUM, Globals.Beschaefting.WERKSTUDENT, Globals.Beschaefting.VOLLZEIT, Globals.Beschaefting.TEILZEIT, Globals.Beschaefting.FESTANSTELLUNG);
         beschaeftigungsverhaeltnis.setRequiredIndicatorVisible(true);
         start = new DatePicker("Start");
         start.setRequired(true);

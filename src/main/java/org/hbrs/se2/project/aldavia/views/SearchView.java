@@ -40,7 +40,12 @@ public class SearchView extends VerticalLayout {
             gridVertical.add(searchComponent);
         }
 
-        searchField.addValueChangeListener(e -> searchComponent.updateList(searchField.getValue()));
+        stellenanzeigeList = searchControl.getAllStellenanzeigen();
+
+        searchField.addValueChangeListener(e -> {
+            searchComponent.updateList(searchField.getValue());
+
+        });
     }
 
     private Component setUpUI() {
