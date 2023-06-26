@@ -34,15 +34,10 @@ public class UnternehmenProfileControl {
 
 
     public UnternehmenProfileDTO getUnternehmenProfileDTO(String userName) throws ProfileException {
-        try {
-            logger.info("Getting Company from Database with username: " + userName);
-            Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
-            logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
-            UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
-            return dto;
-        } catch (Exception e) {
-            throw e;
-        }
+        logger.info("Getting Company from Database with username: " + userName);
+        Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
+        logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
+        return unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
     }
 
     public void createAndUpdateUnternehmenProfile(UnternehmenProfileDTO dto, String userName) throws ProfileException {

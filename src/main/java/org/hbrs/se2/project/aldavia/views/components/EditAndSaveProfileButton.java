@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-import java.util.EventListener;
 
 public class EditAndSaveProfileButton extends HorizontalLayout {
     Button editButton;

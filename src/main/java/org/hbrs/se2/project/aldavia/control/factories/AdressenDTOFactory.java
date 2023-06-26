@@ -1,13 +1,8 @@
 package org.hbrs.se2.project.aldavia.control.factories;
 
 import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
-import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.Adresse;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdressenDTOFactory {
     private static AdressenDTOFactory instance;

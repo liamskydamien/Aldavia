@@ -13,9 +13,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -23,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @Transactional
 public class BewerbungsOverviewStudentTest {
-    public static final String TEST = "test";
+
     private BewerbungsOverviewStudent bewerbungsOverviewStudent;
     @Mock
     private StudentService studentServiceMock;
@@ -38,7 +37,7 @@ public class BewerbungsOverviewStudentTest {
     public void testGetBewerbungen() throws ProfileException {
 
         // Setup
-        HashMap<String, Object> map = BewerbungsSetup.setup();
+        Map<String, Object> map = BewerbungsSetup.setup();
         String userid = (String) map.get("userid");
         Student student = (Student) map.get("student");
 

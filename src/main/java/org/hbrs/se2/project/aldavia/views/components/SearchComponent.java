@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -36,9 +35,9 @@ public class SearchComponent extends VerticalLayout {
 
     private final BewerbungsControl bewerbungsControl;
 
-    private List<StellenanzeigeDTO> stellenanzeigeList;
+    private final List<StellenanzeigeDTO> stellenanzeigeList;
 
-    private VerticalLayout displayStellenanzeigen;
+    private final VerticalLayout displayStellenanzeigen;
 
     private final Logger logger = LoggerFactory.getLogger(SearchComponent.class);
 

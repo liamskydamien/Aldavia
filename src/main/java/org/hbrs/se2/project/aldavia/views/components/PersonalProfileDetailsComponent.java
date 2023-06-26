@@ -251,8 +251,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         email.setReadOnly(true);
     }
 
-
-
     public void updateEditMode() {
         if(getUserOverUrl().equals(getCurrentUserName())) {
             if (checkIfUserIsStudent()) {
@@ -270,9 +268,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 updateEditModeCompany();
             }
         }
-
-
-
 
         //Profile Picture
         Icon profilePiceditIcon = new Icon("lumo","edit");
