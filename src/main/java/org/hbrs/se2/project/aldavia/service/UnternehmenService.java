@@ -3,6 +3,8 @@ package org.hbrs.se2.project.aldavia.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
+import org.hbrs.se2.project.aldavia.control.factories.StellenanzeigeDTOFactory;
+import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
 import org.hbrs.se2.project.aldavia.repository.UnternehmenRepository;
@@ -12,12 +14,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 @Transactional
 public class UnternehmenService {
+
 
     private final UnternehmenRepository unternehmenRepository;
 
@@ -114,6 +118,10 @@ public class UnternehmenService {
             logger.error("Error while creating or updating Unternehmen " + unternehmen.getUser().getUserid());
             throw new ProfileException("Unternehmen konnte nicht geupdatet werden", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
+    }
+
+    public void flush() {
+        unternehmenRepository.flush();
     }
 
 }

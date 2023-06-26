@@ -408,6 +408,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         unternehmenProfileDTO.setName(companyName.getValue());
         unternehmenProfileDTO.setWebside(website.getValue());
         unternehmenProfileDTO.setEmail(email.getValue());
+        System.out.println("Befire hinzufügen: "+unternehmenProfileDTO.getProfilePicture());
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
@@ -476,6 +477,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 studentProfileDTO.setProfilbild(uniqueFileName);
             } else if (checkIfUserIsUnternehmen()) {
                 unternehmenProfileDTO.setProfilbild(uniqueFileName);
+                System.out.println("View Bild" + unternehmenProfileDTO.getProfilbild());
             }
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){

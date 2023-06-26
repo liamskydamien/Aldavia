@@ -34,13 +34,16 @@ public class UnternehmenProfileControl {
 
 
     public UnternehmenProfileDTO getUnternehmenProfileDTO(String userName) throws ProfileException {
-        logger.info("Getting Company from Database with username: " + userName);
-        Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
-        logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
-        UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
-        int anzahlAdressen = dto.getAdressen() != null? dto.getAdressen().size() : 0;
-        logger.info(("Adressen size: " + anzahlAdressen));
-        return dto;
+        try {
+            logger.info("Getting Company from Database with username: " + userName);
+            Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
+            logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
+            UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
+            System.out.println(("Adressen size: " + dto.getAdressen().size()));
+            return dto;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public void createAndUpdateUnternehmenProfile(UnternehmenProfileDTO dto, String userName) throws ProfileException {
@@ -55,6 +58,8 @@ public class UnternehmenProfileControl {
         unternehmen.setAp_nachname(dto.getAp_nachname());
         unternehmen.setAp_vorname(dto.getAp_vorname());
         unternehmen.getUser().setProfilePicture(dto.getProfilePicture());
+        System.out.println("Profile Picture über DTO: " + dto.getProfilePicture());
+        System.out.println("Profile Picture über Unternehmen: " + unternehmen.getUser().getProfilePicture());
         logger.info("Sucessfully updatet the information of the company: " + unternehmen.getName());
 
         //Remove Attributes
@@ -84,6 +89,14 @@ public class UnternehmenProfileControl {
             unternehmen.removeAdresse(adresse);
             adresseService.removeUnternehmenFromAdresse(adresse, unternehmen);
         }
+
+        unternehmenService.flush();
+
+
+
+
+
+        System.out.println("Adressen size Nach löschen: " + unternehmen.getAdressen().size());
     }
 
     @SneakyThrows
