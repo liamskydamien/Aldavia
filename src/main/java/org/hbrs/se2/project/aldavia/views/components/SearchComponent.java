@@ -1,8 +1,7 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -10,19 +9,15 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
-import org.hbrs.se2.project.aldavia.entities.Rolle;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +31,7 @@ import java.util.List;
 
 
 @Component
-@CssImport("./styles/views/profile/studentProfile.css")
+@CssImport("./styles/views/SearchView/SearchView.css")
 public class SearchComponent extends VerticalLayout {
 
     private final SearchControl searchControl;
@@ -48,10 +43,6 @@ public class SearchComponent extends VerticalLayout {
     private VerticalLayout displayStellenanzeigen;
 
     private final Logger logger = LoggerFactory.getLogger(SearchComponent.class);
-
-    private BewerbungErstellenComponent bewerbungErstellenComponent;
-    private Dialog bewerbungsDialog;
-
     private Image profileImg;
 
     Select<String> selectJob = new Select<>();
@@ -92,150 +83,33 @@ public class SearchComponent extends VerticalLayout {
     }
 
     private void addStellenanzeigeToCard(StellenanzeigeDTO stellenanzeigeDTO){
-
-        UnternehmenProfileDTO unternehmenProfileDTO = stellenanzeigeDTO.getUnternehmen();
-        if(unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")){
-            profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-        } else {
-            String file = unternehmenProfileDTO.getProfilbild();
-            String imagePath = "./src/main/webapp/profile-images/" + file;
-            StreamResource streamResource = new StreamResource(file, () -> {
-                try {
-                    return new FileInputStream(imagePath);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return InputStream.nullInputStream();
-                }
-            });
-            profileImg = new Image(streamResource, "Profilbild");
-        }
-        profileImg.setWidth("50px");
-        profileImg.setHeight("50px");
-
-        profileImg.addClickListener(e -> {
-            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE_VIEW);
-
-        });
-
-        Button bewerben = new Button("Bewerben");
-        bewerben.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-
-        HorizontalLayout pictureBewerben = new HorizontalLayout();
-        pictureBewerben.add(profileImg,bewerben);
-        pictureBewerben.setSpacing(true);
-        pictureBewerben.setSizeFull();
-
-        // Header(Bezeichnung und Von-Bis)
-        FlexLayout stellenanzeigeCardHeader = new FlexLayout();
-        stellenanzeigeCardHeader.setWidth("450px");
-        stellenanzeigeCardHeader.addClassName("stellenanzeigeCardHeader");
-        stellenanzeigeCardHeader.setJustifyContentMode(JustifyContentMode.EVENLY);
-        H3 bezeichnung = new H3(stellenanzeigeDTO.getBezeichnung());
-        Span vonBis = new Span(stellenanzeigeDTO.getStart() + " - " + stellenanzeigeDTO.getEnde());
-        stellenanzeigeCardHeader.add(bezeichnung, vonBis);
-
-
-
-
-        // Institution
-        Anchor institution = new Anchor();
-        String institutionName = stellenanzeigeDTO.getUnternehmen().getName();
-        String institutionId = stellenanzeigeDTO.getUnternehmen().getUsername();
-        institution.setText(institutionName);
-        if(UI.getCurrent() != null && UI.getCurrent().getSession() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) != null){
-            institution.setHref(Globals.Pages.COMPANY_PROFILE_VIEW +"/"+ institutionId);
-        } else {
-            institution.setHref(Globals.Pages.NOT_LOGIN_COMPANY_VIEW +"/"+ institutionId);
-        }
-
-        institution.setTarget("_blank");
-
-        // Beschaeftigungsverhaeltnis
-        Span beschaeftigungsverhaeltnis = new Span(stellenanzeigeDTO.getBeschaeftigungsverhaeltnis());
-
-        // Beschreibung
-        Span beschreibung = new Span(stellenanzeigeDTO.getBeschreibung());
-        beschreibung.addClassName("beschreibung");
-
-        // Bezahlung
-        HorizontalLayout layout = new HorizontalLayout();
-        Span bezahlung = new Span(stellenanzeigeDTO.getBezahlung());
-        bezahlung.addClassName("bezahlung");
-        layout.setSizeFull();
-        layout.setSpacing(true);
-        //layout.add(bezahlung, bewerben);
-
-        bewerben.addClickListener(e -> {
-            if (UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) == null) {
-                UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
-
-            } else {
-                UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-                for (RolleDTO r : userDTO.getRoles()) {
-                    if (r.getBezeichhnung().equals(Globals.Roles.STUDENT)) {
-                        bewerbungsDialog = new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO ,userDTO.getUserid());
-                    } else {
-                        Notification.show("Nur Studenten können sich auf Stellenanzeigen bewerben!");
-                    }
-                }
-
-
-            }
-
-        });
-
-        //Taetigkeitsfelder
-        if(stellenanzeigeDTO.getTaetigkeitsfelder() != null) {
-            List<Span> taetigkeitsfelder = createBadges(stellenanzeigeDTO.getTaetigkeitsfelder());
-            HorizontalLayout taetigkeitsfelderLayout = new HorizontalLayout();
-            for (Span s : taetigkeitsfelder) {
-                taetigkeitsfelderLayout.add(s);
-            }
-            displayStellenanzeigen.add(stellenanzeigeCardHeader,pictureBewerben, institution, beschaeftigungsverhaeltnis, beschreibung, bezahlung,
-                                       taetigkeitsfelderLayout);
-        } else {
-            displayStellenanzeigen.add(stellenanzeigeCardHeader, pictureBewerben, institution, beschaeftigungsverhaeltnis, beschreibung, bezahlung);
-        }
-
-
-
+        displayStellenanzeigen.add(createStellenanzeigenCard(stellenanzeigeDTO));
     }
 
-    private List<Span> createBadges(List<TaetigkeitsfeldDTO> list) {
-
-        List<Span> badgeList = new ArrayList<>();
-        for (TaetigkeitsfeldDTO t : list) {
-            Span span = new Span(t.getName());
-            span.getElement().getThemeList().add("badge pill");
-            badgeList.add(span);
-        }
-        return badgeList;
-    }
-
-    public void setUpUI(List<StellenanzeigeDTO> list) {
+    private VerticalLayout createHeadCard(){
+        VerticalLayout headCard = new VerticalLayout();
+        headCard.addClassName("card");
+        headCard.setWidthFull();
         HorizontalLayout headerLayout = new HorizontalLayout();
-        HorizontalLayout unternehmenSearchLayout = new HorizontalLayout();
-        unternehmenSearch.setPlaceholder("Unternehmen");
-        unternehmenSearch.setLabel("Unternehmen Filter");
-        HorizontalLayout usLayout = new HorizontalLayout();
-        usLayout.add(unternehmenSearch);
-        usLayout.setPadding(true);
-        unternehmenSearchLayout.add(usLayout);
-        unternehmenSearchLayout.setWidth("700px");
-        unternehmenSearchLayout.setPadding(true);
-        unternehmenSearchLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        unternehmenSearch.setPlaceholder("Aldavia GmbH");
+        unternehmenSearch.setLabel("Suche nach Unternehmen");
         H2 header = new H2("Stellenanzeigen");
-        headerLayout.add(header);
         //Erstellen des Filters für Arbeitsverhaletnis
-        selectJob.setLabel("Sort by");
+        selectJob.setLabel("Filter nach Arbeitsverhältnis");
         selectJob.setItems("Alle", "Praktikum", "Festanstellung", "Werkstudent", "Teilzeit");
         selectJob.setValue("Alle");
 
-        selectRecommendet.setLabel("Sort by recommendet");
-        selectRecommendet.setItems("Recommendet", "All");
-        selectRecommendet.setValue("All");
+        selectRecommendet.setLabel("Sortiere nach Empfehlung");
+        selectRecommendet.setItems("Empfohlen", "Nicht sortieren");
+        selectRecommendet.setValue("Nicht sortieren");
 
+        headerLayout.add( unternehmenSearch ,selectJob, selectRecommendet);
+        headCard.add(header,headerLayout);
+        return headCard;
+    }
+
+    public void setUpUI(List<StellenanzeigeDTO> list) {
+        this.add(createHeadCard());
 
         List<StellenanzeigeDTO> selectedAnzeigen = new ArrayList<>();
 
@@ -249,11 +123,11 @@ public class SearchComponent extends VerticalLayout {
 
                 }
             } else {
-            for (StellenanzeigeDTO dto : selectedAnzeigen) {
-                if (dto.getUnternehmen().getName().toLowerCase().contains(unternehmenSearch.getValue().toLowerCase())) {
-                    listNeu.add(dto);
+                for (StellenanzeigeDTO dto : selectedAnzeigen) {
+                    if (dto.getUnternehmen().getName().toLowerCase().contains(unternehmenSearch.getValue().toLowerCase())) {
+                        listNeu.add(dto);
+                    }
                 }
-            }
             }
 
             displayStellenanzeigen.removeAll();
@@ -266,50 +140,37 @@ public class SearchComponent extends VerticalLayout {
         unternehmenSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
 
-         headerLayout.add(selectRecommendet, selectJob, unternehmenSearch);
+        if( UI.getCurrent() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER)!= null) {
+            UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
 
+            selectRecommendet.addValueChangeListener(e -> {
+                List<StellenanzeigeDTO> recommendetStellenanzeigen = searchControl.getRecommendedStellenanzeigen(userDTO.getUserid());
+                if (selectRecommendet.getValue().equals("Empfohlen")) {
+                    if (selectedAnzeigen.size() > 0) {
+                        for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                            selectedAnzeigen.remove(i);
+                        }
+                    }
+                    for (StellenanzeigeDTO dto : recommendetStellenanzeigen) {
+                        selectedAnzeigen.add(dto);
+                    }
+                    displayStellenanzeigen.removeAll();
+                    createCard(selectedAnzeigen);
+                    remove(displayStellenanzeigen);
+                    add(displayStellenanzeigen);
 
-         if( UI.getCurrent() != null && UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER)!= null) {
-             UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+                }
+                if (selectRecommendet.getValue().equals("Nicht sortieren")) {
+                    selectJob.setValue("Alle");
+                }
 
-             selectRecommendet.addValueChangeListener(e -> {
-                 List<StellenanzeigeDTO> recommendetStellenanzeigen = searchControl.getRecommendedStellenanzeigen(userDTO.getUserid());
-                 if (selectRecommendet.getValue().equals("Recommendet")) {
-                     if (selectedAnzeigen.size() > 0) {
-                         for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                             selectedAnzeigen.remove(i);
-                         }
-                     }
-                     for (StellenanzeigeDTO dto : recommendetStellenanzeigen) {
-                         selectedAnzeigen.add(dto);
-                     }
-                     displayStellenanzeigen.removeAll();
-                     createCard(selectedAnzeigen);
-                     remove(displayStellenanzeigen);
-                     add(displayStellenanzeigen);
+            });
+        } else {
+            selectRecommendet.addValueChangeListener(e -> {
+                Notification.show("Sie müssen eingeloggt sein,um dieses Feature nutzen zu können!");
+            });
+        }
 
-                 }
-                 if (selectRecommendet.getValue().equals("Alle")) {
-                     selectJob.setValue("Alle");
-                 }
-
-             });
-         } else {
-             selectRecommendet.addValueChangeListener(e -> {
-                 Notification.show("Sie müssen eingeloggt sein,um dieses Feature nutzen zu können!");
-             });
-         }
-
-
-
-
-
-
-
-
-
-
-        this.add(headerLayout);
         createCard(list);
         this.add(displayStellenanzeigen);
 
@@ -344,24 +205,24 @@ public class SearchComponent extends VerticalLayout {
                 add(displayStellenanzeigen);
 
             } else if (selectJob.getValue().equals("Festanstellung") || selectJob.getValue().equals("Vollzeit")) {
-            displayStellenanzeigen.removeAll();
-            if (selectedAnzeigen.size() > 0) {
-                for (int i = 0; i < selectedAnzeigen.size(); i++) {
-                    selectedAnzeigen.remove(i);
+                displayStellenanzeigen.removeAll();
+                if (selectedAnzeigen.size() > 0) {
+                    for (int i = 0; i < selectedAnzeigen.size(); i++) {
+                        selectedAnzeigen.remove(i);
+                    }
                 }
-            }
-            List<StellenanzeigeDTO> listNeu = new ArrayList<>();
-            for (StellenanzeigeDTO dto : stellenanzeigeList) {
-                if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("festanstellung")) {
-                    listNeu.add(dto);
-                    selectedAnzeigen.add(dto);
+                List<StellenanzeigeDTO> listNeu = new ArrayList<>();
+                for (StellenanzeigeDTO dto : stellenanzeigeList) {
+                    if (dto.getBeschaeftigungsverhaeltnis().toLowerCase().contains("festanstellung")) {
+                        listNeu.add(dto);
+                        selectedAnzeigen.add(dto);
+                    }
                 }
-            }
-            createCard(listNeu);
-            remove(displayStellenanzeigen);
-            add(displayStellenanzeigen);
+                createCard(listNeu);
+                remove(displayStellenanzeigen);
+                add(displayStellenanzeigen);
 
-        } else if (selectJob.getValue().equals("Werkstudent")) {
+            } else if (selectJob.getValue().equals("Werkstudent")) {
                 displayStellenanzeigen.removeAll();
                 if (stellenanzeigeList.size() > 0) {
                     for (int i = 0; i < selectedAnzeigen.size(); i++) {
@@ -420,5 +281,141 @@ public class SearchComponent extends VerticalLayout {
         remove(displayStellenanzeigen);
         add(displayStellenanzeigen);
 
+    }
+
+    private Div createStellenanzeigenCard(StellenanzeigeDTO stellenanzeigeDTO){
+        Div stellenanzeigeCard = new Div();
+        stellenanzeigeCard.addClassName("card");
+        stellenanzeigeCard.setWidth("100%");
+        stellenanzeigeCard.setHeight("100%");
+        stellenanzeigeCard.add(createVerticalStellenanzeigenLayout(stellenanzeigeDTO));
+        return stellenanzeigeCard;
+    }
+
+    private VerticalLayout createVerticalStellenanzeigenLayout(StellenanzeigeDTO stellenanzeigeDTO){
+        VerticalLayout stellenanzeigenLayout = new VerticalLayout();
+        stellenanzeigenLayout.addClassName("stellenanzeigeLayout");
+        stellenanzeigenLayout.setSpacing(true);
+        stellenanzeigenLayout.setAlignItems(Alignment.START);
+        stellenanzeigenLayout.setWidth("100%");
+        stellenanzeigenLayout.setHeight("100%");
+        stellenanzeigenLayout.add(new H2(stellenanzeigeDTO.getBezeichnung()));
+        stellenanzeigenLayout.add(createProfilBildAndName(stellenanzeigeDTO));
+        stellenanzeigenLayout.add(new Text(stellenanzeigeDTO.getBeschreibung()));
+        stellenanzeigenLayout.add(createInformationLayout(stellenanzeigeDTO));
+        stellenanzeigenLayout.add(createVonBisLayout(stellenanzeigeDTO));
+        stellenanzeigenLayout.add(createTaetigkeitenLayout(stellenanzeigeDTO));
+        stellenanzeigenLayout.add(createBewerbenButton(stellenanzeigeDTO));
+        return stellenanzeigenLayout;
+    }
+
+    private Button createBewerbenButton(StellenanzeigeDTO stellenanzeigeDTO){
+        Button bewerbenButton = new Button("Bewerben");
+        bewerbenButton.addClassName("bewerbenButton");
+        bewerbenButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        bewerbenButton.addClickListener(e -> {
+            if (UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER) == null) {
+                UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+
+            } else {
+                UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+                for (RolleDTO r : userDTO.getRoles()) {
+                    if (r.getBezeichhnung().equals(Globals.Roles.STUDENT)) {
+                        new BewerbungErstellenComponent(bewerbungsControl, stellenanzeigeDTO ,userDTO.getUserid());
+                    } else {
+                        Notification.show("Nur Studenten können sich auf Stellenanzeigen bewerben!");
+                    }
+                }
+
+            }
+        });
+        return bewerbenButton;
+    }
+
+    private HorizontalLayout createProfilBildAndName(StellenanzeigeDTO stellenanzeigeDTO){
+        HorizontalLayout profilBildAndName = new HorizontalLayout();
+        profilBildAndName.addClassName("profilBildAndName");
+        profilBildAndName.setSpacing(true);
+        profilBildAndName.setAlignItems(Alignment.CENTER);
+        profilBildAndName.setJustifyContentMode(JustifyContentMode.START);
+        profilBildAndName.setWidth("100%");
+        profilBildAndName.setHeight("100%");
+        UnternehmenProfileDTO unternehmenProfileDTO = stellenanzeigeDTO.getUnternehmen();
+        if(unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")){
+            profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
+        } else {
+            String file = unternehmenProfileDTO.getProfilbild();
+            String imagePath = "./src/main/webapp/profile-images/" + file;
+            StreamResource streamResource = new StreamResource(file, () -> {
+                try {
+                    return new FileInputStream(imagePath);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    return InputStream.nullInputStream();
+                }
+            });
+            profileImg = new Image(streamResource, "Profilbild");
+        }
+        profileImg.setWidth("50px");
+        profileImg.setHeight("50px");
+
+        profileImg.addClickListener(e -> {
+            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE);
+
+        });
+        profilBildAndName.add(profileImg);
+        Span name = new Span(unternehmenProfileDTO.getName());
+        Anchor anchor = new Anchor();
+        anchor.add(name);
+        anchor.setHref(Globals.Pages.COMPANY_PROFILE + "/" + unternehmenProfileDTO.getUsername());
+        profilBildAndName.add(anchor);
+        return profilBildAndName;
+    }
+
+    private HorizontalLayout createInformationLayout(StellenanzeigeDTO stellenanzeigeDTO){
+        HorizontalLayout informationLayout = new HorizontalLayout();
+        informationLayout.addClassName("informationLayout");
+        informationLayout.setSpacing(true);
+        informationLayout.setAlignItems(Alignment.CENTER);
+        informationLayout.setJustifyContentMode(JustifyContentMode.START);
+        informationLayout.setWidth("100%");
+        informationLayout.setHeight("100%");
+        informationLayout.add(new Label("Beschäftigungsart: " + stellenanzeigeDTO.getBeschaeftigungsverhaeltnis()));
+        informationLayout.add(new Label("Bezahlung: " + stellenanzeigeDTO.getBezahlung()));
+        return informationLayout;
+    }
+
+    private HorizontalLayout createTaetigkeitenLayout(StellenanzeigeDTO stellenanzeigeDTO){
+        HorizontalLayout taetigkeitenLayout = new HorizontalLayout();
+        taetigkeitenLayout.addClassName("taetigkeitenLayout");
+        taetigkeitenLayout.setSpacing(true);
+        taetigkeitenLayout.setAlignItems(Alignment.CENTER);
+        taetigkeitenLayout.setJustifyContentMode(JustifyContentMode.START);
+        taetigkeitenLayout.setWidth("100%");
+        taetigkeitenLayout.setHeight("100%");
+        taetigkeitenLayout.add(new Label("Tätigkeiten: "));
+        for (TaetigkeitsfeldDTO taetigkeit : stellenanzeigeDTO.getTaetigkeitsfelder()) {
+            Span div = new Span();
+            div.addClassName("taetigkeit");
+            div.getElement().getThemeList().add("badge pill");
+            div.setText(taetigkeit.getName());
+            taetigkeitenLayout.add(div);
+        }
+        return taetigkeitenLayout;
+    }
+
+    private HorizontalLayout createVonBisLayout(StellenanzeigeDTO stellenanzeigeDTO){
+        HorizontalLayout vonBisLayout = new HorizontalLayout();
+        vonBisLayout.addClassName("vonBisLayout");
+        vonBisLayout.setSpacing(true);
+        vonBisLayout.setAlignItems(Alignment.CENTER);
+        vonBisLayout.setJustifyContentMode(JustifyContentMode.START);
+        vonBisLayout.setWidth("100%");
+        vonBisLayout.setHeight("100%");
+        String von = stellenanzeigeDTO.getStart() != null ? stellenanzeigeDTO.getStart().toString() : "Ab sofort!";
+        String bis = stellenanzeigeDTO.getEnde() != null ? stellenanzeigeDTO.getEnde().toString() : "Unbefristet!";
+        vonBisLayout.add(new Label("Von: " + von));
+        vonBisLayout.add(new Label("Bis: " + bis));
+        return vonBisLayout;
     }
 }

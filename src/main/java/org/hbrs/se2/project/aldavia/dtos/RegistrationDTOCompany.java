@@ -18,10 +18,4 @@ public class RegistrationDTOCompany {
     private int registrationDate;
     private String webseite;
 
-
-    @Override
-    public String toString() {
-        return "UserDTO [UserName=" + companyName + ", password=" + password + "]";
-    }
-
 }

@@ -78,12 +78,6 @@ public class StudentProfileControlTest {
         //Setup
         QualifikationsDTO qualifikationDTO = QualifikationsDTO.builder()
                 .bezeichnung("QTester")
-                .beschreibung("Ability to write JUnit tests.")
-                .bereich("Software Engineering 1")
-                .institution("H-BRS")
-                .beschaeftigungsart("Teilzeit")
-                .von(LocalDate.of(2023,4, 1))
-                .bis(LocalDate.of(2023, 6, 30))
                 .build();
         List<QualifikationsDTO> qualifikationenDTO = new ArrayList<>();
         qualifikationenDTO.add(qualifikationDTO);
@@ -107,9 +101,29 @@ public class StudentProfileControlTest {
         List<SpracheDTO> sprachenDTO = new ArrayList<>();
         sprachenDTO.add(spracheDTO);
 
+        Qualifikation qualifikation = new Qualifikation();
+        List<Qualifikation> qualifikationen = new ArrayList<>();
+        qualifikationen.add(qualifikation);
+
+        Taetigkeitsfeld taetigkeitsfeld = new Taetigkeitsfeld();
+        List<Taetigkeitsfeld> taetigkeitsfelder = new ArrayList<>();
+        taetigkeitsfelder.add(taetigkeitsfeld);
+
+        Kenntnis kenntnis = new Kenntnis();
+        List<Kenntnis> kenntnisse = new ArrayList<>();
+        kenntnisse.add(kenntnis);
+
+        Sprache sprache = new Sprache();
+        List<Sprache> sprachen = new ArrayList<>();
+        sprachen.add(sprache);
+
         User user = new User();
         Student student = new Student();
         student.setUser(user);
+        student.setQualifikationen(qualifikationen);
+        student.setTaetigkeitsfelder(taetigkeitsfelder);
+        student.setKenntnisse(kenntnisse);
+        student.setSprachen(sprachen);
         String userId = "testUpdate";
         // Create a mock StudentProfileDTO for the updated version
         StudentProfileDTO updatedVersion = StudentProfileDTO.builder()
@@ -129,8 +143,7 @@ public class StudentProfileControlTest {
                 .kenntnisse(kenntnisseDTO)
                 .sprachen(sprachenDTO)
                 .build();
-        StudentProfileDTO updatedVersionNull = StudentProfileDTO.builder()
-                .build();
+
         // Create a mock StudentProfileDTO for the old version
         StudentProfileDTO oldVersion = StudentProfileDTO.builder()
                 .vorname("Jane")
@@ -155,11 +168,42 @@ public class StudentProfileControlTest {
         given(studentProfileControl.getStudentProfile(userId)).willReturn(oldVersion);
         // Perform the updateStudentProfile operation
         studentProfileControl.updateStudentProfile(updatedVersion, userId);
+
+        verify(studentService, times(1)).createOrUpdateStudent(student);
+        verify(studentService, times(3)).getStudent(userId);
+        verify(studentService, times(1)).getStudent("random123");
+        verifyNoMoreInteractions(studentService);
+    }
+
+    @Test
+    public void testUpdateStudentProfileNull() throws ProfileException, PersistenceException {
+        //Setup
+        User user = new User();
+        Student student = new Student();
+        student.setUser(user);
+        String userId = "testUpdate";
+        // Create a mock StudentProfileDTO for the updated version
+        StudentProfileDTO updatedVersionNull = StudentProfileDTO.builder()
+                .build();
+        // Create a mock StudentProfileDTO for the old version
+        StudentProfileDTO oldVersion = StudentProfileDTO.builder()
+                .build();
+
+        //Test Exception
+        assertThrows(ProfileException.class, () -> studentProfileControl.updateStudentProfile(new StudentProfileDTO(),"random123"));
+
+        // Mock the behavior of getStudentProfile(username) method
+        given(studentService.getStudent(userId)).willReturn(student);
+        given(studentProfileDTOFactory.createStudentProfileDTO(student)).willReturn(oldVersion);
+        given(studentProfileControl.getStudentProfile(userId)).willReturn(oldVersion);
+        // Perform the updateStudentProfile operation
+
         studentProfileControl.updateStudentProfile(updatedVersionNull, userId);
 
+
+        verify(studentService, times(1)).createOrUpdateStudent(student);
+        verify(studentService, times(3)).getStudent(userId);
         verify(studentService, times(1)).getStudent("random123");
-        verify(studentService, times(2)).createOrUpdateStudent(student);
-        verify(studentService, times(5)).getStudent(userId);
         verifyNoMoreInteractions(studentService);
     }
 }
