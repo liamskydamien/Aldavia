@@ -165,7 +165,7 @@ public class StellenanzeigenServiceTest {
 
         stellenanzeigenService.deleteStellenanzeige(stellenanzeige);
         verify(taetigkeitsfeldService, times(1)).deleteTaetigkeitsfeldFromStellenanzeige(taetigkeitsfeld, reference);
-        verify(stellenanzeigeRepository, times(2)).save(stellenanzeige);
+        verify(stellenanzeigeRepository, times(1)).save(stellenanzeige);
         verify(stellenanzeigeRepository, times(1)).delete(stellenanzeige);
     }
 }
