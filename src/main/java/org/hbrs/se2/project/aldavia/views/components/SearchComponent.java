@@ -183,19 +183,19 @@ public class SearchComponent extends VerticalLayout {
                 }
                 createCard(stellenanzeigeList);
             } else if (selectJob.getValue().equals("Praktikum")) {
-                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"Praktikum");
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"praktikum");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
             } else if (selectJob.getValue().equals("Festanstellung") || selectJob.getValue().equals("Vollzeit")) {
-                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"Vollzeit");
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"vollzeit");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
 
             } else if (selectJob.getValue().equals("Werkstudent")) {
-                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"Werkstudent");
+                List<StellenanzeigeDTO> listNeu = addToSelectedStellenanzeigen(stellenanzeigeList,"werkstudent");
                 createCard(listNeu);
                 remove(displayStellenanzeigen);
                 add(displayStellenanzeigen);
