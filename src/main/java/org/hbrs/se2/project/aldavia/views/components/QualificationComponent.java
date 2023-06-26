@@ -279,7 +279,7 @@ public class QualificationComponent extends VerticalLayout implements ProfileCom
             qualificationCardLayout.add(editButtonLayout);
         }
         qualificationCardUnten.add(beschreibung);
-        qualificationCardLinks.add(bezeichnung,institution, beschaeftigungsart, bereich);
+        qualificationCardLinks.add(bezeichnung,institutionName, beschaeftigungsartName, bereichName);
         qualificationCardOben.add(qualificationCardLinks, qualificationCardHeader);
         qualificationCardLayout.add(qualificationCardOben, qualificationCardUnten);
         displayQualifications.add(qualificationCardLayout);
