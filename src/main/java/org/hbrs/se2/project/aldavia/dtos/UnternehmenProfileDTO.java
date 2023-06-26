@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.*;
-import org.hbrs.se2.project.aldavia.entities.Adresse;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 
 import java.util.Set;
 

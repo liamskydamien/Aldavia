@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.test.ProfileTest;
 
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
 import org.hbrs.se2.project.aldavia.service.TaetigkeitsfeldService;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
@@ -17,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +40,7 @@ public class TaetigkeitsfeldServiceTest {
 
     private Taetigkeitsfeld taetigkeitsfeldTest;
 
-    private Logger logger = LoggerFactory.getLogger(TaetigkeitsfeldServiceTest.class);
+    private final Logger logger = LoggerFactory.getLogger(TaetigkeitsfeldServiceTest.class);
 
     @BeforeEach
     public void setUp() {
@@ -84,28 +81,28 @@ public class TaetigkeitsfeldServiceTest {
     }
 
     @Test
-    public void testAddStudentToKenntnis_whenTaetigkeitsfeldIsPresent() {
+    public void testAddStudentToTaetigkeitsfeldWhenTaetigkeitsfeldIsPresent() {
         taetigkeitsfeldTest = new Taetigkeitsfeld();
         taetigkeitsfeldTest.setBezeichnung(taetigkeitsfeldDTO.getName());
         taetigkeitsfeldTest = taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
 
         taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
 
-        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        Taetigkeitsfeld updatedTaetigkeitsfeld = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(updatedTaetigkeitsfeld.getStudents().get(0).getId(), student.getId());
     }
 
     @Test
-    public void testAddStudentToKenntnis_whenTaetigkeitsfeldIsNotPresent() {
+    public void testAddStudentToTaetigkeitsfeldWhenTaetigkeitsfeldIsNotPresent() {
         taetigkeitsfeldService.addStudentToTaetigkeitsfeld(taetigkeitsfeldDTO, student);
-        taetigkeitsfeldTest = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).get();
-        student = studentRepository.findById(student.getId()).get();
+        taetigkeitsfeldTest = taetigkeitsfeldRepository.findById(taetigkeitsfeldDTO.getName()).orElseThrow();
+        student = studentRepository.findById(student.getId()).orElseThrow();
         assertEquals(taetigkeitsfeldTest.getStudents().get(0).getId(), student.getId());
     }
 
     @Test
-    public void testRemoveStudentFromKenntnis_whenKenntnisIsPresent() throws org.hbrs.se2.project.aldavia.control.exception.PersistenceException {
+    public void testRemoveStudentFromTaetigekteitsfeldWhenKenntnisIsPresent() throws org.hbrs.se2.project.aldavia.control.exception.PersistenceException {
         Taetigkeitsfeld existingTaetigkeitsfeld = Taetigkeitsfeld.builder().bezeichnung(taetigkeitsfeldDTO.getName()).build();
         taetigkeitsfeldTest = existingTaetigkeitsfeld.addStudent(student);
         taetigkeitsfeldRepository.save(taetigkeitsfeldTest);
@@ -117,10 +114,8 @@ public class TaetigkeitsfeldServiceTest {
     }
 
     @Test
-    public void testRemoveStudentFromTaetigkeitsfeld_whenTaetigkeitsfeldIsNotPresent() {
-        PersistenceException taetigkeitsfeldNotFound = assertThrows(PersistenceException.class, () -> {
-            taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student);
-        });
+    public void testRemoveStudentFromTaetigkeitsfeldWhenTaetigkeitsfeldIsNotPresent() {
+        PersistenceException taetigkeitsfeldNotFound = assertThrows(PersistenceException.class, () -> taetigkeitsfeldService.removeStudentFromTaetigkeitsfeld(taetigkeitsfeldDTO, student));
 
         assertEquals(taetigkeitsfeldNotFound.getPersistenceExceptionType(), PersistenceException.PersistenceExceptionType.TAETIGKEITSFELD_NOT_FOUND, MESSAGE);
         assertEquals("Taetigkeitsfeld not found", taetigkeitsfeldNotFound.getReason(), MESSAGE2);

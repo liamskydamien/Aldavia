@@ -1,8 +1,6 @@
 package org.hbrs.se2.project.aldavia.dtos;
 
 import lombok.*;
-import org.hbrs.se2.project.aldavia.dtos.*;
-import org.hbrs.se2.project.aldavia.entities.Unternehmen;
 
 import java.util.List;
 
@@ -10,7 +8,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 public class AdresseDTO{
     private String strasse;
