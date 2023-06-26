@@ -1,7 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -12,10 +10,10 @@ import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 
 public class AboutCompany extends VerticalLayout implements ProfileComponent{
-    private UnternehmenProfileDTO unternehmenProfileDTO;
+    private final UnternehmenProfileDTO unternehmenProfileDTO;
     private final UnternehmenProfileControl unternehmenProfileControl;
-    private TextArea aboutCompany;
-    private H2 title;
+    private final TextArea aboutCompany;
+    private final H2 title;
 
     public AboutCompany(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
@@ -36,10 +34,8 @@ public class AboutCompany extends VerticalLayout implements ProfileComponent{
         aboutCompany.setMaxLength(1200);
         aboutCompany.setValueChangeMode(ValueChangeMode.EAGER);
         aboutCompany.setHelperText("0/1200");
-        aboutCompany.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + 1200);
-        });
+        aboutCompany.addValueChangeListener(e -> e.getSource()
+                .setHelperText(e.getValue().length() + "/" + 1200));
         updateView();
     }
 

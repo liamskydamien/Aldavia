@@ -3,7 +3,6 @@ package org.hbrs.se2.project.aldavia.control.factories;
 import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.AdresseDTO;
-import org.hbrs.se2.project.aldavia.dtos.BewerbungsDTO;
 import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.entities.*;
@@ -11,16 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 @Component
 public class UnternehmenProfileDTOFactory {
 
-    private Logger logger = LoggerFactory.getLogger(UnternehmenProfileDTOFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(UnternehmenProfileDTOFactory.class);
     private final AdressenDTOFactory adressenDTOFactory = AdressenDTOFactory.getInstance();
     private UnternehmenProfileDTOFactory() {
     }
@@ -73,7 +68,7 @@ public class UnternehmenProfileDTOFactory {
                 StellenanzeigeDTO stellenanzeigeDTO = StellenanzeigeDTOFactory.getInstance().createStellenanzeigeDTOCompanyKnown(stellenanzeige, unternehmenDTO);
                 stellenanzeigenDTOs.add(stellenanzeigeDTO);
             }
-            logger.info("STELLENANZEIGEDTO WURDE ERSTELLT. GROESSE: " + stellenanzeigenDTOs.size() + " INHALT: " + stellenanzeigenDTOs.toString());
+            logger.info("STELLENANZEIGEDTO WURDE ERSTELLT. GROESSE: " + stellenanzeigenDTOs.size() + " INHALT: " + stellenanzeigenDTOs);
             return stellenanzeigenDTOs;
         }
         return new HashSet<>();

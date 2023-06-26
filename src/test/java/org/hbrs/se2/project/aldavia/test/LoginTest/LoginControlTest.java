@@ -89,29 +89,19 @@ public class LoginControlTest {
     @Test
     public void testLoginNegativ() {
         DatabaseUserException exceptionWrongPassword = assertThrows(
-                DatabaseUserException.class, () -> {
-                    loginControl.authenticate(USERID, "abcd");
-        });
+                DatabaseUserException.class, () -> loginControl.authenticate(USERID, "abcd"));
 
         DatabaseUserException exceptionWrongUsername = assertThrows(
-                DatabaseUserException.class, () -> {
-                    loginControl.authenticate("saschaa", ABC);
-        });
+                DatabaseUserException.class, () -> loginControl.authenticate("saschaa", ABC));
 
         DatabaseUserException exceptionWrongEmail = assertThrows(
-                DatabaseUserException.class, () -> {
-                    loginControl.authenticate("test2@aldavia.de", ABC);
-        });
+                DatabaseUserException.class, () -> loginControl.authenticate("test2@aldavia.de", ABC));
 
         DatabaseUserException exceptionWrongEmail2 = assertThrows(
-                DatabaseUserException.class, () -> {
-                    loginControl.authenticate("", "");
-        });
+                DatabaseUserException.class, () -> loginControl.authenticate("", ""));
 
         DatabaseUserException exceptionWrongEmail3 = assertThrows(
-                DatabaseUserException.class, () -> {
-                    loginControl.authenticate(null, null);
-        });
+                DatabaseUserException.class, () -> loginControl.authenticate(null, null));
 
         assertEquals(exceptionWrongPassword.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);
         assertEquals(exceptionWrongUsername.getDatabaseUserExceptionType(), DatabaseUserException.DatabaseUserExceptionType.USER_NOT_FOUND, MESSAGE);

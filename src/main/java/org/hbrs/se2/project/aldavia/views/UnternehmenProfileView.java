@@ -60,9 +60,7 @@ public class UnternehmenProfileView extends VerticalLayout implements HasUrlPara
                     editAndSaveProfileButtonComapany = new EditAndSaveProfileButton();
                     addClassName("profile-view");
 
-                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> {
-                        switchToEditMode();
-                    });
+                    editAndSaveProfileButtonComapany.addListenerToEditButton(e -> switchToEditMode());
                     editAndSaveProfileButtonComapany.addListenerToSaveButton(e -> {
                         try {
                             switchToViewMode();

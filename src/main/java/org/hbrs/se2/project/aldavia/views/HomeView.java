@@ -4,9 +4,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
-import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
-import org.hbrs.se2.project.aldavia.repository.StellenanzeigeRepository;
 import org.hbrs.se2.project.aldavia.util.Globals;
 
 

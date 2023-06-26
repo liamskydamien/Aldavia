@@ -153,9 +153,7 @@ public class BewerbungsServiceTest {
         bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, TEST);
 
         // Assert
-        BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> {
-            bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, TEST);
-        });
+        BewerbungsException ex2 = assertThrows(BewerbungsException.class, () -> bewerbungsService.addBewerbung(studentEntity, stellenanzeigeEntity, TEST));
 
         assertEquals(BewerbungsException.BewerbungsExceptionType.BEWERBUNG_ALREADY_EXISTS, ex2.getExceptionType(), MESSAGE);
     }
