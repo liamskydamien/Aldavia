@@ -13,16 +13,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class QualifikationTest {
 
+    public static final String BESCHREIBUNG = "Test";
+    public static final String TEST_2 = "Test2";
+
     @Test
     public void testMissingCode(){
         Qualifikation qualifikation = Qualifikation.builder()
                 .id(1)
-                .beschreibung("Test")
-                .bezeichnung("Test")
-                .beschaftigungsverhaltnis("Test")
+                .beschreibung(BESCHREIBUNG)
+                .bezeichnung(BESCHREIBUNG)
+                .beschaftigungsverhaltnis(BESCHREIBUNG)
                 .bis(LocalDate.of(2020, 1, 1))
                 .von(LocalDate.of(2020, 1, 1))
-                .institution("Test")
+                .institution(BESCHREIBUNG)
                 .student(null)
                 .build();
 
@@ -40,23 +43,23 @@ public class QualifikationTest {
     public void testEquals(){
         Qualifikation qualifikation = Qualifikation.builder()
                 .id(1)
-                .beschreibung("Test")
-                .bezeichnung("Test")
-                .beschaftigungsverhaltnis("Test")
+                .beschreibung(BESCHREIBUNG)
+                .bezeichnung(BESCHREIBUNG)
+                .beschaftigungsverhaltnis(BESCHREIBUNG)
                 .bis(LocalDate.of(2020, 1, 1))
                 .von(LocalDate.of(2020, 1, 1))
-                .institution("Test")
+                .institution(BESCHREIBUNG)
                 .student(new Student())
                 .build();
 
         Qualifikation qualifikation2 = Qualifikation.builder()
                 .id(1)
-                .beschreibung("Test")
-                .bezeichnung("Test")
-                .beschaftigungsverhaltnis("Test")
+                .beschreibung(BESCHREIBUNG)
+                .bezeichnung(BESCHREIBUNG)
+                .beschaftigungsverhaltnis(BESCHREIBUNG)
                 .bis(LocalDate.of(2020, 1, 1))
                 .von(LocalDate.of(2020, 1, 1))
-                .institution("Test")
+                .institution(BESCHREIBUNG)
                 .student(new Student())
                 .build();
 
@@ -69,15 +72,15 @@ public class QualifikationTest {
         qualifikation2.setId(2);
         assertNotEquals(qualifikation, qualifikation2);
         qualifikation2.setId(1);
-        qualifikation2.setBeschreibung("Test2");
+        qualifikation2.setBeschreibung(TEST_2);
         assertNotEquals(qualifikation, qualifikation2);
-        qualifikation2.setBeschreibung("Test");
-        qualifikation2.setBezeichnung("Test2");
+        qualifikation2.setBeschreibung(BESCHREIBUNG);
+        qualifikation2.setBezeichnung(TEST_2);
         assertNotEquals(qualifikation, qualifikation2);
-        qualifikation2.setBezeichnung("Test");
-        qualifikation2.setBeschaftigungsverhaltnis("Test2");
+        qualifikation2.setBezeichnung(BESCHREIBUNG);
+        qualifikation2.setBeschaftigungsverhaltnis(TEST_2);
         assertNotEquals(qualifikation, qualifikation2);
-        qualifikation2.setBeschaftigungsverhaltnis("Test");
+        qualifikation2.setBeschaftigungsverhaltnis(BESCHREIBUNG);
         qualifikation2.setBis(LocalDate.of(2020, 1, 2));
         assertNotEquals(qualifikation, qualifikation2);
         qualifikation2.setBis(LocalDate.of(2020, 1, 1));

@@ -33,17 +33,17 @@ import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.getCurrentU
 @Transactional
 @CssImport("./styles/views/profile/studentProfile.css")
 public class StellenanzeigeComponent extends VerticalLayout implements ProfileComponent{
-    private UnternehmenProfileControl unternehmenProfileControl;
-    private UnternehmenProfileDTO unternehmenProfileDTO;
-    private Set<StellenanzeigeDTO> stellenanzeigeSet;
-    private Div displayStellenanzeige;
+    public static final String STELLENANZEIGE_TAETIGKEIT = "stellenanzeige-taetigkeit";
+    public static final String BADGE_PILL = "badge pill";
+    private final UnternehmenProfileControl unternehmenProfileControl;
+    private final UnternehmenProfileDTO unternehmenProfileDTO;
+    private final Set<StellenanzeigeDTO> stellenanzeigeSet;
+    private final Div displayStellenanzeige;
     private HorizontalLayout createStellenanzeige;
-    private H2 title;
-    private Span noStellenanzeige;
+    private final Span noStellenanzeige;
     private Dialog addDialog;
-    private Button addStellenanzeige;
-    private String url;
-    private HorizontalLayout noStellenanzeigeArea;
+    private final String url;
+    private final HorizontalLayout noStellenanzeigeArea;
 
     public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl, String url) {
         this.unternehmenProfileControl = unternehmenProfileControl;
@@ -63,7 +63,7 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
 
 
     public void setUpUI(){
-        title = new H2("Stellenanzeige");
+        H2 title = new H2("Stellenanzeige");
         add(title);
         add(createAddstellenanzeigeArea());
         add(displayStellenanzeige);
@@ -206,18 +206,18 @@ public void getAndCreateStellenanzeige(String mode){
             for (int i = 0; i < 3; i++){
                 TaetigkeitsfeldDTO taetigkeitsfeld = taetigkeitsfeldList.get(i);
                 Span taetigkeit = new Span(taetigkeitsfeld.getName());
-                taetigkeit.getElement().getThemeList().add("badge pill");
-                taetigkeit.addClassName("stellenanzeige-taetigkeit");
+                taetigkeit.getElement().getThemeList().add(BADGE_PILL);
+                taetigkeit.addClassName(STELLENANZEIGE_TAETIGKEIT);
                 taetigkeitLayout.add(taetigkeit);
             }
             Span restlicheTaetigkeiten = new Span("+" + (taetigkeitsfeldList.size()-3) + " weitere");
-            restlicheTaetigkeiten.addClassName("stellenanzeige-taetigkeit");
+            restlicheTaetigkeiten.addClassName(STELLENANZEIGE_TAETIGKEIT);
             taetigkeitLayout.add(restlicheTaetigkeiten);
         } else {
             for (TaetigkeitsfeldDTO taetigkeitsfeld : taetigkeitsfeldList){
                 Span taetigkeit = new Span(taetigkeitsfeld.getName());
-                taetigkeit.addClassName("stellenanzeige-taetigkeit");
-                taetigkeit.getElement().getThemeList().add("badge pill");
+                taetigkeit.addClassName(STELLENANZEIGE_TAETIGKEIT);
+                taetigkeit.getElement().getThemeList().add(BADGE_PILL);
                 taetigkeitLayout.add(taetigkeit);
             }
         }
@@ -251,7 +251,7 @@ public void getAndCreateStellenanzeige(String mode){
 
 
     private Button addStellenanzeige(){
-        addStellenanzeige = new Button("Erstellen");
+        Button addStellenanzeige = new Button("Erstellen");
         addStellenanzeige.setIcon(new Icon("lumo", "plus"));
         addStellenanzeige.addClassName("addStellenanzeige");
         addStellenanzeige.addClassName("editSaveButton");
@@ -298,9 +298,7 @@ public void getAndCreateStellenanzeige(String mode){
     private Button closeAddPopUpButton() {
         Button closeButton = new Button(new Icon("lumo", "cross"));
         closeButton.addClassName("closeButton");
-        closeButton.addClickListener(e -> {
-            addDialog.close();
-        });
+        closeButton.addClickListener(e -> addDialog.close());
         return closeButton;
     }
 
@@ -342,8 +340,7 @@ public void getAndCreateStellenanzeige(String mode){
 
     private String getUserOverUrl(){
         String[] split = url.split("/");
-        String user = split[split.length-1];
-        return user;
+        return split[split.length-1];
     }
 
 }

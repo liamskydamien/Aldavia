@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class AdresseTest {
+    public static final String STRASSE = "Straße";
+    public static final String NUMBER = "12345";
     @Autowired
     private UnternehmenRepository unternehmenRepository;
     @Autowired
@@ -31,9 +33,9 @@ public class AdresseTest {
     public void setup() {
         adresse = Adresse.builder()
                 .id(1)
-                .strasse("Straße")
+                .strasse(STRASSE)
                 .hausnummer("123")
-                .plz("12345")
+                .plz(NUMBER)
                 .ort("Ort")
                 .land("Land")
                 .build();
@@ -102,9 +104,9 @@ public class AdresseTest {
     public void equalsAndHashCodeTest() {
         Adresse adresse2 = Adresse.builder()
                 .id(1)
-                .strasse("Straße")
+                .strasse(STRASSE)
                 .hausnummer("123")
-                .plz("12345")
+                .plz(NUMBER)
                 .ort("Ort")
                 .land("Land")
                 .build();
@@ -126,29 +128,17 @@ public class AdresseTest {
     @Test
     public void testNotNullConstraints() {
         Adresse adresse = new Adresse();
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
-        adresse.setStrasse("Straße");
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
+        adresse.setStrasse(STRASSE);
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
         adresse.setHausnummer("123");
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
-        adresse.setPlz("12345");
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
+        adresse.setPlz(NUMBER);
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
         adresse.setOrt("Ort");
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
         adresse.setLand("Land");
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            adresseRepository.saveAndFlush(adresse);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
 
     }
 }
