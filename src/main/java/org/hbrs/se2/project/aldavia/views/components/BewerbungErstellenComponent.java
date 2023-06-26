@@ -9,8 +9,10 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.exception.BewerbungsException;
@@ -24,7 +26,7 @@ public class BewerbungErstellenComponent extends Dialog {
     private String studentUsername;
     private StellenanzeigeDTO stellenanzeigeDTO;
 
-    private TextField bewerbungsTextfield = new TextField("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
+    private TextArea bewerbungsTextfield = new TextArea("Bewerbungsschreiben", "Beschreibe hier warum du dich für diese Stelle bewirbst und warum du der/die Richtige für diese Stelle bist.");
     public BewerbungErstellenComponent(BewerbungsControl bewerbungsControl, StellenanzeigeDTO stellenanzeigeDTO, String studentUsername) {
         this.bewerbungsControl = bewerbungsControl;
         this.stellenanzeigeDTO = stellenanzeigeDTO;
@@ -47,6 +49,7 @@ public class BewerbungErstellenComponent extends Dialog {
         bewerbungsLayout.add(new H1("Bewerbung erstellen"));
         bewerbungsLayout.add(new Label("Mit deiner Bewerbung werden dem Unternehmen dein Profil und dein Bewerbungsschreiben übermittelt"));
         bewerbungsLayout.add(new Anchor("/profile/" + studentUsername, "Du kannst dein Profil hier einsehen und bearbeiten"));
+        bewerbungsTextfield.setWidthFull();
         bewerbungsLayout.add(bewerbungsTextfield);
         bewerbungsLayout.add(setUpButtons());
         return bewerbungsLayout;
@@ -87,8 +90,9 @@ public class BewerbungErstellenComponent extends Dialog {
     private void addBewerbung() {
         try {
             bewerbungsControl.addBewerbung(studentUsername, stellenanzeigeDTO, bewerbungsTextfield.getValue());
+            Notification.show("Bewerbung erfolgreich abgeschickt").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         } catch (BewerbungsException e) {
-            Notification.show("Fehler beim Speichern der Bewerbung");
+            Notification.show("Du hast dich bereits auf diese Stelle beworben");
         }
     }
 

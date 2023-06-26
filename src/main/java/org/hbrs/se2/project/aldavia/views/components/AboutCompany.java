@@ -45,6 +45,9 @@ public class AboutCompany extends VerticalLayout implements ProfileComponent{
 
     private void updateView(){
         aboutCompany.setReadOnly(true);
+        if(unternehmenProfileDTO.getBeschreibung() != null){
+            aboutCompany.setValue(unternehmenProfileDTO.getBeschreibung());
+        }
     }
 
     private void updateEdit(){
