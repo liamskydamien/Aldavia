@@ -36,12 +36,10 @@ public class UnternehmenServiceTest {
     @Mock
     UserRepository userRepositoryMock;
 
-    @Mock
-    StellenanzeigenService stellenanzeigenServiceMock;
 
     @BeforeEach
     void setUp() {
-        unternehmenService = new UnternehmenService(unternehmenRepositoryMock,stellenanzeigenServiceMock , userRepositoryMock);
+        unternehmenService = new UnternehmenService(unternehmenRepositoryMock, userRepositoryMock);
     }
 
     @Test
@@ -132,7 +130,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testDeleteUnternehmen() throws ProfileException {
+    void testDeleteUnternehmen() {
         //given
         Unternehmen unternehmenMock = new Unternehmen();
 
@@ -152,7 +150,7 @@ public class UnternehmenServiceTest {
     }
 
     @Test
-    void testDeleteUnternehmen_NullLists() throws ProfileException {
+    void testDeleteUnternehmen_NullLists(){
         User user = new User();
         Unternehmen unternehmen = new Unternehmen();
         String userId = "testuser";

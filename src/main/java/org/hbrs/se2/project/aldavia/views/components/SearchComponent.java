@@ -17,6 +17,7 @@ import org.hbrs.se2.project.aldavia.control.BewerbungsControl;
 import org.hbrs.se2.project.aldavia.control.SearchControl;
 import org.hbrs.se2.project.aldavia.dtos.*;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.hbrs.se2.project.aldavia.util.UIUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import java.util.List;
 @CssImport("./styles/views/SearchView/SearchView.css")
 public class SearchComponent extends VerticalLayout {
 
+    public static final String NICHT_SORTIEREN = "Nicht sortieren";
     private final SearchControl searchControl;
 
     private final BewerbungsControl bewerbungsControl;
@@ -41,7 +43,6 @@ public class SearchComponent extends VerticalLayout {
     private VerticalLayout displayStellenanzeigen;
 
     private final Logger logger = LoggerFactory.getLogger(SearchComponent.class);
-    private Image profileImg;
 
     Select<String> selectJob = new Select<>();
 
@@ -68,8 +69,8 @@ public class SearchComponent extends VerticalLayout {
     private void createCard(List<StellenanzeigeDTO> stellenanzeigeList){
         displayStellenanzeigen.addClassName("qualificationCardLayout");
         displayStellenanzeigen.setWidthFull();
-        System.out.println("In render");
-        System.out.println("Listen Anzahl: " + stellenanzeigeList.size());
+        logger.info("Stellenanzeigen: " + stellenanzeigeList.size());
+        logger.info("To render: " + stellenanzeigeList.size());
         if (displayStellenanzeigen != null) {
             displayStellenanzeigen.removeAll();
         }
@@ -97,8 +98,8 @@ public class SearchComponent extends VerticalLayout {
         selectJob.setValue("Alle");
 
         selectRecommendet.setLabel("Sortiere nach Empfehlung");
-        selectRecommendet.setItems("Empfohlen", "Nicht sortieren");
-        selectRecommendet.setValue("Nicht sortieren");
+        selectRecommendet.setItems("Empfohlen", NICHT_SORTIEREN);
+        selectRecommendet.setValue(NICHT_SORTIEREN);
 
         headerLayout.add( unternehmenSearch ,selectJob, selectRecommendet);
         headCard.add(header,headerLayout);
@@ -157,15 +158,13 @@ public class SearchComponent extends VerticalLayout {
                     add(displayStellenanzeigen);
 
                 }
-                if (selectRecommendet.getValue().equals("Nicht sortieren")) {
+                if (selectRecommendet.getValue().equals(NICHT_SORTIEREN)) {
                     selectJob.setValue("Alle");
                 }
 
             });
         } else {
-            selectRecommendet.addValueChangeListener(e -> {
-                Notification.show("Sie müssen eingeloggt sein,um dieses Feature nutzen zu können!");
-            });
+            selectRecommendet.addValueChangeListener(e -> Notification.show("Sie müssen eingeloggt sein,um dieses Feature nutzen zu können!"));
         }
 
         createCard(list);
@@ -331,6 +330,7 @@ public class SearchComponent extends VerticalLayout {
 
     private HorizontalLayout createProfilBildAndName(StellenanzeigeDTO stellenanzeigeDTO){
         HorizontalLayout profilBildAndName = new HorizontalLayout();
+        Image profileImg;
         profilBildAndName.addClassName("profilBildAndName");
         profilBildAndName.setSpacing(true);
         profilBildAndName.setAlignItems(Alignment.CENTER);
@@ -338,21 +338,7 @@ public class SearchComponent extends VerticalLayout {
         profilBildAndName.setWidth("100%");
         profilBildAndName.setHeight("100%");
         UnternehmenProfileDTO unternehmenProfileDTO = stellenanzeigeDTO.getUnternehmen();
-        if(unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")){
-            profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-        } else {
-            String file = unternehmenProfileDTO.getProfilbild();
-            String imagePath = "./src/main/webapp/profile-images/" + file;
-            StreamResource streamResource = new StreamResource(file, () -> {
-                try {
-                    return new FileInputStream(imagePath);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return InputStream.nullInputStream();
-                }
-            });
-            profileImg = new Image(streamResource, "Profilbild");
-        }
+        profileImg = UIUtils.getImage(unternehmenProfileDTO.getProfilbild());
         profileImg.setWidth("50px");
         profileImg.setHeight("50px");
         profileImg.addClickListener(e -> {

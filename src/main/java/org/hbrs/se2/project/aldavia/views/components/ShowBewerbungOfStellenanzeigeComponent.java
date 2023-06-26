@@ -9,34 +9,27 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.ProfileException;
 import org.hbrs.se2.project.aldavia.dtos.*;
-import org.hbrs.se2.project.aldavia.entities.Bewerbung;
-import org.hbrs.se2.project.aldavia.entities.Stellenanzeige;
-import org.hbrs.se2.project.aldavia.entities.Taetigkeitsfeld;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.hbrs.se2.project.aldavia.util.UIUtils;
 import org.hbrs.se2.project.aldavia.views.LoggedInStateLayout;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
 @Route(value = Globals.Pages.STELLENANZEIGE_BEWERBUNGEN_VIEW, layout = LoggedInStateLayout.class)
 public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout implements HasUrlParameter<String> {
-    private UnternehmenProfileControl unternehmenProfileControl;
+    private final UnternehmenProfileControl unternehmenProfileControl;
 
     private UnternehmenProfileDTO unternehmenProfileDTO;
-    private StudentProfileControl studentProfileControl;
+    private final StudentProfileControl studentProfileControl;
     private StellenanzeigeDTO pickedStellenanzeige;
-    private Div displayBewerbungen;
-    private Span noBewerbungen;
+    private final Div displayBewerbungen;
+    private final Span noBewerbungen;
     private List<BewerbungsDTO> bewerbungen;
     @SneakyThrows
     @Override
@@ -56,9 +49,8 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         }
 
     }
-    public ShowBewerbungOfStellenanzeigeComponent(UnternehmenProfileControl unternehmenProfileControl, UnternehmenProfileDTO unternehmenProfileDTO, StudentProfileControl studentProfileControl) {
+    public ShowBewerbungOfStellenanzeigeComponent(UnternehmenProfileControl unternehmenProfileControl, StudentProfileControl studentProfileControl) {
         this.unternehmenProfileControl = unternehmenProfileControl;
-        this.unternehmenProfileDTO = unternehmenProfileDTO;
         this.studentProfileControl = studentProfileControl;
         noBewerbungen = new Span("Es gibt keine Bewerbungen für diese Stellenanzeige");
         displayBewerbungen = new Div();
@@ -80,9 +72,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         }
 
         HorizontalLayout zurueck = new HorizontalLayout();
-        Button zurueckButton = new Button("Zurück zum Profil", event -> {
-            UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE_VIEW);
-        });
+        Button zurueckButton = new Button("Zurück zum Profil", event -> UI.getCurrent().navigate(Globals.Pages.COMPANY_PROFILE_VIEW));
         zurueck.add(zurueckButton);
         this.add(zurueck);
     }
@@ -105,22 +95,7 @@ public class ShowBewerbungOfStellenanzeigeComponent extends VerticalLayout imple
         //Profilbild und Studentenname
         StudentProfileDTO student = getStudent(bewerbung.getStudent().getUsername());
         Image profileImg;
-        if(student.getProfilbild() == null || student.getProfilbild().equals("")){
-            profileImg = new Image("images/defaultProfileImg.png","defaultProfilePic");
-        } else {
-            // lade das Profilbild aus studentProfileDTO.getProfilbild()
-            String fileName = student.getProfilbild();
-            String path = "./src/main/webapp/profile-images/" + fileName;
-            StreamResource resource = new StreamResource(fileName, () -> {
-                try {
-                    return new FileInputStream(path);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return InputStream.nullInputStream(); // In case of an error return an empty stream
-                }
-            });
-            profileImg = new Image(resource, "Profilbild");
-        }
+        profileImg = UIUtils.getImage(student.getProfilbild());
         profileImg.addClassName("profileImg");
         profileImg.setWidth("50px");
 
