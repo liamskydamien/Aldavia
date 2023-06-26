@@ -83,7 +83,6 @@ public class UnternehmenService {
             unternehmen.setName(dto.getName());
         }
         //Comparing by size since there is no update opition for Adressen
-        // TODO: What does this method do?
             if (dto.getAdressen() != null && unternehmen.getAdressen() != null) {
                 if (!(dto.getAdressen().equals(unternehmen.getAdressen()))) {
                     unternehmen.getAdressen().clear();
@@ -119,7 +118,6 @@ public class UnternehmenService {
             unternehmenRepository.save(unternehmen);
         } catch (Exception e) {
             logger.error("Error while creating or updating Unternehmen " + unternehmen.getUser().getUserid());
-            e.printStackTrace();
             throw new ProfileException("Unternehmen konnte nicht geupdatet werden", ProfileException.ProfileExceptionType.DATABASE_CONNECTION_FAILED);
         }
     }
