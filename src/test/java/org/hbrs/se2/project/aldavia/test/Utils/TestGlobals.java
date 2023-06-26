@@ -14,7 +14,7 @@ public class TestGlobals {
         assertEquals("studentMain", Globals.Pages.STUDENT_MAIN);
         assertEquals("companyMain", Globals.Pages.COMPANY_MAIN);
         assertEquals("stellenanzeigeErstellen", Globals.Pages.STELLENANZEIGE_ERSTELLEN_VIEW);
-        assertEquals("profile", Globals.Pages.PROFILE_VIEW);
+        assertEquals("profileStudent", Globals.Pages.PROFILE_VIEW);
         assertEquals("companyProfile", Globals.Pages.COMPANY_PROFILE_VIEW);
         assertEquals("login", Globals.Pages.LOGIN_VIEW);
         assertEquals("", Globals.Pages.MAIN_VIEW);
