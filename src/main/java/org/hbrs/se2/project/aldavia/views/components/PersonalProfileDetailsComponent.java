@@ -151,7 +151,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             if (checkIfUserIsStudent()) {
                logger.info("CheckPoint 1");
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
-                    System.out.println("Default Profilbild");
+                   logger.info("Default Profilbild");
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
 
                 } else {
@@ -279,7 +279,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             HorizontalLayout dialogHeader = new HorizontalLayout();
             dialogHeader.setJustifyContentMode(JustifyContentMode.END);
             Button closeButton = new Button(new Icon("lumo", "cross"),
-                    (event) -> dialogUploadPic.close());
+                    event -> dialogUploadPic.close());
             closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             dialogHeader.add(closeButton);
             dialogUploadPic.add(dialogHeader);
@@ -403,7 +403,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         unternehmenProfileDTO.setName(companyName.getValue());
         unternehmenProfileDTO.setWebside(website.getValue());
         unternehmenProfileDTO.setEmail(email.getValue());
-        System.out.println("Befire hinzufügen: "+unternehmenProfileDTO.getProfilePicture());
+        logger.info(unternehmenProfileDTO.getProfilePicture());
         unternehmenProfileControl.createAndUpdateUnternehmenProfile(unternehmenProfileDTO, userName);
     }
 
@@ -418,10 +418,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         upload.setAcceptedFileTypes("image/jpeg", "image/png");
         upload.setDropAllowed(true);
 
-        upload.addFailedListener(event -> {
-            // handle the error here
-            Notification.show("Upload fehlgeschlagen: " + event.getReason());
-        });
+        upload.addFailedListener(event -> Notification.show("Upload fehlgeschlagen: " + event.getReason()));
 
         upload.addSucceededListener(event -> {
             // Generate a unique name for the image file
@@ -472,7 +469,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                 studentProfileDTO.setProfilbild(uniqueFileName);
             } else if (checkIfUserIsUnternehmen()) {
                 unternehmenProfileDTO.setProfilbild(uniqueFileName);
-                System.out.println("View Bild" + unternehmenProfileDTO.getProfilbild());
+                logger.info("View Bild" + unternehmenProfileDTO.getProfilbild());
             }
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
