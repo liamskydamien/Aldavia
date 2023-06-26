@@ -23,6 +23,8 @@ import org.hbrs.se2.project.aldavia.dtos.StellenanzeigeDTO;
 import org.hbrs.se2.project.aldavia.dtos.TaetigkeitsfeldDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -44,6 +46,8 @@ public class StellenanzeigeComponent extends VerticalLayout implements ProfileCo
     private Dialog addDialog;
     private final String url;
     private final HorizontalLayout noStellenanzeigeArea;
+
+    private final Logger logger = LoggerFactory.getLogger(StellenanzeigeComponent.class);
 
     public StellenanzeigeComponent(UnternehmenProfileDTO unternehmenProfileDTO, UnternehmenProfileControl unternehmenProfileControl, String url) {
         this.unternehmenProfileControl = unternehmenProfileControl;
@@ -191,7 +195,6 @@ public void getAndCreateStellenanzeige(String mode){
         Span stellenanzeigeDatum = new Span("Erstellt am: " + stellenanzeige.getErstellungsdatum().getDayOfMonth() + " " + stellenanzeige.getErstellungsdatum().getMonthValue() + " " + stellenanzeige.getErstellungsdatum().getYear());
         stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
         stellenanzeigeInfoRight.add(stellenanzeigeDatum);
-        //stellenanzeigeInfoRight.add(bewerbungAnsehenButton(stellenanzeige));
 
 
         stellenanzeigeInfo.add(stellenanzeigeInfoLeft, stellenanzeigeInfoRight);
@@ -322,10 +325,10 @@ public void getAndCreateStellenanzeige(String mode){
                 stellenanzeige.setBeschaeftigungsverhaeltnis(addStellenanzeigeFormComponent.getBeschaeftigungsverhaeltnis().getValue());
                 stellenanzeige.setBezahlung(addStellenanzeigeFormComponent.getBezahlung().getValue());
                 stellenanzeige.setErstellungsdatum(LocalDate.now());
-                System.out.println(stellenanzeige);
-                System.out.println("vor"+stellenanzeigeSet.size());
+                logger.info(stellenanzeige.toString());
+                logger.info("vor"+stellenanzeigeSet.size());
                 stellenanzeigeSet.add(stellenanzeige);
-                System.out.println("nach"+stellenanzeigeSet.size());
+                logger.info("nach"+stellenanzeigeSet.size());
                 try {
                     updateUnternehmenProfileDTO();
                 } catch (ProfileException ex) {

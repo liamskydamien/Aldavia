@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BewerbungsSetup {
+    private BewerbungsSetup() {
+    }
 
     private static final String TEST = "test";
 

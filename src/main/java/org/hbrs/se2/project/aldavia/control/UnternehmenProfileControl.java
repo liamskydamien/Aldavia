@@ -100,7 +100,7 @@ public class UnternehmenProfileControl {
             for (AdresseDTO adresse : dto.getAdressen()){
                 adresseService.addUnternehmenToAdresse(adresse, unternehmen);
             }
-            System.out.println("Adressen size Nach hinzufügen: " + unternehmen.getAdressen().size());
+            logger.info("Adressen size Nach hinzufügen: " + unternehmen.getAdressen().size());
         }
     }
 }

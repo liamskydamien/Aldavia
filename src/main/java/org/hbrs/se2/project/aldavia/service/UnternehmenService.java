@@ -83,22 +83,16 @@ public class UnternehmenService {
             unternehmen.setName(dto.getName());
         }
         //Comparing by size since there is no update opition for Adressen
-            if (dto.getAdressen() != null && unternehmen.getAdressen() != null) {
-                if (!(dto.getAdressen().equals(unternehmen.getAdressen()))) {
+        if ((dto.getAdressen() != null && unternehmen.getAdressen() != null)) {
                     unternehmen.getAdressen().clear();
-                }
-            }
-
-        if (dto.getAp_nachname() != null) {
-            if (!dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {
-                unternehmen.setAp_nachname(dto.getAp_nachname());
-            }
         }
 
-        if (dto.getAp_vorname() != null) {
-            if (!dto.getAp_vorname().equals(unternehmen.getAp_vorname())) {
+        if (dto.getAp_nachname() != null && !dto.getAp_nachname().equals(unternehmen.getAp_nachname())) {
+                unternehmen.setAp_nachname(dto.getAp_nachname());
+        }
+
+        if (dto.getAp_vorname() != null && !dto.getAp_vorname().equals(unternehmen.getAp_vorname())) {
                 unternehmen.setAp_vorname(dto.getAp_vorname());
-            }
         }
 
         if (dto.getWebside() != null) {

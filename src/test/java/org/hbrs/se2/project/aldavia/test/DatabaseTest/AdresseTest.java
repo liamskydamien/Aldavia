@@ -127,7 +127,7 @@ public class AdresseTest {
 
     @Test
     public void testNotNullConstraints() {
-        Adresse adresse = new Adresse();
+        adresse = new Adresse();
         assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));
         adresse.setStrasse(STRASSE);
         assertThrows(DataIntegrityViolationException.class, () -> adresseRepository.saveAndFlush(adresse));

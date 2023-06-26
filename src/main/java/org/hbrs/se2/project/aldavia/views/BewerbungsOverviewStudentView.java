@@ -59,7 +59,6 @@ public class BewerbungsOverviewStudentView extends Div {
     private VerticalLayout createBewerbungenLayout(){
         try {
             List<BewerbungsDTO> bewerbungen = bewerbungsOverviewStudent.getBewerbungenStudent(currentUser.getUserid());
-            System.out.println(bewerbungen.size());
             if(bewerbungen.isEmpty()){
                 return new VerticalLayout(new H3("Du hast dich noch auf keine Stellenanzeige beworben."));
             }
@@ -68,8 +67,6 @@ public class BewerbungsOverviewStudentView extends Div {
             layout.setClassName("bewerbungen-layout");
             layout.add(new H1("Deine Bewerbungen"));
             for (BewerbungsDTO bewerbung : bewerbungen) {
-                System.out.println(bewerbung);
-                System.out.println(bewerbung.getStudent().getVorname());
                 layout.add(createBewerbung(bewerbung));
             }
             return layout;

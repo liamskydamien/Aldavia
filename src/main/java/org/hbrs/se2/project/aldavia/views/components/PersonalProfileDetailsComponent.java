@@ -25,14 +25,14 @@ import org.hbrs.se2.project.aldavia.dtos.StudentProfileDTO;
 import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.UIUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Logger;
-
 import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.*;
 
 
@@ -59,6 +59,8 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     private TextArea description;
     private Image profileImg;
     private final String url;
+
+    private final Logger logger = LoggerFactory.getLogger(PersonalProfileDetailsComponent.class);
 
 
     public PersonalProfileDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl, String url) {
@@ -147,7 +149,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
         if (getUserOverUrl().equals(getCurrentUserName())) {
             if (checkIfUserIsStudent()) {
-                System.out.println("CheckPoint 1");
+               logger.info("CheckPoint 1");
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
                     System.out.println("Default Profilbild");
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
@@ -173,14 +175,14 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                     profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
-                    System.out.println("CheckPoint 2");
+                    logger.info("CheckPoint 2");
                     fileName = unternehmenProfileDTO.getProfilbild();
                     String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            logger.error("File not found");
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
@@ -219,7 +221,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                         try {
                             return new FileInputStream(path);
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            logger.error("File not found");
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
@@ -410,7 +412,6 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
     }
 
     private VerticalLayout uploadProfilePicture(Dialog dialogUploadPic) {
-        Logger LOGGER = Logger.getLogger(PersonalProfileDetailsComponent.class.getName());
 
         VerticalLayout uploadLayout = new VerticalLayout();
         uploadLayout.setClassName("uploadLayout");
@@ -432,22 +433,22 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             Path imagePath = Paths.get("./src/main/webapp/profile-images", uniqueFileName);
             String path = imagePath.toAbsolutePath().toString();
 
-            LOGGER.info("Starting file upload: " + path);
+            logger.info("Starting file upload: " + path);
 
             // Save the image on the disk
-            saveProfilePicture(memoryBuffer, uniqueFileName, imagePath, LOGGER);
+            saveProfilePicture(memoryBuffer, uniqueFileName, imagePath, logger);
 
             // Update the UI to display the new image
             StreamResource resource = new StreamResource(uniqueFileName, () -> {
                 try {
                     return new FileInputStream(path);
                 } catch (FileNotFoundException e) {
-                        LOGGER.warning("Error while uploading file");
+                        logger.error("Error while uploading file");
                     return InputStream.nullInputStream(); // In case of an error return an empty stream
                 }
             });
 
-            LOGGER.info("File upload successful");
+            logger.info("File upload successful");
 
             profileImg = new Image(resource, PROFILBILD);
 
@@ -460,12 +461,12 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         return uploadLayout;
     }
 
-    private void saveProfilePicture(MemoryBuffer memoryBuffer, String uniqueFileName, Path imagePath, Logger LOGGER) {
+    private void saveProfilePicture(MemoryBuffer memoryBuffer, String uniqueFileName, Path imagePath, Logger logger) {
         // Save the image on the disk
         try (InputStream inputStream = memoryBuffer.getInputStream()) {
             Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.warning("Error while uploading file");
+            logger.info("Error while uploading file");
 
         }
 

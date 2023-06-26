@@ -35,23 +35,23 @@ import org.hbrs.se2.project.aldavia.util.enums.Reason;
 @CssImport("./styles/views/regView/reg-view.css")
 public class RegViewCompany extends Div {
 
-    private TextField username = new TextField("Username");
-    private TextField mail = new TextField("Email-Adresse");
+    private final TextField username = new TextField("Username");
+    private final TextField mail = new TextField("Email-Adresse");
 
-    private TextField companyName= new TextField("Name Ihres Unternehmens");
-    private TextField webseite = new TextField("Webseite");
-    private PasswordField password = new PasswordField("Passwort");
-    private ProgressBar pbar = new ProgressBar(0.0,10.0);
-    private PasswordField passwordCheck = new PasswordField("Passwort check");
+    private final TextField companyName= new TextField("Name Ihres Unternehmens");
+    private final TextField webseite = new TextField("Webseite");
+    private final PasswordField password = new PasswordField("Passwort");
+    private final ProgressBar pbar = new ProgressBar(0.0,10.0);
+    private final PasswordField passwordCheck = new PasswordField("Passwort check");
 
-    private Button register = new Button("Sign Up");
-    private Button generatePassword = new Button("Generate Password");
+    private final Button register = new Button("Sign Up");
+    private final Button generatePassword = new Button("Generate Password");
 
-    private Dialog dialog = new Dialog();
+    private final Dialog dialog = new Dialog();
 
     private Details details;
 
-    private Binder<RegistrationDTOCompany> binder = new Binder<>(RegistrationDTOCompany.class);
+    private final Binder<RegistrationDTOCompany> binder = new Binder<>(RegistrationDTOCompany.class);
 
 
     public RegViewCompany(RegistrationControl regControl) {
@@ -115,8 +115,6 @@ public class RegViewCompany extends Div {
             // Speicherung der Daten über das zuhörige Control-Object.
             // Daten des Autos werden aus Formular erfasst und als DTO übergeben.
             // Zusätzlich wird das aktuelle UserDTO übergeben.
-            //UserDTO userDTO = (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
-            //carService.createCar(binder.getBean() ,  userDTO );
 
             RegistrationDTOCompany dto = binder.getBean();
             Notification notification = new Notification();
@@ -187,14 +185,13 @@ public class RegViewCompany extends Div {
     }
 
     private VerticalLayout createDialogLayout(RegistrationControl regControl) {
-        RegistrationDTOCompany dto = binder.getBean();
         VerticalLayout layout = new VerticalLayout();
         Div text = new Div();
         text.add("Wollen Sie mit den angegebenen Daten fortfahren?");
         layout.add(text);
         Button confirmButton = new Button("Confirm", e -> {
             RegistrationResult result  = register(regControl);
-            if (result.getResult() == true) {
+            if (result.getResult()) {
                 Notification.show("Registrierung erfolgreich!");
                 UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
                 clearForm();
