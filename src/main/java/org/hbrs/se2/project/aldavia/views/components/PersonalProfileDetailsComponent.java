@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.aldavia.views.components;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -18,7 +17,6 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.server.VaadinServletRequest;
 import org.hbrs.se2.project.aldavia.control.StudentProfileControl;
 import org.hbrs.se2.project.aldavia.control.UnternehmenProfileControl;
 import org.hbrs.se2.project.aldavia.control.exception.PersistenceException;
@@ -28,7 +26,6 @@ import org.hbrs.se2.project.aldavia.dtos.UnternehmenProfileDTO;
 import org.hbrs.se2.project.aldavia.util.Globals;
 import org.hbrs.se2.project.aldavia.util.UIUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,7 +40,10 @@ import static org.hbrs.se2.project.aldavia.views.LoggedInStateLayout.*;
 public class PersonalProfileDetailsComponent extends HorizontalLayout implements ProfileComponent {
 
 
-
+    public static final String DEFAULT_PROFILE_PIC = "defaultProfilePic";
+    public static final String IMAGES_DEFAULT_PROFILE_IMG_PNG = "images/defaultProfileImg.png";
+    public static final String SRC_MAIN_WEBAPP_PROFILE_IMAGES = "./src/main/webapp/profile-images/";
+    public static final String PROFILBILD = "Profilbild";
     private UnternehmenProfileControl unternehmenProfileControl;
     private UnternehmenProfileDTO unternehmenProfileDTO;
     private TextField companyName;
@@ -52,13 +52,13 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
     private StudentProfileControl studentProfileControl;
     private StudentProfileDTO studentProfileDTO;
-    private Div profilePicture = new Div();
-    private Div introduction = new Div();
+    private final Div profilePicture = new Div();
+    private final Div introduction = new Div();
     private TextField firstNameAndLastName;
     private TextField studiengang;
     private TextArea description;
     private Image profileImg;
-    private String url;
+    private final String url;
 
 
     public PersonalProfileDetailsComponent(StudentProfileDTO studentProfileDTO, StudentProfileControl studentProfileControl, String url) {
@@ -116,14 +116,12 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
     private String getUserOverUrl(){
             String[] parts = url.split("/");
-            String requestedProfile = parts[parts.length - 1];
-            return requestedProfile;
+        return parts[parts.length - 1];
 
     }
     private String getProfileType(){
             String[] parts = url.split("/");
-            String requestedProfile = parts[parts.length - 2];
-            return requestedProfile;
+        return parts[parts.length - 2];
     }
 
 
@@ -145,20 +143,20 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
 
 
         profilePicture.removeAll();
-        String fileName = null;
+        String fileName;
 
         if (getUserOverUrl().equals(getCurrentUserName())) {
             if (checkIfUserIsStudent()) {
                 System.out.println("CheckPoint 1");
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
                     System.out.println("Default Profilbild");
-                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
 
                 } else {
                     // lade das Profilbild aus studentProfileDTO.getProfilbild()
 
                     fileName = studentProfileDTO.getProfilbild();
-                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
@@ -167,17 +165,17 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
-                    profileImg = new Image(resource, "Profilbild");
+                    profileImg = new Image(resource, PROFILBILD);
                 }
                 profilePicture.add(profileImg);
             } else if (checkIfUserIsUnternehmen()) {
                 if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
                     System.out.println("CheckPoint 2");
                     fileName = unternehmenProfileDTO.getProfilbild();
-                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
@@ -186,7 +184,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
-                    profileImg = new Image(resource, "Profilbild");
+                    profileImg = new Image(resource, PROFILBILD);
 
                 }
                 profilePicture.add(profileImg);
@@ -194,11 +192,11 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         } else if (!getUserOverUrl().equals(getCurrentUserName())) {
             if (getProfileType().equals(Globals.Pages.PROFILE_VIEW) ) {
                 if (studentProfileDTO.getProfilbild() == null || studentProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // lade das Profilbild aus studentProfileDTO.getProfilbild()
                     fileName = studentProfileDTO.getProfilbild();
-                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
@@ -207,16 +205,16 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
-                    profileImg = new Image(resource, "Profilbild");
+                    profileImg = new Image(resource, PROFILBILD);
                 }
                 profilePicture.add(profileImg);
             } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)) {
                 if (unternehmenProfileDTO.getProfilbild() == null || unternehmenProfileDTO.getProfilbild().equals("")) {
-                    profileImg = new Image("images/defaultProfileImg.png", "defaultProfilePic");
+                    profileImg = new Image(IMAGES_DEFAULT_PROFILE_IMG_PNG, DEFAULT_PROFILE_PIC);
                 } else {
                     // laden Sie das Profilbild aus studentProfileDTO.getProfilbild()
                     fileName = unternehmenProfileDTO.getProfilbild();
-                    String path = "./src/main/webapp/profile-images/" + fileName;
+                    String path = SRC_MAIN_WEBAPP_PROFILE_IMAGES + fileName;
                     StreamResource resource = new StreamResource(fileName, () -> {
                         try {
                             return new FileInputStream(path);
@@ -225,7 +223,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
                             return InputStream.nullInputStream(); // In case of an error return an empty stream
                         }
                     });
-                    profileImg = new Image(resource, "Profilbild");
+                    profileImg = new Image(resource, PROFILBILD);
                 }
                 profilePicture.add(profileImg);
             }
@@ -319,10 +317,8 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         description.setMaxLength(500);
         description.setValueChangeMode(ValueChangeMode.EAGER);
         description.setHelperText("0/500");
-        description.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + 500);
-        });
+        description.addValueChangeListener(e -> e.getSource()
+                .setHelperText(e.getValue().length() + "/" + 500));
     }
 
     private void updateEditModeCompany(){
@@ -396,7 +392,7 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         studentProfileControl.updateStudentProfile(studentProfileDTO, userName);
     }
 
-    private void updateProfileDTOCompany(String userName) throws PersistenceException, ProfileException {
+    private void updateProfileDTOCompany(String userName) throws ProfileException {
         if(companyName.getValue().equals("")){
             Notification.show("Name darf nicht leer sein!");
             return;
@@ -439,42 +435,21 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
             LOGGER.info("Starting file upload: " + path);
 
             // Save the image on the disk
-            try (InputStream inputStream = memoryBuffer.getInputStream()) {
-                Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
-
-            if(getUserOverUrl().equals(getCurrentUserName())){
-                if (checkIfUserIsStudent()){
-                    // Save the path to the image in the database
-                    studentProfileDTO.setProfilbild(uniqueFileName);
-                } else if (checkIfUserIsUnternehmen()) {
-                    unternehmenProfileDTO.setProfilbild(uniqueFileName);
-                }
-            } else if (!getUserOverUrl().equals(getCurrentUserName())) {
-                if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
-                    studentProfileDTO.setProfilbild(uniqueFileName);
-                } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)){
-                    unternehmenProfileDTO.setProfilbild(uniqueFileName);
-                }
-            }
-
+            saveProfilePicture(memoryBuffer, uniqueFileName, imagePath, LOGGER);
 
             // Update the UI to display the new image
             StreamResource resource = new StreamResource(uniqueFileName, () -> {
                 try {
                     return new FileInputStream(path);
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                        LOGGER.warning("Error while uploading file");
                     return InputStream.nullInputStream(); // In case of an error return an empty stream
                 }
             });
 
             LOGGER.info("File upload successful");
 
-            profileImg = new Image(resource, "Profilbild");
+            profileImg = new Image(resource, PROFILBILD);
 
             profilePicture.removeAll();
             profilePicture.add(profileImg);
@@ -483,6 +458,31 @@ public class PersonalProfileDetailsComponent extends HorizontalLayout implements
         });
         uploadLayout.add(upload);
         return uploadLayout;
+    }
+
+    private void saveProfilePicture(MemoryBuffer memoryBuffer, String uniqueFileName, Path imagePath, Logger LOGGER) {
+        // Save the image on the disk
+        try (InputStream inputStream = memoryBuffer.getInputStream()) {
+            Files.copy(inputStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            LOGGER.warning("Error while uploading file");
+
+        }
+
+        if(getUserOverUrl().equals(getCurrentUserName())){
+            if (checkIfUserIsStudent()){
+                // Save the path to the image in the database
+                studentProfileDTO.setProfilbild(uniqueFileName);
+            } else if (checkIfUserIsUnternehmen()) {
+                unternehmenProfileDTO.setProfilbild(uniqueFileName);
+            }
+        } else if (!getUserOverUrl().equals(getCurrentUserName())) {
+            if (getProfileType().equals(Globals.Pages.PROFILE_VIEW)){
+                studentProfileDTO.setProfilbild(uniqueFileName);
+            } else if (getProfileType().equals(Globals.Pages.COMPANY_PROFILE_VIEW) || getProfileType().equals(Globals.Pages.NOT_LOGIN_COMPANY_VIEW)){
+                unternehmenProfileDTO.setProfilbild(uniqueFileName);
+            }
+        }
     }
 
 }

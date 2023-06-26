@@ -68,17 +68,20 @@ public class StudentService {
         if (changeStudentInformationDTO.getBeschreibung() != null) {
             user.setBeschreibung(changeStudentInformationDTO.getBeschreibung());
         }
+        changeData(user, changeStudentInformationDTO.getEmail(), changeStudentInformationDTO.getTelefonnummer(), changeStudentInformationDTO.getProfilbild());
+    }
 
-        if (changeStudentInformationDTO.getEmail() != null) {
-            user.setEmail(changeStudentInformationDTO.getEmail());
+    public static void changeData(User user, String email, String telefonnummer, String profilbild) {
+        if (email != null) {
+            user.setEmail(email);
         }
 
-        if (changeStudentInformationDTO.getTelefonnummer() != null) {
-            user.setPhone(changeStudentInformationDTO.getTelefonnummer());
+        if (telefonnummer != null) {
+            user.setPhone(telefonnummer);
         }
 
-        if (changeStudentInformationDTO.getProfilbild() != null) {
-            user.setProfilePicture(changeStudentInformationDTO.getProfilbild());
+        if (profilbild != null) {
+            user.setProfilePicture(profilbild);
         }
     }
 

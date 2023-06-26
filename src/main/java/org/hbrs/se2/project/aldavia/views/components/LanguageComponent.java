@@ -133,7 +133,7 @@ public class LanguageComponent extends VerticalLayout implements ProfileComponen
                 Notification.show("Bitte füge die Sprache und das Sprachlevel hinzu.");
             } else if (addLanguageField.isEmpty() && !languageLevelDropDown.isEmpty()) {
                 Notification.show("Bitte füge die Sprache hinzu.");
-            } else if (addLanguageField.isEmpty() && languageLevelDropDown.isEmpty()) {
+            } else if (!addLanguageField.isEmpty() && languageLevelDropDown.isEmpty()) {
                 Notification.show("Bitte füge das Sprachlevel hinzu.");
 
             } else if(spracheList.size()<11) {
