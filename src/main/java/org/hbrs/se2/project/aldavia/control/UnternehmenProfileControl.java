@@ -39,7 +39,6 @@ public class UnternehmenProfileControl {
             Unternehmen unternehmen = unternehmenService.getUnternehmen(userName);
             logger.info("Found a company to the userName with the following company name: " + unternehmen.getName());
             UnternehmenProfileDTO dto = unternehmenProfileDTOFactory.createUnternehmenProfileDTO(unternehmen);
-            System.out.println(("Adressen size: " + dto.getAdressen().size()));
             return dto;
         } catch (Exception e) {
             throw e;
@@ -58,8 +57,8 @@ public class UnternehmenProfileControl {
         unternehmen.setAp_nachname(dto.getAp_nachname());
         unternehmen.setAp_vorname(dto.getAp_vorname());
         unternehmen.getUser().setProfilePicture(dto.getProfilePicture());
-        System.out.println("Profile Picture über DTO: " + dto.getProfilePicture());
-        System.out.println("Profile Picture über Unternehmen: " + unternehmen.getUser().getProfilePicture());
+        logger.info("Profile Picture über DTO: " + dto.getProfilePicture());
+        logger.info("Profile Picture über Unternehmen: " + unternehmen.getUser().getProfilePicture());
         logger.info("Sucessfully updatet the information of the company: " + unternehmen.getName());
 
         //Remove Attributes
@@ -91,12 +90,6 @@ public class UnternehmenProfileControl {
         }
 
         unternehmenService.flush();
-
-
-
-
-
-        System.out.println("Adressen size Nach löschen: " + unternehmen.getAdressen().size());
     }
 
     @SneakyThrows
@@ -113,7 +106,8 @@ public class UnternehmenProfileControl {
             for (AdresseDTO adresse : dto.getAdressen()){
                 adresseService.addUnternehmenToAdresse(adresse, unternehmen);
             }
-            logger.info("Adressen size Nach hinzufügen: " + unternehmen.getAdressen().size());
+            int size = dto.getAdressen() != null ? dto.getAdressen().size() : 0;
+            logger.info("Adressen size Nach hinzufügen: " + size);
         }
     }
 }

@@ -46,7 +46,6 @@ public class UnternehmenService {
     public void updateUnternehmenInformation(Unternehmen unternehmen, UnternehmenProfileDTO dto) throws ProfileException {
         try {
             logger.info("Updating unternehmen " + unternehmen.getUser().getUserid());
-
             User user = unternehmen.getUser();
             updateUserData(user, dto);
             updateUnternehmensData(unternehmen, dto);
