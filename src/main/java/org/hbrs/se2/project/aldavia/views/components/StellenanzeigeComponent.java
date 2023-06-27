@@ -160,9 +160,9 @@ public void getAndCreateStellenanzeige(String mode){
         stellenanzeigeBeschaeftigungsverheltnis.addClassName("stellenanzeigeBeschaeftigungsverheltnis");
         Span zeitraum = new Span();
         if(stellenanzeige.getEnde() == null || stellenanzeige.getEnde().toString().equals("")){
-            zeitraum.setText("Ab " + stellenanzeige.getStart().getDayOfYear() + " " + stellenanzeige.getStart().getMonthValue() + " " + stellenanzeige.getStart().getYear());
+            zeitraum.setText("Ab " + stellenanzeige.getStart().getDayOfMonth() + "." + stellenanzeige.getStart().getMonthValue() + "." + stellenanzeige.getStart().getYear());
         } else{
-            zeitraum.setText(stellenanzeige.getStart().getDayOfMonth() + " " + stellenanzeige.getStart().getMonthValue() + " " + stellenanzeige.getStart().getYear() + " - " + stellenanzeige.getEnde().getDayOfYear() + " " + stellenanzeige.getEnde().getMonthValue() + " " + stellenanzeige.getEnde().getYear());
+            zeitraum.setText(stellenanzeige.getStart().getDayOfMonth() + "." + stellenanzeige.getStart().getMonthValue() + "." + stellenanzeige.getStart().getYear() + " - " + stellenanzeige.getEnde().getDayOfYear() + "." + stellenanzeige.getEnde().getMonthValue() + "." + stellenanzeige.getEnde().getYear());
         }
         Span bezahlung = new Span("Bezahlung: "+stellenanzeige.getBezahlung());
         bezahlung.addClassName("bezahlung");
@@ -192,7 +192,7 @@ public void getAndCreateStellenanzeige(String mode){
         stellenanzeigeInfoRight.addClassName("stellenanzeigeInfoRight");
         stellenanzeigeInfoRight.setJustifyContentMode(JustifyContentMode.END);
         stellenanzeigeInfoRight.setWidthFull();
-        Span stellenanzeigeDatum = new Span("Erstellt am: " + stellenanzeige.getErstellungsdatum().getDayOfMonth() + " " + stellenanzeige.getErstellungsdatum().getMonthValue() + " " + stellenanzeige.getErstellungsdatum().getYear());
+        Span stellenanzeigeDatum = new Span("Erstellt am: " + stellenanzeige.getErstellungsdatum().getDayOfMonth() + "." + stellenanzeige.getErstellungsdatum().getMonthValue() + "." + stellenanzeige.getErstellungsdatum().getYear());
         stellenanzeigeDatum.addClassName("stellenanzeigeDatum");
         stellenanzeigeInfoRight.add(stellenanzeigeDatum);
 
